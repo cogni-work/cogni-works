@@ -270,8 +270,8 @@ fi
 #
 # The match is deliberately narrowed to the plugin-structure directories. A bare
 # `<plugin>/` prefix would be red on arrival against the artifact-directory
-# convention `{source_dir}/cogni-visual/`, which absorption-roadmap.md records as
-# a deliberate keep — that path's next segment is an artifact filename, never one
+# convention `{source_dir}/cogni-visual/`, which is a deliberate keep rather than
+# an oversight — that path's next segment is an artifact filename, never one
 # of the directories below, so the narrowing separates the two classes exactly.
 #
 # The assertion is "must RESOLVE", not "must not appear". A source plugin that is

@@ -21,7 +21,7 @@ The cost compounds with every plugin added and every workspace created: configur
 
 ## What it is
 
-cogni-workspace is the ecosystem's infrastructure-as-plugin layer: a dedicated plugin whose sole job is to own the shared state every other plugin consumes — environment variables, the plugin registry, theme storage, and tool configuration. Its scope is horizontal: it owns the workspace state and tooling that no single business plugin should own, while each vertical plugin keeps its own project lifecycle and domain work. It is also the home of the canonical supported-markets registry that every market-aware plugin reads. See `references/absorption-roadmap.md` for what belongs on each side of that line and the rationale behind each call.
+cogni-workspace is the ecosystem's infrastructure-as-plugin layer: a dedicated plugin whose sole job is to own the shared state every other plugin consumes — environment variables, the plugin registry, theme storage, and tool configuration. Its scope is horizontal: it owns the workspace state and tooling that no single business plugin should own, while each vertical plugin keeps its own project lifecycle and domain work. It is also the home of the canonical supported-markets registry that every market-aware plugin reads.
 
 ## What it does
 

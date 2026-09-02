@@ -16,13 +16,27 @@ recorded plainly at the point it matters rather than smoothed over.
 
 ## Decision 1 — the cut line: what becomes its own plugin
 
-**Rule.** A capability that owns a full `setup → resume → dashboard` arc is a
-vertical business plugin and keeps its own plugin. A capability that owns none of
-that arc is horizontal infrastructure and belongs in cogni-workspace.
+**Rule.** A capability that owns a distinct business topic — a body of work a
+user would name as their own — is a vertical business plugin and keeps its own
+plugin. A capability that owns no such topic is a tool other plugins call: it is
+horizontal infrastructure and belongs in cogni-workspace. Owning a full
+`setup → resume → dashboard` arc is a **sufficient** condition for vertical
+status, not a **necessary** one — the arc is evidence for topic ownership, not
+the test itself.
 
-The arc is the test because it is the signature of a *project lifecycle*: state
+The arc is evidence because it is the signature of a *project lifecycle*: state
 that a user initializes, returns to across sessions, and inspects. A capability
-with a lifecycle has something to own. One without is a tool other plugins call.
+with a lifecycle has a topic to own. The converse does not follow — a capability
+can own a topic and not yet have built the arc for it — so the arc was always a
+structural proxy for the semantic property, and a proxy mistaken for the rule
+fails at exactly the boundary it was never calibrated on. Where the topic
+reading and the structural reading disagree, topic wins.
+
+Demoting the arc to evidence leaves the calls made under the earlier wording
+standing. The four "none" rows below other than `cogni-sales` — `cogni-claims`,
+`cogni-copywriting`, `cogni-narrative` and `cogni-visual` — each fail the topic
+test as well as the arc test: they are tools other work calls, not bodies of
+work a user would name.
 
 **Measured across the plugin set** — `git ls-tree -r --name-only origin/main`,
 matching `<plugin>/skills/*/SKILL.md` against the `*-setup` / `*-resume` /
@@ -57,10 +71,16 @@ absorption-status ledger below for the current state. A further top-level direct
 `cogni-portfolio-evals/`, ships no `.claude-plugin/plugin.json` — it is an eval
 harness, not a plugin, and is correctly outside this table.
 
-`cogni-sales` sits in the "none" row on the measurement above. It owns a single
-skill (`why-change`) and no lifecycle arc, so the rule places it with the
-horizontal set even though it reads as a business capability by name. Recorded
-explicitly because it is the one row where the rule and the intuition disagree.
+**`cogni-sales` — settled.** This is the boundary case the amended rule was
+written for. `cogni-sales` was scored `none` on the measurement above and
+owns a single skill (`why-change`), so the structural reading placed it with the
+horizontal set. The topic reading places it with the verticals: selling is a
+distinct business topic a user names as their own work, not a tool other work
+calls. Topic wins, so `cogni-sales` keeps its own plugin and nothing moves. The
+consolidation epic deferred this case rather than settling it; that deferral is
+discharged here. Noted and not scheduled: `cogni-sales` owns no lifecycle arc,
+unlike its GTM sibling `cogni-marketing` — that reads as underbuilt, not
+misplaced.
 
 ## Absorption status
 

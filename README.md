@@ -23,7 +23,7 @@ Each plugin implements an established framework (Corporate Visions, Double Diamo
 
 > "Create a slide deck from the sales presentation, then enrich the trend report with charts and diagrams"
 
-**Narrative and executive copy.** The `narrative` skill transforms structured content into executive narratives using 11 story arc frameworks with quality scoring (0-100, A-F grades), and the `copywriter` skill polishes any document for executive readability using 7 messaging frameworks (BLUF, Pyramid, SCQA, STAR, PSB, FAB, Inverted Pyramid) with 5 parallel stakeholder personas to catch blind spots.
+**Narrative and executive copy.** The `narrative` skill transforms structured content into executive narratives using 11 story arc frameworks, reviewed by `narrative-review` for a per-gate pass/warn/fail verdict plus the top three actionable fixes, and the `copywriter` skill polishes any document for executive readability using 7 messaging frameworks (BLUF, Pyramid, SCQA, STAR, PSB, FAB, Inverted Pyramid) with 5 parallel stakeholder personas to catch blind spots.
 
 **Source verification.** The `claims` skill verifies whether sourced claims match what their cited sources actually say — catching misquotations, unsupported conclusions, selective omissions, and stale data. Other plugins register claims during generation; cogni-workspace fetches each source and flags deviations for your review.
 

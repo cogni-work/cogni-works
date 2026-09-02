@@ -21,8 +21,8 @@ make that the case.
    sample report — scores the report itself.
 3. Map each of the top three improvements to the SKILL.md sections that
    produced the weak guidance, then edit those sections.
-4. Re-score. The loop terminates when `overall_score >= 75` and no gate is
-   marked `fail`, or when the iteration cap is reached.
+4. Re-score. The loop terminates when no gate is marked `fail`, or when
+   the iteration cap is reached.
 
 ## Iteration log — first pass
 

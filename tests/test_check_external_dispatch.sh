@@ -2,7 +2,8 @@
 # test_check_external_dispatch.sh — self-test for the external-dispatch guard.
 #
 # The guard asserts a HARD clean-zero: no live-dispatch surface
-# (*/skills/*/SKILL.md, */agents/*.md, */commands/*.md, */hooks/**) may carry a
+# (*/skills/*/SKILL.md, */agents/*.md, */commands/*.md, */hooks/**,
+# */scripts/*.sh, */scripts/*.py) may carry a
 # dispatch token for a prefix listed in scripts/retired-plugins.json. Cases:
 #   1. Negative controls (bare noun "cogni-research" with no colon) -> exit 0.
 #   2. Dispatch-laden fixture (cogni-wiki: + cogni-research:) -> exit 1, naming
@@ -36,7 +37,8 @@
 # this file is `edNN`: `ed01`-`ed09` for cases 1-5, `ed10`-`ed19` for the
 # registry cases R1-R6 (R1 -> ed10/ed11, R2 -> ed12/ed13, R3 -> ed14,
 # R4 -> ed15, R5 -> ed16/ed17, R6 -> ed18/ed19), `ed20`-`ed33` for the
-# unresolved-target arm and `ed34`-`ed36` for its per-plugin pair binding.
+# unresolved-target arm, `ed34`-`ed36` for its per-plugin pair binding and
+# `ed37`-`ed39` for the scripts-surface discovery cases.
 # `R1`-`R6` remain the names of
 # the LOGICAL case groups in the header notes and the section dividers below;
 # they are not ids and must never be emitted as one. Never introduce an
@@ -45,7 +47,7 @@
 # `R`-stemmed id in this file would be ambiguous in any harness run whose
 # `--test` captures both suites. The whole-token matching rule the ids depend
 # on is stated once, with the regex, above the registry cases below. A new
-# assertion takes the next free id — `ed37` onward — never a renumbering and
+# assertion takes the next free id — `ed40` onward — never a renumbering and
 # never an `R`-stemmed id.
 #
 # Mutation recipe (proves the per-plugin pair binding is load-bearing):
@@ -62,6 +64,30 @@
 # the guard — an invariant the guard's own comment above the line states.
 # ed22 CANNOT carry this recipe: its token `cogni-beta:no-such-thing` resolves
 # under no plugin, so it stays green when the binding is loosened back.
+#
+# Mutation recipe (proves the scripts-surface glob is load-bearing):
+#   scripts/mutation-check.sh --root . \
+#     --file scripts/check-external-dispatch.py \
+#     --expr 's/\*\.sh",/*.shx",/' \
+#     --test 'bash tests/test_check_external_dispatch.sh' --case ed38
+#
+# The substitution renames the shell-script glob entry to a suffix nothing
+# matches, so the fixture's scripts/helper.sh stops being discovered, its
+# unresolved token disappears, `summary.total` drops to 0 and ed38 goes red.
+# Both recipes here substitute the first match only, which is safe only while
+# each entry's text occurs exactly once in the guard — an invariant stated
+# positionally above DEFAULT_GLOBS.
+#
+# Mutation recipe (proves the EXTENSION-SCOPING is load-bearing):
+#   scripts/mutation-check.sh --root . \
+#     --file scripts/check-external-dispatch.py \
+#     --expr 's/"\*\/scripts\/\*\.py",/"*\/scripts\/*",/' \
+#     --test 'bash tests/test_check_external_dispatch.sh' --case ed37
+#
+# The substitution widens the python-script entry to a bare */scripts/* glob,
+# which a git pathspec's * makes match the fixture's scripts/blob.bin too. The
+# guard then opens that binary and the run exits 2 instead of 1 — ed37 goes red.
+# This is what gives the binary fixture teeth.
 
 set -eu
 
@@ -654,6 +680,69 @@ assert d['data']['scanned']['tokens']==3, d['data']['scanned']
 matches=[o['match'] for o in d['data']['violations']]
 assert 'cogni-beta:beta-only' not in matches, matches
 assert 'cogni-alpha:xcaller' not in matches, matches
+"
+
+# --- ed37-ed39: the scripts surface is discovered. Everything here runs in
+# --- DISCOVER mode (no explicit file argument) on purpose: collect() takes the
+# --- explicit-files branch whenever one is passed, skipping discover_files()
+# --- and therefore DEFAULT_GLOBS entirely — so an explicit-file case would pass
+# --- byte-identically at base and prove nothing about the widening. This is its
+# --- own git-initialized tree; the non-git fixtures above cannot be discovered
+# --- at all, and the shared ones carry hard equality assertions a new file flips.
+SXC="$WORK/scriptsxc"
+mkdir -p "$SXC/.claude-plugin"
+git -C "$SXC" init -q
+git -C "$SXC" config user.email t@t.test
+git -C "$SXC" config user.name test
+mkdir -p "$SXC/cogni-foo/skills/s" "$SXC/cogni-foo/scripts"
+printf '%s' '{"plugins":[{"name":"cogni-foo","source":"./cogni-foo"}]}' \
+  > "$SXC/.claude-plugin/marketplace.json"
+printf -- '---\nname: s\n---\nThe only resolvable target in this tree.\n' \
+  > "$SXC/cogni-foo/skills/s/SKILL.md"
+# The dangling token lives ONLY here, in a shell script — the shape that was
+# structurally invisible before the widening. The slash-command line is the AC3
+# negative control: it carries no colon, so it is never dispatch-shaped.
+printf -- '#!/usr/bin/env bash\nadd_action "cogni-foo:no-such-thing" "dangling"\n# Prose: run /copywrite to polish the report.\n' \
+  > "$SXC/cogni-foo/scripts/helper.sh"
+printf -- '#!/usr/bin/env python3\n"""Dispatches cogni-foo:s, which resolves."""\n' \
+  > "$SXC/cogni-foo/scripts/tool.py"
+# Undecodable bytes directly under scripts/ — NOT under __pycache__, so this
+# fixture falsifies a bare */scripts/* glob AND a __pycache__-only exclude.
+# The extension-scoped globs never discover it, so no assertion here can go red
+# on it today: it is a regression fence against a future widening, not a file
+# the guard actively skips. The ed37 recipe in the header is what gives it teeth.
+printf '\377\376\000\001' > "$SXC/cogni-foo/scripts/blob.bin"
+git -C "$SXC" add -A >/dev/null 2>&1
+git -C "$SXC" commit -qm init >/dev/null 2>&1
+
+set +e
+OUT=$(python3 "$GUARD" --root "$SXC" 2>/dev/null)
+CODE=$?
+set -e
+# Exit 1 also proves nothing discovered here hit scan_file()'s decode path,
+# which exits 2 — so exit 1 is incompatible with blob.bin having been read.
+check "ed37 a dangling token in a */scripts/*.sh file is discovered and flagged (exit 1, so nothing hit the decode path)" \
+  "$([ "$CODE" -eq 1 ] && echo 0 || echo 1)"
+assert_json "ed38 the finding names the scripts file, the unresolved arm and the token" "$OUT" "
+import json,sys
+d=json.load(sys.stdin)
+assert d['data']['summary']['total']==1, d['data']['violations']
+o=d['data']['violations'][0]
+assert o['file']=='cogni-foo/scripts/helper.sh', o
+assert o['arm']=='unresolved-target', o
+assert o['match']=='cogni-foo:no-such-thing', o
+"
+# tokens: scan_file increments tokens_examined for EVERY target_re match, before
+# the resolvability gate — so helper.sh's unresolved token and tool.py's
+# resolvable cogni-foo:s contribute one each, while the SKILL.md and the
+# colonless /copywrite prose line contribute none. Without this count the case
+# could not tell 'the slash command was correctly ignored' from 'the file was
+# never read'. files==3 is the positive pin that blob.bin was never discovered.
+assert_json "ed39 both script extensions are examined and the slash-command prose contributes no token" "$OUT" "
+import json,sys
+d=json.load(sys.stdin)
+assert d['data']['scanned']['files']==3, d['data']['scanned']
+assert d['data']['scanned']['tokens']==2, d['data']['scanned']
 "
 
 echo ""

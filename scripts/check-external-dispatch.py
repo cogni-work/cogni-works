@@ -70,8 +70,20 @@ Scope — the surfaces a running session actually dispatches FROM:
   - */agents/*.md         (agent prompts)
   - */commands/*.md       (slash-command definitions)
   - */hooks/**            (lifecycle hooks: *.sh / *.py / *.json)
+  - */scripts/*.sh        (plugin- and skill-owned shell scripts)
+  - */scripts/*.py        (plugin- and skill-owned python scripts)
 
 Excluded, by design (NOT live-dispatch surfaces):
+
+  - any OTHER file type under */scripts/
+                                    the scripts surface is enumerated by
+                                    executable extension, so a README or a data
+                                    file beside a script is out of scope. Note
+                                    this is NOT a general file-type rule: a
+                                    hooks *.json IS a dispatch surface, which is
+                                    why */hooks/** stays type-agnostic above.
+                                    The distinction is config-that-dispatches
+                                    versus data, not extension.
 
   - cogni-knowledge/                its delegation-contract / references
                                     legitimately NAME the retired plugins as
@@ -118,12 +130,39 @@ import subprocess
 import sys
 
 # git ls-files pathspec globs for the live-dispatch surfaces.
+#
+# The scripts surface is enumerated by executable extension rather than as a bare
+# */scripts/* glob. The primary reason is scope: an executable script is a caller,
+# while a README or a data file sitting beside it is not.
+#
+# It also sidesteps a decode hazard on this surface, though only on this one. A
+# git pathspec * crosses /, so */scripts/* would also match the two bytecode
+# files tracked under cogni-portfolio-evals/scripts/__pycache__/, and scan_file()
+# re-raises the resulting UnicodeDecodeError as a RuntimeError that main() renders
+# as exit 2 — one tracked binary would take the whole run down on a decode error
+# instead of reporting a dispatch finding. Do NOT read that as a property this
+# enumeration establishes guard-wide: */hooks/* and */hooks/*/* are already
+# type-agnostic and already carry the identical exposure, verified by observation.
+# Closing it properly means changing scan_file()'s decode policy, which is out of
+# scope here and filed separately.
+#
+# The remedy lives in discovery, not in scan_file(): an explicit-file invocation
+# naming an undecodable path still exits 2, by design.
+#
+# Mutation-recipe invariant: the two extension entries in the list below are each
+# anchored by a recorded recipe in tests/test_check_external_dispatch.sh, and
+# mutation-check.sh substitutes the FIRST match only. Do not repeat either entry's
+# text anywhere else in this file — a second occurrence is mutated instead of the
+# glob, and the recipe then reports a live assertion as decorative. State the
+# invariant positionally, as this comment does; never spell an entry's text.
 DEFAULT_GLOBS = [
     "*/skills/*/SKILL.md",
     "*/agents/*.md",
     "*/commands/*.md",
     "*/hooks/*",
     "*/hooks/*/*",
+    "*/scripts/*.sh",
+    "*/scripts/*.py",
 ]
 
 # Path-prefix excludes (own trees + the history-bearing FMO plugin).

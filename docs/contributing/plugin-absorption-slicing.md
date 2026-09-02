@@ -111,8 +111,11 @@ edit generated wiki output for any other purpose in an absorption — regenerate
 
 `scripts/check-external-dispatch.py` enforces a hard clean-zero — no ratchet, no
 baseline — for every prefix listed in `scripts/retired-plugins.json`, across
-`*/skills/*/SKILL.md`, `*/agents/*.md`, `*/commands/*.md` and `*/hooks/**`. Directories
+`*/skills/*/SKILL.md`, `*/agents/*.md`, `*/commands/*.md`, `*/hooks/**`,
+`*/scripts/*.sh` and `*/scripts/*.py`. Directories
 named `references/` and `docs/` are excluded by design, so lineage prose is safe.
+The scripts surface is enumerated by executable extension rather than as a bare
+`*/scripts/*`; the guard's own header says why.
 
 Add the source prefix to the registry **in stage 3, never earlier**. Register it while
 stage 2 is still in flight and every not-yet-rewritten consumer becomes a build failure.

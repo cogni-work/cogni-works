@@ -7,6 +7,21 @@
 # an enumerated record can express it. Case C10 reads this file and cross-checks it against the live
 # extractor in both directions.
 #
+# What enforces a row being WRITTEN in the first place. C10 checks this record
+# against the live tree in both directions, but both directions read the two
+# CURRENT sides — so a retirement that deletes a skill and adds no row here
+# leaves its phrases absent from the record and absent from the tree at once,
+# the two sides still agree, and C10 stays green on a claim surface that just
+# shrank. scripts/check-retirement-ledger.py (CI job "Retirement-ledger gate")
+# closes that direction from the merge base: it recovers each deleted
+# SKILL.md's base-side blob and requires every phrase it advertised to be
+# re-claimed by a surviving skill or carried by a row here. That guard accepts
+# a row as accounting only when its reason is NON-EMPTY, which is the same bar
+# C10's row hygiene already enforces, reached from the other side.
+# Its subject is deletions only; a phrase dropped from a surviving skill's
+# description is the same omission class in a different diff shape, tracked
+# separately.
+#
 # Why this is not the roster that suite rejects. The suite rejects a per-skill EXEMPTION list: one
 # that must track the extractor's own name key, enumerates live skills, and makes findings
 # disappear. This is the opposite object. It is scoped to retirement events rather than to skills,

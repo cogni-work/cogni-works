@@ -99,6 +99,69 @@ jobs:
           [ "$vrc" -eq 0 ] || exit 1
           exit "$rc"
 
+  retirement-ledger-gate:
+    name: Retirement-ledger gate (a skill retirement accounts for its trigger phrases)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # Load-bearing, for the same reason as the version-bump gate above.
+          # This gate anchors on the MERGE-BASE with origin/main and reads the
+          # deleted SKILL.md's own base-side blob; the default shallow checkout
+          # has neither, under which the gate can only degrade to a vacuous
+          # pass. Do not remove — the vacuity assertion in the step below fails
+          # the build if this is dropped.
+          fetch-depth: 0
+          # Check out the PR HEAD, not the auto-generated merge ref. On a merge
+          # ref the merge-base collapses onto main's tip, so a skill main
+          # retired after the fork would be read as this branch's deletion.
+          # Empty on workflow_dispatch, where checkout falls back to the
+          # default ref.
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Assert every deleted skill's trigger phrases are accounted for
+        run: |
+          # `set +e` FIRST, and it is load-bearing. GitHub runs a `run:` block as
+          # `bash -e {0}`, and `set -uo pipefail` does NOT clear an inherited -e.
+          # Without this the step aborts on the capture line below the moment the
+          # guard exits non-zero, so the envelope, the violation list and the
+          # FIX_HINTS block never reach the log and an author who trips the gate
+          # sees a bare red with no remedy — on a guard whose entire remedial
+          # surface is that stderr. The failing exit is preserved regardless: the
+          # step ends with an explicit `exit "$rc"`.
+          set +e
+          set -uo pipefail
+          python3 scripts/check-retirement-ledger.py > retirement-gate.json 2> retirement-gate.err
+          rc=$?
+          cat retirement-gate.json
+          cat retirement-gate.err >&2
+
+          if [ "$rc" -eq 2 ]; then
+            echo "::error::retirement-ledger gate errored"
+            exit 1
+          fi
+
+          # Graded twice from ONE invocation, exactly as the version-bump gate
+          # is. The script exits 0 both when the gate passed AND when it could
+          # not compare anything (status "degraded" — base ref unresolvable),
+          # so the exit code alone cannot tell "clean" from "never actually
+          # checked". Deliberately NOT a second invocation: re-running the
+          # script would grade a different run than the one that gated the
+          # build.
+          python3 - <<'PY'
+          import json, sys
+          d = json.load(open("retirement-gate.json")).get("data") or {}
+          if d.get("status") == "degraded":
+              sys.exit("retirement-ledger gate is VACUOUS (status: degraded) — %s\n"
+                       "It compared nothing. This usually means fetch-depth: 0 "
+                       "was removed from the checkout step." % d.get("degraded_reason"))
+          print("retirement-ledger gate ran for real (status: %s)" % d.get("status"))
+          PY
+          vrc=$?
+          [ "$vrc" -eq 0 ] || exit 1
+          exit "$rc"
+
   plugin-test-suites:
     name: Plugin test suites (discover and run tests/*.sh)
     runs-on: ubuntu-latest

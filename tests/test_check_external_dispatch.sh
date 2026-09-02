@@ -38,7 +38,7 @@
 # registry cases R1-R6 (R1 -> ed10/ed11, R2 -> ed12/ed13, R3 -> ed14,
 # R4 -> ed15, R5 -> ed16/ed17, R6 -> ed18/ed19), `ed20`-`ed33` for the
 # unresolved-target arm, `ed34`-`ed36` for its per-plugin pair binding and
-# `ed37`-`ed39` for the scripts-surface discovery cases.
+# `ed37`-`ed41` for the scripts-surface discovery cases.
 # `R1`-`R6` remain the names of
 # the LOGICAL case groups in the header notes and the section dividers below;
 # they are not ids and must never be emitted as one. Never introduce an
@@ -47,7 +47,7 @@
 # `R`-stemmed id in this file would be ambiguous in any harness run whose
 # `--test` captures both suites. The whole-token matching rule the ids depend
 # on is stated once, with the regex, above the registry cases below. A new
-# assertion takes the next free id — `ed40` onward — never a renumbering and
+# assertion takes the next free id — `ed42` onward — never a renumbering and
 # never an `R`-stemmed id.
 #
 # Mutation recipe (proves the per-plugin pair binding is load-bearing):
@@ -712,6 +712,12 @@ printf -- '#!/usr/bin/env python3\n"""Dispatches cogni-foo:s, which resolves."""
 # on it today: it is a regression fence against a future widening, not a file
 # the guard actively skips. The ed37 recipe in the header is what gives it teeth.
 printf '\377\376\000\001' > "$SXC/cogni-foo/scripts/blob.bin"
+# The head incident as filed, placement and extension included: the two tracked
+# files are cogni-portfolio-evals/scripts/__pycache__/*.cpython-314.pyc. A git
+# pathspec *.py does not match a *.pyc suffix, so the extension-scoped globs
+# never discover this either — which is the property ed37's exit 1 pins.
+mkdir -p "$SXC/cogni-foo/scripts/__pycache__"
+printf '\377\376\000\001' > "$SXC/cogni-foo/scripts/__pycache__/mod.cpython-314.pyc"
 git -C "$SXC" add -A >/dev/null 2>&1
 git -C "$SXC" commit -qm init >/dev/null 2>&1
 
@@ -743,6 +749,55 @@ import json,sys
 d=json.load(sys.stdin)
 assert d['data']['scanned']['files']==3, d['data']['scanned']
 assert d['data']['scanned']['tokens']==2, d['data']['scanned']
+"
+
+# --- ed40-ed41: the clean-tree controls. This tree carries NO violation, which
+# --- is what lets ed40 assert total==0 — the fixture above cannot, since its
+# --- whole point is to produce a finding.
+SXC2="$WORK/scriptsxc2"
+mkdir -p "$SXC2/.claude-plugin"
+git -C "$SXC2" init -q
+git -C "$SXC2" config user.email t@t.test
+git -C "$SXC2" config user.name test
+mkdir -p "$SXC2/cogni-foo/skills/s" "$SXC2/cogni-foo/scripts" "$SXC2/cogni-knowledge/scripts"
+printf '%s' '{"plugins":[{"name":"cogni-foo","source":"./cogni-foo"},{"name":"cogni-knowledge","source":"./cogni-knowledge"}]}' \
+  > "$SXC2/.claude-plugin/marketplace.json"
+printf -- '---\nname: s\n---\nNo dispatch token here, so the token count below is attributable to the script.\n' \
+  > "$SXC2/cogni-foo/skills/s/SKILL.md"
+# AC3 control, co-located as the acceptance bar requires: the colonless slash
+# command and a genuinely RESOLVABLE token share one file, and the tree produces
+# no finding — so total==0 is the slash command being correctly ignored, while
+# tokens>=1 proves the file was actually read rather than skipped.
+printf -- '#!/usr/bin/env bash\n# Prose: run /copywrite to polish the report.\nadd_action "cogni-foo:s" "resolves"\n' \
+  > "$SXC2/cogni-foo/scripts/clean.sh"
+# EXCLUDE_PREFIXES is newly load-bearing under the widened globs: this file
+# matches */scripts/*.py and carries a RETIRED-arm token, so without the
+# cogni-knowledge/ prefix exclude it would fire. Pinned explicitly rather than
+# left to ride on some other case exiting 0.
+printf -- '# Vendored engine history: cogni-wiki:wiki-ingest was dispatched here.\n' \
+  > "$SXC2/cogni-knowledge/scripts/vendored.py"
+git -C "$SXC2" add -A >/dev/null 2>&1
+git -C "$SXC2" commit -qm init >/dev/null 2>&1
+
+set +e
+OUT2=$(python3 "$GUARD" --root "$SXC2" 2>/dev/null)
+set -e
+assert_json "ed40 a colonless slash command beside a resolvable token yields no finding on a read file" "$OUT2" "
+import json,sys
+d=json.load(sys.stdin)
+assert d['data']['summary']['total']==0, d['data']['violations']
+assert d['data']['scanned']['tokens']>=1, d['data']['scanned']
+"
+# files==2 is the attribution: cogni-foo/skills/s/SKILL.md and
+# cogni-foo/scripts/clean.sh were discovered, while
+# cogni-knowledge/scripts/vendored.py matched */scripts/*.py and was dropped by
+# EXCLUDE_PREFIXES before scan_file() ever opened it. A third file here would
+# mean the exclude stopped holding under the widened globs.
+assert_json "ed41 a retired-arm token under cogni-knowledge/scripts is excluded under the widened globs" "$OUT2" "
+import json,sys
+d=json.load(sys.stdin)
+assert d['data']['scanned']['files']==2, d['data']['scanned']
+assert d['data']['summary']['total']==0, d['data']['violations']
 "
 
 echo ""

@@ -27,9 +27,8 @@
 #   - No retired-plugin dispatch token may survive in the adopted copies. The
 #     obvious candidate guard, scripts/check-external-dispatch.py, reaches only
 #     part of that surface: its globs cover SKILL.md, agents, commands, hooks,
-#     and a skill's own scripts/*.sh and scripts/*.py, while that skill's evals/,
-#     references/ and every other file type under scripts/ match none of them.
-#     P1 below walks every file in both trees instead — the gap is one of
+#     while a skill's own scripts/, evals/ and references/ files match none of
+#     them. P1 below walks every file in both trees instead — the gap is one of
 #     file-type coverage, not of what scripts/retired-plugins.json carries.
 #   - Every `${CLAUDE_PLUGIN_ROOT}`-relative path documented in those trees must
 #     resolve under cogni-workspace. Most such paths are skill-relative and

@@ -62,7 +62,14 @@ jobs:
 
       - name: Assert no plugin version was touched on this branch
         run: |
+          set +e
           set -uo pipefail
+          # `set +e` above is load-bearing and must stay first. Actions runs this
+          # block as `bash -e {0}`, so -e is inherited before line 1 executes, and
+          # `set -uo pipefail` does NOT clear an inherited -e — only `set +e` does.
+          # Without it the guard's non-zero exit aborts the step at the capture
+          # below: a bare red with no envelope, no violation list, no fix hint.
+          # The failing status is preserved by the terminal `exit "$rc"`, not by -e.
           python3 scripts/check-version-bump.py > version-gate.json 2> version-gate.err
           rc=$?
           cat version-gate.json

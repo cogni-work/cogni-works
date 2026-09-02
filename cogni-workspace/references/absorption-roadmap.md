@@ -73,6 +73,8 @@ section is the running record of what has landed.
 | cogni-help | retired | `cogni-issues` and `troubleshoot` kept as skills; `guide` / `cheatsheet` / `workflow` folded into `ask`'s bundled wiki; the course-delivery system deleted |
 | cogni-claims | retired | the `claims` and `claim-entity` skills, the `claim-verifier` and `source-inspector` agents, and the `/claims` command, all moved verbatim. Nothing folded, nothing dropped — there was no overlapping surface to merge into |
 
+> **Superseded in part (2026-09-02):** the `cogni-help` row above is a dated record and is kept byte-identical. `troubleshoot` was subsequently folded into `workspace-status` (#1644): its checks became a plugin-level diagnostics tier in `cogni-workspace/skills/workspace-status/SKILL.md`, its known-issues reference moved to `cogni-workspace/skills/workspace-status/references/known-issues.md`, and `/troubleshoot` survives as a command, `cogni-workspace/commands/troubleshoot.md`. Read the row's `kept as skills` clause, as it applies to `troubleshoot`, as the state at absorption time rather than as current. This note supersedes that clause for `troubleshoot` only and makes no claim about the row's remaining clauses.
+
 Both prefixes are registered in `scripts/retired-plugins.json`, so
 `scripts/check-external-dispatch.py` fails the build on any surviving
 `cogni-help:` or `cogni-claims:` dispatch token. `tests/test-relocated-skill-hygiene.sh`

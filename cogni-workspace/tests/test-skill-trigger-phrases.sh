@@ -98,6 +98,7 @@
 set -u
 HERE="$(cd "$(dirname "$0")" && pwd)"
 WS_ROOT="$(cd "$HERE/.." && pwd)"
+REPO_ROOT="$(cd "$WS_ROOT/.." && pwd)"
 TMPROOT="$(mktemp -d)"
 trap 'rm -rf "$TMPROOT"' EXIT
 
@@ -562,6 +563,60 @@ if [ "$c10_ok" -eq 1 ]; then
   pass "C10 the retirement record and the live tree agree in both directions"
 else
   fail "C10 the retirement record and the live tree agree in both directions"
+fi
+
+# ---------------------------------------------------------------------------
+# C11 — extractor parity with the merge-base guard.
+#
+# scripts/check-retirement-ledger.py closes the direction C10 cannot see: a
+# retirement that deletes a skill and writes no ledger row, where the phrases
+# leave the live set and the record at once so both sides still agree. That
+# guard has to read a SKILL.md recovered from the merge base, which this suite
+# has no git ref to reach, so it carries its own copy of emit_phrases' normal
+# form. Two copies of a normalization drift, and a drifted copy fails OPEN — it
+# would extract fewer phrases from the deleted file and demand fewer rows, going
+# green for the same reason the bug it guards goes green.
+#
+# This case pins them together over the real tree. It needs no git ref: the
+# guard's --emit-phrases mode reads the directory and returns before any git
+# call, so this case is safe inside the shallow plugin-test-suites job.
+c11_ok=1
+C11_GUARD="$REPO_ROOT/scripts/check-retirement-ledger.py"
+
+if [ ! -f "$C11_GUARD" ]; then
+  echo "     guard missing or unreadable: $C11_GUARD"
+  c11_ok=0
+else
+  mkdir -p "$TMPROOT/c11"
+  if ! emit_phrases "$WS_ROOT/skills" > "$TMPROOT/c11/suite" 2>/dev/null; then
+    echo "     emit_phrases failed over $WS_ROOT/skills"
+    c11_ok=0
+  elif ! python3 "$C11_GUARD" --emit-phrases "$WS_ROOT/skills" \
+         > "$TMPROOT/c11/guard" 2>/dev/null; then
+    echo "     guard --emit-phrases failed over $WS_ROOT/skills"
+    c11_ok=0
+  else
+    sort "$TMPROOT/c11/suite" > "$TMPROOT/c11/suite.s"
+    sort "$TMPROOT/c11/guard" > "$TMPROOT/c11/guard.s"
+    # Anti-vacuity floor, mirroring C9's and C10's: two empty outputs match
+    # trivially, so an extractor that stopped finding anything would report
+    # perfect parity. The real tree yields a non-empty set.
+    c11_n=$(grep -c . "$TMPROOT/c11/suite.s" || true)
+    if [ "$c11_n" -eq 0 ]; then
+      echo "     parity is vacuous: emit_phrases yielded 0 phrases"
+      c11_ok=0
+    elif ! diff -u "$TMPROOT/c11/suite.s" "$TMPROOT/c11/guard.s" > "$TMPROOT/c11/diff"; then
+      echo "     extractors disagree (suite yielded $c11_n phrase line(s)):"
+      sed -n '1,20p' "$TMPROOT/c11/diff" | sed 's/^/       /'
+      c11_ok=0
+    fi
+  fi
+fi
+
+if [ "$c11_ok" -eq 1 ]; then
+  pass "C11 the retirement-ledger guard's extractor matches emit_phrases exactly"
+else
+  fail "C11 the retirement-ledger guard's extractor matches emit_phrases exactly"
 fi
 
 # ---------------------------------------------------------------------------

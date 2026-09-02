@@ -72,7 +72,7 @@ absorption-status ledger below for the current state. A further top-level direct
 harness, not a plugin, and is correctly outside this table.
 
 **`cogni-sales` — settled.** This is the boundary case the amended rule was
-written for. `cogni-sales` sits in the "none" row on the measurement above and
+written for. `cogni-sales` was scored `none` on the measurement above and
 owns a single skill (`why-change`), so the structural reading placed it with the
 horizontal set. The topic reading places it with the verticals: selling is a
 distinct business topic a user names as their own work, not a tool other work

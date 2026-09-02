@@ -1588,6 +1588,54 @@ grade citation_family_dispatch "klib-44 citation_family (#1748) — the first fu
 grade strip_author_date_citation_markers "klib-45 strip_author_date_citation_markers (#1748) — APA/MLA/Harvard markers removed with no residue, multiple per sentence, no-op when absent; scheme-anchored so ordinary parenthesized prose links and the [[N]] anti-pattern survive; strip_citation_markers BRANCHES (author-date marker survives under ieee, numbered marker survives under apa)"
 grade extract_author_date_citation_urls "klib-46 extract_author_date_citation_urls (#1748) — the edge set klib-11 pins, transposed: appearance order, file:// first-class, unbracketed file:// with a literal space captured whole, angle-bracketed form, mixed file+http both in order, URL-less marker and ''→[]; scheme-anchored; extract_citation_urls dispatches per family"
 grade build_author_date_reference_list "klib-47 build_author_date_reference_list (#1748) — dedup by SOURCE identity not rendered string, alphabetical by surname across 'Last, First' and 'First Last', un-numbered (no **[N]**/[[N]]), ('','')+surname-less publisher surrogate sort last without raising, slug tiebreak, empty/None→[]"
+grade page_type_line "klib-48 page_type_line (#931) — the reader-facing Type: <Display> · <stage> header: per-type display name and stage word for all seven types, U+00B7 middle dot as the separator and never an ASCII substitute, case-insensitive key, and the fail-safe arms (unknown -> title-cased + raw, None/empty -> Unknown + raw, non-str int coerced) that must never raise"
+grade parse_distilled_claims_with_backlinks "klib-49 parse_distilled_claims_with_backlinks (#885) — the dual-level retrieval join reader: claim_id + text + backlinks and nothing else, inline list parsed with or without a space after the comma, order preserved, missing/empty backlinks normalized to [] so every claim carries the key, the with_id sibling left byte-identical (additive), and inline []/no key/empty/no-frontmatter -> []"
+
+# --- klib-50: check/grade census -------------------------------------------
+# The convention this file grades through has no structural enforcement: a
+# python-side registration prints "<tag>: OK"/"<tag>: FAIL" into $OUT, and only
+# a bash-side grade line ever reads it, so a registration with no grade line is
+# never read and can never fail the suite. #1753 found two such orphans.
+#
+# Bash-only for the same reason klib-01 (line 43) is: the python heredoc runs as
+# a subprocess with no handle on this script's source, and half the subject here
+# — the grade lines — is script text that never enters it. Unlike klib-01 this
+# case is NON-FATAL, folding into $errors so the rest of the report still prints.
+#
+# Three properties are load-bearing. `set -eu` is on (line 24) and grep exits 1
+# on zero matches, so every extraction is `|| true`-guarded as grade() is at line
+# 1536 — otherwise the suite aborts before this case can report. The extractors
+# are anchored so they match neither their own pattern literals (the bytes here
+# are an escaped paren, never a bare one) nor the grade() definition. LC_ALL=C
+# keeps sort and comm byte-collated, since the tags contain `_`.
+grep -oE 'check\("[a-z0-9_]+"' "$0" | sed 's/^check("//; s/"$//' | LC_ALL=C sort > "$WORK/census_reg" || true
+awk '/^grade[ \t]/{print $2}' "$0" | LC_ALL=C sort > "$WORK/census_graded" || true
+census_dup_reg=$(LC_ALL=C uniq -d "$WORK/census_reg" | tr '\n' ' ' || true)
+census_dup_graded=$(LC_ALL=C uniq -d "$WORK/census_graded" | tr '\n' ' ' || true)
+census_only_reg=$(LC_ALL=C comm -23 "$WORK/census_reg" "$WORK/census_graded" | tr '\n' ' ' || true)
+census_only_graded=$(LC_ALL=C comm -13 "$WORK/census_reg" "$WORK/census_graded" | tr '\n' ' ' || true)
+
+census_verdict="PASS"
+if [ ! -s "$WORK/census_reg" ] || [ ! -s "$WORK/census_graded" ]; then
+  census_verdict="EMPTY - registrations=$(wc -l < "$WORK/census_reg") grade lines=$(wc -l < "$WORK/census_graded"); an extractor matched nothing, so the convention was renamed or the scan is broken"
+elif [ -n "$census_dup_reg" ]; then
+  census_verdict="DUP-REGISTRATION - tag registered more than once: $census_dup_reg"
+elif [ -n "$census_dup_graded" ]; then
+  census_verdict="DUP-GRADE - tag graded more than once: $census_dup_graded"
+elif [ -n "$census_only_reg" ]; then
+  census_verdict="ORPHAN-REGISTRATION - registered but never graded, so its result is never read: $census_only_reg"
+elif [ -n "$census_only_graded" ]; then
+  census_verdict="ORPHAN-GRADE - graded but never registered: $census_only_graded"
+fi
+
+census_desc="klib-50 check/grade census - every registered tag has exactly one grade line and every grade line exactly one registration; duplicates on either side and an empty extraction are rejected too, so a third orphan cannot hide"
+if [ "$census_verdict" = "PASS" ]; then
+  green "PASS: $census_desc"
+else
+  red "FAIL: $census_desc ($census_verdict)"
+  errors=$((errors + 1))
+fi
+
 
 if [ $errors -gt 0 ]; then
   red "$errors case(s) failed."

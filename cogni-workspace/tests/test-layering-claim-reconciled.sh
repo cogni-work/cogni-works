@@ -4,10 +4,10 @@
 # surface may reassert the retired live-website / PowerPoint theme-extraction
 # paths that Operation 10 replaced.
 #
-# Why this exists. references/absorption-roadmap.md Decision 1 replaced the
-# LAYERING claim (cogni-workspace is the layer everything depends on) with a
-# SCOPE claim (it is the horizontal layer; each vertical business plugin keeps
-# its own project lifecycle). The claim was asserted in 19 places across docs/,
+# Why this exists. The absorption that created this plugin replaced the LAYERING
+# claim (cogni-workspace is the layer everything depends on) with a SCOPE claim
+# (it is the horizontal layer; each vertical business plugin keeps its own
+# project lifecycle). The claim was asserted in 19 places across docs/,
 # both wiki trees, a since-retired plugin and cogni-workspace, and reconciling
 # them by hand is only durable if something notices when one comes back. Nothing
 # did:
@@ -38,10 +38,10 @@
 # vacuous. They are retained here anyway, and case L2 plants each one in a
 # fixture, so the scanner is proven to catch each phrase.
 #
-# The retired theme-extraction subject. references/absorption-roadmap.md retired
-# the live-website and PPTX theme-extraction operations in favour of Operation 10
-# (the Claude Design bundle importer), and a later sweep removed every surviving
-# claim from both wiki trees, cogni-workspace/README.md and the theme-system RFC.
+# The retired theme-extraction subject. The live-website and PPTX theme-extraction
+# operations were retired in favour of Operation 10 (the Claude Design bundle
+# importer), and a later sweep removed every surviving claim from both wiki trees,
+# cogni-workspace/README.md and the theme-system RFC.
 # Nothing stopped the class returning, so FORBIDDEN_EXTRACTION carries it here
 # under the same scanner. Each of its four literals was measured ZERO-hit
 # repo-wide over tracked files on the post-sweep tree, outside the excluded paths
@@ -101,8 +101,9 @@
 # files they named are gone from the tree, and the phrases they quoted survive
 # nowhere else, so no page is left to point at. This inventory is a claim about
 # what is standing in the current tree, so it may only name things that exist —
-# the retired paths stay recorded in the historical tables of
-# references/absorption-roadmap.md, whose Decision 8 states the reasoning.
+# the retired paths stay recorded in git history instead. Retired-plugin phrasing
+# leaves a live survivor inventory behind, so a list like this one may name only
+# what still stands.
 #
 # This list is why the shared-foundation literal below is prefixed with the
 # plugin name: the bare "is the shared foundation" also matches the first entry,
@@ -124,8 +125,6 @@
 #
 # Path exclusions, each with a reason:
 #   - this file (it necessarily contains every literal it forbids)
-#   - references/absorption-roadmap.md — the decisions record quotes the retired
-#     claim by design, as the historical inventory of what was reconciled
 #   - wiki/log.md and the bundled copy — a dated ingest log; rewriting history is
 #     not reconciliation
 #   - wiki/pages/lint-2026-04-20.md — a dated lint note, and root-tree-only, so
@@ -221,7 +220,6 @@ $FORBIDDEN_EXTRACTION"
 # answer to this guard. The former `cogni-visual/libraries/` directory entry is
 # gone with the source tree it exempted.
 EXCLUDED='cogni-workspace/tests/test-layering-claim-reconciled.sh
-cogni-workspace/references/absorption-roadmap.md
 wiki/wiki/log.md
 wiki/wiki/pages/lint-2026-04-20.md
 cogni-workspace/libraries/excalidraw-patterns.md
@@ -440,10 +438,8 @@ fi
 # ---------------------------------------------------------------------------
 l3_ok=1
 mkdir -p "$TMPROOT/l3/cogni-workspace/libraries" \
-         "$TMPROOT/l3/cogni-workspace/references" \
          "$TMPROOT/l3/wiki/wiki/pages"
 printf '| Foundation Layer | fill |\n' > "$TMPROOT/l3/cogni-workspace/libraries/svg-patterns.md"
-printf 'The claim was: every other plugin depends on it.\n' > "$TMPROOT/l3/cogni-workspace/references/absorption-roadmap.md"
 printf 'ingest: foundation layer\n' > "$TMPROOT/l3/wiki/wiki/log.md"
 printf 'quoted `no upward dependencies` in a lint note\n' > "$TMPROOT/l3/wiki/wiki/pages/lint-2026-04-20.md"
 run_scan "$TMPROOT/l3" "excluded"

@@ -485,8 +485,7 @@ source for other documents, and its audit asserts only that the path exists, nev
 It also holds zero `portfolio_path` occurrences, so it could not emit this cell even by accident.
 Secondarily, grafting the literal onto that suite would put an unrelated pin inside cases scoped
 end to end to the retired layering claim, and a separate suite for one string is not worth its own
-file. The sibling caveat recorded in `absorption-roadmap.md` reached the same no-guard answer for
-output that genuinely is generated; the case is stronger here, not merely identical.
+file.
 
 **Revisit trigger:** if cogni-docs ever adds an `er-diagram` entry to its document-type routing
 table, this file becomes generated output and the guard question reopens on the terms above.

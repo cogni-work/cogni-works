@@ -31,9 +31,10 @@
 #   0 on a clean base. Only an enumerated vocabulary can satisfy both at once. The cost
 #   is that the guard catches exactly what it lists, which is why extending it is a
 #   first-class, test-enforced operation (see below) rather than an afterthought.
-#   This is a settled decision, not an open question deferred to a later rewrite: it is
-#   recorded in references/absorption-roadmap.md, under the decision covering this guard,
-#   together with the consequences of reversing it. Coverage grows by adding rows.
+#   This is a settled decision, not an open question deferred to a later rewrite, and
+#   reversing it has a known consequence: a matcher that infers the shape instead of
+#   listing the vocabulary is red on the base tree, for the reasons just given.
+#   Coverage grows by adding rows.
 #
 # HOW TO EXTEND THE VOCABULARY
 #   Add one row to VOCABULARY: ascii_token|correct_form|style|guard. That is the whole

@@ -274,8 +274,6 @@ the `venv` module / the network is unavailable — never block the update.
 
 ### 4. Update Theme Template
 
-Do **not** copy an output style into the workspace — the register ships with the plugin at `output-styles/` and is selected in `/config`.
-
 **Migrate a workspace created before the language settings key.** Step 3's `generate-settings.sh --update` writes the `language` key into `.claude/settings.local.json`, which is now where the workspace language lives. Three retired artifacts may still be on disk:
 
 - `.claude/templates/` — the cache that fed the Obsidian launcher's per-session `CLAUDE.md` copy. Nothing reads it any more. Delete it.

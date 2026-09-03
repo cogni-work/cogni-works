@@ -10,7 +10,7 @@ cogni-workspace is the horizontal layer of the insight-wave ecosystem — it own
 
 In practice, most users interact with cogni-workspace twice: once when setting up a new workspace (`manage-workspace`), and occasionally when something drifts out of sync (`workspace-status`, `manage-workspace`). Theme management and Obsidian integration are optional — use them if you want visual consistency across plugin outputs or a terminal-integrated note-taking environment.
 
-The plugin imposes no data model on the workspace. It writes four files during initialization — `.workspace-config.json`, `.workspace-env.sh`, `.claude/settings.local.json`, and output style templates — and then stays out of the way.
+The plugin imposes no data model on the workspace. It writes three files during initialization — `.workspace-config.json`, `.workspace-env.sh`, and `.claude/settings.local.json` — and then stays out of the way.
 
 ---
 
@@ -22,7 +22,7 @@ The plugin imposes no data model on the workspace. It writes four files during i
 | **Plugin discovery** | The process of scanning the marketplace cache for installed cogni-x plugins and registering them in the workspace config |
 | **Theme** | A markdown file containing color palettes, typography, and design principles, stored in `cogni-workspace/themes/` |
 | **Theme picker** | The `pick-theme` skill — the single entry point for theme selection used by all visual plugins |
-| **Output style** | A language-specific behavioral anchor file (EN/DE) that shapes how plugin outputs are formatted |
+| **Output style** | A language-neutral stance register shipped at the plugin root, discovered by Claude Code and selected in `/config` |
 | **Session hook** | `on-session-start.sh` — sources the workspace environment and validates plugin availability each time a session opens |
 | **Layered diagnostic** | The structure of `workspace-status` output: foundation → env vars → plugin registry → themes → dependencies → Python packages → MCP servers, then plugin-level faults |
 | **Obsidian vault** | A `.obsidian/` configuration directory scaffolded by `manage-workspace` during initialization |
@@ -66,8 +66,7 @@ What the initialization does:
 4. Generates `.workspace-config.json` with plugin registry and metadata
 5. Generates `.workspace-env.sh` with environment variables for each plugin
 6. Generates `.claude/settings.local.json` with workspace-appropriate settings
-7. Writes output style templates for EN and DE
-8. Creates the `cogni-workspace/themes/` directory and installs the bundled `cogni-work` theme
+7. Creates the `cogni-workspace/themes/` directory and installs the bundled `cogni-work` theme
 
 After initialization, your workspace root contains:
 
@@ -84,7 +83,7 @@ cogni-workspace/themes/    shared theme storage
 
 ### `manage-workspace` — Initialize or update a workspace
 
-A single command that auto-detects whether to initialize or update. If no `.workspace-config.json` exists, it runs the full initialization flow (dependency checks, plugin discovery, preference gathering, settings generation). If one exists, it runs the update flow (backup, re-scan plugins, refresh env vars, update output styles) while preserving user customizations.
+A single command that auto-detects whether to initialize or update. If no `.workspace-config.json` exists, it runs the full initialization flow (dependency checks, plugin discovery, preference gathering, settings generation). If one exists, it runs the update flow (backup, re-scan plugins, refresh env vars) while preserving user customizations.
 
 ```
 /manage-workspace
@@ -94,13 +93,16 @@ A single command that auto-detects whether to initialize or update. If no `.work
 
 ### `workspace-status` — Layered health diagnostic
 
-Checks the workspace in five layers and reports findings with actionable fixes:
+Checks the workspace in layers and reports findings with actionable fixes:
 
 1. **Foundation** — are the required files present and well-formed?
 2. **Environment variables** — does `.workspace-env.sh` define the variables plugins expect?
 3. **Plugin registry** — are registered plugins still installed at their expected paths?
 4. **Themes** — is at least one theme available for visual plugins?
 5. **Dependencies** — are `jq`, `python3`, and bash at the required versions?
+6. **Optional Python packages** — is the shared venv provisioned with what dependent skills need?
+7. **MCP servers** — are the servers plugins expect built, configured, and loaded in this session?
+8. **Plugin-level faults** — plugin availability, skill-file integrity, cross-plugin dependencies, stale state
 
 Run when something is not working and you are not sure whether it is a plugin issue or a workspace issue:
 
@@ -377,7 +379,7 @@ cogni-workspace has no required plugin dependencies. Its scope is horizontal: th
 |---------------|----------------------------------|
 | All cogni-x plugins | `.workspace-env.sh` — sourced at session start via the hook |
 | cogni-website | Themes via `pick-theme`; `design-variables.json` derived from the picked theme |
-| document-skills | Themes via `pick-theme`; output style templates |
+| document-skills | Themes via `pick-theme` |
 | cogni-consult | `discover-plugins.sh` results — to know which plugins are available for dispatch |
 
 ---
@@ -388,7 +390,7 @@ cogni-workspace has no required plugin dependencies. Its scope is horizontal: th
 
 1. Install insight-wave plugins from the marketplace
 2. Run `/manage-workspace` in your project directory — answer the language and integration questions
-3. Run `/workspace-status` to confirm all five tiers are green
+3. Run `/workspace-status` to confirm every layer is green
 4. Run `/manage-themes` to import your Claude Design bundle or start from a preset
 5. Obsidian integration is offered during `/manage-workspace` if you indicate Obsidian use
 

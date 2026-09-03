@@ -1,20 +1,18 @@
 ---
 name: workspace-status
 description: >-
-  Diagnose and report on the health of an insight-wave workspace and the plugins installed in
-  it — one surface for both workspace infrastructure and plugin-level faults. Use this skill
-  whenever the user mentions workspace status, health, or diagnostics — including "check
-  workspace", "is my workspace ok", "diagnose workspace", "verify workspace" — or reports
-  something broken at the plugin level: "something is wrong", "plugin error", "skill not
-  responding", "fix my setup", or "why isn't X working". It covers workspace infrastructure
-  (env vars, themes, settings, the plugin registry, MCP servers in the session) and plugin-
-  level and cross-plugin faults (plugin availability, skill-file integrity, cross-plugin
-  dependencies, progress and state files, stale state left by retirements). It is also the
-  re-entry point for workspace work across sessions, so trigger it on "workspace resume",
-  "resume workspace", "where was I", "what's next", or "continue" when the subject is the
-  workspace rather than a specific plugin's project. Trigger it even without an explicit
-  request when the user describes symptoms of a misconfigured workspace or hits an unclear
-  error during plugin use.
+  Diagnose the health of an insight-wave workspace and its installed plugins — one surface for
+  both workspace infrastructure and plugin-level faults. Use this skill whenever the user
+  mentions workspace status, health, or diagnostics — including "check workspace", "is my
+  workspace ok", "diagnose workspace", "verify workspace" — or reports something broken at the
+  plugin level: "something is wrong", "plugin error", "skill not responding", "fix my setup",
+  or "why isn't X working". It covers workspace infrastructure (env vars, themes, settings, the
+  plugin registry, MCP servers) and plugin-level and cross-plugin faults (plugin availability,
+  skill-file integrity, cross-plugin dependencies, stale state left by retirements). It is also
+  the cross-session re-entry point for the workspace itself: "workspace resume", "resume
+  workspace", "where was I in the workspace". Trigger it even without an explicit request when
+  the user describes symptoms of a misconfigured workspace or hits an unclear error during
+  plugin use.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion, Skill, ToolSearch
 ---
 
@@ -361,14 +359,22 @@ The report orients; the recommendation commits. After the summary block, name **
 | Condition | Recommend | Because |
 |---|---|---|
 | A required foundation file is missing | `manage-workspace` | Nothing else can be trusted until the workspace exists |
+| A required dependency is missing (check 5) | Install it with the command that check named | Scripts cannot run at all, so every other finding below is unreliable |
 | Registry and installed plugins disagree | `manage-workspace` | Env vars are generated from the registry, so every downstream path is suspect |
-| An env var is set but points at a missing path | `manage-workspace` | Regenerating settings is the only supported repair |
+| An env var is missing, or set but pointing at a missing path | `manage-workspace` | Regenerating settings is the only supported repair |
+| No themes are available | `manage-themes` | Visual output across every plugin falls back to defaults until one exists |
 | A theme reports `upgrade_available` or `tier_drift` | `manage-themes` | Advisory, not an error — but it is the next thing worth doing |
+| An optional Python package is missing (check 5.5) | `manage-workspace` | It provisions the shared venv; the dependent skill degrades until it does |
 | An MCP server is built but not configured | `install-mcp` | One config write plus a new session clears it |
 | A plugin-level fault was found in check 7 | The fix named in that finding | The finding already carries its own remedy |
 | Everything is OK | Offer `workspace-dashboard` | Nothing needs fixing, so the useful next move is seeing the configuration |
 
-If the user arrived by asking to resume — "where was I", "what's next" — lead with this recommendation and keep the summary block underneath it. If they asked for a diagnosis, keep the summary first and close with the recommendation.
+The last row is reachable only when **every** check reported OK. If a check reports
+CRITICAL or WARNING and no row above matches it, the ladder is out of date with the
+checks — say so and recommend the remedy that check printed, rather than falling through
+to `workspace-dashboard` while the summary block above shows a fault.
+
+If the user arrived by asking to resume — "workspace resume", "where was I in the workspace" — lead with this recommendation and keep the summary block underneath it. If they asked for a diagnosis, keep the summary first and close with the recommendation.
 
 ## Full Scan Mode
 

@@ -70,7 +70,7 @@ These are typically set by an upstream agent (e.g., why-change-work), not by a h
 
 ### Theme-driven visuals
 
-The renderer owns all visual decisions — colors, fonts, spacing — by reading the theme directly. Briefs specify content and layout only. Omit color/styling fields (`Background:`, `Text-Color:`, `Icon-Color:`, `Role:`, `Intensity:`, `Mood:`) because the renderer ignores them and their presence creates ambiguity about who controls styling.
+The renderer owns all visual decisions — colors, fonts, spacing — by reading the theme directly. Briefs specify content and layout only. Omit color/styling fields (`Background:`, `Text-Color:`, `Icon-Color:`, `Role:`, `Intensity:`, `Mood:`) because the renderer ignores them and their presence creates ambiguity about who controls styling. The nested `intent.role` key is a different, permitted 4.1 key and is not covered by this prohibition.
 
 ### Interactive checkpoints
 
@@ -203,7 +203,7 @@ If arc_id set: read `$CLAUDE_PLUGIN_ROOT/libraries/arc-taxonomy.md`, map to arc_
 
 If pick-theme is unavailable (e.g., cogni-workspace not installed), fall back to Glob scanning `$COGNI_WORKSPACE_ROOT/themes/*/theme.md` and present via AskUserQuestion manually.
 
-**Load libraries:** `cta-taxonomy.md`, `arc-taxonomy.md` (if arc_id set). The heavier libraries (`pptx-layouts.md` and `EXAMPLE_BRIEF.md`) are deferred to the steps that consume them (Steps 7 and 8) to keep context lean during the creative intelligence steps.
+**Load libraries:** `cta-taxonomy.md`, `arc-taxonomy.md` (if arc_id set). The heavier libraries (`pptx-layouts.md` and `EXAMPLE_BRIEF.md`) are deferred to the steps that consume them (Steps 7 and 8), and `presentation-intent.md` is deferred to Step 8.2, to keep context lean during the creative intelligence steps.
 
 ---
 
@@ -333,7 +333,7 @@ Content checkpoint: State slides compressed count, total words moved to notes.
 
 **Read library:** `$CLAUDE_PLUGIN_ROOT/libraries/EXAMPLE_BRIEF.md` — output format reference needed for YAML spec generation and final brief output (Step 10). Deferred from Step 1 to keep context lean during creative Steps 2-6.
 
-**Read reference:** `references/07-output-template.md` (Slide YAML Example section)
+**Read reference:** `references/07-output-template.md` (Per-slide YAML pattern section)
 
 For each slide, generate content-only YAML following `pptx-layouts.md` field names. Omit all color/styling fields — the renderer reads the theme. Every slide heading is an assertion headline.
 
@@ -390,6 +390,8 @@ Frontmatter — omit `arc_id` when unresolved, and `climax` when no slide carrie
 **Resolve output path** before launching (run via Bash):
 - If `output_path` explicit: `mkdir -p "$(dirname "${output_path}")"`
 - Otherwise: set `output_path = {source_dir}/cogni-visual/presentation-brief.md` and `mkdir -p "{source_dir}/cogni-visual"`
+
+The `FRONTMATTER:` block in the prompt below is a deliberate interpolation payload — it supplies values for the keys, not a second definition of the key set; `references/07-output-template.md` → Frontmatter remains the authority and this block is kept in sync with it.
 
 **Launch the `slides-enrichment-artist` agent:**
 

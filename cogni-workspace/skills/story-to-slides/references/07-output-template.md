@@ -130,13 +130,18 @@ them.
 
 `climax` is **conditionally required**: present whenever some slide carries
 `emphasis: climax`, omitted when no slide does — which is what the inline
-`omit if none` annotation above means. Within `design`, `dark_slides` and
+`omit if none` annotation above means. `arc_id` is likewise conditional —
+present when the arc resolves, omitted when it does not, which is what its
+inline `omit if not` annotation above means. Within `design`, `dark_slides` and
 `variations` are optional and fall back to the defaults in
-`presentation-intent.md`. **Every other key above is required**, `design` and
+`presentation-intent.md`. `transformation_notes` is producer-emitted provenance,
+not a validated input key: this skill always writes it, and no checker requires
+it of a brief. **Every other key above is required**, `design` and
 `key_figures` included.
 
-This paragraph is the single authority on 4.1 requiredness: `SKILL.md` and
-`09-validation-checklist.md` both defer to it rather than restating the key set.
+This paragraph is the single authority on 4.1 requiredness: `SKILL.md` defers
+to it; `09-validation-checklist.md` restates it for the checker and must not
+diverge from it.
 
 ### Rendering Contract
 

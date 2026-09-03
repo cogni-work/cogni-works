@@ -52,6 +52,18 @@ via `trap rm -rf "$WORK" EXIT`.
   `[`, `]`, `.` or `*` — a wikilink, a glob, a path. `assert_grep` reads such
   a pattern as a regex, so it can report green against a file that does not
   contain the string at all.
+- `check_grade_census <file>` censuses the two-part check/grade convention in
+  `<file>` — every `check("<tag>", ...)` registration paired with exactly one
+  `grade <tag>` line — and returns a verdict string on stdout: `PASS`, or a
+  diagnostic naming the offending tag(s). Pass the caller's own `"$0"`. It
+  emits no label and increments no `errors`, so the calling suite spells its
+  own case id **literally in both arms** and folds the verdict into `errors`
+  itself. That is what keeps the case addressable: `fixtures/` is one path
+  segment out of reach of `scripts/check-case-id-pairing.py`, and an id that
+  is entirely an expansion is skipped by it, so an arm emitted from the helper
+  — or one whose id arrives only via `$census_desc` — is invisible to the
+  guard. `test_knowledge_lib.sh`, `test_ingest_contract.sh` and
+  `test_pdf_extract.sh` are its three callers.
 - Real Python harness (inline `python3 - <<PY ... PY` heredoc) for
   script-level assertions.
 - Fixtures are minimal — only the files the test actually exercises.

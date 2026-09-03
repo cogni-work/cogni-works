@@ -1592,47 +1592,20 @@ grade page_type_line "klib-48 page_type_line (#931) — the reader-facing Type: 
 grade parse_distilled_claims_with_backlinks "klib-49 parse_distilled_claims_with_backlinks (#885) — the dual-level retrieval join reader: claim_id + text + backlinks and nothing else, inline list parsed with or without a space after the comma, order preserved, missing/empty backlinks normalized to [] so every claim carries the key, the with_id sibling left byte-identical (additive), and inline []/no key/empty/no-frontmatter -> []"
 
 # --- klib-50: check/grade census -------------------------------------------
-# The convention this file grades through has no structural enforcement: a
-# python-side registration prints "<tag>: OK"/"<tag>: FAIL" into $OUT, and only
-# a bash-side grade line ever reads it, so a registration with no grade line is
-# never read and can never fail the suite. #1753 found two such orphans.
-#
-# Bash-only for the same reason klib-01 (line 43) is: the python heredoc runs as
-# a subprocess with no handle on this script's source, and half the subject here
-# — the grade lines — is script text that never enters it. Unlike klib-01 this
-# case is NON-FATAL, folding into $errors so the rest of the report still prints.
-#
-# Three properties are load-bearing. `set -eu` is on (line 24) and grep exits 1
-# on zero matches, so every extraction is `|| true`-guarded as grade() is at line
-# 1536 — otherwise the suite aborts before this case can report. The extractors
-# are anchored so they match neither their own pattern literals (the bytes here
-# are an escaped paren, never a bare one) nor the grade() definition. LC_ALL=C
-# keeps sort and comm byte-collated, since the tags contain `_`.
-grep -oE 'check\("[a-z0-9_]+"' "$0" | sed 's/^check("//; s/"$//' | LC_ALL=C sort > "$WORK/census_reg" || true
-awk '/^grade[ \t]/{print $2}' "$0" | LC_ALL=C sort > "$WORK/census_graded" || true
-census_dup_reg=$(LC_ALL=C uniq -d "$WORK/census_reg" | tr '\n' ' ' || true)
-census_dup_graded=$(LC_ALL=C uniq -d "$WORK/census_graded" | tr '\n' ' ' || true)
-census_only_reg=$(LC_ALL=C comm -23 "$WORK/census_reg" "$WORK/census_graded" | tr '\n' ' ' || true)
-census_only_graded=$(LC_ALL=C comm -13 "$WORK/census_reg" "$WORK/census_graded" | tr '\n' ' ' || true)
+# The census computation lives in fixtures/test_helpers.sh as
+# check_grade_census; that function's header carries the full rationale — why
+# it is bash-only, why every extraction is `|| true`-guarded under `set -eu`,
+# why it owns its own scratch dir and installs no EXIT trap, and which two
+# anchors must not be simplified. #1753 found two orphans in this file; this
+# case is what keeps a third from hiding. NON-FATAL — it folds into $errors so
+# the rest of the report still prints.
+census_verdict=$(check_grade_census "$0")
 
-census_verdict="PASS"
-if [ ! -s "$WORK/census_reg" ] || [ ! -s "$WORK/census_graded" ]; then
-  census_verdict="EMPTY - registrations=$(wc -l < "$WORK/census_reg") grade lines=$(wc -l < "$WORK/census_graded"); an extractor matched nothing, so the convention was renamed or the scan is broken"
-elif [ -n "$census_dup_reg" ]; then
-  census_verdict="DUP-REGISTRATION - tag registered more than once: $census_dup_reg"
-elif [ -n "$census_dup_graded" ]; then
-  census_verdict="DUP-GRADE - tag graded more than once: $census_dup_graded"
-elif [ -n "$census_only_reg" ]; then
-  census_verdict="ORPHAN-REGISTRATION - registered but never graded, so its result is never read: $census_only_reg"
-elif [ -n "$census_only_graded" ]; then
-  census_verdict="ORPHAN-GRADE - graded but never registered: $census_only_graded"
-fi
-
-census_desc="klib-50 check/grade census - every registered tag has exactly one grade line and every grade line exactly one registration; duplicates on either side and an empty extraction are rejected too, so a third orphan cannot hide"
+census_desc="check/grade census - every registered tag has exactly one grade line and every grade line exactly one registration; duplicates on either side and an empty extraction are rejected too, so a third orphan cannot hide"
 if [ "$census_verdict" = "PASS" ]; then
-  green "PASS: $census_desc"
+  green "PASS: klib-50 $census_desc"
 else
-  red "FAIL: $census_desc ($census_verdict)"
+  red "FAIL: klib-50 $census_desc ($census_verdict)"
   errors=$((errors + 1))
 fi
 

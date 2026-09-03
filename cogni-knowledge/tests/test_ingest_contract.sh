@@ -438,6 +438,20 @@ grade atomic_write_text "ingest-contract-118-atomic-write-text-round atomic_writ
 grade slugify           "ingest-contract-119-slugify-lower-kebab-dash slugify — lower-kebab, dash-collapse, length cap, empty-on-non-alnum"
 grade sanitize_summary  "ingest-contract-120-sanitize-summary-u-2020 sanitize_summary — U+2020 dagger / NBSP -> regular space, accents preserved (#387)"
 
+# --- ingest-contract-125: check/grade census --------------------------------
+# Shared computation in fixtures/test_helpers.sh (check_grade_census); its
+# header carries the rationale. Guards this suite against the silent-orphan
+# class #1753 found in test_knowledge_lib.sh: a python-side registration with
+# no matching bash-side grade line is never read, so it can never fail here.
+census_verdict=$(check_grade_census "$0")
+census_desc="check/grade census - every registered tag has exactly one grade line and every grade line exactly one registration; duplicates on either side and an empty extraction are rejected too, so an orphan cannot hide"
+if [ "$census_verdict" = "PASS" ]; then
+  green "PASS: ingest-contract-125-check-grade-census $census_desc"
+else
+  red "FAIL: ingest-contract-125-check-grade-census $census_desc ($census_verdict)"
+  errors=$((errors + 1))
+fi
+
 if [ $errors -eq 0 ]; then
   green ""
   green "ALL PASS"

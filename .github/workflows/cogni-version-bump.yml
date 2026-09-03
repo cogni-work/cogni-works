@@ -144,7 +144,19 @@ jobs:
         env:
           DRY_RUN: ${{ inputs.dry_run }}
         run: |
+          set +e
           set -uo pipefail
+          # `set +e` above is load-bearing and must stay first. Actions runs this
+          # block as `bash -e {0}`, so -e is inherited before line 1 executes, and
+          # `set -uo pipefail` does NOT clear an inherited -e — only `set +e` does.
+          # Without it RC=1 (a hard skip, where the healthy plugins WERE written)
+          # aborts the step at the apply-version-bump command itself, so both
+          # `cat`s, the skip annotations and the `count` / `deferred_failure`
+          # outputs never happen — silently skipping BOTH downstream `if:`-gated
+          # steps.
+          # Deliberately NO terminal `exit "$RC"` here, unlike the gate blocks in
+          # lint.yml — this step must SUCCEED on RC=1 so the healthy plugins still
+          # commit; "Fail the run on a hard skip" fails the run at the very end.
           ARGS="--changed-file changed-files.txt"
           if [ "${DRY_RUN:-}" = "true" ]; then ARGS="$ARGS --dry-run"; fi
 

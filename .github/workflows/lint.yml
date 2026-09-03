@@ -185,9 +185,16 @@ jobs:
 
       - name: Discover and run every plugin and repo-root test suite
         run: |
-          # Not `set -e`: the runner's exit code is the result we report on,
-          # so it must be captured rather than abort the step.
+          set +e
           set -uo pipefail
+          # `set +e` above is load-bearing and must stay first. Actions runs this
+          # block as `bash -e {0}`, so -e is inherited before line 1 executes, and
+          # `set -uo pipefail` does NOT clear an inherited -e — only `set +e` does.
+          # Without it a failing sweep aborts the step at the runner command itself,
+          # so `rc=$?`, the per-suite annotation loop and the terminal exit are all
+          # unreachable: a bare red naming no failing suite, on the one job whose
+          # whole purpose is to name them.
+          # The failing status is preserved by the terminal `exit "$rc"`, not by -e.
           python3 scripts/run-plugin-tests.py > plugin-tests.json
           rc=$?
 

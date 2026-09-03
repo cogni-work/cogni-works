@@ -13,7 +13,7 @@
         "No Slide-Title exceeds 110 characters (IS-DOES-MEANS slides may reach 130 characters)",
         "Total slide count is 15 or fewer",
         "YAML frontmatter contains a governing_thought field with a non-empty value",
-        "The brief contains no color/styling fields (Background, Text-Color, Icon-Color, Role, Intensity, Mood)",
+        "The brief contains no TOP-LEVEL color/styling fields (Background, Text-Color, Icon-Color, Role, Intensity, Mood) — the nested intent.role key is a permitted 4.1 key and does not count",
         "A references slide is present as the last substantive slide",
         "Every slide has a Speaker-Notes field with content",
         "Speaker notes follow the two-section format with WHAT YOU SAY and WHAT YOU NEED TO KNOW headers",

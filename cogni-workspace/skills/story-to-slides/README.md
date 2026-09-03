@@ -440,7 +440,6 @@ intent:
 visual:
   kind: none
 
-Layout: title-slide
 Title: Crisis in the Railway Network
 Subtitle: Why manual monitoring is no longer sufficient
 Metadata: Customer Name | Provider Name | 2026-02-06
@@ -453,7 +452,7 @@ Layout: process-flow
 Slide-Kind: internal-prep
 
 intent:
-  role: evidence
+  role: hook
   emphasis: none
 
 visual:
@@ -501,7 +500,7 @@ Layout: four-quadrants
 Slide-Kind: internal-prep
 
 intent:
-  role: evidence
+  role: hook
   emphasis: none
 
 visual:
@@ -565,21 +564,20 @@ visual:
 ## Generation Metadata
 
 ```yaml
-story_arc: why-change
-governing_thought: "Deutsche Bahn should deploy AI video analytics..."
-source_files:
-  - value-story.md
-  - 01-why-change/narrative.md
-  - 02-why-now/narrative.md
-  - 03-why-you/narrative.md
-  - 04-why-pay/narrative.md
-  - power-positions.md
 slides_total: 12
-arguments_mece: 4
-consolidation: "18 sections → 12 slides"
+content_slides: 10
+prep_slides: 2
 number_plays: 6
 headlines_optimized: 12
 bullets_consolidated: 8
+source_links: 9
+layout_distribution:
+  title-slide: 1
+  process-flow: 1
+  four-quadrants: 1
+  context-box: 5
+  hero-stat: 3
+  closing-slide: 1
 avg_confidence: 0.87
 manual_review: [4, 9]
 validation:

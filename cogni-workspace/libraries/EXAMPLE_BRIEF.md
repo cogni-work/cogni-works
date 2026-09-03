@@ -46,7 +46,7 @@ Dieser Block ist die deutsche Fassung von `# Rendering Contract` aus `07-output-
 
 - Texte sind eingefroren: Überschriften, Aufzählungen, Zahlen und Beschriftungen exakt übernehmen — wer eine Zeile umformuliert, ändert das Ergebnis, statt es zu gestalten.
 - Notizen für Slides gehen vollständig in den nativen Notizkanal des Renderers; gekürzte oder zusammengefasste Notizen sind eine fehlerhafte Umsetzung.
-- Zitatmarker <sup>[N](url)</sup> werden zu Hyperlinks auf der Zahl, und die Quellenfolie bleibt die letzte Folie.
+- Zitatmarker `<sup>[N](url)</sup>` werden zu Hyperlinks auf der Zahl, und die Quellenfolie bleibt die letzte Folie.
 - Gestaltung stammt ausschließlich aus dem Theme oder dem Designsystem des Renderers; der Brief enthält keine Farben, Schriften oder Koordinaten, und es dürfen auch keine aus dem Wortlaut abgeleitet werden.
 - `Layout` ist eine Inhaltsform und `visual` eine Absicht: beide auf das nächstgelegene native Layout abbilden und niemals Inhalte erfinden, um eines zu füllen.
 
@@ -723,7 +723,7 @@ conversion_goal: "consultation"
 | Slide fencing | Unfenced slide YAML | Exactly one fenced `yaml` block per `## Slide N:` heading |
 | Slide identity | Inferred from banner text and position | Declared: `Slide-Kind: content / internal-prep / references` |
 | Intent | Not expressed | Per-slide `intent: {role, emphasis}` and `visual: {kind, chart, image_prompt}` |
-| Contract block | A pptx-only requirements block addressed to one renderer | `# Rendering Contract` — renderer-neutral, five clauses plus a per-renderer appendix |
+| Contract block | A pptx-only requirements block addressed to one renderer | `# Rendering Contract` — renderer-neutral, five clauses |
 
 **Backward compatibility:** 4.1 is additive over 4.0 — every renderer accepts both, and an unfenced 4.0 brief stays readable. The PPTX skill still accepts v2.0/v3.0 briefs with explicit color fields; when color fields are present, they take precedence over theme-based inference.
 

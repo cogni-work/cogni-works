@@ -83,9 +83,11 @@ Never use English labels in a German presentation or vice versa.
 The final brief uses this structure. Read it before writing Step 9 output.
 
 Schema **4.1** is additive over 4.0: every renderer accepts both, and an unfenced
-4.0 brief stays readable. The frontmatter keys added below are defined in
-`cogni-workspace/libraries/presentation-intent.md` — this template cites that
-vocabulary rather than restating it.
+4.0 brief stays readable. Three of the frontmatter keys added below — `climax`,
+`design` and `key_figures` — are defined in
+`cogni-workspace/libraries/presentation-intent.md`, and this template cites that
+vocabulary rather than restating it. The remaining two, `max_slides` and
+`slides`, are defined here.
 
 ### Frontmatter
 
@@ -108,10 +110,10 @@ slides: {slides_total}
 climax: {slide number carrying the emphasis peak, omit if none}
 design:
   register: {visual/tonal register, e.g. quiet-executive}
-  dark_slides: [{slide numbers rendered dark as rhythm anchors}]
+  dark_slides: [{slide numbers rendered dark as rhythm anchors}]   # optional — default per presentation-intent.md
   speaker_notes: {full-script | calm peer-to-peer | bullets}
   imagery: {none | type-only | photographic}
-  variations: {how many design variations to generate}
+  variations: {how many design variations to generate}   # optional — default per presentation-intent.md
 key_figures:
   - "{hero number promoted out of prose, provenance marker kept if it carries one}"
 transformation_notes: |
@@ -124,7 +126,17 @@ transformation_notes: |
 
 `theme` and `theme_path` are **optional pass-through keys**: a caller that already
 resolved a theme may supply them, and a renderer that chooses its own may ignore
-them. Every other key above is required.
+them.
+
+`climax` is **conditionally required**: present whenever some slide carries
+`emphasis: climax`, omitted when no slide does — which is what the inline
+`omit if none` annotation above means. Within `design`, `dark_slides` and
+`variations` are optional and fall back to the defaults in
+`presentation-intent.md`. **Every other key above is required**, `design` and
+`key_figures` included.
+
+This paragraph is the single authority on 4.1 requiredness: `SKILL.md` and
+`09-validation-checklist.md` both defer to it rather than restating the key set.
 
 ### Rendering Contract
 
@@ -152,6 +164,10 @@ requirements block of 4.0 and is addressed to whichever renderer consumes the br
 - Gestaltung stammt ausschließlich aus dem Theme oder dem Designsystem des Renderers; der Brief enthält keine Farben, Schriften oder Koordinaten, und es dürfen auch keine aus dem Wortlaut abgeleitet werden.
 - `Layout` ist eine Inhaltsform und `visual` eine Absicht: beide auf das nächstgelegene native Layout abbilden und niemals Inhalte erfinden, um eines zu füllen.
 
+**The `### Per renderer` block below is template-side documentation and is NOT
+emitted into the brief.** The emitted Rendering Contract is the five
+renderer-neutral clauses above it and nothing more.
+
 ### Per renderer
 
 - Claude Design — consumes the outline export; honours `intent.role` for section rhythm and `design.register` for the visual register.
@@ -173,6 +189,12 @@ sub-keys; `visual.chart` and `visual.image_prompt` are conditional on `visual.ki
 | `visual.kind` | `stat` / `chart` / `diagram` / `table` / `icon` / `image` / `none` | The visual treatment the renderer should build |
 | `visual.chart` | `{type, unit, categories[], series[{name, values[]}]}` | Native series data — never an image |
 | `visual.image_prompt` | free text | Imagery direction when `visual.kind` is `image` |
+
+The per-slide `type:` tag in `presentation-intent.md` and `visual.kind` above are
+**orthogonal, not alternatives**: `type:` annotates the slide's *shape* and is bound
+to `Layout` by that library's own Layout-to-type table, while `visual.kind` names the
+*visual element the slide carries*. `table` appears in both because a slide whose
+shape is a table also carries a table as its visual; every other pairing is free.
 
 `Icon:` is unchanged. `cta:` per slide and a `## CTA Summary` section remain optional.
 

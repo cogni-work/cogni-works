@@ -454,7 +454,7 @@ Detail-Grid:
     - "34-week deployment"
     - "18-month payback"
 Bottom-Banner:
-  Text: "INTERNAL — REMOVE BEFORE CLIENT PRESENTATION"
+  Text: "INTERNAL — REMOVE FROM CLIENT PRESENTATION"
 Speaker-Notes: |
   [... coaching notes + slide-by-slide pacing guide with PEAK/RELEASE ...]
 
@@ -490,7 +490,7 @@ Q4:
     - "Flagship project for their agenda"
     - "Activate as internal advocate"
 Bottom-Banner:
-  Text: "INTERNAL — REMOVE BEFORE CLIENT PRESENTATION"
+  Text: "INTERNAL — REMOVE FROM CLIENT PRESENTATION"
 Speaker-Notes: |
   [... coaching notes for presenter ...]
 
@@ -602,6 +602,7 @@ graph TD
 | `references/05a-slide-copywriting.md` | Number plays, headline optimization, bullet consolidation, evidence hierarchy |
 | `references/05b-speaker-notes.md` | Speaker notes format reference: two-section structure, tags, templates, localization (used by Step 7c) |
 | `references/06-slide-mapping-rules.md` | Message-driven layout selection, confidence scoring, fallback strategies |
+| `references/07-output-template.md` | Brief output template: v4.1 grammar, per-slide fences, Rendering Contract, citation handling |
 | `references/08b-references-slide.md` | References slide construction, column splitting, citation formatting |
 | `references/09-validation-checklist.md` | Five-layer validation framework with 50+ validation rules |
 | `references/2g-diagram-simplification.md` | Mermaid diagram detection, classification decision tree, simplification rules |

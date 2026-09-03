@@ -1,6 +1,6 @@
 ---
 type: presentation-brief
-version: "4.0"
+version: "4.1"
 theme: smarter-service
 theme_path: "/cogni-workspace/themes/smarter-service/theme.md"
 customer: "Deutsche Bahn AG"
@@ -11,6 +11,22 @@ arc_type: "why-change"
 arc_id: "corporate-visions"
 governing_thought: "Deutsche Bahn braucht KI-Videoanalytik, weil manuelle Überwachung die Sicherheitskrise nicht bewältigen kann."
 confidence_score: 0.87
+max_slides: 12
+slides: 13
+climax: 4
+design:
+  register: quiet-executive
+  dark_slides: [1, 4, 12]
+  speaker_notes: full-script
+  imagery: none
+  variations: 1
+key_figures:
+  - "688 Schienensuizide jährlich"
+  - "2.661 Übergriffe auf Bahnhöfen"
+  - "73% Infrastruktur veraltet"
+  - "87% kürzere Reaktionszeit"
+  - "60% Kosteneinsparung"
+  - "34 Wochen bis Pilotbetrieb"
 transformation_notes: |
   Story-to-slides transformation.
   Theme: smarter-service
@@ -20,15 +36,19 @@ transformation_notes: |
   Diagram slides: 2 (layered-architecture, gantt-chart).
 ---
 
-# Example Presentation Brief (v4.0 Content-Only Schema)
+# Example Presentation Brief (v4.1 Content-Only Schema)
 
-This example demonstrates the v4.0 content-only slide specification schema. All color fields are absent — the PPTX skill reads the theme directly for all visual decisions.
+This example demonstrates the v4.1 content-only slide specification schema. All color fields are absent — the renderer reads the theme directly for all visual decisions. Every slide declares `Slide-Kind`, an `intent` and a `visual`.
 
-# PPTX-Rendering-Anforderungen
-- Texte und Zahlen sind freigegeben und exakt zu übernehmen; Abweichungen führen zu einer fehlerhaften Präsentation.
-- Notizen für Slides müssen vollständig übernommen werden; gekürzte Notizen führen zu einer fehlerhaften Präsentation.
-- Quellenangaben müssen mit funktionierenden Links erhalten bleiben; eine Präsentation ohne Quellenlinks ist fehlerhaft.
-- Hochgestellte Links wie <sup>[1](url)</sup> müssen als PPTX-Hyperlinks mit der Zahl als Anzeigetext in Hochstellung erstellt werden; nicht umgesetzte Links sind Fehler.
+Dieser Block ist die deutsche Fassung von `# Rendering Contract` aus `07-output-template.md`.
+
+# Rendering-Vertrag
+
+- Texte sind eingefroren: Überschriften, Aufzählungen, Zahlen und Beschriftungen exakt übernehmen — wer eine Zeile umformuliert, ändert das Ergebnis, statt es zu gestalten.
+- Notizen für Slides gehen vollständig in den nativen Notizkanal des Renderers; gekürzte oder zusammengefasste Notizen sind eine fehlerhafte Umsetzung.
+- Zitatmarker <sup>[N](url)</sup> werden zu Hyperlinks auf der Zahl, und die Quellenfolie bleibt die letzte Folie.
+- Gestaltung stammt ausschließlich aus dem Theme oder dem Designsystem des Renderers; der Brief enthält keine Farben, Schriften oder Koordinaten.
+- `Layout` ist eine Inhaltsform und `visual` eine Absicht: beide auf das nächstgelegene native Layout abbilden und niemals Inhalte erfinden.
 
 ---
 
@@ -36,6 +56,14 @@ This example demonstrates the v4.0 content-only slide specification schema. All 
 
 ```yaml
 Layout: title-slide
+Slide-Kind: content
+
+intent:
+  role: hook
+  emphasis: none
+
+visual:
+  kind: none
 
 Title: Krise im deutschen Bahnnetz
 Subtitle: Warum manuelle Überwachung nicht mehr ausreicht
@@ -50,6 +78,14 @@ Metadata: Deutsche Bahn AG | TechVision Solutions | Februar 2026
 
 ```yaml
 Layout: process-flow
+Slide-Kind: internal-prep
+
+intent:
+  role: hook
+  emphasis: none
+
+visual:
+  kind: diagram
 
 Slide-Title: Pitch-Methodik
 
@@ -121,6 +157,14 @@ Speaker-Notes: |
 
 ```yaml
 Layout: four-quadrants
+Slide-Kind: internal-prep
+
+intent:
+  role: hook
+  emphasis: none
+
+visual:
+  kind: table
 
 Slide-Title: Buying Center
 
@@ -185,6 +229,14 @@ Speaker-Notes: |
 
 ```yaml
 Layout: stat-card-with-context
+Slide-Kind: content
+
+intent:
+  role: problem
+  emphasis: climax
+
+visual:
+  kind: stat
 
 Slide-Title: 688 Menschenleben jährlich durch vermeidbare Schienenunfälle
 
@@ -238,6 +290,14 @@ Source: "[Bundesbericht Schienensicherheit 2024](https://www.eba.bund.de/sicherh
 
 ```yaml
 Layout: stat-card-with-context
+Slide-Kind: content
+
+intent:
+  role: problem
+  emphasis: none
+
+visual:
+  kind: stat
 
 Slide-Title: 42% der Überwachungssysteme sind veraltet
 
@@ -266,6 +326,14 @@ Source: "[DB Infrastruktur Report 2024](https://www.deutschebahn.com/infrastrukt
 
 ```yaml
 Layout: four-quadrants
+Slide-Kind: content
+
+intent:
+  role: evidence
+  emphasis: none
+
+visual:
+  kind: table
 
 Slide-Title: Vier kritische Handlungsfelder
 
@@ -303,6 +371,14 @@ Bottom-Banner:
 
 ```yaml
 Layout: is-does-means
+Slide-Kind: content
+
+intent:
+  role: solution
+  emphasis: release
+
+visual:
+  kind: table
 
 Slide-Title: KI-Videoanalytik für Bahnsicherheit
 
@@ -333,6 +409,23 @@ cta:
 
 ```yaml
 Layout: two-columns-equal
+Slide-Kind: content
+
+intent:
+  role: proof
+  emphasis: none
+
+visual:
+  kind: chart
+  chart:
+    type: bar
+    unit: "Minuten"
+    categories: ["Reaktionszeit", "Sichtung", "Eskalation"]
+    series:
+      - name: "Manuell"
+        values: [2880, 240, 120]
+      - name: "KI-gestützt"
+        values: [15, 5, 8]
 
 Slide-Title: Manuell vs. KI-gestützt
 
@@ -381,6 +474,14 @@ Speaker-Notes: |
 
 ```yaml
 Layout: three-options
+Slide-Kind: content
+
+intent:
+  role: options
+  emphasis: none
+
+visual:
+  kind: table
 
 Slide-Title: Rollout-Strategien im Vergleich
 
@@ -424,6 +525,14 @@ Bottom-Banner:
 
 ```yaml
 Layout: layered-architecture
+Slide-Kind: content
+
+intent:
+  role: solution
+  emphasis: none
+
+visual:
+  kind: diagram
 
 Slide-Title: Edge-to-Cloud in 3 Schichten — Videodaten bleiben lokal
 
@@ -477,6 +586,14 @@ Speaker-Notes: |
 
 ```yaml
 Layout: gantt-chart
+Slide-Kind: content
+
+intent:
+  role: roadmap
+  emphasis: none
+
+visual:
+  kind: diagram
 
 Slide-Title: In 34 Wochen vom PoV zum Pilotbetrieb
 
@@ -504,11 +621,62 @@ Bottom-Banner:
 
 ```yaml
 Layout: closing-slide
+Slide-Kind: content
+
+intent:
+  role: call-to-action
+  emphasis: none
+
+visual:
+  kind: none
 
 Title: Handeln Sie jetzt — Förderfenster schließt
 Subtitle: Pilotprojekt in 6 Wochen starten
 Metadata: kontakt@techvision.de | +49 123 456 789
 ```
+
+---
+
+## Slide 13: Quellen & Referenzen
+
+```yaml
+Layout: two-columns-equal
+Slide-Kind: references
+
+intent:
+  role: evidence
+  emphasis: none
+
+visual:
+  kind: table
+
+Slide-Title: Quellen & Referenzen
+
+Left-Column:
+  Headline: Quellen 1-2
+  Bullets:
+    - "[1] Bundesbericht Schienensicherheit 2024 — https://www.eba.bund.de/sicherheitsbericht-2024"
+    - "[2] BKA Kriminalstatistik — https://www.bka.de/kriminalstatistik"
+
+Right-Column:
+  Headline: Quellen 3
+  Bullets:
+    - "[3] DB Infrastruktur Report 2024 — https://www.deutschebahn.com/infrastruktur-report"
+
+Speaker-Notes: |
+  >> WAS SIE SAGEN
+
+  [Einstieg]: "Diese Folie fasst alle in der Präsentation zitierten Quellen zusammen."
+  [Kernaussage]: "Jede quantitative Aussage lässt sich auf eine nummerierte Quelle zurückführen."
+  [Überleitung]: "Damit sind wir am Ende — gerne beantworte ich Ihre Fragen."
+
+  >> WAS SIE WISSEN MÜSSEN
+
+  - Die Nummern entsprechen den hochgestellten <sup>[N]</sup> Markern im Folientext.
+  - Vollständige URLs stehen als Klartext, damit sie unabhängig vom Renderer sichtbar bleiben.
+```
+
+**Notes**: The references slide is the last slide in the deck, placed after the closing slide. It is the only slide carrying `Slide-Kind: references` — no renderer has to infer it from banner text or position any more.
 
 ---
 
@@ -545,14 +713,18 @@ conversion_goal: "consultation"
 
 ## Key Differences from v2.0/v3.0
 
-| Aspect | v2.0/v3.0 (Old) | v4.0 (Current) |
+| Aspect | v2.0/v3.0 (Old) | v4.1 (Current) |
 |--------|-----------------|----------------|
 | Color fields | `Background: danger`, `Text-Color: textLight` on every element | Absent — PPTX skill decides |
 | Theme reference | `theme_context` block with tokens, color_mode, font | `theme_path` pointing to compact theme.md |
 | Visual intent | Mechanical token mapping | Theme-driven — PPTX skill reads theme.md |
 | PPTX skill latitude | Zero — follows exact tokens | Full — reads theme for all visual decisions |
-| Brief version | `"2.0"` or `"3.0"` | `"4.0"` |
+| Brief version | `"2.0"` or `"3.0"` | `"4.1"` |
+| Slide fencing | Unfenced slide YAML | Exactly one fenced `yaml` block per `## Slide N:` heading |
+| Slide identity | Inferred from banner text and position | Declared: `Slide-Kind: content / internal-prep / references` |
+| Intent | Not expressed | Per-slide `intent: {role, emphasis}` and `visual: {kind, chart, image_prompt}` |
+| Contract block | A pptx-only requirements block addressed to one renderer | `# Rendering Contract` — renderer-neutral, five clauses plus a per-renderer appendix |
 
-**Backward compatibility:** The PPTX skill still accepts v2.0/v3.0 briefs with explicit color fields. When color fields are present, they take precedence over theme-based inference.
+**Backward compatibility:** 4.1 is additive over 4.0 — every renderer accepts both, and an unfenced 4.0 brief stays readable. The PPTX skill still accepts v2.0/v3.0 briefs with explicit color fields; when color fields are present, they take precedence over theme-based inference.
 
 ---

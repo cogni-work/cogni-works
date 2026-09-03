@@ -55,7 +55,7 @@ Your ENTIRE response must be a SINGLE LINE of JSON — NO text before or after, 
 | Field | Required | Description |
 |-------|----------|-------------|
 | `OUTPUT_PATH` | Yes | Absolute path to write the presentation-brief.md |
-| `OUTPUT_TEMPLATE_PATH` | Yes | Path to `07-output-template.md` — brief structure, citation rules, PPTX Rendering Requirements |
+| `OUTPUT_TEMPLATE_PATH` | Yes | Path to `07-output-template.md` — brief structure, citation rules, Rendering Contract |
 | `FRONTMATTER` | Yes | YAML frontmatter fields: type, version, theme, theme_path, customer, provider, language, generated, arc_type, arc_id, governing_thought, confidence_score, transformation_notes |
 | `TITLE` | Yes | Presentation title |
 | `SUBTITLE` | Yes | Presentation subtitle |
@@ -77,7 +77,7 @@ Read the reference files that define how to generate prep slides, speaker notes,
 
 1. **Read** `$CLAUDE_PLUGIN_ROOT/skills/story-to-slides/references/08c-presenter-prep.md` — prep slide generation rules, 10-step speaker notes process, arc-position coaching, layout-aware openings, comprehensive Q&A methodology
 2. **Read** `$CLAUDE_PLUGIN_ROOT/skills/story-to-slides/references/05b-speaker-notes.md` — two-section format spec ("WHAT YOU SAY" + "WHAT YOU NEED TO KNOW"), available tags, worked examples, localization rules
-3. **Read** `OUTPUT_TEMPLATE_PATH` — brief output template structure, citation handling rules, PPTX Rendering Requirements template
+3. **Read** `OUTPUT_TEMPLATE_PATH` — brief output template structure, citation handling rules, Rendering Contract template
 
 These are your primary instructions. Follow them precisely.
 
@@ -139,7 +139,7 @@ Now combine everything into a single file following the output template from Ste
    - **YAML frontmatter** — all fields from `FRONTMATTER` block
    - **`# Presentation Brief: {TITLE}`** header
    - Governing thought paragraph (from `FRONTMATTER.governing_thought`)
-   - **`# PPTX Rendering Requirements`** section — localized per `LANGUAGE` (use the template from `07-output-template.md`)
+   - **`# Rendering Contract`** section — localized per `LANGUAGE` (use the template from `07-output-template.md`)
    - `---` separator
    - **Slide 1** (title slide from SLIDE_SPECS) — with Speaker-Notes appended
    - `---` separator
@@ -171,7 +171,7 @@ Return a lightweight status (no content payload — the file is already written)
 - Do not modify the content of existing slides — you add prep slides and speaker notes, you don't edit headlines, bullets, or layouts
 - Do not use AskUserQuestion — this is a fully autonomous worker agent
 - You MUST write the complete brief to `OUTPUT_PATH` using the Write tool before returning JSON
-- Follow the output template from `07-output-template.md` exactly — frontmatter fields, PPTX Rendering Requirements section, slide separators (`---`), Generation Metadata
+- Follow the output template from `07-output-template.md` exactly — frontmatter fields, Rendering Contract section, slide separators (`---`), Generation Metadata
 - Renumber all slides sequentially: Slide 1 (title), Slide 2 (Methodology), Slide 3 (Buying Center if Rich, else first content slide), etc.
 - Preserve German umlauts (ä, ö, ü, Ä, Ö, Ü, ß) — ASCII-ified umlauts undermine executive credibility
 - Strip internal methodology vocabulary from speaker notes delivery scripts — "Power Position", "Why Change", "Unconsidered Need" belong in WHAT YOU NEED TO KNOW, not in WHAT YOU SAY

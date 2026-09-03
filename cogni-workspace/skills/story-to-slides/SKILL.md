@@ -8,7 +8,7 @@ description: >
   prose into slide-level message architecture. Also trigger when the user needs pyramid
   communication, number plays, assertion headlines, or speaker notes for a presentation.
   Covers Why Change projects, research reports, competitive intelligence, trend panoramas,
-  and both English and German output. Produces a presentation-brief.md (v4.0) that the
+  and both English and German output. Produces a presentation-brief.md (v4.1) that the
   PPTX agent renders. Important: this skill CREATES the brief from a narrative source —
   it does NOT render an existing brief (use PPTX skill for that), does NOT create a web page
   (use story-to-web), and does NOT enhance prose (use cogni-workspace:copywriter).
@@ -361,7 +361,7 @@ Generate from citation renumber map (Step 2). Position after closing-slide as la
 |-------|--------|
 | `OUTPUT_PATH` | Resolved output path (from parameters or default `{source_dir}/cogni-visual/presentation-brief.md`) |
 | `OUTPUT_TEMPLATE_PATH` | `$CLAUDE_PLUGIN_ROOT/skills/story-to-slides/references/07-output-template.md` |
-| `FRONTMATTER` | All YAML frontmatter fields: type, version (4.0), theme, theme_path, customer, provider, language, generated, arc_type, arc_id, governing_thought, confidence_score, transformation_notes |
+| `FRONTMATTER` | All YAML frontmatter fields: type, version (4.1), theme and theme_path (both optional pass-through), customer, provider, language, generated, arc_type, arc_id, governing_thought, confidence_score, max_slides, slides, climax, design, key_figures, transformation_notes |
 | `TITLE` / `SUBTITLE` | From Step 2 or parameters |
 | `SLIDE_SPECS` | All slide YAML specs from Steps 8 + 8.1 (the complete deck so far) |
 | `AUDIENCE_MODEL` | From Step 3 — mode (Rich/Lean), decision-maker, priorities, objections, champion, blockers |
@@ -388,7 +388,7 @@ Agent tool:
 
     FRONTMATTER:
       type: presentation-brief
-      version: "4.0"
+      version: "4.1"
       theme: {theme_id}
       theme_path: "{theme_path}"
       customer: "{customer_name}"
@@ -494,9 +494,9 @@ Write the review verdict to `{output_dir}/presentation-brief.review.json`.
 - If `output_path` explicit: `mkdir -p "$(dirname "${output_path}")"`
 - Otherwise: set `output_path = {source_dir}/cogni-visual/presentation-brief.md` and `mkdir -p "{source_dir}/cogni-visual"`
 
-Write the brief following the output template. YAML frontmatter must include: type, version (4.0), theme, theme_path, arc_type, arc_id, governing_thought, confidence_score. Include PPTX Rendering Requirements section (localized). Include Generation Metadata at end.
+Write the brief following the output template. YAML frontmatter must include: type, version (4.1), arc_type, arc_id, governing_thought, confidence_score, max_slides and slides (`theme` and `theme_path` are optional pass-through keys). Include the Rendering Contract section (localized). Include the fenced Generation Metadata block at end.
 
-Run the validation checklist (reference `09-validation-checklist.md`) one final time against the written file. The most commonly missed items at this stage: mispositioned PPTX Rendering Requirements section, and superscript `<sup>[N](url)</sup>` in body text vs plain `[N](url)` in speaker notes.
+Run the validation checklist (reference `09-validation-checklist.md`) one final time against the written file. The most commonly missed items at this stage: a mispositioned Rendering Contract section, and superscript `<sup>[N](url)</sup>` in body text vs plain `[N](url)` in speaker notes.
 
 ---
 

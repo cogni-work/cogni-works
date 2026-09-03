@@ -79,23 +79,26 @@ REASON through schema compliance for each slide:
      → FIX: Quote strings with special characters, fix indentation
 
   6. CHECK frontmatter completeness
-     → Required keys: type ("presentation-brief"), version ("4.0"), theme,
-       theme_path (must end in /theme.md), customer, provider, language,
-       generated, arc_type, governing_thought, confidence_score (0.0-1.0)
-     → FAIL if: any key missing or value invalid
+     → Required keys: type ("presentation-brief"), version ("4.0" or "4.1"),
+       customer, provider, language, generated, arc_type, governing_thought,
+       confidence_score (0.0-1.0), max_slides, slides
+     → Optional pass-through keys: theme, theme_path (when present, theme_path
+       must end in /theme.md), climax, design, key_figures
+     → FAIL if: any required key missing or value invalid
      → FIX: Add missing keys from metadata collected in Step 1
 
-  7. CHECK PPTX Rendering Requirements section
+  7. CHECK Rendering Contract section
      → Must appear AFTER governing_thought paragraph and BEFORE ## Slide 1
      → Must be localized (EN or DE based on language parameter)
-     → Must contain all 4 rules: exact text, complete notes, source links, superscript hyperlinks
+     → Must contain all 5 clauses: frozen copy, complete notes, citation
+       hyperlinks + references last, theme-only styling, layout/visual mapping
      → FAIL if: section missing, mispositioned, or wrong language
-     → FIX: Insert the localized requirements block from SKILL.md Step 9 template
+     → FIX: Insert the localized contract block from 07-output-template.md
 ```
 
 ### Pass Criteria
 
-All slides use valid layouts, have all required fields, contain no unknown or color fields, parse as valid YAML. Frontmatter complete with correct values. PPTX Rendering Requirements section present and localized.
+All slides use valid layouts, have all required fields, contain no unknown or color fields, parse as valid YAML. Frontmatter complete with correct values. Rendering Contract section present and localized.
 
 ---
 
@@ -415,7 +418,7 @@ Before marking Step 8 complete, verify ALL items. Mark each ✅ or ❌:
 - [ ] ZERO color fields (Background, Text-Color, Icon-Color must be absent)
 - [ ] YAML parses without errors
 - [ ] Frontmatter complete and valid (version "4.0", theme_path ends in /theme.md)
-- [ ] PPTX Rendering Requirements section present (localized, between governing thought and Slide 1)
+- [ ] Rendering Contract section present (localized, between governing thought and Slide 1)
 
 ### Layer 2: Message Quality
 - [ ] Every slide heading is an assertion (not a topic label)

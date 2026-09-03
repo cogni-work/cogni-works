@@ -85,17 +85,13 @@ Large stat card on left (40%), context bullets on right (55%), with optional bot
 - **Impact Box**: Small callout within stat card
 - **Bottom Banner**: Footer context or metadata
 - **Left Border**: Colored accent strip
-- **Source**: Clickable source attribution link(s) — see Note 10
+- **Source**: Clickable source attribution link(s) — see Note 9
 
 ### Visual Hierarchy
 
 1. HERO (stat number - 36pt, dominant)
 2. CONTEXT (headline + bullets - 16pt/14pt)
 3. BANNER (optional footer - 12pt, muted)
-
-### Color Fields (Optional)
-
-Color fields (`Background`, `Text-Color`, `Icon-Color`) are **optional**. When present (v2-v3 briefs), the PPTX skill uses them directly. When absent (v4 briefs), the PPTX skill infers colors from the theme directly.
 
 ### Example (v4 — content-only)
 
@@ -167,7 +163,7 @@ When `Number` is absent and `Bullets` is present, each quadrant renders as a tex
 - **Sublabels**: Additional context per quadrant
 - **Icons**: Visual indicators per quadrant (stat mode only)
 - **Bottom Banner**: Footer context
-- **Source**: Clickable source attribution link(s) — see Note 10
+- **Source**: Clickable source attribution link(s) — see Note 9
 
 ### Visual Hierarchy
 
@@ -288,7 +284,7 @@ Each column can contain:
 
 - **Column Callouts**: Highlighted info boxes
 - **Bottom Banner**: Summary or conclusion
-- **Source**: Clickable source attribution link(s) — see Note 10
+- **Source**: Clickable source attribution link(s) — see Note 9
 
 ### Visual Hierarchy
 
@@ -365,7 +361,7 @@ Generators must set the `Label` field per box according to the `language` parame
 ### Optional Content
 
 - **Bottom Banner**: Value proposition summary
-- **Source**: Clickable source attribution link(s) — see Note 10
+- **Source**: Clickable source attribution link(s) — see Note 9
 
 ### Visual Hierarchy
 
@@ -430,7 +426,7 @@ Each option contains:
 - **Pricing**: Cost per option
 - **Badges**: Highlight recommended option
 - **Bottom Banner**: Selection guidance
-- **Source**: Clickable source attribution link(s) — see Note 10
+- **Source**: Clickable source attribution link(s) — see Note 9
 
 ### Visual Hierarchy
 
@@ -515,7 +511,7 @@ Each step contains:
 - **Durations**: Time per step
 - **Step 5-6**: Additional steps (adjust spacing)
 - **Bottom Banner**: Total duration or outcome
-- **Source**: Clickable source attribution link(s) — see Note 10
+- **Source**: Clickable source attribution link(s) — see Note 9
 
 ### Visual Hierarchy
 
@@ -821,14 +817,13 @@ Metadata: kontakt@t-systems.com | +49 123 456 789
 
 1. **Coordinates**: All x, y, w, h values are in inches from top-left origin (0,0)
 2. **Safe Margins**: Layouts respect contentStartX (0.7") and contentWidth (8.6")
-3. **Color Fields**: Optional in v4.0 briefs. When present, PPTX skill uses them directly. When absent, PPTX skill infers from theme directly
-4. **Layout Prefix**: Briefs should specify `Layout: stat-card-with-context` etc.
-5. **Required vs Optional**: Generators should validate required fields before rendering
-6. **Flexible Heights**: Some layouts allow variable heights within constraints
-7. **Bottom Banner**: Always optional, use for context/metadata when needed
-8. **Icons**: Icon placement varies by layout, reference icon-library.md for mappings
-9. **Speaker-Notes**: Optional field for all layouts. Contains comprehensive presenter notes in two sections, rendered via PptxGenJS `slide.addNotes()`. Format is multi-line YAML string with `>> WHAT YOU SAY` (delivery script with `[Opening]`, `[Key point]`, `[Pause]`, `[Emphasis]`, `[Transition]` tags) and `>> WHAT YOU NEED TO KNOW` (bullet list of sources, context, Q&A prep). German: `>> WAS SIE SAGEN` / `>> WAS SIE WISSEN MÜSSEN` with tags `[Einstieg]`, `[Kernaussage]`, `[Pause]`, `[Betonung]`, `[Überleitung]`. Target 100-200 words per slide.
-10. **Source**: Optional field for all content layouts (not title-slide or closing-slide). Contains markdown-formatted clickable link(s) to the data source for the slide's key claim. Format: `Source: "[Label](URL)"`. For multiple sources use pipe separation: `Source: "[Label1](URL1) | [Label2](URL2)"`. Maximum 2 sources per slide. Only generated when the source narrative actually provides URLs — never invented or guessed. When the `>> WHAT YOU NEED TO KNOW` section of Speaker-Notes references a source, use inline markdown links there as well.
+3. **Layout Prefix**: Briefs should specify `Layout: stat-card-with-context` etc.
+4. **Required vs Optional**: Generators should validate required fields before rendering
+5. **Flexible Heights**: Some layouts allow variable heights within constraints
+6. **Bottom Banner**: Always optional, use for context/metadata when needed
+7. **Icons**: Icon placement varies by layout, reference icon-library.md for mappings
+8. **Speaker-Notes**: Optional field for all layouts. Contains comprehensive presenter notes in two sections, rendered via PptxGenJS `slide.addNotes()`. Format is multi-line YAML string with `>> WHAT YOU SAY` (delivery script with `[Opening]`, `[Key point]`, `[Pause]`, `[Emphasis]`, `[Transition]` tags) and `>> WHAT YOU NEED TO KNOW` (bullet list of sources, context, Q&A prep). German: `>> WAS SIE SAGEN` / `>> WAS SIE WISSEN MÜSSEN` with tags `[Einstieg]`, `[Kernaussage]`, `[Pause]`, `[Betonung]`, `[Überleitung]`. Target 200–400 words per slide (150 minimum, 450 maximum).
+9. **Source**: Optional field for all content layouts (not title-slide or closing-slide). Contains markdown-formatted clickable link(s) to the data source for the slide's key claim. Format: `Source: "[Label](URL)"`. For multiple sources use pipe separation: `Source: "[Label1](URL1) | [Label2](URL2)"`. Maximum 2 sources per slide. Only generated when the source narrative actually provides URLs — never invented or guessed. When the `>> WHAT YOU NEED TO KNOW` section of Speaker-Notes references a source, use inline markdown links there as well.
 
     **PptxGenJS rendering:** Use `createSourceFooter()` from pptx-components.js to render the Source field as a clickable footer positioned above the Bottom-Banner area:
 

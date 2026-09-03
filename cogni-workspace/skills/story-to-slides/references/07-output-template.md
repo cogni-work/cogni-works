@@ -1,13 +1,21 @@
 # Output Template Reference
 
-## Slide YAML Example
+## Per-slide YAML pattern
 
-Every slide follows this content-only YAML pattern. No color fields (`Background:`, `Text-Color:`, `Icon-Color:`, `Role:`, `Intensity:`, `Mood:`) — the PPTX skill reads the theme directly.
+Every slide follows this content-only YAML pattern: a `## Slide N:` heading, then exactly one fenced `yaml` block. No color fields (`Background:`, `Text-Color:`, `Icon-Color:`, `Role:`, `Intensity:`, `Mood:`) — the renderer reads the theme directly.
 
-```yaml
 ## Slide 3: 688 Lives Lost Annually to Preventable Rail Incidents
 
+```yaml
 Layout: stat-card-with-context
+Slide-Kind: content
+
+intent:
+  role: problem
+  emphasis: climax
+
+visual:
+  kind: stat
 
 Slide-Title: 688 Lives Lost Annually to Preventable Rail Incidents
 
@@ -74,12 +82,19 @@ Never use English labels in a German presentation or vice versa.
 
 The final brief uses this structure. Read it before writing Step 9 output.
 
+Schema **4.1** is additive over 4.0: every renderer accepts both, and an unfenced
+4.0 brief stays readable. The frontmatter keys added below are defined in
+`cogni-workspace/libraries/presentation-intent.md` — this template cites that
+vocabulary rather than restating it.
+
+### Frontmatter
+
 ```yaml
 ---
 type: presentation-brief
-version: "4.0"
-theme: {theme_context.theme_id}
-theme_path: "{theme_context.theme_path}"
+version: "4.1"
+theme: {theme_context.theme_id}            # optional — a caller may pass it through
+theme_path: "{theme_context.theme_path}"   # optional — a caller may pass it through
 customer: "{customer_name}"
 provider: "{provider_name}"
 language: "{language}"
@@ -88,41 +103,108 @@ arc_type: "{detected_or_specified_arc}"
 arc_id: "{arc_id if resolved, omit if not}"
 governing_thought: "{single-sentence argument}"
 confidence_score: {avg_confidence}
+max_slides: {max_slides}
+slides: {slides_total}
+climax: {slide number carrying the emphasis peak, omit if none}
+design:
+  register: {visual/tonal register, e.g. quiet-executive}
+  dark_slides: [{slide numbers rendered dark as rhythm anchors}]
+  speaker_notes: {full-script | calm peer-to-peer | bullets}
+  imagery: {none | type-only | photographic}
+  variations: {how many design variations to generate}
+key_figures:
+  - "{hero number promoted out of prose, provenance marker kept if it carries one}"
 transformation_notes: |
   Story-to-slides transformation.
   Theme: {theme_id}. Arc: {arc_type}.
   {N} slides, {avg}% avg confidence.
   {number_plays} number plays, {headlines_optimized} headlines optimized.
 ---
+```
 
-# Presentation Brief: {title}
+`theme` and `theme_path` are **optional pass-through keys**: a caller that already
+resolved a theme may supply them, and a renderer that chooses its own may ignore
+them. Every other key above is required.
 
-{governing_thought}
+### Rendering Contract
 
-# PPTX Rendering Requirements
-{IF language == "en":}
-- All text and numbers are user-approved and must be reproduced exactly; deviations produce an incorrect presentation.
-- Speaker notes must be included completely; truncated notes produce an incorrect presentation.
-- Source citations must be preserved with working links; a presentation without source links is incorrect.
-- Superscript links like <sup>[1](url)</sup> must be rendered as PPTX hyperlinks with the number as display text in superscript; unresolved links are errors.
-{IF language == "de":}
-- Texte und Zahlen sind freigegeben und exakt zu übernehmen; Abweichungen führen zu einer fehlerhaften Präsentation.
-- Notizen für Slides müssen vollständig übernommen werden; gekürzte Notizen führen zu einer fehlerhaften Präsentation.
-- Quellenangaben müssen mit funktionierenden Links erhalten bleiben; eine Präsentation ohne Quellenlinks ist fehlerhaft.
-- Hochgestellte Links wie <sup>[1](url)</sup> müssen als PPTX-Hyperlinks mit der Zahl als Anzeigetext in Hochstellung erstellt werden; nicht umgesetzte Links sind Fehler.
+The brief carries one labeled contract block, localized, placed after the
+governing-thought paragraph and before `## Slide 1`. It replaces the pptx-only
+requirements block of 4.0 and is addressed to whichever renderer consumes the brief.
 
----
+`{IF language == "en":}`
+
+# Rendering Contract
+
+- Copy is frozen: reproduce every headline, bullet, number and label verbatim — a renderer that rewrites a line has changed the deliverable, not styled it.
+- Speaker notes travel complete into the renderer's native notes channel; truncated or summarized notes are an incorrect rendering.
+- Citation markers `<sup>[N](url)</sup>` become hyperlink runs on the number, and the references slide stays last in the deck.
+- Styling comes only from the theme or the renderer's own design system; the brief carries no color, font, or coordinate, and none may be inferred from its wording.
+- `Layout` is a content shape and `visual` is an intent: map each to the nearest native layout and never invent content to fill one.
+
+`{IF language == "de":}`
+
+# Rendering-Vertrag
+
+- Texte sind eingefroren: Überschriften, Aufzählungen, Zahlen und Beschriftungen exakt übernehmen — wer eine Zeile umformuliert, ändert das Ergebnis, statt es zu gestalten.
+- Notizen für Slides gehen vollständig in den nativen Notizkanal des Renderers; gekürzte oder zusammengefasste Notizen sind eine fehlerhafte Umsetzung.
+- Zitatmarker `<sup>[N](url)</sup>` werden zu Hyperlinks auf der Zahl, und die Quellenfolie bleibt die letzte Folie.
+- Gestaltung stammt ausschließlich aus dem Theme oder dem Designsystem des Renderers; der Brief enthält keine Farben, Schriften oder Koordinaten, und es dürfen auch keine aus dem Wortlaut abgeleitet werden.
+- `Layout` ist eine Inhaltsform und `visual` eine Absicht: beide auf das nächstgelegene native Layout abbilden und niemals Inhalte erfinden, um eines zu füllen.
+
+### Per renderer
+
+- Claude Design — consumes the outline export; honours `intent.role` for section rhythm and `design.register` for the visual register.
+- pptx skill — maps `Layout` to its slide masters and writes `Speaker-Notes` through `slide.addNotes()`.
+- render-html-slides — parses the fenced slide blocks directly and renders `visual.chart` as native series data.
+
+### Slide grammar
+
+Every slide is a `## Slide N:` heading carrying the assertion headline, followed by
+**exactly one** fenced `yaml` block. Three keys are new in 4.1 and appear on every slide:
+
+| Key | Values | Purpose |
+|---|---|---|
+| `Slide-Kind` | `content` / `internal-prep` / `references` | Replaces inference from the INTERNAL banner and from slide position |
+| `intent.role` | `hook` / `problem` / `urgency` / `evidence` / `solution` / `proof` / `options` / `roadmap` / `investment` / `call-to-action` | The Step 4c section role, declared rather than re-derived |
+| `intent.emphasis` | `climax` / `release` / `none` | The pacing beat the slide carries |
+| `visual.kind` | `stat` / `chart` / `diagram` / `table` / `icon` / `image` / `none` | The visual treatment the renderer should build |
+| `visual.chart` | `{type, unit, categories[], series[{name, values[]}]}` | Native series data — never an image |
+| `visual.image_prompt` | free text | Imagery direction when `visual.kind` is `image` |
+
+`Icon:` is unchanged. `cta:` per slide and a `## CTA Summary` section remain optional.
 
 ## Slide 1: {message headline}
+
+```yaml
 Layout: title-slide
+Slide-Kind: content
+
+intent:
+  role: hook
+  emphasis: none
+
+visual:
+  kind: none
+
 Title: {title}
 Subtitle: {subtitle}
 Metadata: {customer} | {provider} | {date}
-
----
+```
 
 ## Slide 2: {methodology_headline}
+
+```yaml
 Layout: process-flow
+Slide-Kind: internal-prep
+
+intent:
+  role: hook
+  emphasis: none
+
+visual:
+  kind: diagram
+
 Diagram: |
   graph LR
     P0["{phase_0}"] --> P1["{phase_1}"] --> P2["{phase_2}"] --> P3["{phase_3}"] --> P4["{phase_4}"]
@@ -134,32 +216,60 @@ Bottom-Banner:
   Text: "{INTERNAL_WARNING}"
 Speaker-Notes: |
   {... comprehensive coaching on delivery arc and pacing ...}
-
----
+```
 
 ## Slide 3: {buying_center_headline}
+
+```yaml
 Layout: four-quadrants
+Slide-Kind: internal-prep
+
+intent:
+  role: hook
+  emphasis: none
+
+visual:
+  kind: table
+
 {... text-card mode: Q1-Q4 with Label, Sublabel, Bullets per stakeholder, conditional on Rich audience mode ...}
 Bottom-Banner:
   Text: "{INTERNAL_WARNING}"
 Speaker-Notes: |
   {... comprehensive coaching on stakeholder analysis ...}
-
----
+```
 
 ## Slide 4: {first content slide headline}
-Layout: {layout}
-[... content-only YAML, no color or annotation fields ...]
 
----
+```yaml
+Layout: {layout}
+Slide-Kind: content
+
+intent:
+  role: problem
+  emphasis: none
+
+visual:
+  kind: {stat | chart | diagram | table | icon | image | none}
+
+[... content-only YAML, no color or annotation fields ...]
+```
 
 [... problem and urgency slides ...]
 
----
-
 <!-- WHY-CHANGE ARC: Solution Overview slide (MANDATORY) — placed between urgency and Power Positions -->
+
 ## Slide N: {solution_concept_assertion_headline}
+
+```yaml
 Layout: two-columns-equal
+Slide-Kind: content
+
+intent:
+  role: solution
+  emphasis: release
+
+visual:
+  kind: none
 
 Slide-Title: {Assertion headline describing the overall solution concept}
 
@@ -190,11 +300,20 @@ Speaker-Notes: |
   >> {WHAT YOU NEED TO KNOW / WAS SIE WISSEN MUESSEN}
   - This overview orients the audience BEFORE Power Position detail
   - Source: 03-why-you/narrative.md Executive Summary
-
----
+```
 
 ## Slide N+1: {power_position_assertion_headline}
+
+```yaml
 Layout: is-does-means
+Slide-Kind: content
+
+intent:
+  role: proof
+  emphasis: none
+
+visual:
+  kind: table
 
 Slide-Title: {Assertion headline — specific capability claim, NO methodology jargon like "Power Position" or "Why You"}
 
@@ -212,33 +331,48 @@ MEANS-Box:
 
 Bottom-Banner:
   Text: {Strongest proof point or differentiator}
+```
 
 [... repeat for each Power Position — one slide per Power Position, never combined ...]
 
----
+[... investment and closing slides ...]
 
-[... investment, references, closing slides ...]
+## Slide N+2: {references_headline}
 
----
+```yaml
+Layout: two-columns-equal
+Slide-Kind: references
+
+intent:
+  role: evidence
+  emphasis: none
+
+visual:
+  kind: table
+
+[... consolidated citation registry, two columns — see 08b-references-slide.md ...]
+```
 
 ## Generation Metadata
 
-**Story Arc:** {arc_type}
-**Governing Thought:** {governing_thought}
-
-**Message Architecture:**
-- Slides: {N} | Arguments: {N} | Consolidation: {yes/no}
-
-**Copywriting Applied:**
-- Number plays: {count} | Headlines optimized: {count}
-- Bullets consolidated: {count} | Speaker notes: {count} slides
-- Source links: {count} | Internal prep: {count}
-
-**Layout Distribution:** {layout_type}: {count} [...]
-**Average Confidence:** {score}
-**Manual Review:** {slide list if any}
-
-**Validation:** Schema: {p/f} | Messages: {p/f} | Copy: {p/f} | Logic: {p/f} | Integrity: {p/f}
+```yaml
+slides_total: {N}
+content_slides: {N}
+prep_slides: {N}
+number_plays: {count}
+headlines_optimized: {count}
+bullets_consolidated: {count}
+source_links: {count}
+layout_distribution:
+  {layout_type}: {count}
+avg_confidence: {score}
+manual_review: [{slide numbers needing review, empty list if none}]
+validation:
+  schema: {pass | fail}
+  messages: {pass | fail}
+  copy: {pass | fail}
+  logic: {pass | fail}
+  integrity: {pass | fail}
 ```
 
 ---

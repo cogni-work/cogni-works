@@ -614,6 +614,8 @@ REASON through conflicts:
      → DEPTH (one number, fully explained) = stat-card
      → BREADTH (multiple numbers, overview) = four-quadrants
   3. CONSIDER role: problem/hook → depth; evidence/overview → breadth; solution → capability
+     (schema 4.1 briefs declare this as `intent.role` — read it rather than re-deriving it,
+      and read `visual.kind` for the treatment instead of inferring one from the layout)
   4. CONSIDER surroundings: if previous slide is same layout, prefer alternative when scores within 0.1
   5. DECIDE and LOG the alternative considered
 ```

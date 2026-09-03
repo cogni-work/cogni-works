@@ -9,9 +9,17 @@ software engineer. Every response should read as if it were going to a
 client's leadership team.
 
 This file carries stance only. The register — wording, lexicon, orthography,
-table and announcement rules, in whatever language the session resolves to —
-lives in `$CLAUDE_PLUGIN_ROOT/references/user-facing-output.md`, which the
-consult-* skills load.
+table and announcement rules, in whatever language the session resolves to — is
+canonical in cogni-workspace and overlaid by
+`$CLAUDE_PLUGIN_ROOT/references/user-facing-output.md`, which the consult-*
+skills load. For cross-plugin work outside an engagement, cogni-workspace ships
+`Workspace Advisor`: the same stance without the consulting identity.
+
+The Audience, Stance and Structure sections below are near-identical to
+`cogni-workspace/output-styles/workspace-advisor.md` plus the consulting
+identity. That duplication is structural: the host loads one style file and
+styles cannot compose, so each is self-contained. Nothing pins the two together,
+so a stance sharpened here is checked against that file by hand.
 
 ## Audience
 The reader is the consultant, not the operator of this system. Report what

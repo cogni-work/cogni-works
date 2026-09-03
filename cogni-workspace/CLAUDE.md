@@ -58,16 +58,16 @@ it guards has disappeared.
 
 The `language` key in `.claude/settings.local.json` is the single source of truth for the workspace language. `scripts/generate-settings.sh` writes it, mapping the ISO code in `.workspace-config.json` to the natural-language name the setting expects (`de` → `"german"`). Claude Code turns that key into a `# Language` system-prompt section, so a fresh session responds in the workspace language with no output style and no `CLAUDE.md` — which is why neither is used to carry language rules any more.
 
-What the built-in section does **not** carry travels in `hooks/on-session-start-language.sh`: German orthography (umlauts, ß/ss) and the rule that a user switching language mid-conversation wins over the workspace default. It emits a `SessionStart` `hookSpecificOutput` envelope, or nothing when the language has no rule block. Add a language by adding a `case` branch there — plain stdout is not injected as context, only the parsed `additionalContext` field, so the envelope is required.
+What the built-in section does **not** carry travels in `hooks/on-session-start-language.sh`: German orthography (umlauts, ß/ss) and the rule that a user switching language mid-conversation wins over the workspace default. The hook is the delivery path for a session carrying no skill and no overlay, not the only statement of the rule — `references/user-facing-output.md` (a) carries the copy a plugin reading the register gets, and the `copywriter` skill owns the fuller treatment. That file names all three and the rule that binds them. It emits a `SessionStart` `hookSpecificOutput` envelope, or nothing when the language has no rule block. Add a language by adding a `case` branch there — plain stdout is not injected as context, only the parsed `additionalContext` field, so the envelope is required.
 
 Two consequences worth keeping straight:
 
 - **The workspace-root `CLAUDE.md` is the user's file.** Nothing in this plugin creates, copies, or overwrites it. The Obsidian launcher's per-session language switch writes the settings key instead.
-- **Subagents get none of this.** A subagent's system prompt is its own body plus a notes block and the environment info — no settings language, no memory. A plugin whose agents produce user-facing prose needs its own `SubagentStart` hook (see cogni-consult).
+- **Subagents get none of this.** A subagent's system prompt is its own body plus a notes block and the environment info — no settings language, no memory. A plugin whose agents produce user-facing prose needs its own `SubagentStart` hook (see cogni-consult). **This plugin does not yet have one**, and `hooks/hooks.json` registers only `SessionStart` and `PreToolUse`: the agents under `agents/` that write user-facing prose inherit no language and no register. That is a known gap, not a solved problem — owning the canonical register does not close it, and the register says so of any plugin in this position, this one included.
 
 ## Output Style Register
 
-One register, `output-styles/workspace-advisor.md`, at the **plugin root**. Four decisions are load-bearing and none of them is enforced by reading the file:
+One output style, `output-styles/workspace-advisor.md`, at the **plugin root**. It carries stance; the *register* is `references/user-facing-output.md`, a different artifact with its own section below — do not read "register" here as naming this file. Four decisions are load-bearing and none of them is enforced by reading the file:
 
 - **Plugin root, never nested.** Claude Code discovers `output-styles/` only at the root of a directory holding a plugin manifest. This register sat at `assets/output-styles/` and was discovered by nothing, silently — the files were present and parsed fine. `scripts/check-output-style-placement.py` is the guard; it also grades frontmatter and in-plugin resolution, so it cannot catch the other three below.
 - **Never copied into a workspace.** `manage-workspace` used to install a copy into `.claude/output-styles/`. A copied style only *appears* in the picker and is never activated, so the copy read as configuration and governed nothing — a worse state than the missing register, because it looked like a fix.
@@ -75,6 +75,20 @@ One register, `output-styles/workspace-advisor.md`, at the **plugin root**. Four
 - **`keep-coding-instructions: true` stays.** Dropping it costs Claude Code's engineering defaults the moment the register is activated, which is a silent capability loss in a plugin whose users are mostly writing code alongside workspace work.
 
 Language lives in the settings key and the `SessionStart` hook above, not here: the register is language-neutral stance, which is why collapsing the old EN/DE pair into one file lost nothing.
+
+## User-facing Output Register
+
+`references/user-facing-output.md` is the **canonical** register for the whole ecosystem: language and orthography, which surfaces the rules govern, the never-display-a-raw-value rule, the table contract, step announcements and brevity budgets, tool-call description copy, the anglicism test, and the executive register. It governs the main loop only — a dispatched agent inherits none of it, so a plugin whose agents write user-facing prose owes them the same doctrine through its own `SubagentStart` contract.
+
+A vertical plugin **overlays** rather than restates it. The overlay carries only what is genuinely its own — its state lexicon rows, its coinage vocabulary, and any surface its own guards pin — and section letters match the canonical file so a rule and its overlay line up. `cogni-consult/references/user-facing-output.md` is the worked example.
+
+**A cross-plugin read cannot rely on one variable.** `$CLAUDE_PLUGIN_ROOT` resolves to the *owning* plugin, so it cannot reach this file from a vertical plugin, and `COGNI_WORKSPACE_PLUGIN` is not guaranteed: `scripts/generate-settings.sh` writes a `_PLUGIN` key only when the plugin entry carries a path, so a plugin list supplied as bare names writes none at all, and the value can be left pointing at a version-scoped cache directory an update has replaced. So an overlay resolves through the same ladder the rest of the repo uses — the variable, then the plugin cache, then the monorepo sibling — testing for the *file* rather than the variable, exactly as `cogni-consult/scripts/discover-projects.sh` and `scripts/get-market-config.py` do. `cogni-consult/references/user-facing-output.md` carries the worked snippet.
+
+**The read stays fail-soft**: an overlay that cannot reach the file says so once, applies itself alone, and carries on — matching the convention already used for optional Python deps and theme fallback. A missing canonical register degrades the doctrine; it never blocks the work. It reports what it could not read and not why: the causes above all fail identically, so naming one is a guess.
+
+The canonical file owns its own rationale for the two duplications the split preserves — (h) stated inline, and (f) restatable inline by a plugin. Read them there; a second copy here is a second thing to drift.
+
+**Output styles are plugin-owned and never centralized.** A style carries stance; the register carries wording. `output-styles/workspace-advisor.md` is the general cross-plugin stance, `cogni-consult/output-styles/strategy-advisor.md` the consulting one — styles are session-global and cannot compose or inherit, so two picks serve two audiences. The two never-rules that follow from that (no workspace copy, no `force-for-plugin`) are stated once, under "Output Style Register" above.
 
 ## MCP Server Installation
 

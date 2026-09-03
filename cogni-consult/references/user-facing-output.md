@@ -1,8 +1,43 @@
 # User-facing output
 
 The register every cogni-consult skill follows when it writes for the
-consultant: which language, which surfaces the rules cover, which words stand in
-for a stored value, how a table reads, and how a step is announced.
+consultant. This file is an **overlay**: the ecosystem register is canonical and
+carries the shared doctrine — language and orthography (a), governed surfaces
+(b), the never-display-a-raw-value rule (c), the table contract (d), step
+announcements and brevity budgets (e), tool-call descriptions (f), the anglicism
+test (g), and the executive register (h).
+
+Read the canonical file first. Resolve cogni-workspace through the same ladder
+every other cross-plugin read in this repo uses — the settings-generated
+variable, then the plugin cache, then the monorepo sibling — and test for the
+file rather than for the variable, so a half-installed or stale candidate loses
+instead of winning:
+
+```bash
+_ws="${COGNI_WORKSPACE_PLUGIN:-${WORKSPACE_PLUGIN_ROOT:-}}"
+_reg="references/user-facing-output.md"
+[ -n "$_ws" ] && [ -f "$_ws/$_reg" ] || \
+  _ws="$(ls -td "$HOME"/.claude/plugins/cache/insight-wave/cogni-workspace/*/ 2>/dev/null | head -1)"
+[ -n "$_ws" ] && [ -f "$_ws/$_reg" ] || _ws="$CLAUDE_PLUGIN_ROOT/../cogni-workspace"
+cat "$_ws/$_reg"
+```
+
+A bare one-variable read is the shape this ladder exists to avoid: the variable
+can be absent, pruned by a `manage-workspace --update` that deselected
+cogni-workspace, or left pointing at a version-scoped cache directory an update
+has since replaced — and an unquoted empty expansion reads an absolute
+`/references/user-facing-output.md` rather than failing as unset.
+
+**If no candidate carries the file**, say so once, apply this overlay alone, and
+carry on — a missing canonical register degrades the doctrine, it never blocks
+the work. Report what could not be read, not why: every cause above fails
+identically, so naming one is a guess, and only an unregistered workspace is
+fixed by running `/cogni-workspace:manage-workspace`.
+
+This file carries only what is genuinely cogni-consult's: its state lexicon rows,
+its own coinage vocabulary, the description constraints its skills mirror inline,
+and the pointers to where the rest binds. Section letters match the canonical
+file so a rule and its overlay line up.
 
 **This file governs the main loop only.** A dispatched agent never sees it — a
 subagent's prompt carries no `CLAUDE.md`, no settings language, no output style
@@ -11,56 +46,43 @@ and no skill body. Agents receive the same doctrine through
 plus an `interaction_language` dispatch input. The two are one contract with two
 delivery paths, not two contracts: check a rule changed here against that file.
 
-## (a) Language
+## (a) Language — this plugin's ladder
 
 Resolve the **interaction language** per `references/interaction-language.md`,
 which owns the resolution ladder and the separation from the engagement's
-deliverable `language`. Do not restate the ladder — read it there. Everything
-below applies in whatever language that resolves to.
+deliverable `language`. Do not restate the ladder — read it there.
 
-**German orthography.** Write ß after a long vowel or a diphthong (Maßnahme,
-außerhalb, Größe) and ss after a short vowel (dass, muss, Prozess).
-Kein schweizerisches ss an ß-Stellen — the Swiss convention of writing ss in
-every ß position is never used here. Umlauts are covered by the repo-wide
-encoding convention that forbids ASCII substitutes, which this file already
-relies on where it declines to import the `copywriter` skill's table for
-transliterating them.
-
-**When the engagement's own text disagrees.** The paragraph above is read once; an
-engagement's stored files arrive as in-context evidence and out-argue it. A corpus
-already written in Swiss ss therefore teaches every later turn to keep writing it,
-and the drift reinforces itself silently. To check a corpus rather than trust it,
-run `python3 $CLAUDE_PLUGIN_ROOT/scripts/orthography-drift-scan.py "<engagement-dir>"`.
-Treat a finding as the stored text being wrong, not the rule. The scan is read-only
-and matches a curated pair list with bounded recall, so a zero-finding report means
-nothing on that list appeared — not that the corpus is ß-correct.
-
-## (b) Scope — every surface, not only prose
-
-These rules govern **every** user-facing surface, not only prose: table cells,
-column headers, list items, headings, count lines, step announcements,
-offer lines, and the `description` of a tool call, whose own copy rules are (f).
-
-A table is not an exemption from the register — it is where register failures are
-most visible, because a column header reads as a label the system endorses.
+The canonical file's German orthography rules bind here unchanged. To check an
+engagement's stored corpus rather than trust it, run
+`python3 $CLAUDE_PLUGIN_ROOT/scripts/orthography-drift-scan.py "<engagement-dir>"`.
+Treat a finding as the stored text being wrong, not the rule. The scan is
+read-only and matches a curated pair list with bounded recall, so a zero-finding
+report means nothing on that list appeared — not that the corpus is ß-correct.
 
 ## (c) State lexicon
 
-An engine value is **never** displayed raw. A value missing from this table is a
-gap in the table, not a licence to pass the raw value through — add the row.
+The canonical rule binds: an engine value is never displayed raw, and a value
+missing from this table is a gap in the table, not a licence to pass the raw
+value through — add the row.
 
-| Engine value | German | English |
-|---|---|---|
-| `pending` | offen | pending |
-| `in-progress` | in Arbeit | in progress |
-| `complete` | fertig | complete |
-| `lineage_status.status: "stale"` | überholt | outdated |
-| `unreadable` | nicht lesbar | unreadable |
-| `personas_gate: "satisfied"` | erfüllt | satisfied |
-| `personas_gate: "pending"` | offen | pending |
-| adherence `strong` / `partial` / `drifted` | stark / teilweise / abgewichen | strong / partial / drifted |
-| outcome `promoted` / `declined` / `none-found` | übernommen / abgelehnt / nichts gefunden | promoted / declined / none found |
-| disposition `accepted` / `revised` / `rejected` | übernommen / überarbeitet / begründet verworfen | accepted / revised / rejected with reason |
+Canonical (c) requires each entry to state whether its lexicon is **open** or
+**closed**. Every row below is open — the engine writes these values, so a new
+one is a row to add — except the disposition triple, which is closed and carries
+its own note. The `Mode` column states it per row rather than leaving it to be
+inferred from the notes.
+
+| Engine value | German | English | Mode |
+|---|---|---|---|
+| `pending` | offen | pending | open |
+| `in-progress` | in Arbeit | in progress | open |
+| `complete` | fertig | complete | open |
+| `lineage_status.status: "stale"` | überholt | outdated | open |
+| `unreadable` | nicht lesbar | unreadable | open |
+| `personas_gate: "satisfied"` | erfüllt | satisfied | open |
+| `personas_gate: "pending"` | offen | pending | open |
+| adherence `strong` / `partial` / `drifted` | stark / teilweise / abgewichen | strong / partial / drifted | open |
+| outcome `promoted` / `declined` / `none-found` | übernommen / abgelehnt / nichts gefunden | promoted / declined / none found | open |
+| disposition `accepted` / `revised` / `rejected` | übernommen / überarbeitet / begründet verworfen | accepted / revised / rejected with reason | closed |
 
 Four notes travel with the table:
 
@@ -71,10 +93,10 @@ Four notes travel with the table:
   warning's substance; do not pass the token through.
 - The disposition triple is **prose vocabulary**, not a stored field. It names
   how the consultant answered a persona challenge; no JSON key carries it. It is
-  also **closed**: exactly three values, and a fourth is an invention rather than
-  a gap to add. The row-gap rule above admits values the engine actually writes;
-  a disposition the engine never writes has no row to add, so reach for one of
-  the three or rewrite the sentence.
+  the **closed** lexicon the canonical (c) distinguishes: exactly three values,
+  and a fourth is an invention rather than a gap to add. The row-gap rule admits
+  values the engine actually writes; a disposition the engine never writes has no
+  row to add, so reach for one of the three or rewrite the sentence.
 - Design-thinking stage names (`empathize` → `define` → `ideate` → `prototype` →
   `test`) are method terms: proper-case them for display (`ideate` → `Ideate`),
   do not translate them. The casing is what carries the meaning: lower-cased,
@@ -88,90 +110,40 @@ Four notes travel with the table:
   inside a phrase rather than a label being displayed. These two are the
   complete exception set; anywhere else, proper-case.
 
-Where an English display string happens to equal the engine token, that is a
-coincidence of vocabulary, not an exemption — the value still passes through the
-lexicon rather than being printed because it "already looks like English".
+## (e) Step announcements — this plugin's German vocabulary
 
-## (d) Table contract
+Canonical (e) owns the two tiers, the budgets and the three cheapness rules. It
+names the tiers in English because it is language-neutral; on a German surface
+they are this plugin's own coinages, and naming them is what stops each session
+inventing a pair:
 
-1. A fixed, named column set — never derived at runtime from whatever keys the
-   data happens to carry.
-2. Natural-language headers. A field identifier as a column header is a defect.
-3. An explicit sort, stated once, not left to the order the data arrived in.
-4. A row cap, plus one overflow line naming what was not shown.
-5. Drop degenerate columns — a column carrying an identical value in every row
-   informs no one.
-6. No table under four rows. Below that, prose or a list reads better.
-7. A slug appears only where the reader needs it to *act*, in code form. Never
-   as a header, and never as a deliverable's name.
-8. A cell standing in for a missing or unmeasured **quantity or state** renders
-   `—`, never a zero-valued token (`0/0`, `0 von 0`): zero reads as a
-   measurement, the em-dash as "nothing here to measure". A value that could
-   not be read is a third case again — name it rather than flattening it into
-   either of the first two. This does not govern a boolean marker column (a
-   glyph when true, blank when false), which is its own established idiom. And
-   rule 5 never licenses dropping a column to hide a state the reader needs
-   to see.
+| Canonical tier | German | Budget |
+|---|---|---|
+| Read-only step | Orientierungsschritt | one sentence, at most 25 words |
+| Work step | Arbeitsschritt | two sentences, at most 45 words |
 
-## (e) Step announcements and brevity budgets
+The canonical exemplars are English. The German ones are here, because this is
+the surface they calibrate — a DACH engagement is the normal case for this
+plugin, not the exception:
 
-Two tiers, split by irreversibility rather than by skill:
-
-- **Orientierungsschritt** (read-only): one sentence, at most 25 words.
-- **Arbeitsschritt** (writes state, or fans out over engagement entities): two
-  sentences, at most 45 words, naming what comes back and what changes on disk.
-
-One announcement per perceptible wait, never one per tool call.
-
-Three rules keep the announcement cheap:
-
-- **Announce before *or* report after — never both.** Saying it twice costs the
-  reader a second pass and adds nothing.
-- **Name the actors when they are engagement entities, never the dispatch.**
-  "Partner, Projektleitung, CFO und Betriebsrat, jeder in seiner eigenen Logik",
-  not "vier Agenten" — the consultant knows the stakeholders, not the machinery.
-- **No wall-clock estimates.** A wrong estimate is a trust withdrawal, which
-  inverts what the announcement is for.
-
-**Work narration.** A batch of edits is one perceptible step, not many. Announce
-it with a single high-altitude line before making it — what is changing and why
-("Aktualisiere N Dateien, um …") — never a file-by-file preview. Afterwards, do
-not restate each individual edit or diff back in prose: the change itself is the
-record, and re-narrating it buries the answer in low-altitude detail. Close the
-batch with a compact summary — which files were touched and to what collective
-purpose — not a walkthrough of each diff. This does not contradict the
-announce-before-*or*-report-after rule above: that rule binds per perceptible
-step, and a batch gets one opening line at batch altitude plus one closing
-summary, never a per-edit narration.
-
-**A numbered back-reference carries its name** — "Teillösung 2 (die freie
-Content-Schicht)", not "bei 2". A bare ordinal makes the reader scroll back to
-recover what it points at.
-
-Work narration is main-loop-only, in the style of (f) below: a dispatched agent's
-user-facing surface is the envelope it returns, not a sequence of edits it
-narrates, so `references/subagent-output-contract.md` carries no counterpart and
-none is owed.
+- **Name the actors, never the dispatch**: "Partner, Projektleitung, CFO und
+  Betriebsrat, jeder in seiner eigenen Logik", not "vier Agenten".
+- **A numbered back-reference carries its name**: "Teillösung 2 (die freie
+  Content-Schicht)", not "bei 2".
 
 ## (f) Tool-call descriptions
 
-The `description` of a Bash tool call is rendered to the consultant, so it is
-user copy. (b) names it a governed surface; this section owns its specifics.
-
-Every `consult-*` skill's Step 0 also states the five constraints inline and
-cites this section. That duplication is deliberate: unlike the resolution ladder
-in (a), which cannot be applied without opening its reference, a description can
-be written — wrongly — without ever opening this file, so the constraints have to
-sit where the model always reads them. Edit them here first, then mirror the
-change into the nine Step 0 blocks; `tests/test_step0_register_block.sh` fails
-if the copies drift apart or get thinned.
-
-Main-loop-only, deliberately: a dispatched agent's user-facing surface is the
-envelope it returns, not its own tool calls, so
-`references/subagent-output-contract.md` carries no counterpart to this section
-and none is owed.
-
-Five constraints, all binding:
+The canonical file owns the five constraints. They are restated here, and inline
+in every `consult-*` skill's Step 0, because a description can be written —
+wrongly — without ever opening any reference, so the constraints have to sit
+where the model always reads them. Edit them in the canonical file first, then
+mirror the change here and into the nine Step 0 blocks.
+`tests/test_step0_register_block.sh` pins two of those three legs: it fails if
+the nine blocks drift apart or get thinned, and if this file stops carrying (f).
+Its `canonical-*` cases cover the third leg — this file against the canonical
+one — only when both plugins are checked out as siblings, which is the monorepo
+and CI case but not an installed one, so a canonical edit made against an
+installed plugin still has to be mirrored by hand.
 
 1. Written in the resolved interaction language, per (a).
 2. Outcome-shaped — what the consultant gets back, not what the machine runs.
@@ -184,29 +156,15 @@ Five constraints, all binding:
 
 Worked pair: `Discover cogni-consult engagements` → `Laufende Engagements holen`.
 
-A description failing any of the five is a defect on the same footing as a raw
-engine value in a table cell. This is a surface, not a debug channel.
+## (g) Prose anglicisms — this plugin's coinages
 
-## (g) Prose anglicisms
-
-(c) governs how a **stored engine token** is displayed. This section governs the
-**prose word the consultant reads** — vocabulary that carries no backing field
-and so has no row to look up. Of the terms below only `Stale` is also a (c) row
+Canonical (g) owns the three-step test; this section owns only what the test
+resolves to for this plugin. Of the terms below only `Stale` is also a (c) row
 (`lineage_status.status: "stale"`); `Cascade` and `Gate` are engine vocabulary
-governed by the engine-vocabulary rule in (h) below. Where both apply they
+governed by the engine-vocabulary rule in canonical (h). Where both apply they
 agree, so there is nothing to reconcile.
 
-Before reaching for the table, run the three-step test — the method comes from
-the `copywriter` skill's German-style principles, cited here rather than loaded,
-because nothing in this plugin loads that file:
-
-1. Does an equally precise German word exist? If yes, use it.
-2. Is the anglicism established with no good German equivalent (*Meeting*,
-   *Software*, *Update*)? If yes, keep it.
-3. Is it a hyphenated English compound? Those almost always have a German
-   rendering — replace them.
-
-The table is what step 3 resolves to for this plugin's own coinages:
+The table is what step 3 of that test resolves to for this plugin's own coinages:
 
 | English | German | Note |
 |---|---|---|
@@ -226,7 +184,7 @@ The table is what step 3 resolves to for this plugin's own coinages:
 The established domain terms that may stay English are
 **Deliverable**, **Design Thinking** and **Persona**, together with file and
 skill names, CLI commands, and slugs in code form. That list is closed — anything
-outside it takes the three-step test above rather than being waved through as
+outside it takes the three-step test rather than being waved through as
 established.
 
 `Action Field` is this plugin's own coinage, not an established German
@@ -235,73 +193,62 @@ worked exclusion from the list just above. The English table templates keep
 `Action Field` deliberately — that is the two-language split doing its job, not
 a leak.
 
-**Spell an acronym out once at first use** — ICP, OMTM, UVP — then use it freely
-for the rest of the exchange.
-
 Step 1 of the test resolves these recurring consulting anglicisms. They are not
 this plugin's coinages, so they sit here rather than in the table above, whose
 scope is deliberately narrower: `Moat-Richtung` → **Wettbewerbsschutz**;
 `Sozialbeweis` → **sichtbarer Beleg durch andere**; `Evergreen-Bestand` →
 **dauerhaft nutzbarer Bestand**.
 
-**Never invent a system term that does not exist.** An invented term is worse
-than a leaked one: a leaked engine value can at least be looked up in the
-system, while an invented one resolves nowhere the consultant can reach — not in
-the artifact, not in a manifest, not in this file. The observed instance is
+The canonical never-invent-a-system-term rule has a worked instance here:
 `Routed`, offered as a fourth disposition alongside the three real ones; the
-plugin has never written it. When a word is needed for a state, take it from
-(c), or describe what happened in plain language.
+plugin has never written it.
 
-This table is owned here rather than borrowed. the `copywriter` skill's German-style
-table addresses sales and go-to-market vocabulary and shares no term with the
-list above; it transliterates its umlauts to ASCII, which contradicts the
-orthography this plugin mandates; and no load path reaches it from here. The
-method above is worth citing, the vocabulary is not worth importing.
+This table is owned here rather than borrowed. The `copywriter` skill's
+German-style table addresses sales and go-to-market vocabulary and shares no term
+with the list above, and no load path reaches it from cogni-consult. Borrowing it
+would import a vocabulary this plugin never writes; the test it resolves to is
+canonical (g)'s, which already binds here. Note what is *not* a reason to decline
+it: that table spells its umlauts correctly and the `copywriter` skill forbids
+ASCII substitutes outright, so orthography is not a point of difference between
+the two.
 
-The naming discipline in this section has a subagent counterpart —
+Canonical (g)'s never-invent-a-system-term rule has a subagent counterpart —
 `references/subagent-output-contract.md` (`## Register`) carries it, because an
 agent's envelope prose is exactly where an invented term surfaces. Unlike (f),
-which is main-loop-only by its own terms, a rule changed here is checked against
-that file.
+which is main-loop-only by its own terms, a rule changed in canonical (g) is
+checked against that file, and the worked `Routed` instance above is what it
+catches.
 
-## (h) Executive register and engine vocabulary
+## (h) Executive register — this plugin's German exemplars
 
-Write in an executive register: precise, concise, no filler, no restating the
-question, no postamble.
+Canonical (h) owns the register, the compression discipline and the
+engine-vocabulary rule. Its contrasts are English; these are the German ones for
+this plugin's own engine nouns, and they are the pairs the rule is easiest to
+fail on:
 
-**Compression discipline.** Minimize words with zero precision loss. Cut hedging,
-throat-clearing and restatement — never cut a fact, a number, a caveat or an
-option to be shorter. Brevity must lose words, not information.
-
-**Engine vocabulary stays in the system.** Engine nouns — cascade, graph, edge,
-`depends_on`, gate, slug, state values (`complete`), log ids (`d-084`), version
-tags — are internal. Report the business consequence instead: "drei Deliverables
-ruhen jetzt auf einer überholten Zahl", not "das Cascade hat drei Knoten
-geflaggt"; "die Entscheidung ist im Protokoll festgehalten", not "d-084
-eingetragen"; "alle vierzehn Deliverables sind fertig", not "14/14 Deliverables
-complete". Name an id only when the reader needs it to look something up.
-
-This section is stated here rather than delegated because it has to reach the
-**main loop**. `references/subagent-output-contract.md` (`## Register`) carries
-the same three rules for the agent path, and it is injected into a dispatched
-agent — never loaded here — so a pointer to it would leave the main loop with no
-reachable copy. This is the one-contract-two-delivery-paths rule at the top of
-this file doing its job, not a duplication.
+- "drei Deliverables ruhen jetzt auf einer überholten Zahl", not "das Cascade hat
+  drei Knoten geflaggt".
+- "die Entscheidung ist im Protokoll festgehalten", not "d-084 geschrieben".
+- "alle vierzehn Deliverables sind fertig", not "14/14 Deliverables complete".
 
 ## What binds here but lives elsewhere
 
-These rules are not restated in this file; they hold on every surface named in
-(b) all the same:
+These rules are owned elsewhere and hold on every surface named in canonical (b)
+all the same. Only (f) is restated here, for the reason that section gives:
 
+- The shared register — language and orthography, governed surfaces, the table
+  contract, step announcements and brevity budgets, the anglicism test, and the
+  executive register — `${COGNI_WORKSPACE_PLUGIN}/references/user-facing-output.md`.
 - Audience framing and the answer-first advisory stance —
   `output-styles/strategy-advisor.md`, on the styled path only. That file is
   opt-in and carries stance alone; it restates none of the register.
-- The slug-presence rule — (d).7 above owns it.
+- The slug-presence rule — canonical (d).7 owns it.
   `references/subagent-output-contract.md` still scopes its own slug rule to
   prose.
 
-German orthography is no longer delegated: (a) above owns it outright, because
-the sole file that used to carry it no longer exists.
+German orthography is not delegated away from this plugin by the overlay split:
+canonical (a) owns it for the ecosystem, and the corpus-drift scan that checks an
+engagement against it stays here, because the script is this plugin's.
 
 One boundary: the generated HTML dashboard document follows the engagement's
 deliverable `language` axis, not the interaction language, and is therefore

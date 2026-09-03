@@ -129,7 +129,7 @@ Acting personas gate the first deliverable: before design thinking starts, perso
 
 Research never goes to raw web search: the engagement's bound knowledge base serves quick gap-checks (`knowledge-query`), full inverted-pipeline runs for new topics, and `--source wiki` re-runs on covered topics — with finalized syntheses copied to the owning action field's `research/` directory. Routing every run through one base is what lets later deliverables build on earlier findings instead of paying to rediscover them.
 
-The plugin also ships one **Strategy Advisor output style** that turns Claude Code into an executive advisor rather than a coder — answer-first (Pyramid Principle), hypothesis-driven, MECE options with explicit tradeoffs. It is language-neutral: it carries the advisory stance, and the wording register it applies — lexicon, orthography, table and announcement rules, in whatever language the session resolves to — lives in `references/user-facing-output.md`, which the consult-* skills load. A German engagement therefore gets the same discipline without a second style file to keep in step. Enable it from the `/config` output-style picker once cogni-consult is installed; it is opt-in (never auto-applied) and fixed at session start, so switching styles mid-engagement needs `/clear` or a new session.
+The plugin also ships one **Strategy Advisor output style** that turns Claude Code into an executive advisor rather than a coder — answer-first (Pyramid Principle), hypothesis-driven, MECE options with explicit tradeoffs. It is language-neutral: it carries the consulting stance, and the wording register it applies — lexicon, orthography, table and announcement rules, in whatever language the session resolves to — is canonical in cogni-workspace and overlaid by `references/user-facing-output.md`, which the consult-* skills load. For general cross-plugin work rather than an engagement, cogni-workspace ships its own **Workspace Advisor** register carrying the same doctrine without the consulting identity. A German engagement therefore gets the same discipline without a second style file to keep in step. Enable it from the `/config` output-style picker once cogni-consult is installed; it is opt-in (never auto-applied) and fixed at session start, so switching styles mid-engagement needs `/clear` or a new session.
 
 ## Publishing deliverables
 
@@ -164,7 +164,7 @@ Publishing is **consultant-elected and never automatic** — it does not fire at
 | `register-generator.py` | Script | Generate the browsable `assumptions.md` register (summary table + anchored `## <slug>` sections with value, provenance, source lineage, and `used_by[]` backlinks) from `assumptions.json`; overwrite-guarded |
 | `submit-assumption-claim.py` | Script | Adapter for the assumption ↔ `cogni-workspace:claims` verify round-trip: `submit` appends an `unverified` ClaimRecord under a lock (idempotent — one assumption, one record), `propagate` writes `status: verified` + `citation.claim_id` back onto the assumption record, `resolve-propagate` completes the deviated→resolved leg for the three value-affecting resolution actions |
 | `assumption-change-frequency.sh` | Script | Read-only retrospective spike over a deliverable corpus's git history: reports how often bare numeric literals changed (`edits_per_literal`), sizing the payoff of propagation automation independently of `assumptions.json` |
-| `orthography-drift-scan.py` | Script | Read-only scan reporting Swiss-`ss` spellings that sit in `ß` positions across one engagement's stored corpus, so a drifted corpus stops silently out-arguing the orthography rule in `references/user-facing-output.md` §(a). Curated-list heuristic with bounded recall — a zero-finding report means nothing on the list appeared, not that the corpus is `ß`-correct — and reports only: there is no repair mode and nothing under the engagement root is opened for writing |
+| `orthography-drift-scan.py` | Script | Read-only scan reporting Swiss-`ss` spellings that sit in `ß` positions across one engagement's stored corpus, so a drifted corpus stops silently out-arguing the orthography rule canonical §(a) owns and `references/user-facing-output.md` §(a) points at. Curated-list heuristic with bounded recall — a zero-finding report means nothing on the list appeared, not that the corpus is `ß`-correct — and reports only: there is no repair mode and nothing under the engagement root is opened for writing |
 | `discover-projects.sh` | Script | Engagement discovery (delegates to the cogni-workspace helper) |
 | `consult-dashboard/scripts/generate-dashboard.py` | Script | Render the engagement HTML dashboard from `consult-project.json` + `field.json` files (read-only) |
 
@@ -192,9 +192,9 @@ cogni-consult/
 │   ├── publish-routing.md         Canonical publish format→route contract
 │   ├── research-routing.md        Canonical cogni-knowledge research rule
 │   ├── subagent-output-contract.md  Register rules the SubagentStart hook emits
-│   ├── user-facing-output.md      Main-loop register contract (language, state
-│   │                              lexicon, table rules, step announcements,
-│   │                              orthography, prose anglicism lexicon)
+│   ├── user-facing-output.md      Main-loop register overlay on cogni-workspace's
+│   │                              canonical ecosystem register (this plugin's state
+│   │                              lexicon + coinage anglicism table)
 │   ├── personas/                  Packaged default advisors (partner, PM)
 │   ├── methods/                   Stage methods (scope dimensions, empathy mapping,
 │   │                              HMW synthesis, guided ideation)
@@ -211,7 +211,8 @@ cogni-consult/
 │                                  mapping fan-out)
 ├── output-styles/                 Strategy-advisor stance file (language-neutral,
 │                                  opt-in, auto-discovered in /config); the register
-│                                  lives in references/user-facing-output.md
+│                                  it applies is canonical in cogni-workspace,
+│                                  overlaid by references/user-facing-output.md
 ├── hooks/                         SubagentStart hook carrying the interaction
 │                                  language + subagent-output-contract.md into the
 │                                  four agents, which inherit neither from the main loop
@@ -232,9 +233,9 @@ cogni-consult/
 | Plugin | Required | Purpose |
 |--------|----------|---------|
 | cogni-knowledge | Yes | Bound once at setup (`plugin_refs.knowledge_base`) — the research spine every deliverable's evidence routes through |
-| cogni-workspace | No | Cross-session engagement discovery (`discover-projects.sh` delegates to its helper); `pick-theme` themes the `consult-dashboard` HTML (falls back to a built-in theme); consult-design-thinking routes the claims-correction cascade, and `submit-assumption-claim.py` submits assumption claims to `cogni-workspace:claims` for verification; consult-publish runs an optional `copywriter` polish pass before brief handoff; opt-in local-render fallback for publish deliverables (`cogni-workspace:enrich-report` / `cogni-workspace:story-to-infographic`) — the standard `consult-publish` path builds every format as a consult-native brief and hands it to Claude Design to render, so no plugin sits on the standard export route |
+| cogni-workspace | Recommended | Cross-session engagement discovery (`discover-projects.sh` delegates to its helper); `pick-theme` themes the `consult-dashboard` HTML (falls back to a built-in theme); consult-design-thinking routes the claims-correction cascade, and `submit-assumption-claim.py` submits assumption claims to `cogni-workspace:claims` for verification; consult-publish runs an optional `copywriter` polish pass before brief handoff; opt-in local-render fallback for publish deliverables (`cogni-workspace:enrich-report` / `cogni-workspace:story-to-infographic`) — the standard `consult-publish` path builds every format as a consult-native brief and hands it to Claude Design to render, so no plugin sits on the standard export route |
 
-cogni-consult is standalone as an orchestrator — it structures the engagement, the WBS, and the design-thinking loops on its own. cogni-knowledge is the one required integration: without it, deliverable research has no compounding base.
+cogni-consult is standalone as an orchestrator — it structures the engagement, the WBS, and the design-thinking loops on its own. cogni-knowledge is the one required integration: without it, deliverable research has no compounding base. cogni-workspace is not required but is now recommended rather than merely useful: it owns the canonical user-facing output register, so without it the plugin's own overlay applies alone and the shared half of the doctrine — scope, the table contract, step announcements and brevity budgets, the executive register — is unavailable. Work still completes; the output register is thinner.
 
 ## Custom development
 

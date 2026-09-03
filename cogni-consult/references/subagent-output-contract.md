@@ -10,9 +10,12 @@ emits this file verbatim at dispatch, prefixed with the resolved language block;
 that hook is the only delivery path, which is why the doctrine lives here rather
 than as a string inside it.
 
-Keep this in step with `references/user-facing-output.md` — the two are one
-contract with two delivery paths (that file loads in the main loop, this one is
-injected into agents), not two contracts.
+Keep this in step with the canonical ecosystem register's sections (g) and (h) —
+the rules below are its agent-side copy, and `references/user-facing-output.md`
+reaches it in the main loop while this file is injected into agents. One contract,
+two delivery paths, not two contracts. The overlay itself carries neither (g)'s
+never-invent rule nor (h), so check a change against the canonical file, not
+against the overlay.
 
 ## Audience
 

@@ -44,8 +44,8 @@ meaning — a method term surfacing as a method term, not an identifier surfacin
 as an identifier.
 
 That governs *how* an identifier is spelled, not *whether* it belongs on the
-surface at all. The whether question is owned by
-`references/user-facing-output.md`, where the default answer is **no**.
+surface at all. The whether question is owned by canonical (d).7, which
+`references/user-facing-output.md` reaches; the default answer is **no**.
 
 ## Subagents do not inherit it
 
@@ -70,9 +70,11 @@ This file owns the language axis and nothing else. A surface can be governed by
 the resolved interaction language and still take its copy rules from elsewhere —
 notably the `description` of a Bash tool call, which is written in the resolved
 language per this file, but whose own copy constraints are owned by section (f)
-of `references/user-facing-output.md`. Deliberately not restated here: a fourth
-copy of the specifics is the drift this split exists to prevent. Look for a copy
+of the canonical register, which `references/user-facing-output.md` restates for
+the reason that section gives. Deliberately not restated here: one more copy of
+the specifics is the drift this split exists to prevent. Look for a copy
 rule there, not here.
 
 The same split governs identifiers: this file says how one is spelled once it
-appears, and `references/user-facing-output.md` says whether it may appear.
+appears, and canonical (d).7 — reached through
+`references/user-facing-output.md` — says whether it may appear.

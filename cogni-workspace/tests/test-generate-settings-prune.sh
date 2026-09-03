@@ -53,6 +53,7 @@ seed_ws() {
     "PLUGIN_LEGACY_PLUGIN": "/gone/legacy/plugin",
     "COGNI_TRENDS_ROOT": "/stale/cogni-trends",
     "COGNI_KNOWLEDGE_PLUGIN": "/kept/knowledge/plugin",
+    "COGNI_WORKSPACE_PLUGIN": "/kept/workspace/plugin",
     "MY_OWN_VAR": "keep-me-exactly"
   },
   "permissions": { "allow": ["Bash"] },
@@ -132,6 +133,18 @@ seed_ws "$WS6"
 bash "$GEN" --target "$WS6" --plugins '[{"name":"cogni-trends","path":"/p/cogni-trends"}]' --update >/dev/null 2>&1
 assert_py "P6 unconditional workspace keys survive a run omitting cogni-workspace" "$WS6" \
   'all(k in env for k in ("PROJECT_AGENTS_OPS_ROOT", "COGNI_WORKSPACE_ROOT", "COGNI_WORKSPACE_PYTHON_VENV"))'
+
+# ------------------------------------------- Q6 workspace _PLUGIN survives
+# COGNI_WORKSPACE_PLUGIN is not assigned unconditionally the way
+# COGNI_WORKSPACE_ROOT is - it is written only when the plugin entry carries a
+# path - so an --update omitting cogni-workspace would prune it under a
+# stem-only rule while its sibling ROOT key survived. A vertical plugin's
+# overlay reads this key to reach the canonical user-facing output register, so
+# the prune degrades that register in a workspace where cogni-workspace is
+# still installed. The main run's plugin list omits cogni-workspace, so this
+# asserts against it directly.
+assert_py "Q6 the workspace _PLUGIN key survives a run omitting cogni-workspace" "$WS" \
+  'env.get("COGNI_WORKSPACE_PLUGIN") == "/kept/workspace/plugin"'
 
 # ------------------------------------------------------------ Q1 init mode
 # Without --update the prune must be unreachable: the document is replaced, so

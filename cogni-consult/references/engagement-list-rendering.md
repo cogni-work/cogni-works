@@ -56,8 +56,9 @@ what makes the column affordable at all, so never widen it to every registered
 engagement. The runs are one announced step, never one announcement per call.
 
 A cell is `—` when the engagement genuinely has **no planned deliverables**,
-and on a suffixed row per the rule below. Per rule 8 of the table contract in
-`$CLAUDE_PLUGIN_ROOT/references/user-facing-output.md`, an action field the run
+and on a suffixed row per the rule below. Per rule 8 of canonical (d)'s table contract — which the overlay
+`$CLAUDE_PLUGIN_ROOT/references/user-facing-output.md` opens by reading — an
+action field the run
 reports as `unreadable` — or a run that comes back unsuccessful — is that
 contract's third case, so it renders `nicht lesbar` rather than `—`. Say what
 was unreadable once below the table rather than per row. On the capped

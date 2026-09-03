@@ -7,16 +7,32 @@ carries the shared doctrine — language and orthography (a), governed surfaces
 announcements and brevity budgets (e), tool-call descriptions (f), the anglicism
 test (g), and the executive register (h).
 
-Read the canonical file first:
+Read the canonical file first. Resolve cogni-workspace through the same ladder
+every other cross-plugin read in this repo uses — the settings-generated
+variable, then the plugin cache, then the monorepo sibling — and test for the
+file rather than for the variable, so a half-installed or stale candidate loses
+instead of winning:
 
 ```bash
-cat "${COGNI_WORKSPACE_PLUGIN}/references/user-facing-output.md"
+_ws="${COGNI_WORKSPACE_PLUGIN:-${WORKSPACE_PLUGIN_ROOT:-}}"
+_reg="references/user-facing-output.md"
+[ -n "$_ws" ] && [ -f "$_ws/$_reg" ] || \
+  _ws="$(ls -td "$HOME"/.claude/plugins/cache/insight-wave/cogni-workspace/*/ 2>/dev/null | head -1)"
+[ -n "$_ws" ] && [ -f "$_ws/$_reg" ] || _ws="$CLAUDE_PLUGIN_ROOT/../cogni-workspace"
+cat "$_ws/$_reg"
 ```
 
-**If `$COGNI_WORKSPACE_PLUGIN` does not resolve**, cogni-workspace is not
-registered in this workspace. Say so once, apply this overlay alone, and carry
-on — a missing canonical register degrades the doctrine, it never blocks the
-work. Run `/cogni-workspace:manage-workspace` to register it.
+A bare one-variable read is the shape this ladder exists to avoid: the variable
+can be absent, pruned by a `manage-workspace --update` that deselected
+cogni-workspace, or left pointing at a version-scoped cache directory an update
+has since replaced — and an unquoted empty expansion reads an absolute
+`/references/user-facing-output.md` rather than failing as unset.
+
+**If no candidate carries the file**, say so once, apply this overlay alone, and
+carry on — a missing canonical register degrades the doctrine, it never blocks
+the work. Report what could not be read, not why: every cause above fails
+identically, so naming one is a guess, and only an unregistered workspace is
+fixed by running `/cogni-workspace:manage-workspace`.
 
 This file carries only what is genuinely cogni-consult's: its state lexicon rows,
 its own coinage vocabulary, the description constraints its skills mirror inline,
@@ -49,18 +65,24 @@ The canonical rule binds: an engine value is never displayed raw, and a value
 missing from this table is a gap in the table, not a licence to pass the raw
 value through — add the row.
 
-| Engine value | German | English |
-|---|---|---|
-| `pending` | offen | pending |
-| `in-progress` | in Arbeit | in progress |
-| `complete` | fertig | complete |
-| `lineage_status.status: "stale"` | überholt | outdated |
-| `unreadable` | nicht lesbar | unreadable |
-| `personas_gate: "satisfied"` | erfüllt | satisfied |
-| `personas_gate: "pending"` | offen | pending |
-| adherence `strong` / `partial` / `drifted` | stark / teilweise / abgewichen | strong / partial / drifted |
-| outcome `promoted` / `declined` / `none-found` | übernommen / abgelehnt / nichts gefunden | promoted / declined / none found |
-| disposition `accepted` / `revised` / `rejected` | übernommen / überarbeitet / begründet verworfen | accepted / revised / rejected with reason |
+Canonical (c) requires each entry to state whether its lexicon is **open** or
+**closed**. Every row below is open — the engine writes these values, so a new
+one is a row to add — except the disposition triple, which is closed and carries
+its own note. The `Mode` column states it per row rather than leaving it to be
+inferred from the notes.
+
+| Engine value | German | English | Mode |
+|---|---|---|---|
+| `pending` | offen | pending | open |
+| `in-progress` | in Arbeit | in progress | open |
+| `complete` | fertig | complete | open |
+| `lineage_status.status: "stale"` | überholt | outdated | open |
+| `unreadable` | nicht lesbar | unreadable | open |
+| `personas_gate: "satisfied"` | erfüllt | satisfied | open |
+| `personas_gate: "pending"` | offen | pending | open |
+| adherence `strong` / `partial` / `drifted` | stark / teilweise / abgewichen | strong / partial / drifted | open |
+| outcome `promoted` / `declined` / `none-found` | übernommen / abgelehnt / nichts gefunden | promoted / declined / none found | open |
+| disposition `accepted` / `revised` / `rejected` | übernommen / überarbeitet / begründet verworfen | accepted / revised / rejected with reason | closed |
 
 Four notes travel with the table:
 
@@ -88,15 +110,40 @@ Four notes travel with the table:
   inside a phrase rather than a label being displayed. These two are the
   complete exception set; anywhere else, proper-case.
 
+## (e) Step announcements — this plugin's German vocabulary
+
+Canonical (e) owns the two tiers, the budgets and the three cheapness rules. It
+names the tiers in English because it is language-neutral; on a German surface
+they are this plugin's own coinages, and naming them is what stops each session
+inventing a pair:
+
+| Canonical tier | German | Budget |
+|---|---|---|
+| Read-only step | Orientierungsschritt | one sentence, at most 25 words |
+| Work step | Arbeitsschritt | two sentences, at most 45 words |
+
+The canonical exemplars are English. The German ones are here, because this is
+the surface they calibrate — a DACH engagement is the normal case for this
+plugin, not the exception:
+
+- **Name the actors, never the dispatch**: "Partner, Projektleitung, CFO und
+  Betriebsrat, jeder in seiner eigenen Logik", not "vier Agenten".
+- **A numbered back-reference carries its name**: "Teillösung 2 (die freie
+  Content-Schicht)", not "bei 2".
+
 ## (f) Tool-call descriptions
 
 The canonical file owns the five constraints. They are restated here, and inline
 in every `consult-*` skill's Step 0, because a description can be written —
 wrongly — without ever opening any reference, so the constraints have to sit
 where the model always reads them. Edit them in the canonical file first, then
-mirror the change here and into the nine Step 0 blocks;
-`tests/test_step0_register_block.sh` fails if the copies drift apart or get
-thinned.
+mirror the change here and into the nine Step 0 blocks.
+`tests/test_step0_register_block.sh` pins two of those three legs: it fails if
+the nine blocks drift apart or get thinned, and if this file stops carrying (f).
+Its `canonical-*` cases cover the third leg — this file against the canonical
+one — only when both plugins are checked out as siblings, which is the monorepo
+and CI case but not an installed one, so a canonical edit made against an
+installed plugin still has to be mirrored by hand.
 
 1. Written in the resolved interaction language, per (a).
 2. Outcome-shaped — what the consultant gets back, not what the machine runs.
@@ -111,12 +158,13 @@ Worked pair: `Discover cogni-consult engagements` → `Laufende Engagements hole
 
 ## (g) Prose anglicisms — this plugin's coinages
 
-The canonical file owns the three-step test. Of the terms below only `Stale` is
-also a (c) row (`lineage_status.status: "stale"`); `Cascade` and `Gate` are engine
-vocabulary governed by the engine-vocabulary rule in canonical (h). Where both
-apply they agree, so there is nothing to reconcile.
+Canonical (g) owns the three-step test; this section owns only what the test
+resolves to for this plugin. Of the terms below only `Stale` is also a (c) row
+(`lineage_status.status: "stale"`); `Cascade` and `Gate` are engine vocabulary
+governed by the engine-vocabulary rule in canonical (h). Where both apply they
+agree, so there is nothing to reconcile.
 
-The table is what step 3 of the test resolves to for this plugin's own coinages:
+The table is what step 3 of that test resolves to for this plugin's own coinages:
 
 | English | German | Note |
 |---|---|---|
@@ -157,20 +205,36 @@ plugin has never written it.
 
 This table is owned here rather than borrowed. The `copywriter` skill's
 German-style table addresses sales and go-to-market vocabulary and shares no term
-with the list above; it transliterates its umlauts to ASCII, which contradicts
-the orthography this plugin mandates; and no load path reaches it from here. The
-method above is worth citing, the vocabulary is not worth importing.
+with the list above, and no load path reaches it from cogni-consult. Borrowing it
+would import a vocabulary this plugin never writes; the test it resolves to is
+canonical (g)'s, which already binds here. Note what is *not* a reason to decline
+it: that table spells its umlauts correctly and the `copywriter` skill forbids
+ASCII substitutes outright, so orthography is not a point of difference between
+the two.
 
-The naming discipline in this section has a subagent counterpart —
+Canonical (g)'s never-invent-a-system-term rule has a subagent counterpart —
 `references/subagent-output-contract.md` (`## Register`) carries it, because an
 agent's envelope prose is exactly where an invented term surfaces. Unlike (f),
-which is main-loop-only by its own terms, a rule changed here is checked against
-that file.
+which is main-loop-only by its own terms, a rule changed in canonical (g) is
+checked against that file, and the worked `Routed` instance above is what it
+catches.
+
+## (h) Executive register — this plugin's German exemplars
+
+Canonical (h) owns the register, the compression discipline and the
+engine-vocabulary rule. Its contrasts are English; these are the German ones for
+this plugin's own engine nouns, and they are the pairs the rule is easiest to
+fail on:
+
+- "drei Deliverables ruhen jetzt auf einer überholten Zahl", not "das Cascade hat
+  drei Knoten geflaggt".
+- "die Entscheidung ist im Protokoll festgehalten", not "d-084 geschrieben".
+- "alle vierzehn Deliverables sind fertig", not "14/14 Deliverables complete".
 
 ## What binds here but lives elsewhere
 
-These rules are not restated in this file; they hold on every surface named in
-canonical (b) all the same:
+These rules are owned elsewhere and hold on every surface named in canonical (b)
+all the same. Only (f) is restated here, for the reason that section gives:
 
 - The shared register — language and orthography, governed surfaces, the table
   contract, step announcements and brevity budgets, the anglicism test, and the

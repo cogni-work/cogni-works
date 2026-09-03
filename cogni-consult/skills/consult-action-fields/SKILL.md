@@ -48,12 +48,17 @@ user copy — write it in the interaction language, outcome-shaped, at most 6
 words, with no script, file, or skill names, and never derived from the
 script's filename or header comment. Worked pair:
 `Discover cogni-consult engagements` → `Laufende Engagements holen`.
-Section (f) of `$CLAUDE_PLUGIN_ROOT/references/user-facing-output.md` owns
-these five constraints — edit them there, then mirror the change here.
+Section (f) of the canonical ecosystem register owns these five constraints —
+edit them there first, then mirror into
+`$CLAUDE_PLUGIN_ROOT/references/user-facing-output.md` and here.
 
-The register that output follows — scope, state lexicon, table rules, step
-announcements — is `$CLAUDE_PLUGIN_ROOT/references/user-facing-output.md`;
-table cells and headers are user copy too, not an exemption.
+The register that output follows has two tiers. The overlay
+`$CLAUDE_PLUGIN_ROOT/references/user-facing-output.md` carries this plugin's own
+state lexicon, coinages and German step vocabulary, and opens with the command
+that reads the canonical ecosystem register behind it — which owns scope, the
+table contract, step announcements and brevity budgets, and the executive
+register. Read the overlay and follow that command; table cells and headers are
+user copy too, not an exemption.
 
 ### 1. Prerequisite Gate
 

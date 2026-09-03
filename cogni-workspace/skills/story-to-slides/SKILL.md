@@ -391,7 +391,7 @@ Frontmatter — omit `arc_id` when unresolved, and `climax` when no slide carrie
 - If `output_path` explicit: `mkdir -p "$(dirname "${output_path}")"`
 - Otherwise: set `output_path = {source_dir}/cogni-visual/presentation-brief.md` and `mkdir -p "{source_dir}/cogni-visual"`
 
-The `FRONTMATTER:` block in the prompt below is a deliberate interpolation payload — it supplies values for the keys, not a second definition of the key set; `references/07-output-template.md` → Frontmatter remains the authority, so re-derive this payload from it whenever the Frontmatter key set changes.
+The `FRONTMATTER:` block in the prompt below is a deliberate interpolation payload — it supplies values for the keys, not a second definition of the key set; `references/07-output-template.md` → Frontmatter remains the authority, so re-derive this payload from it whenever the Frontmatter key set or any of its value annotations change.
 
 **Launch the `slides-enrichment-artist` agent:**
 
@@ -582,13 +582,16 @@ Replace `{absolute_path_to_presentation_brief}` with the resolved `output_path` 
 | Library | Step | Purpose |
 |---------|------|---------|
 | **arc-taxonomy.md** | 1 | Arc ID → visual arc type mapping, element names |
-| **cta-taxonomy.md** | 1 | CTA types, urgency, arc-to-CTA heuristics |
+| **cta-taxonomy.md** | 1, 6.1 | CTA types, urgency, arc-to-CTA heuristics |
 | **pptx-layouts.md** | 7 | Slide layout schemas and field definitions (deferred from Step 1) |
 | **EXAMPLE_BRIEF.md** | 8 | Output format reference (deferred from Step 1) |
 | **presentation-intent.md** | 8.2 | `design` / `climax` / `key_figures` vocabulary and the design defaults the `design` override falls back to |
 
 ## Backward Compatibility
 
+- Schema 4.1 is additive over 4.0 — both versions stay valid and an unfenced 4.0 brief
+  stays readable. `references/07-output-template.md` is the authority on which keys each
+  version requires.
 - `arc_type: why-change` activates Why Change file discovery
 - `project_path` parameter still accepted (mapped to `source_path`)
 - Power Position extraction still supported

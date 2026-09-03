@@ -2,7 +2,7 @@
 
 ## Per-slide YAML pattern
 
-Every slide follows this content-only YAML pattern: a `## Slide N:` heading, then exactly one fenced `yaml` block. No top-level color or styling fields (`Background:`, `Text-Color:`, `Icon-Color:`, `Role:`, `Intensity:`, `Mood:`) — the renderer reads the theme directly. The nested `intent.role` key is a different, permitted 4.1 key and is not covered by this prohibition.
+Every slide follows this content-only YAML pattern: a `## Slide N:` heading, then exactly one fenced `yaml` block. No color or styling fields (`Background:`, `Text-Color:`, `Icon-Color:`, `Role:`, `Intensity:`, `Mood:`) — the renderer reads the theme directly. The nested `intent.role` key is a different, permitted 4.1 key and is not covered by this prohibition.
 
 ## Slide 3: 688 Lives Lost Annually to Preventable Rail Incidents
 
@@ -177,7 +177,7 @@ renderer-neutral clauses above it and nothing more.
 
 - Claude Design — consumes the outline export; honours `intent.role` for section rhythm and `design.register` for the visual register.
 - pptx skill — maps `Layout` to its slide masters and writes `Speaker-Notes` through `slide.addNotes()`.
-- render-html-slides — parses the fenced slide blocks directly and renders `visual.chart` as native series data.
+- render-html-slides — parses the fenced slide blocks directly and renders `Diagram` through Mermaid; it does not yet consume `visual.chart`.
 
 ### Slide grammar
 

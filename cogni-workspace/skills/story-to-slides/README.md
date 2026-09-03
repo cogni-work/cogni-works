@@ -575,8 +575,8 @@ layout_distribution:
   title-slide: 1
   process-flow: 1
   four-quadrants: 1
-  context-box: 5
-  hero-stat: 3
+  stat-card-with-context: 5
+  two-columns-equal: 3
   closing-slide: 1
 avg_confidence: 0.87
 manual_review: [4, 9]

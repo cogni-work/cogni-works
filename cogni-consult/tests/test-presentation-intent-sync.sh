@@ -18,9 +18,13 @@
 # c_skip/c_info helpers from cogni-workspace/scripts/verify-theme-backcompat.sh —
 # those survive only because that path matches neither discovery glob.
 #
-# SKIP vs FAIL: a MISSING library file is the installed-plugin layout and skips
-# cleanly. A file that is PRESENT but whose block is empty or malformed FAILS — a
-# vacuous scan must never read as success.
+# SKIP vs FAIL: a MISSING cogni-workspace TREE is the installed-plugin layout and
+# skips cleanly. A tree that is present but has lost its library file, or a file
+# whose block is empty or malformed, FAILS — a vacuous scan must never read as
+# success, and in a monorepo checkout the tree is always present.
+#
+# Mutation recipe (verified — mutated red, restored green):
+#   bash "${CLAUDE_PLUGIN_ROOT}/scripts/mutation-check.sh" --root . --file cogni-workspace/libraries/presentation-intent.md --expr 's/speaker_notes/speaker_note/' --test 'bash cogni-consult/tests/test-presentation-intent-sync.sh' --case pi-sync-03
 
 set -u
 
@@ -54,11 +58,19 @@ extract_block() {
   sed -n "/^$START_MARK\$/,/^$END_MARK\$/p" "$1"
 }
 
-# The installed-plugin layout carries no cogni-workspace tree. That is a clean
-# skip, not a failure -- there is nothing to compare against.
-if [ ! -f "$LIB_FILE" ]; then
-  printf 'SKIP  pi-sync-00 (cogni-workspace library not found at %s)\n' "$LIB_FILE"
+# The installed-plugin layout carries no cogni-workspace TREE at all. That is the
+# only clean skip. A tree that IS present but has lost the library file is a real
+# failure -- skipping there would let an accidental deletion read as success.
+if [ ! -d "$REPO_ROOT/cogni-workspace" ]; then
+  printf 'SKIP: pi-sync-00 (no cogni-workspace tree at %s)\n' "$REPO_ROOT/cogni-workspace"
   exit 0
+fi
+
+if [ -f "$LIB_FILE" ]; then
+  pass "pi-sync-00-library"
+else
+  fail "pi-sync-00-library" "the cogni-workspace tree is present but $LIB_FILE is missing"
+  exit 1
 fi
 
 if [ ! -f "$CONSULT_FILE" ]; then
@@ -144,7 +156,7 @@ fi
 # mutated and assert this suite fails against it. Skipped when already nested so
 # the fixture run cannot recurse.
 if [ "$NESTED" -eq 1 ]; then
-  printf 'SKIP  pi-sync-07 (nested fixture run)\n'
+  printf 'SKIP: pi-sync-07 (nested fixture run)\n'
 else
   FIX="$WORK_DIR/fixture"
   mkdir -p "$FIX/cogni-workspace/libraries" "$FIX/cogni-consult/references" "$FIX/cogni-consult/tests"

@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 # test_check_retirement_ledger.sh — self-test for the retirement-ledger gate.
 #
-# The gate asserts one invariant: when a branch DELETES a
-# cogni-workspace/skills/<name>/SKILL.md, every trigger phrase that file
-# advertised at the MERGE BASE must be accounted for at HEAD — re-claimed by a
-# surviving live skill, or recorded in the retirement ledger with a non-empty
-# reason.
+# The gate asserts one invariant over TWO diff shapes: when a branch DELETES a
+# cogni-workspace/skills/<name>/SKILL.md, or MODIFIES a surviving one so its
+# frontmatter description no longer advertises a phrase, every trigger phrase
+# that file advertised at the MERGE BASE must be accounted for at HEAD —
+# re-claimed by a surviving live skill, or recorded in the retirement ledger
+# with a non-empty reason. One accounting rule, reached by two routes.
 #
 # Cases:
 #   1. delete a skill, write no ledger row -> retirement-row-missing, exit 1.
@@ -60,6 +61,42 @@
 #      mode's skip and the sentinel is iterated instead: the run dies
 #      mid-stream, so the line count and the exit code both move.
 #      [retirement-ledger-15-emit-phrases-skips-unparseable]
+#  16. a SURVIVING skill's description drops a phrase that no sibling re-claims
+#      and no ledger row records -> one violation. The modified-subject mirror
+#      of case 1. [retirement-ledger-16-description-drop-unaccounted]
+#  17. rewording the prose AROUND unchanged quoted phrases is not a drop, so an
+#      ordinary description edit is not taxed.
+#      [retirement-ledger-17-description-reword-clean]
+#  18. both remedies discharge a drop — a ledger row, and a re-claim by a
+#      surviving sibling. Two arms, one id.
+#      [retirement-ledger-18-description-drop-accounted]
+#  19. the surviving file is UNPARSEABLE AT HEAD: it contributes nothing to the
+#      live set, so BOTH of its base phrases are demanded. Observations stay
+#      empty — the base blob parsed, and there is no head-side observation
+#      channel. [retirement-ledger-19-modified-head-unparseable]
+#  20. main advanced past the fork and reworded a skill of its own; this branch
+#      touched no SKILL.md. The case-6 analogue for the modified subject.
+#      [retirement-ledger-20-modified-merge-base-anchoring]
+#  21. both subjects in one branch -> the two checks co-report without moving
+#      each other's counts. [retirement-ledger-21-mixed-subjects]
+#  22. the modified file was UNPARSEABLE AT THE MERGE BASE, so it advertised
+#      nothing to lose -> an observation, the mirror of case 11, and the only
+#      case that observes the per-subject `checked` arithmetic.
+#      [retirement-ledger-22-modified-base-unparseable]
+#  23. a modification-only branch that also removes the ledger still returns a
+#      determinate verdict rather than an unhandled-error exit 2.
+#      [retirement-ledger-23-modified-no-ledger]
+#  24. a retained phrase whose RAW TEXT changes case and internal whitespace
+#      normalizes to the same key, so it was never dropped. Pins that the
+#      modified arm compares normalized keys rather than raw phrase text.
+#      [retirement-ledger-24-description-normalize-clean]
+#
+# Cases 2, 7 and 8 transitively pin the modified side's path scoping: each
+# OVERWRITES the existing ledger, so the ledger TSV is a genuine M row that
+# SKILL_PATH_RE must reject. (Case 4's README.md is an ADD — make_repo writes
+# none — so the filter never sees it and it pins nothing here.) Case 3 rewrites
+# beta's description, adding phrases rather than dropping any, so it is a live
+# modified-arm case that must stay clean.
 #
 # bash 3.2 + stdlib python3 + git. No network.
 #
@@ -106,6 +143,24 @@
 # only that one arm's behaviour moves. The 16-space indent is part of the
 # anchor. --expr reaches `perl -0pi` through a quoted expansion, so the literal
 # \n and \. survive; -0 slurps the file, which is what lets \n bind without /m.
+#
+# Mutation recipe — the modified-file half of the diff filter:
+#
+#   scripts/mutation-check.sh --root . \
+#     --file scripts/check-retirement-ledger.py \
+#     --expr 's/"--diff-filter=DM"/"--diff-filter=D"/' \
+#     --test 'bash tests/test_check_retirement_ledger.sh' \
+#     --case retirement-ledger-16-description-drop-unaccounted
+#
+# The mutation narrows the one diff query back to deletions, which is exactly
+# the regression this suite's modified-subject cases exist to catch: the branch
+# in case 16 deletes nothing, so the status split yields two empty lists, the
+# both-empty early return fires, and the tuple moves from
+# 1|ok|description-phrase-dropped|1|EMPTY to 0|ok|EMPTY|0|EMPTY. The anchor is
+# the QUOTED argument-list form and occurs exactly once — every prose mention of
+# the filter in this file and in the guard is backticked, never wrapped in ASCII
+# double quotes — and the mutant is valid Python, so only the subject moves
+# rather than reddening every case and grading nothing.
 
 set -eu
 
@@ -170,6 +225,26 @@ write_block_skill() {
 name: $name
 description: >-
   Use this skill when the user says$body.
+---
+
+# $name
+EOF
+}
+
+# write_skill_prose <root> <dir> <name> <lead> <phrase...> — the same quoted
+# phrases as write_skill, wrapped in a caller-supplied lead-in sentence. It
+# exists so the reword case produces a GENUINE modification: writing identical
+# bytes leaves the path out of the diff entirely, and the case would pass
+# vacuously against an arm that never ran.
+write_skill_prose() {
+  local root="$1" dir="$2" name="$3" lead="$4"; shift 4
+  local body="" p
+  for p in "$@"; do body="$body \\\"$p\\\""; done
+  mkdir -p "$root/$SKILLS/$dir"
+  cat > "$root/$SKILLS/$dir/SKILL.md" <<EOF
+---
+name: $name
+description: "$lead$body."
 ---
 
 # $name
@@ -509,6 +584,130 @@ EP15_LINES="$(printf '%s\n' "$EP15_OUT" | grep -c . || true)"
 EP15_ERR_LINES="$(grep -c . "$WORK/c15.err" || true)"
 check "retirement-ledger-15-emit-phrases-skips-unparseable parity mode prints the parseable skill's one phrase and nothing for either unparseable shape (rc=$EP15_RC lines=$EP15_LINES err=$EP15_ERR_LINES)" \
   "$([ "$EP15_RC" -eq 0 ] && [ "$EP15_LINES" -eq 1 ] && [ "$EP15_ERR_LINES" -eq 0 ] && echo 0 || echo 1)"
+
+# ---------------------------------------------------------------------------
+# 16. a SURVIVING skill's description drops a phrase, unaccounted -> violation.
+#     The modified-subject mirror of case 1, and the recorded mutation's target.
+R="$WORK/c16"; make_repo "$R"
+write_skill "$R" alpha alpha "alpha one"
+(cd "$R" && $GIT commit -aqm "reword alpha")
+GOT="$(run_gate "$R")"
+check "retirement-ledger-16-description-drop-unaccounted a phrase dropped from a surviving description with no row and no re-claim fails (got: $GOT)" \
+  "$([ "$GOT" = "1|ok|description-phrase-dropped|1|EMPTY" ] && echo 0 || echo 1)"
+
+# ---------------------------------------------------------------------------
+# 17. rewording the prose AROUND unchanged quoted phrases is not a drop.
+#     One-directional by construction: it shares case 16's fixture shape and
+#     differs in exactly one argument, so it cannot be vacuously green while
+#     16 is green.
+R="$WORK/c17"; make_repo "$R"
+write_skill_prose "$R" alpha alpha "Reach for this skill whenever someone says" "alpha one" "alpha two"
+(cd "$R" && $GIT commit -aqm "reword alpha prose only")
+GOT="$(run_gate "$R")"
+check "retirement-ledger-17-description-reword-clean rewording prose around unchanged phrases is not taxed (got: $GOT)" \
+  "$([ "$GOT" = "0|ok|EMPTY|0|EMPTY" ] && echo 0 || echo 1)"
+
+# ---------------------------------------------------------------------------
+# 18. both remedies discharge a drop. TWO arms, ONE id, accumulated and emitted
+#     by a single check AFTER the loop — a check inside it would print the same
+#     id twice and break --case addressability for a mutation recipe.
+C18_OK=0
+R="$WORK/c18a"; make_repo "$R"
+write_skill "$R" alpha alpha "alpha one"
+write_ledger "$R" "$(printf 'legacy phrase\tretired\t-\tfixture seed row')" \
+  "$(printf 'alpha two\tretired\t-\tfolded away, no successor')"
+(cd "$R" && $GIT commit -aqm "reword alpha, record the phrase")
+GOT_A="$(run_gate "$R")"
+[ "$GOT_A" = "0|ok|EMPTY|0|EMPTY" ] || C18_OK=1
+R="$WORK/c18b"; make_repo "$R"
+write_skill "$R" alpha alpha "alpha one"
+write_skill "$R" beta beta "beta one" "alpha two"
+(cd "$R" && $GIT commit -aqm "reword alpha, re-claim in beta")
+GOT_B="$(run_gate "$R")"
+[ "$GOT_B" = "0|ok|EMPTY|0|EMPTY" ] || C18_OK=1
+check "retirement-ledger-18-description-drop-accounted a ledger row and a sibling re-claim each discharge a dropped phrase (got: $GOT_A / $GOT_B)" \
+  "$C18_OK"
+
+# ---------------------------------------------------------------------------
+# 19. the surviving file becomes UNPARSEABLE at HEAD. It contributes nothing to
+#     the live set, so BOTH phrases it advertised at the merge base are demanded
+#     — the safe direction. Observations stay EMPTY: the BASE blob parsed fine,
+#     and there is deliberately no head-side observation channel.
+R="$WORK/c19"; make_repo "$R"
+write_no_frontmatter_skill "$R" alpha
+(cd "$R" && $GIT commit -aqm "alpha loses its frontmatter")
+GOT="$(run_gate "$R")"
+check "retirement-ledger-19-modified-head-unparseable a file unparseable at HEAD excuses none of its own base phrases (got: $GOT)" \
+  "$([ "$GOT" = "1|ok|description-phrase-dropped|2|EMPTY" ] && echo 0 || echo 1)"
+
+# ---------------------------------------------------------------------------
+# 20. main advanced past the fork and dropped a phrase from a skill of its own;
+#     this branch touched no SKILL.md. The case-6 analogue for the modified
+#     subject — a base-TIP anchor would blame the branch for main's edit.
+R="$WORK/c20"; make_repo "$R"
+(cd "$R" && $GIT checkout -q -b feature \
+   && printf 'docs\n' > README.md && $GIT add -A && $GIT commit -qm "branch work" \
+   && $GIT checkout -q main)
+write_skill "$R" alpha alpha "alpha one"
+(cd "$R" && $GIT commit -aqm "main rewords alpha" \
+   && $GIT update-ref refs/remotes/origin/main HEAD \
+   && $GIT checkout -q feature)
+GOT="$(run_gate "$R")"
+check "retirement-ledger-20-modified-merge-base-anchoring main's own later description edit is not the branch's (got: $GOT)" \
+  "$([ "$GOT" = "0|ok|EMPTY|0|EMPTY" ] && echo 0 || echo 1)"
+
+# ---------------------------------------------------------------------------
+# 21. both subjects in one branch: beta is deleted AND alpha drops a phrase.
+#     TWO violations, not three — beta advertises one phrase and alpha drops
+#     one. run_gate sorts the check set, so the dropped-phrase code sorts first.
+R="$WORK/c21"; make_repo "$R"
+write_skill "$R" alpha alpha "alpha one"
+(cd "$R" && $GIT rm -rq "$SKILLS/beta" && $GIT commit -aqm "retire beta, reword alpha")
+GOT="$(run_gate "$R")"
+check "retirement-ledger-21-mixed-subjects a deletion and a description drop co-report without contaminating each other's counts (got: $GOT)" \
+  "$([ "$GOT" = "1|ok|description-phrase-dropped,retirement-row-missing|2|EMPTY" ] && echo 0 || echo 1)"
+
+# ---------------------------------------------------------------------------
+# 22. the modified file was UNPARSEABLE AT THE MERGE BASE: it advertised nothing
+#     to lose, and no branch edit can change its own merge base. An OBSERVATION,
+#     the mirror of case 11 — and the only case that observes the per-subject
+#     `checked` arithmetic, which under-reported while one class existed.
+R="$WORK/c22"; mkdir -p "$R"
+write_no_frontmatter_skill "$R" alpha
+write_skill "$R" beta beta "beta one"
+write_ledger "$R" "$(printf 'legacy phrase\tretired\t-\tfixture seed row')"
+(cd "$R" && $GIT init -q -b main && $GIT add -A && $GIT commit -qm base \
+   && $GIT update-ref refs/remotes/origin/main HEAD)
+write_skill "$R" alpha alpha "alpha one"
+(cd "$R" && $GIT commit -aqm "alpha gains a frontmatter")
+GOT="$(run_gate "$R")"
+check "retirement-ledger-22-modified-base-unparseable a file unparseable at the merge base advertised nothing to drop (got: $GOT)" \
+  "$([ "$GOT" = "0|ok|EMPTY|0|modified-base-unparseable" ] && echo 0 || echo 1)"
+
+# ---------------------------------------------------------------------------
+# 23. a modification-only branch that also removes the ledger. The ledger's own
+#     path is a D row SKILL_PATH_RE rejects, so the deletion set stays empty and
+#     the ledger-missing arm — whose detail text names a deletion — correctly
+#     does not fire. Without the ledger-tolerant `accounted`, this run dies as
+#     an unhandled-error exit 2 instead of returning a determinate verdict.
+R="$WORK/c23"; make_repo "$R"
+write_skill "$R" alpha alpha "alpha one"
+(cd "$R" && $GIT rm -q "$LEDGER" && $GIT commit -aqm "reword alpha, drop the ledger")
+GOT="$(run_gate "$R")"
+check "retirement-ledger-23-modified-no-ledger a modification-only branch with no ledger still returns a determinate verdict (got: $GOT)" \
+  "$([ "$GOT" = "1|ok|description-phrase-dropped|1|EMPTY" ] && echo 0 || echo 1)"
+
+# ---------------------------------------------------------------------------
+# 24. a retained phrase is rewritten with different case and internal spacing.
+#     The extractor's normal form — trimmed, whitespace collapsed, lowercased —
+#     maps it to the SAME key, so nothing left the claim surface. An arm that
+#     compared raw phrase text instead of the key would report it dropped.
+R="$WORK/c24"; make_repo "$R"
+write_skill "$R" alpha alpha "Alpha  ONE" "alpha two"
+(cd "$R" && $GIT commit -aqm "restyle a retained phrase")
+GOT="$(run_gate "$R")"
+check "retirement-ledger-24-description-normalize-clean a retained phrase restyled to the same normalized key is not a drop (got: $GOT)" \
+  "$([ "$GOT" = "0|ok|EMPTY|0|EMPTY" ] && echo 0 || echo 1)"
 
 # ---------------------------------------------------------------------------
 if [ "$FAILED" -gt 0 ]; then

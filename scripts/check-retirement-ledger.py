@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
-"""Retirement-ledger gate — a skill retirement must account for its trigger phrases.
+"""Retirement-ledger gate — a skill's trigger phrases must survive it leaving.
 
-WHAT THIS ASSERTS. When a branch deletes a `cogni-workspace/skills/<name>/SKILL.md`,
-every trigger phrase that file advertised **at the merge base** must still be
-accounted for at HEAD, in one of exactly two ways: a surviving live skill yields
-the same phrase (it was re-claimed, so nothing was lost), or
+WHAT THIS ASSERTS. Two diff shapes, one accounting rule. When a branch deletes a
+`cogni-workspace/skills/<name>/SKILL.md`, or when it edits a SURVIVING one's
+frontmatter `description:` so that it no longer advertises a phrase, every
+trigger phrase that file advertised **at the merge base** must still be accounted
+for at HEAD, in one of exactly two ways: a surviving live skill yields the same
+phrase (it was re-claimed, so nothing was lost), or
 `cogni-workspace/references/retired-trigger-phrases.tsv` carries a row for it with
 a non-empty `reason` (the retirement was recorded). A phrase in neither is a
 violation.
@@ -36,11 +38,35 @@ would never satisfy the check — the guard would be unfixable rather than merel
 wrong. The live-skill set is read from HEAD for the same reason: a re-claim lands
 on the branch too.
 
-SCOPED TO DELETIONS. A phrase can also leave the surface when a *surviving*
-skill's `description:` is edited to drop it. That is the same omission class but a
-different diff shape — it needs a per-skill base-vs-head phrase-set diff over
-modified files rather than this deletion scan — so it is tracked separately rather
-than widened into here.
+TWO SUBJECTS, ONE GUARD. A phrase leaves the claim surface by two routes: the
+file that advertised it is deleted, or it survives and its `description:` stops
+advertising the phrase. Those are different diff shapes but the same omission
+class, and they are arms of one gate rather than two gates because everything the
+second needs the first already establishes — the base-ref resolvability check, the
+merge base, the `degrade()` arm that makes an unresolvable baseline exit 0, and an
+`accounted` set that was always subject-agnostic (it asks who claims a phrase now,
+never how it stopped being claimed).
+
+A sibling guard was the alternative and it was rejected on cost. It would have
+needed a second CI job replicating the `status: degraded` re-grade — the one thing
+standing between a dropped `fetch-depth: 0` and a vacuous pass — a second
+full-history checkout, a second registry bullet in `CLAUDE.md`, and a THIRD copy
+of the phrase extractor. Case C11 pins exactly one copy against the suite's
+`emit_phrases`; an unpinned third would drift, extract fewer phrases, demand fewer
+rows, and fail OPEN in precisely the direction this guard exists to close.
+
+NO HEAD-SIDE READ ON THE MODIFIED ARM. The modified file is itself a surviving
+skill, so `live_phrase_keys` over the working tree already carries whatever its
+description still advertises. A phrase the edit kept is therefore inside
+`accounted` by construction, and `key not in accounted` is the whole test — a
+`git show HEAD:<path>` read would re-derive a subset of what the live set already
+holds, at the cost of a second notion of HEAD sitting beside the working-tree
+reads that `live_phrase_keys` and `ledger_phrase_keys` both take.
+
+That also settles the file that is UNPARSEABLE AT HEAD: it contributes nothing to
+the live set, so everything it advertised at the merge base is demanded. The
+guard asks for more, never less — the safe direction — and whether a live file
+parses at all stays `check-frontmatter`'s subject, not this one's.
 
 DEGRADATION IS DELIBERATE. An unresolvable base ref (shallow clone, offline
 runner, unfetched remote) yields `status: "degraded"` and exit 0. A guard that
@@ -308,6 +334,7 @@ def main():
     data = {
         "status": "ok", "violations": [], "observations": [],
         "base_ref": base_ref, "merge_base": None, "deleted_skills": [],
+        "modified_skills": [],
         "metric_version": METRIC_VERSION,
     }
 
@@ -330,8 +357,10 @@ def main():
     merge_base = mb_out.strip()
     data["merge_base"] = merge_base
 
-    # Deletions, fork-point relative. `--diff-filter=D` must stay one unsplit
-    # token in this argument list — it is what scopes the guard to retirements.
+    # Both subjects in ONE query, fork-point relative. The `--diff-filter`
+    # token must stay one unsplit token in this argument list — it is what
+    # scopes the guard, and its M half is what makes the status split below
+    # exhaustive, so the else-arm is exactly M and needs no third branch.
     #
     # `--no-renames` is equally load-bearing, and for a reason the D filter alone
     # does not cover: rename detection has been on by default since git 2.9, so a
@@ -343,23 +372,44 @@ def main():
     # reached by a different route, so the flag is part of the subject definition
     # rather than a tuning knob. Turning it off does not narrow the guard; it
     # blinds it.
-    rc, diff_out, diff_err = git(repo_root, "diff", "--name-only",
-                                 "--no-renames", "--diff-filter=D",
+    rc, diff_out, diff_err = git(repo_root, "diff", "--name-status",
+                                 "--no-renames", "--diff-filter=DM",
                                  "{}...HEAD".format(base_ref))
     if rc != 0:
         render(data, "could not diff against '{}': {}".format(
             base_ref, (diff_err or "").strip()[:200]))
         return 2
 
-    deleted = [p for p in diff_out.splitlines() if SKILL_PATH_RE.match(p)]
-    if not deleted:
+    # `--name-status` yields exactly two tab-separated fields per line for
+    # these two filters: a status letter and a path. Only R and C carry a
+    # similarity score suffix, and `--no-renames` plus the filter exclude both,
+    # so partitioning on the first tab is total. Every path goes through the
+    # UNCHANGED SKILL_PATH_RE: the ledger TSV is itself a modified file on many
+    # branches, and a deleted ledger is a D row, so without this filter both
+    # would enter the accounting as if they were skills.
+    deleted = []
+    modified = []
+    for line in diff_out.splitlines():
+        status, _, path = line.partition("\t")
+        if not SKILL_PATH_RE.match(path):
+            continue
+        (deleted if status[:1] == "D" else modified).append(path)
+    if not deleted and not modified:
         render(data)
-        sys.stderr.write("retirement-ledger gate: no skill deletion in this "
-                         "branch; nothing to account for.\n")
+        sys.stderr.write("retirement-ledger gate: no skill deletion and no "
+                         "skill-description change in this branch; nothing to "
+                         "account for.\n")
         return 0
 
     ledger_path = repo_root / LEDGER_REL
-    if not ledger_path.is_file():
+    # Gated on `deleted`, not on the ledger alone. A deletion has exactly ONE
+    # remedy and it is a ledger row, so a deleting branch with no ledger cannot
+    # discharge anything and is told so here. A MODIFICATION has two remedies
+    # that need no ledger at all — restore the phrase in that same description,
+    # or re-claim it in a sibling — so a modification-only branch falls through
+    # to the per-phrase finding instead of firing a violation whose own detail
+    # text ("branch deletes a skill...") would be false.
+    if deleted and not ledger_path.is_file():
         # Same element shape as the main path below — one key, one schema.
         # `phrases` is null rather than 0: with no ledger there is nothing to
         # compare against, so the count was never computed, which is a
@@ -375,8 +425,13 @@ def main():
                          "phrases in it.\n" % LEDGER_REL)
         return 1
 
-    accounted = live_phrase_keys(str(repo_root / SKILLS_REL)) \
-        | ledger_phrase_keys(str(ledger_path))
+    # The ledger may legitimately be absent here now that the arm above is
+    # gated on `deleted`: a modification-only branch that removes it reaches
+    # this line. Reading it unconditionally would raise into the top-level
+    # handler and exit 2 — a script error standing in for a determinate verdict.
+    accounted = live_phrase_keys(str(repo_root / SKILLS_REL))
+    if ledger_path.is_file():
+        accounted = accounted | ledger_phrase_keys(str(ledger_path))
 
     violations = []
     observations = []
@@ -425,6 +480,57 @@ def main():
                                              "by no surviving skill and carried "
                                              "by no ledger row" % key})
 
+    # The modification subject. Same merge-base blob read, same extractor and
+    # the same `key not in accounted` predicate as the deletion loop above —
+    # one accounting rule, reached by a second diff shape. See that loop for
+    # the null-means-never-computed rule this one also follows.
+    #
+    # There is deliberately NO per-file head-side read here. The modified file
+    # is itself a SURVIVING skill, so `live_phrase_keys` over the working tree
+    # already carries whatever its description still advertises: a phrase the
+    # edit kept is in `accounted` by construction, and a `git show HEAD:<path>`
+    # read could only re-derive that at the cost of a second notion of HEAD
+    # beside the working-tree reads `live_phrase_keys` and `ledger_phrase_keys`
+    # both take.
+    #
+    # A file UNPARSEABLE AT HEAD therefore needs no arm of its own: it
+    # contributes nothing to the live set, so every phrase it advertised at the
+    # merge base is demanded. That is the safe direction — the guard asks for
+    # more, never less — and it keeps this gate out of `check-frontmatter`'s
+    # subject, which owns whether a live file parses.
+    for path in modified:
+        rc, blob, blob_err = git(repo_root, "show",
+                                 "{}:{}".format(merge_base, path))
+        if rc != 0:
+            render(data, "could not read '{}' at the merge base: {}".format(
+                path, (blob_err or "").strip()[:200]))
+            return 2
+        keys, name = phrases_from_skill_text(blob, path.split("/")[-2])
+        data["modified_skills"].append(
+            {"path": path, "skill": name,
+             "base_phrases": None if keys is UNPARSEABLE else len(keys)})
+        if keys is UNPARSEABLE:
+            # The modified-side mirror of `base-blob-unparseable`, and an
+            # OBSERVATION for the same two reasons: a file that advertised no
+            # parseable phrase set at the merge base had nothing to lose, and
+            # the merge base is history, so no edit on this branch could
+            # discharge a demand made against it.
+            observations.append(
+                {"check": "modified-base-unparseable", "skill": name,
+                 "path": path,
+                 "detail": "no frontmatter description at the merge base, so "
+                           "no phrase set was derived; nothing could have been "
+                           "dropped"})
+            continue
+        for key in keys:
+            if key not in accounted:
+                violations.append({"check": "description-phrase-dropped",
+                                   "skill": name, "path": path, "phrase": key,
+                                   "detail": "trigger phrase \"%s\" was "
+                                             "advertised at the merge base, is "
+                                             "claimed by no surviving skill and "
+                                             "is carried by no ledger row" % key})
+
     data["violations"] = violations
     data["observations"] = observations
     render(data)
@@ -442,7 +548,8 @@ def main():
         checks = {v["check"] for v in violations}
         sys.stderr.write(
             "retirement-ledger gate: %d violation(s) from %d deleted "
-            "skill(s).\n" % (len(violations), len(deleted)))
+            "skill(s) and %d modified skill(s).\n"
+            % (len(violations), len(deleted), len(modified)))
         for v in violations:
             sys.stderr.write("  %s: %s\n"
                              % (v.get("skill") or v["path"], v["detail"]))
@@ -455,8 +562,19 @@ def main():
                 "The key is the extractor's normal form: trimmed, internal "
                 "whitespace collapsed to single spaces, lowercased.\n"
                 % LEDGER_REL)
-        # No FIX_HINTS arm for `base-blob-unparseable`, deliberately: it is no
-        # longer a violation, so it can never be in `checks` here. There was
+        if "description-phrase-dropped" in checks:
+            sys.stderr.write(
+                "FIX_HINTS: for each dropped phrase above, either restore it in "
+                "that skill's own frontmatter description, or re-claim it in a "
+                "surviving skill's frontmatter description, or add a row to %s "
+                "as\n"
+                "  <phrase_key>\\tretired\\t-\\t<non-empty reason>\n"
+                "The key is the extractor's normal form: trimmed, internal "
+                "whitespace collapsed to single spaces, lowercased.\n"
+                % LEDGER_REL)
+        # No FIX_HINTS arm for `base-blob-unparseable` or its modified-side
+        # mirror `modified-base-unparseable`, deliberately: neither is a
+        # violation, so neither can ever be in `checks` here. There was
         # never an executable remedy to name — nothing a branch commits changes
         # its own merge base — and three review cycles were spent re-wording one
         # that did not exist. An observation asks nothing of the author, so it
@@ -467,16 +585,27 @@ def main():
     # the original defect: it asserted full accounting over files the gate had
     # not parsed. The counts below are partitioned, so the claim is exactly as
     # strong as the evidence.
-    checked = len(deleted) - len(observations)
+    # Each subject subtracts only ITS OWN unparseable class. Subtracting the
+    # whole observation list, as this line did while one class existed, silently
+    # under-reports the checked count the moment a second class contributes one.
+    unparseable_deleted = len([o for o in observations
+                               if o["check"] == "base-blob-unparseable"])
+    unparseable_modified = len([o for o in observations
+                                if o["check"] == "modified-base-unparseable"])
+    checked = len(deleted) - unparseable_deleted
+    checked_modified = len(modified) - unparseable_modified
     if observations:
         sys.stderr.write(
             "retirement-ledger gate: %d deleted skill(s) — %d with every "
-            "trigger phrase accounted for, %d unparseable at the merge base "
-            "(no phrase set derived; not a loadable skill, so none was "
-            "advertised).\n" % (len(deleted), checked, len(observations)))
+            "trigger phrase accounted for, %d unparseable at the merge base; "
+            "%d modified skill(s) — %d checked, %d unparseable at the merge "
+            "base (no phrase set derived; nothing was advertised to lose).\n"
+            % (len(deleted), checked, unparseable_deleted,
+               len(modified), checked_modified, unparseable_modified))
     else:
-        sys.stderr.write("retirement-ledger gate: %d deleted skill(s), every "
-                         "trigger phrase accounted for.\n" % len(deleted))
+        sys.stderr.write("retirement-ledger gate: %d deleted skill(s) and %d "
+                         "modified skill(s), every trigger phrase accounted "
+                         "for.\n" % (len(deleted), len(modified)))
     return 0
 
 

@@ -277,7 +277,6 @@ def foundation_files(workspace_root):
         (".workspace-config.json", False, True),
         (".claude/settings.local.json", False, True),
         (".workspace-env.sh", False, False),
-        (".claude/output-styles", True, False),
     ]
     out = []
     for rel, is_dir, required in files:

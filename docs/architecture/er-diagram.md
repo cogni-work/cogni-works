@@ -6,7 +6,7 @@ This document places the insight-wave entity model in context. The canonical dat
 
 ## Architectural Groups
 
-The ecosystem splits along one line: cogni-workspace is **horizontal** infrastructure, and the business plugins are **vertical**, each keeping its own project lifecycle. The dividing rule is the `setup → resume → dashboard` arc — a capability owning a full arc is a vertical business plugin; one owning none of that arc is horizontal infrastructure. The vertical plugins are grouped below by the role they play; that grouping is descriptive, not a dependency ordering.
+The ecosystem splits along one line: cogni-workspace is **horizontal** infrastructure, and the business plugins are **vertical**, each keeping its own project lifecycle. The dividing rule is not the `setup → resume → dashboard` arc itself but what it is *about*: a capability owning a **project lifecycle** — many projects, each with its own state, advancing across sessions — is a vertical business plugin. cogni-workspace runs the same shape, but over configuration rather than projects: one workspace, not a portfolio of them. Owning the shape does not make a plugin vertical; owning projects does. The vertical plugins are grouped below by the role they play; that grouping is descriptive, not a dependency ordering.
 
 ```
 horizontal   cogni-workspace  (shared workspace state: themes, env vars, discovery)

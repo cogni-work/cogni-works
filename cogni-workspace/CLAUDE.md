@@ -4,7 +4,7 @@ Workspace-level infrastructure for the cogni plugin ecosystem: theme management,
 
 ## Scope
 
-cogni-workspace is the horizontal layer: it owns shared workspace state and tooling, while each vertical business plugin keeps its own project lifecycle. The dividing rule is the `setup → resume → dashboard` arc — a capability that owns one is its own plugin, a capability that owns none is infrastructure.
+cogni-workspace is the horizontal layer: it owns shared workspace state and tooling, while each vertical business plugin keeps its own project lifecycle. The dividing rule is not the `setup → resume → dashboard` arc itself but what it is *about*: a capability owning a **project lifecycle** — many projects, each with its own state, advancing across sessions — is a vertical business plugin. cogni-workspace runs the same shape, but over configuration rather than projects: one workspace, not a portfolio of them. Owning the shape does not make a plugin vertical; owning projects does.
 
 
 ## Theme Infrastructure
@@ -64,6 +64,7 @@ Two consequences worth keeping straight:
 
 - **The workspace-root `CLAUDE.md` is the user's file.** Nothing in this plugin creates, copies, or overwrites it. The Obsidian launcher's per-session language switch writes the settings key instead.
 - **Subagents get none of this.** A subagent's system prompt is its own body plus a notes block and the environment info — no settings language, no memory. A plugin whose agents produce user-facing prose needs its own `SubagentStart` hook (see cogni-consult).
+
 
 ## MCP Server Installation
 

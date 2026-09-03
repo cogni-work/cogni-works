@@ -64,7 +64,7 @@ The script returns JSON with each plugin's name, version, path, and computed env
 
 Use AskUserQuestion to collect:
 
-1. **Language** — EN or DE. This controls which behavioral output-style anchors get installed, affecting how Claude communicates in this workspace.
+1. **Language** — EN or DE. This is written as the `language` key by step 3, which Claude Code turns into a `# Language` system-prompt section, so a fresh session responds in the workspace language. Bilingual plugins read the same value as their default.
 2. **Plugin confirmation** — Show discovered plugins, let the user adjust.
 3. **Tool integrations** — Obsidian, VS Code, other. This gets stored in the config so tool-specific plugins know what to set up later.
 
@@ -109,18 +109,13 @@ success it returns `data.action` of `installed` / `updated` / `skipped` and the
 provisioned package list. Packages are declared in
 `references/python-deps-registry.json`.
 
-### 4. Install Output Styles and Theme Template
+### 4. Install Theme Template
 
-Copy the language-appropriate output-style file. These files contain behavioral anchors that shape Claude's communication patterns in this workspace:
-
-```bash
-cp "${CLAUDE_PLUGIN_ROOT}/assets/output-styles/workspace-${LANGUAGE}.md" \
-   "${TARGET_DIR}/.claude/output-styles/"
-```
+Do **not** copy an output style into the workspace. The register ships with the plugin at `output-styles/`, where Claude Code discovers it — a copied style only appears in the picker and is never activated, so copying it creates a file that looks like configuration and governs nothing. Users select it in `/config`.
 
 Do **not** write a workspace-root `CLAUDE.md`. The language rules reach a fresh session without it: step 3's `generate-settings.sh` writes the `language` key into `.claude/settings.local.json`, which Claude Code turns into a `# Language` system-prompt section, and the plugin's `SessionStart` hook adds the orthography rules that section does not carry. The root `CLAUDE.md` is the user's file — the place for project-specific instructions — and this skill never creates or overwrites it.
 
-Create the `output-styles` directory first if needed. Then copy the theme template:
+Copy the theme template:
 
 ```bash
 cp -r "${CLAUDE_PLUGIN_ROOT}/themes/_template/" \
@@ -277,13 +272,14 @@ bash ${CLAUDE_PLUGIN_ROOT}/scripts/install-workspace-deps.sh --force
 Same fail-soft contract as Init Mode Step 3.5: warn and continue if `python3` /
 the `venv` module / the network is unavailable — never block the update.
 
-### 4. Update Output Styles and Theme Template
+### 4. Update Theme Template
 
-Copy latest output-style files from `${CLAUDE_PLUGIN_ROOT}/assets/output-styles/` to `.claude/output-styles/`, overwriting existing ones (these are plugin-managed, not user-customized).
+Do **not** copy an output style into the workspace — the register ships with the plugin at `output-styles/` and is selected in `/config`.
 
-**Migrate a workspace created before the language settings key.** Step 3's `generate-settings.sh --update` writes the `language` key into `.claude/settings.local.json`, which is now where the workspace language lives. Two retired artifacts may still be on disk:
+**Migrate a workspace created before the language settings key.** Step 3's `generate-settings.sh --update` writes the `language` key into `.claude/settings.local.json`, which is now where the workspace language lives. Three retired artifacts may still be on disk:
 
 - `.claude/templates/` — the cache that fed the Obsidian launcher's per-session `CLAUDE.md` copy. Nothing reads it any more. Delete it.
+- `.claude/output-styles/workspace-en.md` / `workspace-de.md` — copies this skill used to install. A copied style only ever appeared in the picker; the register now ships with the plugin. Say so and offer to delete them, defaulting to keeping the files in case the user edited one.
 - The workspace-root `CLAUDE.md`, if it was written by a retired template. Compare it against the language block the plugin used to ship (a `# Workspace Instructions` / `# Workspace-Anweisungen` heading followed only by language bullets). If that is all it contains, say the rules now arrive via the settings key and the `SessionStart` hook and offer to delete it — defaulting to keeping the file. If it contains anything else, leave it untouched and say why.
 
 Do **not** overwrite the workspace-root `CLAUDE.md` under any branch. It is the user's file.

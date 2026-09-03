@@ -240,6 +240,21 @@ jobs:
           set -euo pipefail
           python3 scripts/check-case-id-pairing.py
 
+  output-style-placement-guard:
+    name: Output-style placement guard (registers live at plugin root and resolve in-plugin)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        # Default shallow checkout is sufficient: the guard walks the working
+        # tree at this commit, not git history. Do NOT copy version-bump-gate's
+        # fetch-depth: 0 — that is load-bearing only for its merge-base anchor.
+
+      - name: Assert output-styles sit at the plugin root and resolve in-plugin
+        run: |
+          set -euo pipefail
+          python3 scripts/check-output-style-placement.py
+
   mcp-tool-grant-guard:
     name: MCP agent-grant guard (agent bodies call only servers their frontmatter grants)
     runs-on: ubuntu-latest

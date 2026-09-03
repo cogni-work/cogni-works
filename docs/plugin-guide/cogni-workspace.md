@@ -24,7 +24,7 @@ The plugin imposes no data model on the workspace. It writes four files during i
 | **Theme picker** | The `pick-theme` skill — the single entry point for theme selection used by all visual plugins |
 | **Output style** | A language-specific behavioral anchor file (EN/DE) that shapes how plugin outputs are formatted |
 | **Session hook** | `on-session-start.sh` — sources the workspace environment and validates plugin availability each time a session opens |
-| **Five-tier diagnostic** | The structure of `workspace-status` output: foundation → env vars → plugin registry → themes → dependencies |
+| **Layered diagnostic** | The structure of `workspace-status` output: foundation → env vars → plugin registry → themes → dependencies → Python packages → MCP servers, then plugin-level faults |
 | **Obsidian vault** | A `.obsidian/` configuration directory scaffolded by `manage-workspace` during initialization |
 | **Claim** | A sourced assertion tracked for verification — carries the asserted text, its `source_url`, and `entity_ref` provenance pointing back to the plugin entity it came from |
 | **Deviation** | A detected mismatch between a claim and what its cited source actually says, held for the user to review and resolve |
@@ -92,7 +92,7 @@ A single command that auto-detects whether to initialize or update. If no `.work
 
 ---
 
-### `workspace-status` — Five-tier health diagnostic
+### `workspace-status` — Layered health diagnostic
 
 Checks the workspace in five layers and reports findings with actionable fixes:
 
@@ -442,7 +442,7 @@ cogni-workspace is a contribution-friendly surface for infrastructure improvemen
 
 - **New theme templates** — the `themes/_template/` directory defines the canonical theme format; new presets or industry templates are additive and safe
 - **Platform support** — `bash/portability-utils.sh` handles macOS, Linux, WSL, and Git Bash; if you have a platform that behaves differently, extending portability-utils is the right place
-- **New diagnostic checks** — the five-tier structure in `workspace-status` can be extended with additional checks; a check should return a clear finding and a specific fix action
-- **New output style languages** — the `assets/output-styles/` directory currently has EN and DE; other languages follow the same format
+- **New diagnostic checks** — the layered structure in `workspace-status` can be extended with additional checks; a check should return a clear finding and a specific fix action
+- **The output register** — `output-styles/` at the plugin root carries one register, discovered by Claude Code and selected in `/config`. It is never copied into a workspace; a copied style only appears in the picker and is never activated
 
 See [CONTRIBUTING.md](../../cogni-workspace/CONTRIBUTING.md) for guidelines.

@@ -29,7 +29,7 @@ cogni-workspace is the ecosystem's infrastructure-as-plugin layer: a dedicated p
 2. **Manage themes** — import a Claude Design bundle or create from presets; audit harmony and script-checked WCAG contrast; author tiered theme systems (tokens → assets → components → templates) per Theme System v2 (see [migration guide](docs/theme-system-v2-migration.md)); apply to downstream skills
 3. **Pick themes** — centralized theme picker used by all visual plugins
 4. **Discover plugins** — scan installed cogni-x plugins, detect versions, compute env var names
-5. **Diagnose** workspace health — five-tier report (foundation, env vars, plugin registry, themes, dependencies)
+5. **Diagnose** workspace health — eight checks reported as seven status rows (foundation, env vars, plugin registry, themes, dependencies, optional Python packages, MCP servers) plus a plugin-level tier
 6. **Install MCP servers** — clone and build git-based MCP servers, detect native app MCPs, and write the server into your own MCP config (`~/.claude.json` for Claude Code, `claude_desktop_config.json` for Claude Desktop) so rendering plugins find their tools without manual JSON editing
 7. **Obsidian integration** — scaffold `.obsidian/` vault or incrementally update terminal profiles, handled as sub-steps of manage-workspace
 8. **Bundled reference wiki** — a vendor-curated insight-wave reference wiki ships at `wiki/`; read it directly, starting from its `wiki/index.md`, for grounded pages on plugins, skills, agents, architecture and conventions, plus the command cheatsheet (`ecosystem-command-reference`), the plugin-selection guide (`ecosystem-plugin-selection`) and the workflow walkthroughs (`workflow-*`)
@@ -44,7 +44,7 @@ cogni-workspace is the ecosystem's infrastructure-as-plugin layer: a dedicated p
 - **Set up a whole workspace in one command.** One `manage-workspace` run auto-detects mode, discovers plugins, and generates env vars, settings, themes, and output styles — replacing 20+ minutes of hand-scaffolding, and backing up first so a bad update rolls back in seconds.
 - **Skip hand-editing MCP config entirely.** `install-mcp` clones, builds, and wires up git-based and native MCP servers and writes them into your own MCP config, for Claude Code or Claude Desktop — plugins find their tools without a single JSON edit.
 - **Reskin everything from one file.** Slides, journey maps, web narratives, and dashboards across 5+ visual plugins inherit colors and fonts from one theme, so a rebrand is a single-file edit.
-- **Catch drift before a skill breaks.** Five-tier health diagnostics surface missing deps and version mismatches as a clear report, not a cryptic mid-run failure.
+- **Catch drift before a skill breaks.** Layered health diagnostics surface missing deps, version mismatches and unloaded MCP servers as a clear report, not a cryptic mid-run failure.
 
 ## Supported markets & languages
 
@@ -109,15 +109,14 @@ Claude checks dependencies, discovers your installed plugins, and asks for your 
 .claude/settings.local.json   # env vars + plugin registry
 .workspace-env.sh             # sourced by the session-start hook
 .workspace-config.json        # discovered plugins, preferences
-.claude/output-styles/        # language-specific behavioral anchors
-themes/                       # default cogni-work theme
+cogni-workspace/themes/_template/   # starting point for custom themes
 ```
 
 Then confirm everything is wired up:
 
 > Run `/cogni-workspace:workspace-status`
 
-You'll get a five-tier report — foundation, env vars, plugin registry, themes, dependencies — each marked OK or flagged, with a clear pointer to the fix when something is off. From here every cogni-x plugin reads its configuration from the workspace instead of asking you to set it up again. Re-run `manage-workspace` any time you install a new plugin and it updates the registry in place, so the rest of the ecosystem stays wired up without touching a single config file by hand.
+You'll get a seven-row report — foundation, env vars, plugin registry, themes, dependencies, optional Python packages, MCP servers — each marked OK or flagged, closing with the single next action to take. From here every cogni-x plugin reads its configuration from the workspace instead of asking you to set it up again. Re-run `manage-workspace` any time you install a new plugin and it updates the registry in place, so the rest of the ecosystem stays wired up without touching a single config file by hand.
 
 ## How it works
 
@@ -125,7 +124,7 @@ cogni-workspace runs as the first link in every ecosystem session. The session-s
 
 Setup itself is a single ordered pass. `manage-workspace` runs `check-dependencies.sh` first (you can't configure tools that aren't installed), then `discover-plugins.sh` scans the marketplace cache to learn which cogni-x plugins are present and what env var names they expect. With the inventory known, `generate-settings.sh` writes the settings files, `install-mcp` clones and wires any MCP servers the discovered plugins need, and the Obsidian and theme steps follow. Each step backs up before it writes, so an interrupted or bad run is recoverable.
 
-State lives in two layers that other plugins consume. Configuration (env vars, the plugin registry, themes) is read at runtime — `pick-theme` is the single entry point visual plugins call for theme paths, and `get-market-config.py` merges the canonical supported-markets registry with each plugin's overlay so market data is never duplicated. Health is verified on demand: `workspace-status` re-runs the five-tier check (foundation, env vars, plugin registry, themes, dependencies) so drift is located before a skill trips over it, not after. The ordering throughout is deliberate — discover before configure, configure before wire, back up before write.
+State lives in two layers that other plugins consume. Configuration (env vars, the plugin registry, themes) is read at runtime — `pick-theme` is the single entry point visual plugins call for theme paths, and `get-market-config.py` merges the canonical supported-markets registry with each plugin's overlay so market data is never duplicated. Health is verified on demand: `workspace-status` re-runs its layered check (foundation, env vars, plugin registry, themes, dependencies, optional Python packages, MCP servers) so drift is located before a skill trips over it, not after. The ordering throughout is deliberate — discover before configure, configure before wire, back up before write.
 
 ## Components
 
@@ -134,7 +133,7 @@ State lives in two layers that other plugins consume. Configuration (env vars, t
 | `manage-workspace` | skill | Initialize or update workspace — auto-detects mode, dependencies, discovery, preferences, settings, themes, backup and rollback |
 | `manage-themes` | skill | 8 theme operations: recommend, list, create from preset, audit (script-checked WCAG contrast), author deep theme system, generate showcase, apply, import from Claude Design bundle |
 | `pick-theme` | skill | Centralized theme picker — discovers themes, presents interactive selection, returns path |
-| `workspace-status` | skill | Five-tier diagnostic: foundation, env vars, plugin registry, themes, dependencies |
+| `workspace-status` | skill | Layered diagnostic: foundation, env vars, plugin registry, themes, dependencies, Python packages, MCP servers, plus plugin-level faults |
 | `install-mcp` | skill | End-to-end MCP server installation — clone and build git-based MCPs, configure native app MCPs, and write the server into the user's own config (`~/.claude.json` or `claude_desktop_config.json`) |
 | `manage-markets` | skill | Write path for the canonical supported-markets registry — show status and add markets (codes, locales, authorities) |
 | `audit-region-sources` | skill | Read-only sibling of manage-markets — audit per-plugin region-source overlays against the canonical registry for orphans and drift |
@@ -298,7 +297,7 @@ cogni-workspace/
 | cogni-portfolio | No | install-mcp references cogni-portfolio as a consumer of excalidraw MCP in the installation plan |
 | claude-in-chrome | No | The `claims` skill's cobrowse mode and `workspace-status`' MCP health check use the Chrome extension; claim verification degrades to WebFetch without it |
 | cogni-trends | No | audit-region-sources and manage-markets read the trends region-authority overlay when auditing market coverage |
-| cogni-knowledge | No | workspace-status and manage-workspace route knowledge-base questions to knowledge-setup / knowledge-query |
+| cogni-knowledge | No | Declares `pypdf` in `references/python-deps-registry.json`, which manage-workspace provisions into the shared venv and workspace-status reports on |
 
 ## Contributing
 

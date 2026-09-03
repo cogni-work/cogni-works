@@ -119,13 +119,15 @@ assert_not_grep_f() {
 #
 #   Five properties are load-bearing.
 #
-#   1. Every extraction keeps the `|| true` guard #1753 wrote. Measured, it is
-#      belt-and-braces rather than the thing holding the suite up: each guard
-#      sits on the LAST element of its pipeline, where `sort` and `tr` succeed
-#      on empty input, so a zero-match extraction survives `set -eu` without
-#      them — and under `set -o pipefail` too. Keep them anyway: they are the
-#      guard a future edit needs if the grep or awk ever moves to the tail of
-#      its pipeline, which is where the abort #1753 described would be real.
+#   1. Every extraction keeps the `|| true` guard #1753 wrote. Its comment said
+#      an unguarded extraction aborts the suite under `set -eu`; measured, that
+#      is not what happens here, because each guard sits on the LAST element of
+#      its pipeline, where `sort` and `tr` succeed on empty input — so grep's
+#      exit 1 on a zero-match is already discarded by the pipe. The guards earn
+#      their keep the moment `set -o pipefail` is added: measured again, the
+#      same pipeline without them DOES abort under pipefail. None of the three
+#      callers sets pipefail today. Keep the guards — they are what makes
+#      turning it on later a one-line change rather than a debugging session.
 #   2. It returns 0 on every path. Every call site is
 #      `census_verdict=$(check_grade_census "$0")`, and under `set -e` an
 #      assignment takes its status from the substitution — a body ending in a

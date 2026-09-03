@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Report Swiss-ss spellings sitting in ß positions across one engagement's corpus.
 
-The register states the German orthography rule as prose (references/user-facing-output.md
-section (a)), and prose loses to data: an engagement whose stored files are written in
+The register states the German orthography rule as prose — canonical section (a) in
+cogni-workspace, which references/user-facing-output.md section (a) points at rather
+than restating — and prose loses to data: an engagement whose stored files are written in
 Swiss ss teaches every later turn to keep writing it, because that corpus reaches the
 model as in-context evidence while the rule is a paragraph read once. This scan makes
 that drift visible so it stops reinforcing itself silently.

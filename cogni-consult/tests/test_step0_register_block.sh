@@ -29,8 +29,13 @@
 #   7  owner-present-<n>  (1..3)
 #                        user-facing-output.md carries (f), the 6-word cap and
 #                        the worked pair
-#   8  goes-red-drifted / goes-red-thinned
-#                        a mutated block and a thinned block each fail the guard
+#   7b canonical-basis / canonical-constraints
+#                        the canonical (f) list in cogni-workspace and this
+#                        plugin's overlay carry the same constraints, audience
+#                        noun folded (sibling checkout only)
+#   8  goes-red-drifted / goes-red-thinned / goes-red-canonical
+#                        a mutated block, a thinned block and a canonical-side
+#                        edit each fail the guard
 #
 # The emitted first token is the addressable id: each case emits the id shown
 # above — with its per-skill or per-index suffix substituted — as the first
@@ -45,6 +50,8 @@ set -u
 TESTS_DIR="$(cd "$(dirname "$0")" && pwd)"
 PLUGIN_DIR="$(cd "$TESTS_DIR/.." && pwd)"
 NESTED=0
+CANONICAL_ARG=""
+CANONICAL_OVERRIDE=0
 
 while [ "$#" -gt 0 ]; do
   case "$1" in
@@ -52,6 +59,15 @@ while [ "$#" -gt 0 ]; do
       PLUGIN_DIR="$2"
       # A nested run grades a fixture tree, so it must not build its own.
       NESTED=1
+      shift 2
+      ;;
+    --canonical)
+      # Point the 7b comparison at a specific canonical file. This is what lets
+      # goes-red-canonical prove that arm discriminates: a nested run normally
+      # skips 7b for want of a sibling, so without an override the arm could
+      # only ever be observed green.
+      CANONICAL_ARG="$2"
+      CANONICAL_OVERRIDE=1
       shift 2
       ;;
     *)
@@ -194,6 +210,73 @@ else
   done
 fi
 
+# --- 7b  canonical ---------------------------------------------------------
+
+# The five (f) constraints live in three tiers once the register is split:
+# the canonical file in cogni-workspace, this plugin's overlay, and the nine
+# Step 0 blocks. Assertion 7 pins the overlay and assertions 3-6 pin the nine,
+# so without this arm the tier the overlay itself names as edit-first is the one
+# tier no assertion reads - a canonical edit would leave eleven downstream
+# copies stale with CI green.
+#
+# The comparison NORMALIZES rather than demanding byte-equality, deliberately.
+# Canonical (f) is written for any plugin and says "user"; this plugin's copies
+# say "consultant". That difference is correct, so an equality arm would redden a
+# tree that is behaving properly and force either churn or an exemption - the
+# same trap a keywords-equality arm would be elsewhere in this repo. What must
+# match is the substance: the same count of constraints, in the same order, with
+# the audience noun folded.
+#
+# Basis: the canonical file is reached as a monorepo sibling. That resolves in a
+# checkout and in CI but not in an installed plugin, and the --root fixtures do
+# not carry it either - so a nested run skips this arm rather than reddening for
+# a missing basis, and a non-nested run with no sibling fails as un-based rather
+# than passing vacuously.
+CANONICAL_REL="../cogni-workspace/references/user-facing-output.md"
+if [ "$CANONICAL_OVERRIDE" -eq 1 ]; then
+  CANONICAL="$CANONICAL_ARG"
+else
+  CANONICAL="$PLUGIN_DIR/$CANONICAL_REL"
+fi
+
+# Emit the numbered constraint list under "## (f)", one per line, audience noun
+# folded and whitespace collapsed so a rewrap is not a diff.
+fold_constraints() {
+  SRC="$1" python3 - <<'PY'
+import os, re, sys
+text = open(os.environ["SRC"], encoding="utf-8").read()
+m = re.search(r"(?m)^##\s+\(f\)[^\n]*\n(.*?)(?=^##\s|\Z)", text, re.S)
+if not m:
+    sys.exit(3)
+body = m.group(1)
+items = re.findall(r"(?m)^\d+\.\s+(.*?)(?=^\d+\.\s|\n\n|\Z)", body, re.S)
+for it in items:
+    one = " ".join(it.split())
+    one = one.replace("consultant", "user")
+    sys.stdout.write(one + "\n")
+PY
+}
+
+if [ "$NESTED" -eq 1 ] && [ "$CANONICAL_OVERRIDE" -eq 0 ]; then
+  pass "canonical-basis - nested run, sibling basis not expected"
+  pass "canonical-constraints - nested run, comparison skipped"
+elif [ ! -f "$CANONICAL" ]; then
+  fail "canonical-basis" "canonical register not found at $CANONICAL_REL"
+  fail "canonical-constraints" "no basis to compare against"
+else
+  pass "canonical-basis - canonical register found at $CANONICAL_REL"
+  own="$(fold_constraints "$OWNER")"
+  can="$(fold_constraints "$CANONICAL")"
+  if [ -z "$own" ] || [ -z "$can" ]; then
+    fail "canonical-constraints" "could not extract the (f) constraint list from one side"
+  elif [ "$own" = "$can" ]; then
+    n="$(printf '%s\n' "$own" | wc -l | tr -d ' ')"
+    pass "canonical-constraints - $n constraints match the canonical file"
+  else
+    fail "canonical-constraints" "overlay (f) diverges from canonical (f)"
+  fi
+fi
+
 # --- 8  goes-red -----------------------------------------------------------
 
 # A guard only ever seen green proves nothing about its ability to catch drift.
@@ -239,6 +322,30 @@ if [ "$NESTED" -eq 0 ]; then
     fi
   else
     fail "goes-red-thinned" "could not build the thinned fixture"
+  fi
+
+  # 8c - a canonical-side edit nobody mirrored. The real canonical file is never
+  # mutated: a copy is, and it reaches the nested run through --canonical while
+  # the plugin tree graded alongside it is the real one, so the canonical copy is
+  # the only difference from the green run. Skipped when this run was itself
+  # given an override, which would make the mutation compare against a mutation.
+  if [ "$CANONICAL_OVERRIDE" -eq 1 ]; then
+    pass "goes-red-canonical - override run, self-comparison skipped"
+  elif [ ! -f "$PLUGIN_DIR/$CANONICAL_REL" ]; then
+    fail "goes-red-canonical" "canonical register absent, cannot prove the arm"
+  else
+    mutcan="$TMPROOT/canonical-mutated.md"
+    sed 's/At most 6 words/At most 8 words/' \
+      "$PLUGIN_DIR/$CANONICAL_REL" > "$mutcan"
+    if ! cmp -s "$mutcan" "$PLUGIN_DIR/$CANONICAL_REL"; then
+      if bash "$0" --root "$PLUGIN_DIR" --canonical "$mutcan" >/dev/null 2>&1; then
+        fail "goes-red-canonical" "a canonical-side edit did not fail the guard"
+      else
+        pass "goes-red-canonical - a canonical-side edit fails the guard"
+      fi
+    else
+      fail "goes-red-canonical" "could not build the mutated canonical fixture"
+    fi
   fi
 fi
 

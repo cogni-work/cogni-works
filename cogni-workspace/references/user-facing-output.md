@@ -34,6 +34,15 @@ Kein schweizerisches ss an ß-Stellen — the Swiss convention of writing ss in
 every ß position is never used here. Umlauts are covered by the repo-wide
 encoding convention that forbids ASCII substitutes.
 
+Two other copies of this rule exist in this plugin and are deliberate, not
+drift. `hooks/on-session-start-language.sh` injects it into every German session
+with no file to load, which is the only path that reaches a session carrying no
+skill and no overlay; `skills/copywriter/references/01-core-principles/translation-en-to-de.md`
+owns the fuller treatment with a substitution table. This paragraph is the copy a
+plugin reading the register gets. A change to any of the three is checked against
+the other two — the hook is the one that actually reaches an unadorned session,
+so it is the one that must never be thinner than this.
+
 **When the stored corpus disagrees.** The paragraph above is read once; a
 project's stored files arrive as in-context evidence and out-argue it. A corpus
 already written in Swiss ss therefore teaches every later turn to keep writing
@@ -162,7 +171,7 @@ counterpart to this section and none is owed.
 **prose word the reader reads** — vocabulary that carries no backing field and so
 has no row to look up.
 
-Before reaching for any vocabulary table, run the three-step test:
+**German.** Before reaching for any vocabulary table, run the three-step test:
 
 1. Does an equally precise German word exist? If yes, use it.
 2. Is the anglicism established with no good German equivalent (*Meeting*,
@@ -170,12 +179,29 @@ Before reaching for any vocabulary table, run the three-step test:
 3. Is it a hyphenated English compound? Those almost always have a German
    rendering — replace them.
 
+The test is German-specific, like the orthography paragraph in (a); the
+acronym and never-invent rules below are not. A plugin resolving to a language
+with no equivalent discipline stated here applies those two and skips the test
+rather than transliterating it.
+
+The method is the `copywriter` skill's, at
+`skills/copywriter/references/01-core-principles/german-style-principles.md`,
+which also owns the substitution table and the checklist row binding it. It is
+restated here rather than delegated because a vertical plugin reading this file
+cannot resolve a path inside this one — `$CLAUDE_PLUGIN_ROOT` names the reading
+plugin. The two copies are checked against each other; that reference is the
+source.
+
 Step 3 is what a plugin's own coinage table resolves to. That table belongs in
 the overlay, not here: a coinage is by definition the plugin's own, and a shared
 table would collect terms most plugins never write.
 
 **Spell an acronym out once at first use** — ICP, OMTM, UVP — then use it freely
-for the rest of the exchange.
+for the rest of the exchange. That is the default where no audience is resolved.
+Where a plugin resolves one, `skills/copywriter/references/01-core-principles/acronym-handling-principles.md`
+tunes the expansion depth to it and names a set that is never expanded at all —
+`IT`, `EU`, `USD`, `PDF`, regulation proper nouns, brand names — and it wins over
+this default rather than contradicting it.
 
 **Never invent a system term that does not exist.** An invented term is worse
 than a leaked one: a leaked engine value can at least be looked up in the system,
@@ -202,9 +228,11 @@ option to be shorter. Brevity must lose words, not information.
 `depends_on`, gate, slug, state values (`complete`), log ids, version tags — are
 internal. Report the business consequence instead: "three deliverables now rest
 on an outdated figure", not "the cascade flagged three nodes"; "the decision is
-recorded", not "d-084 written"; "all fourteen deliverables are finished", not
-"14/14 deliverables complete". Name an id only when the reader needs it to look
-something up.
+recorded", not the log id that was written; "all fourteen entities are finished",
+not "14/14 complete". Name an id only when the reader needs it to look something
+up. The contrasts stay generic on purpose: a plugin's own id format and entity
+noun belong in its overlay, and a worked pair borrowed from one vertical reads to
+every other as a format its engine never writes.
 
 This section is stated here rather than delegated because it has to reach the
 **main loop**. An agent-side contract carries the same three rules for the agent

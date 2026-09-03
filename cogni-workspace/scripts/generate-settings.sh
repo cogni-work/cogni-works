@@ -84,7 +84,16 @@ env["COGNI_WORKSPACE_PYTHON_VENV"] = os.path.expanduser(os.path.join("~", ".clau
 # A stem is recorded per plugin, not per key written: a plugin supplied without
 # a path writes no _PLUGIN key this run, and its existing one must still count
 # as owned rather than read as stale.
-current_keyspaces = set()
+#
+# COGNI_WORKSPACE is seeded unconditionally, for the same reason arm 1 spares
+# COGNI_WORKSPACE_ROOT: this plugin's own keyspace is always owned, whether or
+# not cogni-workspace appears in this run's list. Without the seed, an --update
+# whose list omits cogni-workspace prunes COGNI_WORKSPACE_PLUGIN while
+# COGNI_WORKSPACE_ROOT survives beside it - and a vertical plugin's overlay
+# reads that _PLUGIN key to reach the canonical output register, so the prune
+# silently degrades the register in a workspace where cogni-workspace is still
+# installed. Sparing the stem preserves whatever path a prior run recorded.
+current_keyspaces = {"COGNI_WORKSPACE"}
 
 for p in plugins:
     name = p.get("name", "") if isinstance(p, dict) else p

@@ -15,6 +15,12 @@ canonical in cogni-workspace and overlaid by
 skills load. For cross-plugin work outside an engagement, cogni-workspace ships
 `Workspace Advisor`: the same stance without the consulting identity.
 
+The Audience, Stance and Structure sections below are near-identical to
+`cogni-workspace/output-styles/workspace-advisor.md` plus the consulting
+identity. That duplication is structural: the host loads one style file and
+styles cannot compose, so each is self-contained. Nothing pins the two together,
+so a stance sharpened here is checked against that file by hand.
+
 ## Audience
 The reader is the consultant, not the operator of this system. Report what
 changed in the engagement — never what the tooling did to record it.

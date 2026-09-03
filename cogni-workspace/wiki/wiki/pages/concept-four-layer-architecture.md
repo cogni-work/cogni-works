@@ -10,7 +10,7 @@ sources:
 status: stable
 ---
 
-The ecosystem (see [[ecosystem-overview]]) splits along one line: cogni-workspace is **horizontal** infrastructure, and the business plugins are **vertical**, each keeping its own project lifecycle. A capability that owns a full `setup → resume → dashboard` arc is a vertical business plugin; a capability that owns none of that arc is horizontal infrastructure. The vertical plugins are grouped below by the role they play — that grouping is descriptive, not a dependency ordering.
+The ecosystem (see [[ecosystem-overview]]) splits along one line: cogni-workspace is **horizontal** infrastructure, and the business plugins are **vertical**, each keeping its own project lifecycle. The dividing rule is not the `setup → resume → dashboard` arc itself but what it is *about*: a capability owning a **project lifecycle** — many projects, each with its own state, advancing across sessions — is a vertical business plugin. cogni-workspace runs the same shape, but over configuration rather than projects: one workspace, not a portfolio of them. Owning the shape does not make a plugin vertical; owning projects does. The vertical plugins are grouped below by the role they play — that grouping is descriptive, not a dependency ordering.
 
 ```
 horizontal   cogni-workspace

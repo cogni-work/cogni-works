@@ -2,7 +2,7 @@
 # Workplace Orchestrator - Claude Code Launcher
 # Version: 4.0.0
 # Plugin: cogni-workspace
-# Launches Claude Code with language-specific output-style from Obsidian Terminal
+# Launches Claude Code from the Obsidian Terminal, setting the workspace language
 
 set -e
 
@@ -154,9 +154,10 @@ launch_claude() {
     write_settings_language "$LANGUAGE"
     echo ""
 
-    # The register ships with cogni-workspace and is always discoverable, so there
-    # is no file to probe for here — the workspace language is already set above.
-    echo -e "${CYAN}Optional register:${NC} /output-style Workspace Advisor"
+    # No file to probe for: the register ships with the plugin rather than the
+    # workspace. Naming the picker rather than a style name keeps this correct if
+    # the register is renamed, and honest where the plugin is not installed.
+    echo -e "${CYAN}Optional register:${NC} pick the workspace output style in /config"
     echo ""
 
     exec "$CLAUDE_CMD"

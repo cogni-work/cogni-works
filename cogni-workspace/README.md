@@ -41,7 +41,7 @@ cogni-workspace is the ecosystem's infrastructure-as-plugin layer: a dedicated p
 
 ## What it means for you
 
-- **Set up a whole workspace in one command.** One `manage-workspace` run auto-detects mode, discovers plugins, and generates env vars, settings, themes, and output styles — replacing 20+ minutes of hand-scaffolding, and backing up first so a bad update rolls back in seconds.
+- **Set up a whole workspace in one command.** One `manage-workspace` run auto-detects mode, discovers plugins, and generates env vars, settings, and themes — replacing 20+ minutes of hand-scaffolding, and backing up first so a bad update rolls back in seconds.
 - **Skip hand-editing MCP config entirely.** `install-mcp` clones, builds, and wires up git-based and native MCP servers and writes them into your own MCP config, for Claude Code or Claude Desktop — plugins find their tools without a single JSON edit.
 - **Reskin everything from one file.** Slides, journey maps, web narratives, and dashboards across 5+ visual plugins inherit colors and fonts from one theme, so a rebrand is a single-file edit.
 - **Catch drift before a skill breaks.** Layered health diagnostics surface missing deps, version mismatches and unloaded MCP servers as a clear report, not a cryptic mid-run failure.
@@ -285,8 +285,7 @@ cogni-workspace/
 ├── references/                   Reference documentation
 ├── tests/                        Script unit tests (check-skill-names, sanitize-theme)
 ├── docs/                         Developer notes (e.g. theme-system v2 migration)
-└── assets/
-    └── output-styles/            Language-specific behavioral anchors (EN/DE)
+└── output-styles/                Workspace Advisor register, discovered in /config
 ```
 
 ## Dependencies
@@ -297,7 +296,7 @@ cogni-workspace/
 | cogni-portfolio | No | install-mcp references cogni-portfolio as a consumer of excalidraw MCP in the installation plan |
 | claude-in-chrome | No | The `claims` skill's cobrowse mode and `workspace-status`' MCP health check use the Chrome extension; claim verification degrades to WebFetch without it |
 | cogni-trends | No | audit-region-sources and manage-markets read the trends region-authority overlay when auditing market coverage |
-| cogni-knowledge | No | Declares `pypdf` in `references/python-deps-registry.json`, which manage-workspace provisions into the shared venv and workspace-status reports on |
+| cogni-knowledge | No | Named as the consumer of `pypdf` in cogni-workspace's own `references/python-deps-registry.json`, which manage-workspace provisions into the shared venv and workspace-status reports on |
 
 ## Contributing
 

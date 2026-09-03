@@ -95,8 +95,10 @@ DEFAULT_THEME = {
     },
 }
 
+# One entry, not two: cogni-research is a retired prefix with no directory, so its
+# path could never resolve and its column rendered permanently empty — which reads
+# as "market absent from that plugin's catalog", not "that plugin does not exist".
 MARKET_PLUGINS = [
-    ("cogni-research", "cogni-research/references/market-sources.json"),
     ("cogni-trends", "cogni-trends/skills/trend-research/references/region-authority-sources.json"),
 ]
 
@@ -272,17 +274,21 @@ def detect_mode(workspace_root):
 
 
 def foundation_files(workspace_root):
-    """Return list of (filename, exists, is_dir, required) tuples."""
+    """Return list of {file, exists, required} dicts, one per foundation file.
+
+    Every entry is a file. The retired `.claude/output-styles` row was the only
+    directory-shaped one, so the isdir/isfile switch it needed went with it
+    rather than staying as an unreachable branch no caller exercises.
+    """
     files = [
-        (".workspace-config.json", False, True),
-        (".claude/settings.local.json", False, True),
-        (".workspace-env.sh", False, False),
+        (".workspace-config.json", True),
+        (".claude/settings.local.json", True),
+        (".workspace-env.sh", False),
     ]
     out = []
-    for rel, is_dir, required in files:
+    for rel, required in files:
         path = os.path.join(workspace_root, rel)
-        exists = os.path.isdir(path) if is_dir else os.path.isfile(path)
-        out.append({"file": rel, "exists": exists, "required": required})
+        out.append({"file": rel, "exists": os.path.isfile(path), "required": required})
     return out
 
 

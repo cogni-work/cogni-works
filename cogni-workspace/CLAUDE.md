@@ -76,6 +76,21 @@ One register, `output-styles/workspace-advisor.md`, at the **plugin root**. Four
 
 Language lives in the settings key and the `SessionStart` hook above, not here: the register is language-neutral stance, which is why collapsing the old EN/DE pair into one file lost nothing.
 
+## User-facing Output Register
+
+`references/user-facing-output.md` is the **canonical** register for the whole ecosystem: language and orthography, which surfaces the rules govern, the never-display-a-raw-value rule, the table contract, step announcements and brevity budgets, tool-call description copy, the anglicism test, and the executive register. It governs the main loop only — a dispatched agent inherits none of it, so a plugin whose agents write user-facing prose owes them the same doctrine through its own `SubagentStart` contract.
+
+A vertical plugin **overlays** rather than restates it. The overlay carries only what is genuinely its own — its state lexicon rows, its coinage vocabulary, and any surface its own guards pin — and section letters match the canonical file so a rule and its overlay line up. `cogni-consult/references/user-facing-output.md` is the worked example.
+
+**Cross-plugin reads go through `$COGNI_WORKSPACE_PLUGIN`, and this is the only sanctioned use.** `$CLAUDE_PLUGIN_ROOT` resolves to the *owning* plugin, so it cannot reach this file from a vertical plugin; `scripts/generate-settings.sh` emits `COGNI_WORKSPACE_PLUGIN` for every discovered plugin, and `docs/ecosystem-overview.md` already requires `manage-workspace` to have run before any plugin is used, so the variable is present. **The read must be fail-soft**: an overlay that cannot resolve the variable says so once, applies itself alone, and carries on — matching the convention already used for optional Python deps and theme fallback. A missing canonical register degrades the doctrine; it never blocks the work.
+
+Two rules the split must preserve, both deliberate duplication rather than drift:
+
+- Section (h) stays stated inline in the canonical file rather than delegated, because it has to reach the main loop; the agent-side contract carries its own copy because it is injected, never loaded.
+- A plugin may restate the five description constraints of (f) inline in its skills, and should where a description can be written wrongly without opening any reference. That duplication is the plugin's to guard — `cogni-consult/tests/test_step0_register_block.sh` is the model.
+
+**Output styles are plugin-owned and never centralized.** A style carries stance; the register carries wording. `output-styles/workspace-advisor.md` is the general cross-plugin stance, `cogni-consult/output-styles/strategy-advisor.md` the consulting one — styles are session-global and cannot compose or inherit, so two picks serve two audiences. Never copy a style into a workspace: a copied style only appears in the picker and is never activated. Never set `force-for-plugin` — a forced style would govern the voice of every unrelated session.
+
 ## MCP Server Installation
 
 - The `install-mcp` skill is the primary entry point for end-to-end MCP setup

@@ -502,7 +502,7 @@ or by reading the field manifests directly).
 artifact, one next-step. Six is the ceiling on the whole close: a trailing offer
 spends one of the substance lines rather than adding a seventh, so a close that
 makes an offer carries at most two other substance lines. At most one table, and
-only at four or five rows — section (d) of
+only at four or five rows — section (d) of the register headed by
 `$CLAUDE_PLUGIN_ROOT/references/user-facing-output.md`; anything smaller is
 prose, and its overflow line spends a substance line too. Announce before *or* report after, never both — section (e) of
 that same register. The next-step line carries exactly one recommendation,

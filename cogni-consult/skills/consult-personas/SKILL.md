@@ -212,7 +212,7 @@ the next step.
 
 **Close budget: at most six lines** — one result line, at most three substance
 lines, one artifact line, one next-step line. At most one table, and only at
-four or five rows: section (d) of
+four or five rows: section (d) of the register headed by
 `$CLAUDE_PLUGIN_ROOT/references/user-facing-output.md` bars a table under four
 rows, so anything smaller is prose. Announce before *or* report after, never
 both — section (e) of that same register owns that rule. The producing-route

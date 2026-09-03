@@ -238,7 +238,7 @@ cogni-workspace/
 │   ├── story-to-*.md             Four narrative -> brief drivers (slides, web, storyboard, infographic)
 │   ├── render-infographic-*.md   Three infographic renderers (pencil, sketchnote, whiteboard)
 │   └── concept-diagram*.md       Diagram workers (Excalidraw and inline-SVG variants)
-├── libraries/                    17 layout, taxonomy and worked-example files read at render time
+├── libraries/                    18 layout, taxonomy and worked-example files read at render time
 ├── commands/                     13 slash commands
 │   ├── claims.md                 Registers /claims
 │   ├── narrative*.md             Registers /narrative, /narrative-review, /narrative-adapt

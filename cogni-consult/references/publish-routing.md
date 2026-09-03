@@ -77,11 +77,21 @@ renderer (Claude Design) to guess two things every deck needs settled up front:
 the **design register**, and **what belongs on the slide vs. in the talk-track**.
 That guessing turns into a clarify-then-build round before the deck can be built.
 
+The canonical definition of this layer lives in
+`cogni-workspace/libraries/presentation-intent.md`. The marked block below is a
+synchronized copy of it, compared byte for byte by
+`cogni-consult/tests/test-presentation-intent-sync.sh` — edit one copy and the
+guard goes red until the other matches. The copy is kept here in full, rather
+than reduced to a pointer, so this subsection stays a complete schema when
+cogni-consult is installed without a cogni-workspace tree beside it.
+
 To skip that round and let the deck build in one pass, the author **may** layer a
 thin **presentation-intent** annotation on top of the same content. It is
 **optional and additive** — omit any piece and the brief still renders; the
 narrative-completeness strength is never traded away. The author (not the
 renderer) owns the slide-vs-notes and emphasis decisions. The five pieces:
+
+<!-- PRESENTATION-INTENT:SHARED:START -->
 
 1. **`design:` front-matter block** — a small block at the head of the brief
    declaring the deck's design intent, so the renderer does not ask. Fields, all
@@ -121,6 +131,8 @@ renderer) owns the slide-vs-notes and emphasis decisions. The five pieces:
 "render citations as footnotes / speaker notes") and the **"design is frozen"**
 framing — both proved useful in real handoffs; favor more of that over reasoning
 prose buried inside bullets.
+
+<!-- PRESENTATION-INTENT:SHARED:END -->
 
 ### report → consult-native report-outline brief
 

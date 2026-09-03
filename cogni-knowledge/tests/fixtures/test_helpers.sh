@@ -125,20 +125,28 @@ assert_not_grep_f() {
 #      its pipeline, where `sort` and `tr` succeed on empty input — so grep's
 #      exit 1 on a zero-match is already discarded by the pipe. The guards earn
 #      their keep the moment `set -o pipefail` is added: measured again, the
-#      same pipeline without them DOES abort under pipefail. None of the three
-#      callers sets pipefail today. Keep the guards — they are what makes
-#      turning it on later a one-line change rather than a debugging session.
+#      same pipeline without them DOES abort under pipefail. No caller sets
+#      pipefail today. Keep the guards — they are what makes turning it on
+#      later a one-line change rather than a debugging session.
 #   2. It returns 0 on every path. Every call site is
 #      `census_verdict=$(check_grade_census "$0")`, and under `set -e` an
 #      assignment takes its status from the substitution — a body ending in a
 #      failing test would kill the caller instead of reporting a verdict.
-#   3. It mints its own scratch dir and installs NO `EXIT` handler of its own.
-#      test_ingest_contract.sh defines no $WORK at all, so a caller-supplied
-#      scratch dir cannot be assumed; and test_knowledge_lib.sh and
-#      test_pdf_extract.sh each already install an `EXIT` handler that removes
-#      their $WORK. A second one here would silently REPLACE the caller's,
-#      leaking that caller's $WORK with every suite still green, so nothing
-#      would report it. Clean up inline instead, as the body below does.
+#   3. It mints its own scratch dir and installs NO `EXIT` handler of its own,
+#      because callers differ on both counts and neither difference is this
+#      helper's to assume. Some define no $WORK at all, so a caller-supplied
+#      scratch dir cannot be relied on. Others already install an `EXIT`
+#      handler that removes their own $WORK — and bash keeps exactly ONE
+#      handler per signal, so a second one here would silently REPLACE the
+#      caller's, leaking that caller's $WORK with every suite still green, so
+#      nothing would report it. Clean up inline instead, as the body below
+#      does. The caller SET both halves quantify over is derived rather than
+#      listed — tests/test_check_grade_enrolment.sh names any suite carrying
+#      the convention that does not call this helper — so re-checking either
+#      half is a read over that set rather than a hunt for which files are in
+#      it. The two halves themselves are hand-checked against it: nothing
+#      asserts that some caller still defines no $WORK, or that some other
+#      still installs its own EXIT handler.
 #   4. Pass FILE as the caller's own `"$0"`. Pointing it at this helper is
 #      harmless — neither extractor matches its own literal, so the census
 #      comes back `EMPTY - registrations=0 grade lines=0`, which is the honest

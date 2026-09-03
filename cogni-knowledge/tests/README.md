@@ -62,8 +62,10 @@ via `trap rm -rf "$WORK" EXIT`.
   segment out of reach of `scripts/check-case-id-pairing.py`, and an id that
   is entirely an expansion is skipped by it, so an arm emitted from the helper
   — or one whose id arrives only via `$census_desc` — is invisible to the
-  guard. `test_knowledge_lib.sh`, `test_ingest_contract.sh` and
-  `test_pdf_extract.sh` are its three callers.
+  guard. Every suite that uses the convention must call it — that rule is not
+  a list kept here: `test_check_grade_enrolment.sh` derives the caller set from
+  file content (a registration plus a grade line) and names any suite that
+  carries both and does not call the helper.
 - Real Python harness (inline `python3 - <<PY ... PY` heredoc) for
   script-level assertions.
 - Fixtures are minimal — only the files the test actually exercises.

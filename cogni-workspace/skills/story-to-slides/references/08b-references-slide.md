@@ -29,9 +29,9 @@ IF total citations > 12: Split across two References slides
 
 **Layout:** `two-columns-equal`
 
-```yaml
 ## Slide N: Sources & References
 
+```yaml
 Layout: two-columns-equal
 Slide-Kind: references
 

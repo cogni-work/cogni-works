@@ -2,7 +2,7 @@
 
 ## Per-slide YAML pattern
 
-Every slide follows this content-only YAML pattern: a `## Slide N:` heading, then exactly one fenced `yaml` block. No color fields (`Background:`, `Text-Color:`, `Icon-Color:`, `Role:`, `Intensity:`, `Mood:`) — the renderer reads the theme directly.
+Every slide follows this content-only YAML pattern: a `## Slide N:` heading, then exactly one fenced `yaml` block. No top-level color or styling fields (`Background:`, `Text-Color:`, `Icon-Color:`, `Role:`, `Intensity:`, `Mood:`) — the renderer reads the theme directly. The nested `intent.role` key is a different, permitted 4.1 key and is not covered by this prohibition.
 
 ## Slide 3: 688 Lives Lost Annually to Preventable Rail Incidents
 
@@ -161,7 +161,9 @@ requirements block of 4.0 and is addressed to whichever renderer consumes the br
 ### Slide grammar
 
 Every slide is a `## Slide N:` heading carrying the assertion headline, followed by
-**exactly one** fenced `yaml` block. Three keys are new in 4.1 and appear on every slide:
+**exactly one** fenced `yaml` block. Three top-level keys are new in 4.1 and appear on
+every slide — `Slide-Kind`, `intent` and `visual`. The table below enumerates them and their
+sub-keys; `visual.chart` and `visual.image_prompt` are conditional on `visual.kind`:
 
 | Key | Values | Purpose |
 |---|---|---|

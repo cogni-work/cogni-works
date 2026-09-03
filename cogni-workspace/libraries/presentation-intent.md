@@ -94,15 +94,15 @@ layouts. This table binds each to the `type:` tag a renderer should treat it as.
 | `process-flow` | `timeline` | |
 | `gantt-chart` | `timeline` | |
 | `closing-slide` | `bluf` | |
-| references slide | `table` | **Proposal, not yet implemented** — see below |
+| references slide | `table` | Tagged by `Slide-Kind: references` — see below |
 
-**The references row is a proposal.** The references slide is real — it is
+**The references row is tagged, not laid out.** The references slide is real — it is
 documented as placement guidance in `pptx-layouts.md` under "Notes for
 Generators", and it renders after the closing slide as an appendix — but it is
-**not** one of the eleven layouts and has no layout name of its own. No marker
-distinguishing it exists in this repository today. The row above records the
-intended treatment so a later change has one place to bind it; nothing reads it
-yet, and no test asserts it.
+still **not** one of the eleven layouts and has no layout name of its own. What
+distinguishes it is the per-slide key `Slide-Kind: references`, which the brief
+grammar now emits. The row above records the type-tag treatment a renderer should
+apply to that slide.
 
 **`quote` has no layout mapping, deliberately.** It is one of the eight tags, but
 no layout in the closed set renders as a pull quote. A symmetric "every tag

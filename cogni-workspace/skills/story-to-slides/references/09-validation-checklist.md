@@ -46,7 +46,11 @@ REASON through schema compliance for each slide:
      → FIX: Add missing field with content from the relevant step's output
 
   3. CHECK for unknown fields
-     → Does this slide contain fields NOT defined in pptx-layouts.md?
+     → The recognized vocabulary is the layout fields defined in
+       pptx-layouts.md PLUS the 4.1 per-slide keys defined in
+       07-output-template.md: Slide-Kind, intent (sub-keys role, emphasis)
+       and visual (sub-keys kind, chart, image_prompt)
+     → Does this slide contain fields outside BOTH sets?
      → FAIL if: invented field names present
      → FIX: Remove or map to correct field names
 
@@ -67,7 +71,7 @@ REASON through schema compliance for each slide:
 
   4. CHECK for prohibited color fields
      → Does ANY slide contain Background, Text-Color, or Icon-Color?
-     → v4.0 briefs must NEVER contain color fields
+     → No brief may contain color fields, in either version
      → FAIL if: any color field present (including in optional fields)
      → FIX: Delete the color field entirely
 
@@ -417,10 +421,10 @@ Before marking Step 8 complete, verify ALL items. Mark each ✅ or ❌:
 ### Layer 1: Schema Compliance
 - [ ] All slides use valid layout types from pptx-layouts.md
 - [ ] All required fields present for each layout type
-- [ ] No unknown fields present
+- [ ] No unknown fields present (the 4.1 per-slide keys Slide-Kind, intent and visual are known fields, not unknown ones)
 - [ ] ZERO color fields (Background, Text-Color, Icon-Color must be absent)
 - [ ] YAML parses without errors
-- [ ] Frontmatter complete and valid (version "4.0", theme_path ends in /theme.md)
+- [ ] Frontmatter complete and valid for the brief's OWN declared version ("4.0" or "4.1"); theme_path required in 4.0, and when present in either version it ends in /theme.md
 - [ ] Rendering Contract section present (localized, between governing thought and Slide 1)
 
 ### Layer 2: Message Quality

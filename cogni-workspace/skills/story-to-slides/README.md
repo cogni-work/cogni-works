@@ -417,6 +417,7 @@ transformation_notes: |
   2 slides flagged for manual review.
   Copywriting: 6 number plays, 12 headlines optimized.
 ---
+```
 
 # Presentation Brief: Customer Name
 
@@ -427,13 +428,37 @@ incident response.
 ---
 
 ## Slide 1: Crisis in the Railway Network
+
+```yaml
+Layout: title-slide
+Slide-Kind: content
+
+intent:
+  role: hook
+  emphasis: none
+
+visual:
+  kind: none
+
 Layout: title-slide
 Title: Crisis in the Railway Network
 Subtitle: Why manual monitoring is no longer sufficient
 Metadata: Customer Name | Provider Name | 2026-02-06
+```
 
 ## Slide 2: Pitch Methodology
+
+```yaml
 Layout: process-flow
+Slide-Kind: internal-prep
+
+intent:
+  role: evidence
+  emphasis: none
+
+visual:
+  kind: diagram
+
 Slide-Title: Pitch Methodology
 Diagram: |
   graph LR
@@ -467,9 +492,21 @@ Bottom-Banner:
   Text: "INTERNAL — REMOVE FROM CLIENT PRESENTATION"
 Speaker-Notes: |
   [... coaching notes + slide-by-slide pacing guide with PEAK/RELEASE ...]
+```
 
 ## Slide 3: Buying Center
+
+```yaml
 Layout: four-quadrants
+Slide-Kind: internal-prep
+
+intent:
+  role: evidence
+  emphasis: none
+
+visual:
+  kind: table
+
 Slide-Title: Buying Center
 Q1:
   Label: "Economic Buyer"
@@ -503,10 +540,23 @@ Bottom-Banner:
   Text: "INTERNAL — REMOVE FROM CLIENT PRESENTATION"
 Speaker-Notes: |
   [... coaching notes for presenter ...]
+```
 
 ## Slide 4: 688 Lives Lost Annually to Preventable Rail Incidents
+
+```yaml
 Layout: stat-card-with-context
+Slide-Kind: content
+
+intent:
+  role: problem
+  emphasis: climax
+
+visual:
+  kind: stat
+
 [... YAML specification ...]
+```
 
 [... additional slides ...]
 
@@ -514,36 +564,30 @@ Layout: stat-card-with-context
 
 ## Generation Metadata
 
-**Story Arc:** why-change
-**Governing Thought:** Deutsche Bahn should deploy AI video analytics...
-
-**Source Files:**
-- value-story.md
-- 01-why-change/narrative.md
-- 02-why-now/narrative.md
-- 03-why-you/narrative.md
-- 04-why-pay/narrative.md
-- power-positions.md
-
-**Message Architecture:**
-- Slides generated: 12
-- Arguments (MECE groups): 4
-- Consolidation applied: yes (18 sections → 12 slides)
-
-**Copywriting Applied:**
-- Number plays: 6
-- Headlines optimized: 12
-- Bullets consolidated: 8
-
-**Average Confidence:** 0.87
-**Manual Review Recommended:** Slides 4, 9 (low confidence)
-
-**Validation:**
-- Schema compliance: PASS
-- Message quality: PASS
-- Copywriting quality: PASS
-- Presentation logic: PASS
-- Content integrity: PASS
+```yaml
+story_arc: why-change
+governing_thought: "Deutsche Bahn should deploy AI video analytics..."
+source_files:
+  - value-story.md
+  - 01-why-change/narrative.md
+  - 02-why-now/narrative.md
+  - 03-why-you/narrative.md
+  - 04-why-pay/narrative.md
+  - power-positions.md
+slides_total: 12
+arguments_mece: 4
+consolidation: "18 sections → 12 slides"
+number_plays: 6
+headlines_optimized: 12
+bullets_consolidated: 8
+avg_confidence: 0.87
+manual_review: [4, 9]
+validation:
+  schema: pass
+  messages: pass
+  copy: pass
+  logic: pass
+  integrity: pass
 ```
 
 ## Integration with why-change-work

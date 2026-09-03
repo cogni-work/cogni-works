@@ -47,8 +47,8 @@ Dieser Block ist die deutsche Fassung von `# Rendering Contract` aus `07-output-
 - Texte sind eingefroren: Überschriften, Aufzählungen, Zahlen und Beschriftungen exakt übernehmen — wer eine Zeile umformuliert, ändert das Ergebnis, statt es zu gestalten.
 - Notizen für Slides gehen vollständig in den nativen Notizkanal des Renderers; gekürzte oder zusammengefasste Notizen sind eine fehlerhafte Umsetzung.
 - Zitatmarker <sup>[N](url)</sup> werden zu Hyperlinks auf der Zahl, und die Quellenfolie bleibt die letzte Folie.
-- Gestaltung stammt ausschließlich aus dem Theme oder dem Designsystem des Renderers; der Brief enthält keine Farben, Schriften oder Koordinaten.
-- `Layout` ist eine Inhaltsform und `visual` eine Absicht: beide auf das nächstgelegene native Layout abbilden und niemals Inhalte erfinden.
+- Gestaltung stammt ausschließlich aus dem Theme oder dem Designsystem des Renderers; der Brief enthält keine Farben, Schriften oder Koordinaten, und es dürfen auch keine aus dem Wortlaut abgeleitet werden.
+- `Layout` ist eine Inhaltsform und `visual` eine Absicht: beide auf das nächstgelegene native Layout abbilden und niemals Inhalte erfinden, um eines zu füllen.
 
 ---
 

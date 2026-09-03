@@ -1,15 +1,16 @@
 ---
 name: story-to-slides
 description: >
-  Transform any narrative into an optimized multi-slide presentation brief that the PPTX skill
-  renders into PowerPoint. Use this skill whenever the user mentions "presentation",
+  Transform any narrative into an optimized multi-slide presentation brief that Claude Design,
+  the PPTX skill or the HTML slide renderer turns into a deck. Use this skill whenever the user mentions "presentation",
   "slide deck", "slides", "PowerPoint", "Foliensatz", "Praesentation erstellen",
   "Folien aus Bericht", "pitch deck", "create slides from report", or wants to convert
   prose into slide-level message architecture. Also trigger when the user needs pyramid
   communication, number plays, assertion headlines, or speaker notes for a presentation.
   Covers Why Change projects, research reports, competitive intelligence, trend panoramas,
-  and both English and German output. Produces a presentation-brief.md (v4.1) that the
-  PPTX agent renders. Important: this skill CREATES the brief from a narrative source —
+  and both English and German output. Produces a presentation-brief.md (v4.1) whose
+  renderer-neutral Rendering Contract is read by Claude Design, the PPTX skill and
+  render-html-slides. Important: this skill CREATES the brief from a narrative source —
   it does NOT render an existing brief (use PPTX skill for that), does NOT create a web page
   (use story-to-web), and does NOT enhance prose (use cogni-workspace:copywriter).
 allowed-tools: Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion, Agent, Skill
@@ -68,7 +69,7 @@ These are typically set by an upstream agent (e.g., why-change-work), not by a h
 
 ### Theme-driven visuals
 
-The PPTX renderer owns all visual decisions — colors, fonts, spacing — by reading the theme directly. Briefs specify content and layout only. Omit visual fields (`Background:`, `Text-Color:`, `Icon-Color:`, `Role:`, `Intensity:`, `Mood:`) because the renderer ignores them and their presence creates ambiguity about who controls styling.
+The PPTX renderer owns all visual decisions — colors, fonts, spacing — by reading the theme directly. Briefs specify content and layout only. Omit color/styling fields (`Background:`, `Text-Color:`, `Icon-Color:`, `Role:`, `Intensity:`, `Mood:`) because the renderer ignores them and their presence creates ambiguity about who controls styling.
 
 ### Interactive checkpoints
 
@@ -335,7 +336,9 @@ Content checkpoint: State slides compressed count, total words moved to notes.
 
 **Read reference:** `references/07-output-template.md` (Slide YAML Example section)
 
-For each slide, generate content-only YAML following `pptx-layouts.md` field names. Omit all visual fields — the renderer reads the theme. Every slide heading is an assertion headline.
+For each slide, generate content-only YAML following `pptx-layouts.md` field names. Omit all color/styling fields — the renderer reads the theme. Every slide heading is an assertion headline.
+
+Every slide also carries the three per-slide keys 4.1 requires: `Slide-Kind`, `intent` (with `role` and `emphasis`) and `visual` (with `kind`). Read `references/07-output-template.md` for their value sets — `pptx-layouts.md` defines layout fields only and does not define these three.
 
 **Density enforcement (Step 7.5):** IS/DOES/MEANS boxes: billboard-line brevity (15/20/15 words max, phrase notation only). All bullets: McKinsey slide bullet density (max 10 words, phrase not sentence). No full sentences in any box or bullet field.
 
@@ -353,7 +356,7 @@ Generate from citation renumber map (Step 2). Position after closing-slide as la
 
 #### Step 8.2: Enrich and Write Complete Brief (Delegated)
 
-> Speaker notes transform a deck from a document into a performance tool. Prep slides give the presenter strategic context before entering the room. The `slides-enrichment-artist` agent loads its own heavy references (1,647 lines) in a separate context, generates prep slides and speaker notes, and **writes the complete presentation-brief.md directly** — eliminating the token-heavy JSON round-trip and the integration step that can stall the orchestrator.
+> Speaker notes transform a deck from a document into a performance tool. Prep slides give the presenter strategic context before entering the room. The `slides-enrichment-artist` agent loads its own heavy references in a separate context, generates prep slides and speaker notes, and **writes the complete presentation-brief.md directly** — eliminating the token-heavy JSON round-trip and the integration step that can stall the orchestrator.
 
 **Prepare the enrichment prompt** with these fields from previous steps:
 
@@ -399,6 +402,15 @@ Agent tool:
       arc_id: "{arc_id}"
       governing_thought: "{governing_thought}"
       confidence_score: {avg_confidence}
+      max_slides: {max_slides}
+      slides: {slides_total}
+      climax: {climax_slide}
+      design:
+        register: {register}
+        speaker_notes: {speaker_notes_mode}
+        imagery: {imagery_mode}
+      key_figures:
+        - "{hero number promoted out of prose}"
       transformation_notes: |
         Story-to-slides transformation.
         Theme: {theme_id}. Arc: {arc_type}.
@@ -448,7 +460,7 @@ Agent tool:
 **Read reference:** `references/09-validation-checklist.md`
 
 Five layers — stop on first failure, fix, re-check:
-1. **Schema** — layout types exist, required fields present, no visual fields, valid YAML
+1. **Schema** — layout types exist, required fields present, no color/styling fields, valid YAML
 2. **Message quality** — assertion headlines, MECE sequence, isolated hero numbers
 3. **Copywriting** — number plays applied, bullets consolidated, no hedging
 4. **Presentation logic** — bookend slides enforced, within max_slides, layout variety
@@ -494,7 +506,7 @@ Write the review verdict to `{output_dir}/presentation-brief.review.json`.
 - If `output_path` explicit: `mkdir -p "$(dirname "${output_path}")"`
 - Otherwise: set `output_path = {source_dir}/cogni-visual/presentation-brief.md` and `mkdir -p "{source_dir}/cogni-visual"`
 
-Write the brief following the output template. YAML frontmatter must include: type, version (4.1), arc_type, arc_id, governing_thought, confidence_score, max_slides and slides (`theme` and `theme_path` are optional pass-through keys). Include the Rendering Contract section (localized). Include the fenced Generation Metadata block at end.
+Write the brief following the output template. YAML frontmatter must include: type, version (4.1), arc_type, arc_id, governing_thought, confidence_score, max_slides, slides, climax, design and key_figures (`theme` and `theme_path` are optional pass-through keys). Include the Rendering Contract section (localized). Include the fenced Generation Metadata block at end.
 
 Run the validation checklist (reference `09-validation-checklist.md`) one final time against the written file. The most commonly missed items at this stage: a mispositioned Rendering Contract section, and superscript `<sup>[N](url)</sup>` in body text vs plain `[N](url)` in speaker notes.
 

@@ -56,7 +56,7 @@ Your ENTIRE response must be a SINGLE LINE of JSON — NO text before or after, 
 |-------|----------|-------------|
 | `OUTPUT_PATH` | Yes | Absolute path to write the presentation-brief.md |
 | `OUTPUT_TEMPLATE_PATH` | Yes | Path to `07-output-template.md` — brief structure, citation rules, Rendering Contract |
-| `FRONTMATTER` | Yes | YAML frontmatter fields: type, version, theme, theme_path, customer, provider, language, generated, arc_type, arc_id, governing_thought, confidence_score, transformation_notes |
+| `FRONTMATTER` | Yes | YAML frontmatter fields: type, version, theme, theme_path, customer, provider, language, generated, arc_type, arc_id, governing_thought, confidence_score, max_slides, slides, climax, design, key_figures, transformation_notes |
 | `TITLE` | Yes | Presentation title |
 | `SUBTITLE` | Yes | Presentation subtitle |
 | `SLIDE_SPECS` | Yes | All slide YAML specs from Steps 8 + 8.1 (complete deck) |

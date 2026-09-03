@@ -18,9 +18,10 @@
 # re-claimed by a surviving skill or carried by a row here. That guard accepts
 # a row as accounting only when its reason is NON-EMPTY, which is the same bar
 # C10's row hygiene already enforces, reached from the other side.
-# Its subject is deletions only; a phrase dropped from a surviving skill's
-# description is the same omission class in a different diff shape, tracked
-# separately.
+# Its subject is both shapes of the same omission: a phrase advertised at the
+# merge base and gone at HEAD, whether because the file was deleted or because a
+# surviving skill's description stopped advertising it. A row here discharges
+# either one.
 #
 # Why this is not the roster that suite rejects. The suite rejects a per-skill EXEMPTION list: one
 # that must track the extractor's own name key, enumerates live skills, and makes findings

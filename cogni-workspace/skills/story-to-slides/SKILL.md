@@ -1,15 +1,15 @@
 ---
 name: story-to-slides
 description: >
-  Transform any narrative into an optimized multi-slide presentation brief that Claude Design,
-  the PPTX skill or the HTML slide renderer turns into a deck. Use this skill whenever the user mentions "presentation",
+  Transform any narrative into an optimized multi-slide presentation brief that a slide
+  renderer turns into a deck. Use this skill whenever the user mentions "presentation",
   "slide deck", "slides", "PowerPoint", "Foliensatz", "Praesentation erstellen",
   "Folien aus Bericht", "pitch deck", "create slides from report", or wants to convert
   prose into slide-level message architecture. Also trigger when the user needs pyramid
-  communication, number plays, assertion headlines, or speaker notes for a presentation.
+  communication, number plays, assertion headlines, or speaker notes.
   Covers Why Change projects, research reports, competitive intelligence, trend panoramas,
-  and both English and German output. Produces a presentation-brief.md (v4.1) whose
-  renderer-neutral Rendering Contract is read by Claude Design, the PPTX skill and
+  and both English and German output. Produces a presentation-brief.md (v4.1) with a
+  renderer-neutral Rendering Contract read by Claude Design, the PPTX skill and
   render-html-slides. Important: this skill CREATES the brief from a narrative source —
   it does NOT render an existing brief (use PPTX skill for that), does NOT create a web page
   (use story-to-web), and does NOT enhance prose (use cogni-workspace:copywriter).

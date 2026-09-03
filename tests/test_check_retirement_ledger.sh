@@ -86,6 +86,10 @@
 #  23. a modification-only branch that also removes the ledger still returns a
 #      determinate verdict rather than an unhandled-error exit 2.
 #      [retirement-ledger-23-modified-no-ledger]
+#  24. a retained phrase whose RAW TEXT changes case and internal whitespace
+#      normalizes to the same key, so it was never dropped. Pins that the
+#      modified arm compares normalized keys rather than raw phrase text.
+#      [retirement-ledger-24-description-normalize-clean]
 #
 # Cases 2, 7 and 8 transitively pin the modified side's path scoping: each
 # OVERWRITES the existing ledger, so the ledger TSV is a genuine M row that
@@ -692,6 +696,18 @@ write_skill "$R" alpha alpha "alpha one"
 GOT="$(run_gate "$R")"
 check "retirement-ledger-23-modified-no-ledger a modification-only branch with no ledger still returns a determinate verdict (got: $GOT)" \
   "$([ "$GOT" = "1|ok|description-phrase-dropped|1|EMPTY" ] && echo 0 || echo 1)"
+
+# ---------------------------------------------------------------------------
+# 24. a retained phrase is rewritten with different case and internal spacing.
+#     The extractor's normal form — trimmed, whitespace collapsed, lowercased —
+#     maps it to the SAME key, so nothing left the claim surface. An arm that
+#     compared raw phrase text instead of the key would report it dropped.
+R="$WORK/c24"; make_repo "$R"
+write_skill "$R" alpha alpha "Alpha  ONE" "alpha two"
+(cd "$R" && $GIT commit -aqm "restyle a retained phrase")
+GOT="$(run_gate "$R")"
+check "retirement-ledger-24-description-normalize-clean a retained phrase restyled to the same normalized key is not a drop (got: $GOT)" \
+  "$([ "$GOT" = "0|ok|EMPTY|0|EMPTY" ] && echo 0 || echo 1)"
 
 # ---------------------------------------------------------------------------
 if [ "$FAILED" -gt 0 ]; then

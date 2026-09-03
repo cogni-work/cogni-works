@@ -52,7 +52,7 @@ Source: "[Federal Rail Safety Report 2024](https://eba.bund.de/sicherheitsberich
 
 The slide heading (`## Slide N: ...`) contains the **assertion headline**, not a topic label.
 
-#### IS/DOES/MEANS Label Localization
+## IS/DOES/MEANS Label Localization
 
 The `Label` field in IS-Box, DOES-Box, and MEANS-Box must match the presentation language:
 
@@ -175,7 +175,7 @@ renderer-neutral clauses above it and nothing more.
 
 ### Per renderer
 
-- Claude Design — consumes the outline export; honours `intent.role` for section rhythm and `design.register` for the visual register.
+- Claude Design — consumes the presentation brief; honours `intent.role` for section rhythm and `design.register` for the visual register.
 - pptx skill — maps `Layout` to its slide masters and writes `Speaker-Notes` through `slide.addNotes()`.
 - render-html-slides — parses the fenced slide blocks directly and renders `Diagram` through Mermaid; it does not yet consume `visual.chart`.
 
@@ -189,7 +189,7 @@ sub-keys; `visual.chart` and `visual.image_prompt` are conditional on `visual.ki
 | Key | Values | Purpose |
 |---|---|---|
 | `Slide-Kind` | `content` / `internal-prep` / `references` | Replaces inference from the INTERNAL banner and from slide position |
-| `intent.role` | `hook` / `problem` / `urgency` / `evidence` / `solution` / `proof` / `options` / `roadmap` / `investment` / `call-to-action` | The Step 4c section role, declared rather than re-derived |
+| `intent.role` | `hook` / `problem` / `urgency` / `evidence` / `solution` / `proof` / `options` / `roadmap` / `investment` / `call-to-action` | The Step 3c section role, declared rather than re-derived |
 | `intent.emphasis` | `climax` / `release` / `none` | The pacing beat the slide carries |
 | `visual.kind` | `stat` / `chart` / `diagram` / `table` / `icon` / `image` / `none` | The visual treatment the renderer should build |
 | `visual.chart` | `{type, unit, categories[], series[{name, values[]}]}` | Native series data — never an image |

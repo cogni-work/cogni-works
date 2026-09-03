@@ -9,7 +9,7 @@ description: >
   communication, number plays, assertion headlines, or speaker notes.
   Covers Why Change projects, research reports, competitive intelligence, trend panoramas,
   and both English and German output. Produces a presentation-brief.md (v4.1) with a
-  renderer-neutral Rendering Contract read by Claude Design, the PPTX skill and
+  renderer-neutral Rendering Contract addressed to Claude Design, the PPTX skill and
   render-html-slides. Important: this skill CREATES the brief from a narrative source —
   it does NOT render an existing brief (use PPTX skill for that), does NOT create a web page
   (use story-to-web), and does NOT enhance prose (use cogni-workspace:copywriter).
@@ -590,8 +590,9 @@ Replace `{absolute_path_to_presentation_brief}` with the resolved `output_path` 
 ## Backward Compatibility
 
 - Schema 4.1 is additive over 4.0 — both versions stay valid and an unfenced 4.0 brief
-  stays readable. `references/07-output-template.md` is the authority on which keys each
-  version requires.
+  stays readable. `references/07-output-template.md` is the authority on 4.1 frontmatter
+  requiredness; `references/09-validation-checklist.md` carries the 4.0 key set for the
+  checker.
 - `arc_type: why-change` activates Why Change file discovery
 - `project_path` parameter still accepted (mapped to `source_path`)
 - Power Position extraction still supported

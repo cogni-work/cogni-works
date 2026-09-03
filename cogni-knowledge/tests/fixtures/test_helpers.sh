@@ -97,3 +97,83 @@ assert_not_grep_f() {
     green "PASS: $description"
   fi
 }
+
+# check_grade_census FILE
+#   Census the two-part check/grade convention in FILE and print a verdict
+#   string on stdout: `PASS`, or a diagnostic naming the offending tag(s). The
+#   caller owns its own case id and both result arms — this function emits no
+#   label and increments no `errors`, so it follows case_slug's return-a-value
+#   shape rather than the assert_* family's emit-and-increment one.
+#
+#   The convention has no structural enforcement of its own: a python-side
+#   registration prints "<tag>: OK"/"<tag>: FAIL" into the suite's $OUT, and
+#   only a bash-side `grade <tag> "..."` line ever reads it, so a registration
+#   with no grade line is never read and can never fail the suite. #1753 found
+#   two such orphans.
+#
+#   The census is bash-side rather than part of the python harness because the
+#   heredoc runs as a subprocess with no handle on the suite's own source, and
+#   half the subject here — the grade lines — is script text that never enters
+#   it. Callers fold the verdict into their own $errors so the rest of the
+#   report still prints; it is not fatal.
+#
+#   Five properties are load-bearing.
+#
+#   1. Every extraction keeps the `|| true` guard #1753 wrote. Measured, it is
+#      belt-and-braces rather than the thing holding the suite up: each guard
+#      sits on the LAST element of its pipeline, where `sort` and `tr` succeed
+#      on empty input, so a zero-match extraction survives `set -eu` without
+#      them — and under `set -o pipefail` too. Keep them anyway: they are the
+#      guard a future edit needs if the grep or awk ever moves to the tail of
+#      its pipeline, which is where the abort #1753 described would be real.
+#   2. It returns 0 on every path. Every call site is
+#      `census_verdict=$(check_grade_census "$0")`, and under `set -e` an
+#      assignment takes its status from the substitution — a body ending in a
+#      failing test would kill the caller instead of reporting a verdict.
+#   3. It mints its own scratch dir and installs NO `EXIT` handler of its own.
+#      test_ingest_contract.sh defines no $WORK at all, so a caller-supplied
+#      scratch dir cannot be assumed; and test_knowledge_lib.sh and
+#      test_pdf_extract.sh each already install an `EXIT` handler that removes
+#      their $WORK. A second one here would silently REPLACE the caller's,
+#      leaking that caller's $WORK with every suite still green, so nothing
+#      would report it. Clean up inline instead, as the body below does.
+#   4. Pass FILE as the caller's own `"$0"`. Pointing it at this helper is
+#      harmless — neither extractor matches its own literal, so the census
+#      comes back `EMPTY - registrations=0 grade lines=0`, which is the honest
+#      answer: this file carries no registrations to pair.
+#   5. Neither anchor may be "simplified". The registration literal spells an
+#      escaped paren, never a bare one, so it cannot match itself; and
+#      `/^grade[ \t]/` requires whitespace after `grade`, so a `grade() {`
+#      definition line is not counted as a grade line. Relaxing either turns a
+#      clean census into a phantom finding.
+#
+#   LC_ALL=C keeps sort and comm byte-collated, since the tags contain `_`.
+check_grade_census() {
+  local file scratch dup_reg dup_graded only_reg only_graded verdict
+  file="$1"
+  scratch=$(mktemp -d)
+
+  grep -oE 'check\("[a-z0-9_]+"' "$file" | sed 's/^check("//; s/"$//' | LC_ALL=C sort > "$scratch/reg" || true
+  awk '/^grade[ \t]/{print $2}' "$file" | LC_ALL=C sort > "$scratch/graded" || true
+  dup_reg=$(LC_ALL=C uniq -d "$scratch/reg" | tr '\n' ' ' || true)
+  dup_graded=$(LC_ALL=C uniq -d "$scratch/graded" | tr '\n' ' ' || true)
+  only_reg=$(LC_ALL=C comm -23 "$scratch/reg" "$scratch/graded" | tr '\n' ' ' || true)
+  only_graded=$(LC_ALL=C comm -13 "$scratch/reg" "$scratch/graded" | tr '\n' ' ' || true)
+
+  verdict="PASS"
+  if [ ! -s "$scratch/reg" ] || [ ! -s "$scratch/graded" ]; then
+    verdict="EMPTY - registrations=$(wc -l < "$scratch/reg") grade lines=$(wc -l < "$scratch/graded"); an extractor matched nothing, so the convention was renamed or the scan is broken"
+  elif [ -n "$dup_reg" ]; then
+    verdict="DUP-REGISTRATION - tag registered more than once: $dup_reg"
+  elif [ -n "$dup_graded" ]; then
+    verdict="DUP-GRADE - tag graded more than once: $dup_graded"
+  elif [ -n "$only_reg" ]; then
+    verdict="ORPHAN-REGISTRATION - registered but never graded, so its result is never read: $only_reg"
+  elif [ -n "$only_graded" ]; then
+    verdict="ORPHAN-GRADE - graded but never registered: $only_graded"
+  fi
+
+  rm -rf "$scratch"
+  printf '%s' "$verdict"
+  return 0
+}

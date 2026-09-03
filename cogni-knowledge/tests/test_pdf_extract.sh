@@ -192,6 +192,20 @@ grade venv_python_resolution "pdf-extract-03 _venv_python — COGNI_WORKSPACE_PY
 grade main_envelope_mapping  "pdf-extract-04 main() reason→envelope mapping — ok/no_text_layer/extract_failed/pypdf_unavailable, install hint on pypdf_unavailable (faked extract_pdf_text, host-independent)"
 grade normalize_pdf_body     "pdf-extract-05 normalize_pdf_body_text — NFKC ligature fold + smart-quote/dash map + hyphenated-wrap rejoin + soft-wrap→space, paragraph breaks preserved (opt-in stored-body cleaner)"
 
+# --- pdf-extract-06: check/grade census -------------------------------------
+# Shared computation in fixtures/test_helpers.sh (check_grade_census); its
+# header carries the rationale. Guards this suite against the silent-orphan
+# class #1753 found in test_knowledge_lib.sh: a python-side registration with
+# no matching bash-side grade line is never read, so it can never fail here.
+census_verdict=$(check_grade_census "$0")
+census_desc="check/grade census - every registered tag has exactly one grade line and every grade line exactly one registration; duplicates on either side and an empty extraction are rejected too, so an orphan cannot hide"
+if [ "$census_verdict" = "PASS" ]; then
+  green "PASS: pdf-extract-06 $census_desc"
+else
+  red "FAIL: pdf-extract-06 $census_desc ($census_verdict)"
+  errors=$((errors + 1))
+fi
+
 if [ $errors -gt 0 ]; then
   red "$errors case(s) failed."
   exit 1

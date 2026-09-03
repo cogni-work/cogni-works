@@ -79,12 +79,15 @@ REASON through schema compliance for each slide:
      → FIX: Quote strings with special characters, fix indentation
 
   6. CHECK frontmatter completeness
-     → Required keys: type ("presentation-brief"), version ("4.0" or "4.1"),
-       customer, provider, language, generated, arc_type, governing_thought,
-       confidence_score (0.0-1.0), max_slides, slides
-     → Optional pass-through keys: theme, theme_path (when present, theme_path
-       must end in /theme.md), climax, design, key_figures
-     → FAIL if: any required key missing or value invalid
+     → Required in BOTH 4.0 and 4.1: type ("presentation-brief"), version
+       ("4.0" or "4.1"), customer, provider, language, generated, arc_type,
+       governing_thought, confidence_score (0.0-1.0)
+     → Required in 4.1 only: max_slides, slides — a 4.0 brief carries neither
+       and must still pass, so never require them of a 4.0 brief
+     → Required in 4.0 only: theme, theme_path. In 4.1 both are OPTIONAL
+       pass-through keys, as are climax, design and key_figures
+     → When theme_path is present it must end in /theme.md, in either version
+     → FAIL if: any key required at the brief's OWN version is missing or invalid
      → FIX: Add missing keys from metadata collected in Step 1
 
   7. CHECK Rendering Contract section

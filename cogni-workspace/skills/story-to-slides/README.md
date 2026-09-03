@@ -389,7 +389,7 @@ As of v4.0, presentation briefs are **content-only** — they contain no color f
 ```yaml
 ---
 type: presentation-brief
-version: "4.0"
+version: "4.1"
 theme: smarter-service
 theme_path: "/cogni-workspace/themes/smarter-service/theme.md"
 customer: "Customer Name"
@@ -399,6 +399,16 @@ generated: "2026-02-06"
 arc_type: "why-change"
 governing_thought: "Deutsche Bahn should deploy AI video analytics because 688 preventable deaths annually demand automated monitoring, resulting in 87% faster incident response."
 confidence_score: 0.87
+max_slides: 12
+slides: 13
+climax: 4
+design:
+  register: quiet-executive
+  speaker_notes: full-script
+  imagery: none
+key_figures:
+  - "688 preventable deaths annually"
+  - "87% faster incident response"
 transformation_notes: |
   Story-to-slides transformation.
   Theme: smarter-service

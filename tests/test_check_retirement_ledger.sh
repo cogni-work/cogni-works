@@ -49,6 +49,17 @@
 #      --no-renames git reports R, the D filter sees nothing, and the guard exits
 #      0 announcing "no skill deletion" while the phrases are gone.
 #      [retirement-ledger-13-move-out-of-skills-is-a-retirement]
+#  14. an unparseable SKILL.md that stays LIVE at HEAD while a DIFFERENT skill
+#      is deleted -> the live file excuses nothing, so the deleted skill's
+#      phrases are still demanded, and the observation channel stays empty
+#      because nothing unparseable was DELETED. Cases 11 and 12 both delete the
+#      unparseable file, so neither one ever reaches the live side.
+#      [retirement-ledger-14-unparseable-live-at-head]
+#  15. --emit-phrases over a dir mixing one parseable skill with BOTH
+#      unparseable shapes -> exactly one phrase line, exit 0. Drop parity
+#      mode's skip and the sentinel is iterated instead: the run dies
+#      mid-stream, so the line count and the exit code both move.
+#      [retirement-ledger-15-emit-phrases-skips-unparseable]
 #
 # bash 3.2 + stdlib python3 + git. No network.
 #
@@ -64,6 +75,37 @@
 # SPACE, never a colon abutting it, so a harness matching the whole token
 # resolves it. Both arms of a case receive the same id from one argument, so
 # they cannot drift apart.
+#
+# Mutation recipe — the live-set sentinel filter:
+#
+#   scripts/mutation-check.sh --root . \
+#     --file scripts/check-retirement-ledger.py \
+#     --expr 's/if keys is not UNPARSEABLE //' \
+#     --test 'bash tests/test_check_retirement_ledger.sh' \
+#     --case retirement-ledger-14-unparseable-live-at-head
+#
+# The mutation drops live_phrase_keys()'s filter, so the set comprehension
+# iterates the truthy UNPARSEABLE sentinel, raises TypeError, and the run
+# resolves to the unhandled-error envelope at exit 2 rather than to a verdict.
+# Case 14 asserts the whole tuple, so that movement reddens it. The anchor
+# occurs exactly once, and removing it leaves the comprehension's bracket
+# continuation valid Python rather than a SyntaxError that would red every
+# case and grade nothing. No /m modifier: the expression carries no ^/$ anchor.
+#
+# Mutation recipe — parity mode's skip:
+#
+#   scripts/mutation-check.sh --root . \
+#     --file scripts/check-retirement-ledger.py \
+#     --expr 's/byte-identical to it\.\n                continue/byte-identical to it.\n                pass/' \
+#     --test 'bash tests/test_check_retirement_ledger.sh' \
+#     --case retirement-ledger-15-emit-phrases-skips-unparseable
+#
+# `if keys is UNPARSEABLE:` is spelled identically in emit_phrases() and in
+# main(), so this expression anchors on the comment text unique to the parity
+# arm and swaps `continue` for `pass`, leaving the block syntactically valid so
+# only that one arm's behaviour moves. The 16-space indent is part of the
+# anchor. --expr reaches `perl -0pi` through a quoted expansion, so the literal
+# \n and \. survive; -0 slurps the file, which is what lets \n bind without /m.
 
 set -eu
 
@@ -139,15 +181,32 @@ EOF
 # both are needed; one helper taking a mode flag would let a typo at a call site
 # silently write the other fixture and grade one path twice.
 
-# write_no_frontmatter_skill <root> <dir> — no frontmatter block at all.
+# write_no_frontmatter_skill <root> <dir> [phrase...] — no frontmatter block at
+# all. Optional trailing phrases are quoted into the PROSE BODY, never into a
+# frontmatter block, so the file stays unparseable while still carrying the
+# quoted spans a live-set build would have to ignore. With no phrases the bytes
+# are identical to what this helper has always written, so its zero-arg callers
+# are unaffected. This is one helper writing one shape, not the mode-flagged
+# helper the comment above rejects: write_no_description_skill is untouched.
 write_no_frontmatter_skill() {
-  local root="$1" dir="$2"
+  local root="$1" dir="$2"; shift 2
+  local body="" p
+  for p in "$@"; do body="$body \"$p\""; done
   mkdir -p "$root/$SKILLS/$dir"
   cat > "$root/$SKILLS/$dir/SKILL.md" <<EOF
 # $dir
 
 No frontmatter block at all.
 EOF
+  # if/then/fi, never `[ -n ... ] && cat`: the conditional is this function's
+  # last command, so under set -e the && form returns 1 on every zero-arg call
+  # and aborts the whole suite at the callers that pass no phrases.
+  if [ -n "$body" ]; then
+    cat >> "$root/$SKILLS/$dir/SKILL.md" <<EOF
+
+It mentions$body in prose, which no frontmatter block declares.
+EOF
+  fi
 }
 
 # write_no_description_skill <root> <dir> — a well-formed block, no
@@ -391,6 +450,65 @@ mkdir -p "$R/cogni-workspace/references/archive"
 GOT="$(run_gate "$R")"
 check "retirement-ledger-13-move-out-of-skills-is-a-retirement archiving a skill by git mv is still a deletion the ledger must account for (got: $GOT)" \
   "$([ "$GOT" = "1|ok|retirement-row-missing|2|EMPTY" ] && echo 0 || echo 1)"
+
+# ---------------------------------------------------------------------------
+# 14. the unparseable skill stays LIVE at HEAD and a DIFFERENT skill is retired.
+#     Cases 11 and 12 both DELETE the unparseable file, so both land in the
+#     deleted-skill arm and neither reaches live_phrase_keys() at all. Here
+#     gamma survives, so the live set is the only thing that can excuse alpha,
+#     and the whole tuple is asserted: the trailing observation field is EMPTY
+#     precisely because nothing unparseable was deleted, which is what separates
+#     this case from 11 and 12 rather than restating them.
+#
+#     Two facts, deliberately not conflated. The MUTATION reddens this case
+#     because dropping the filter iterates the truthy sentinel and the run dies
+#     at exit 2 -- gamma's quoted phrases are not what moves it, and a control
+#     fixture carrying none behaves identically under the mutation. What those
+#     phrases pin is the ASSERTION: gamma quotes both of alpha's phrases and the
+#     count still reads 2, so a phrase quoted only by an unparseable LIVE file
+#     excuses nothing. That is the property, and it would fail at count 0 if the
+#     extractor ever began reading prose quotes out of an unparseable file.
+R="$WORK/c14"; make_repo "$R"
+write_no_frontmatter_skill "$R" gamma "alpha one" "alpha two"
+(cd "$R" && $GIT add -A && $GIT commit -qm "add unparseable gamma" \
+   && $GIT update-ref refs/remotes/origin/main HEAD)
+# The rm must be COMMITTED: the gate diffs base_ref...HEAD over commits, so an
+# uncommitted removal would leave this passing vacuously at 0|ok|EMPTY|0|EMPTY.
+(cd "$R" && $GIT rm -rq "$SKILLS/alpha" && $GIT commit -qm "retire alpha only")
+GOT="$(run_gate "$R")"
+check "retirement-ledger-14-unparseable-live-at-head a live unparseable skill excuses nothing, and no unparseable deletion means no observation (got: $GOT)" \
+  "$([ "$GOT" = "1|ok|retirement-row-missing|2|EMPTY" ] && echo 0 || echo 1)"
+
+# ---------------------------------------------------------------------------
+# 15. parity mode over a dir holding one parseable skill and BOTH unparseable
+#     shapes -> exactly one phrase line, exit 0. Both shapes are present because
+#     they hit SEPARATE returns in phrases_from_skill_text; case 10 proves the
+#     mode runs outside a git repo but feeds it only parseable input, so nothing
+#     before this reaches emit_phrases's skip.
+#
+#     The dir names sort alpha < mu < nu so the parseable skill is walked FIRST.
+#     That ordering is what makes both assertions move under the mutation rather
+#     than just one: alpha's phrase line prints, then the sentinel is iterated
+#     and the unhandled-error envelope is printed on STDOUT by render() -- not a
+#     traceback on stderr -- so the count goes 1 -> 2 and rc goes 0 -> 2.
+#
+#     The set +e wrapper is load-bearing, not stylistic: under the mutation the
+#     gate exits 2, and without it set -e would abort the suite before check
+#     printed, so the recorded recipe would report the case missing rather than
+#     red and would not be replayable.
+R="$WORK/c15"
+mkdir -p "$R"
+write_skill "$R" alpha alpha "alpha one"
+write_no_frontmatter_skill "$R" mu
+write_no_description_skill "$R" nu
+set +e
+EP15_OUT="$(cd "$R" && python3 "$GATE" --emit-phrases "$R/$SKILLS" 2>"$WORK/c15.err")"
+EP15_RC=$?
+set -e
+EP15_LINES="$(printf '%s\n' "$EP15_OUT" | grep -c . || true)"
+EP15_ERR_LINES="$(grep -c . "$WORK/c15.err" || true)"
+check "retirement-ledger-15-emit-phrases-skips-unparseable parity mode prints the parseable skill's one phrase and nothing for either unparseable shape (rc=$EP15_RC lines=$EP15_LINES err=$EP15_ERR_LINES)" \
+  "$([ "$EP15_RC" -eq 0 ] && [ "$EP15_LINES" -eq 1 ] && [ "$EP15_ERR_LINES" -eq 0 ] && echo 0 || echo 1)"
 
 # ---------------------------------------------------------------------------
 if [ "$FAILED" -gt 0 ]; then

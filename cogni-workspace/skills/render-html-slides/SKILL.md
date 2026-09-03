@@ -46,7 +46,7 @@ all in a single `.html` file.
 3. If multiple found, present options via AskUserQuestion
 4. Read the brief, validate frontmatter:
    - `type: presentation-brief` (must match)
-   - `version: "4.0"` or `"4.1"` (content-only schema)
+   - `version: "4.0"` or `"4.1"` (must match one of these — the 4.1 delta is content-only, so nothing this renderer parses changed)
 5. Extract metadata: `theme`, `theme_path`, `language`, `customer`, `provider`, `arc_type`, `governing_thought`
 
 **Theme resolution** (3-stage, same as enrich-report):

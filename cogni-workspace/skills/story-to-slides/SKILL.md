@@ -391,7 +391,7 @@ Frontmatter — omit `arc_id` when unresolved, and `climax` when no slide carrie
 - If `output_path` explicit: `mkdir -p "$(dirname "${output_path}")"`
 - Otherwise: set `output_path = {source_dir}/cogni-visual/presentation-brief.md` and `mkdir -p "{source_dir}/cogni-visual"`
 
-The `FRONTMATTER:` block in the prompt below is a deliberate interpolation payload — it supplies values for the keys, not a second definition of the key set; `references/07-output-template.md` → Frontmatter remains the authority and this block is kept in sync with it.
+The `FRONTMATTER:` block in the prompt below is a deliberate interpolation payload — it supplies values for the keys, not a second definition of the key set; `references/07-output-template.md` → Frontmatter remains the authority, so re-derive this payload from it whenever the Frontmatter key set changes.
 
 **Launch the `slides-enrichment-artist` agent:**
 
@@ -425,7 +425,7 @@ Agent tool:
         imagery: {imagery}
         variations: {variations}
       key_figures:
-        - "{hero number promoted out of prose}"
+        - "{hero number promoted out of prose, provenance marker kept if it carries one}"
       transformation_notes: |
         Story-to-slides transformation.
         Theme: {theme_id}. Arc: {arc_type}.
@@ -571,10 +571,10 @@ Replace `{absolute_path_to_presentation_brief}` with the resolved `output_path` 
 | **05a-slide-copywriting.md** | 6 | Assertion headlines, number plays, bullet consolidation |
 | **05b-speaker-notes.md** | 8.2 | Two-section speaker notes format reference (loaded by slides-enrichment-artist agent) |
 | **06-slide-mapping-rules.md** | 7 | Layout selection, confidence scoring, fallback strategies |
-| **07-output-template.md** | 8, 8.2, 10 | Slide YAML example, brief output template, citation rules (also loaded by slides-enrichment-artist agent) |
+| **07-output-template.md** | 2, 8, 8.2, 10 | Slide YAML example, brief output template, citation rules (also loaded by slides-enrichment-artist agent) |
 | **08b-references-slide.md** | 8.1 | References slide construction |
 | **08c-presenter-prep.md** | 8.2 | Internal prep slides + per-slide speaker notes process (loaded by slides-enrichment-artist agent) |
-| **09-validation-checklist.md** | 9 | Five-layer validation framework |
+| **09-validation-checklist.md** | 9, 10 | Five-layer validation framework |
 | **2g-diagram-simplification.md** | 2.1 | Mermaid diagram detection and simplification |
 
 ### Libraries (loaded as needed — progressive disclosure)

@@ -400,7 +400,7 @@ arc_type: "why-change"
 governing_thought: "Deutsche Bahn should deploy AI video analytics because 688 preventable deaths annually demand automated monitoring, resulting in 87% faster incident response."
 confidence_score: 0.87
 max_slides: 12
-slides: 13
+slides: 12
 climax: 4
 design:
   register: quiet-executive

@@ -90,7 +90,8 @@ REASON through schema compliance for each slide:
        brief carries none of them and must still pass, so never require them
        of a 4.0 brief
      → Conditionally required in 4.1: climax — required whenever some slide
-       carries `emphasis: climax`, omitted when no slide does
+       carries `emphasis: climax`, omitted when no slide does; arc_id —
+       present when the arc resolves, omitted when it does not
      → Required in 4.0 only: theme, theme_path. In 4.1 both are OPTIONAL
        pass-through keys
      → Authority: `07-output-template.md` → Frontmatter states the 4.1

@@ -1,16 +1,16 @@
 # Delegation contract
 
-cogni-knowledge is a **thin orchestrator**. Its live v0.1.0 path delegates to `cogni-wiki` and forks the agents it needs locally (see `agents/`); the archived v0.0.x chain also delegated to `cogni-research`. This document is the precise contract: what cogni-knowledge owns vs. what it delegates.
+cogni-knowledge is a **thin orchestrator** over a **vendored** wiki engine. Its live v0.1.0 path does not delegate to `cogni-wiki`: the wiki-absorption arc (Phases 7–9) has landed, so the engine is vendored into this plugin and `cogni-wiki` itself is retired — its prefix is registered in the repo-root `scripts/retired-plugins.json`. The archived v0.0.x chain delegated to `cogni-research`, which was absorbed earlier and is retired on the same register. This document is the precise contract: what cogni-knowledge owns vs. what it delegates.
 
 ## The hard rule
 
-If a behavior already exists in `cogni-wiki` or `cogni-research`, cogni-knowledge MUST delegate to it. Re-implementing upstream behavior in this plugin is a design error, not a shortcut. The reasons:
+**Don't duplicate the vendored engine.** If a behavior already exists in the vendored engine, call it rather than re-implementing it here. The reason that survives the absorption intact:
 
 1. **Bugfix locality.** A bug in wiki ingest should be fixed in one place (the vendored `wiki-ingest` helper scripts), not in N orchestrators that each forked the logic.
-2. **Clean absorption boundary.** cogni-research is being absorbed — runtime reached zero at v0.1.0; formal deprecation is Phase 6. The boundary stays clean only if we never duplicate `cogni-wiki` logic; the forked v0.1.0 agents under `agents/` are the one intentional, documented exception.
-3. **Version skew.** `cogni-wiki` and `cogni-research` are released independently. Forked logic drifts; delegated logic tracks the upstream automatically.
 
-> **Terminal-arc reversal (Phase 7+).** The hard rule above holds for the **entire research-absorption arc through v1.0** — keep delegating to `cogni-wiki`, do not fork it. It **inverts** for the cogni-wiki absorption arc (Phases 7–9): the committed single-installable-plugin FMO requires **internalizing** cogni-wiki, not delegating to it. From Phase 7 the wiki engine is **vendored** into `cogni-knowledge/scripts/` and that vendored copy becomes the single source of truth; by Phase 9 cogni-wiki is archived. **Until Phase 7 actually lands, this reversal is intent, not licence** — do not pre-emptively fork cogni-wiki logic into cogni-knowledge ahead of the planned vendoring (it would re-introduce exactly the drift reasons 1–3 warn about, with no upstream to track). The reasons above are not "wrong"; they are the cost the FMO knowingly accepts in exchange for one shippable plugin.
+The forked v0.1.0 agents under `agents/` are the one intentional, documented exception. Where the vendored engine is resolved from is deliberately **not** restated here — the **Note (M11+)** under the delegation table is the canonical reference point for that rule, and a second copy would be a second thing to drift.
+
+> **History — the superseded delegate-upstream rule.** Through the research-absorption arc this section instructed the opposite: a behavior that already existed in `cogni-wiki` or `cogni-research` had to be delegated to and never re-implemented, because the absorption boundary stayed clean only while upstream logic was never duplicated, and because independently released upstreams made forked logic drift while delegated logic tracked them automatically. The cogni-wiki absorption arc (Phases 7–9) reversed that by design — the committed single-installable-plugin FMO required **internalizing** cogni-wiki rather than delegating to it — and that arc has since landed, leaving no upstream to track and no external engine source. The delegate-upstream rule is therefore spent, not paused; it is recorded here so a reader who meets its wording elsewhere can date it, and because the reasons it gave were the cost the FMO knowingly accepted in exchange for one shippable plugin.
 
 ## What cogni-knowledge owns
 

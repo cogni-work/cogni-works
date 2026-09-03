@@ -2,7 +2,7 @@
 # Workplace Orchestrator - Claude Code Launcher
 # Version: 4.0.0
 # Plugin: cogni-workspace
-# Launches Claude Code with language-specific output-style from Obsidian Terminal
+# Launches Claude Code from the Obsidian Terminal, setting the workspace language
 
 set -e
 
@@ -154,25 +154,10 @@ launch_claude() {
     write_settings_language "$LANGUAGE"
     echo ""
 
-    # Resolve output-style
-    local OUTPUT_STYLE_FILE="$WORKPLACE_ROOT/.claude/output-styles/workspace-${LANGUAGE}.md"
-    local FALLBACK_OUTPUT_STYLE="$WORKPLACE_ROOT/.claude/output-styles/workspace-en.md"
-
-    if [[ ! -f "$OUTPUT_STYLE_FILE" ]]; then
-        if [[ "$LANGUAGE" != "en" ]] && [[ -f "$FALLBACK_OUTPUT_STYLE" ]]; then
-            echo -e "${YELLOW}⚠${NC} workspace-${LANGUAGE}.md not found, using English" >&2
-            LANGUAGE="en"
-            OUTPUT_STYLE_FILE="$FALLBACK_OUTPUT_STYLE"
-        else
-            echo -e "${YELLOW}⚠${NC} No output-style found, starting without it" >&2
-            OUTPUT_STYLE_FILE=""
-        fi
-    fi
-
-    if [[ -n "$OUTPUT_STYLE_FILE" ]]; then
-        echo -e "${GREEN}Output-style:${NC} workspace-${LANGUAGE}"
-        echo -e "${CYAN}Activate with:${NC} /output-style workspace-${LANGUAGE}"
-    fi
+    # No file to probe for: the register ships with the plugin rather than the
+    # workspace. Naming the picker rather than a style name keeps this correct if
+    # the register is renamed, and honest where the plugin is not installed.
+    echo -e "${CYAN}Optional register:${NC} pick the workspace output style in /config"
     echo ""
 
     exec "$CLAUDE_CMD"

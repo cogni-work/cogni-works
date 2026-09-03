@@ -4,7 +4,7 @@ Workspace-level infrastructure for the cogni plugin ecosystem: theme management,
 
 ## Scope
 
-cogni-workspace is the horizontal layer: it owns shared workspace state and tooling, while each vertical business plugin keeps its own project lifecycle. The dividing rule is the `setup → resume → dashboard` arc — a capability that owns one is its own plugin, a capability that owns none is infrastructure.
+cogni-workspace is the horizontal layer: it owns shared workspace state and tooling, while each vertical business plugin keeps its own project lifecycle. The dividing rule is not the `setup → resume → dashboard` arc itself but what it is *about*: a capability owning a **project lifecycle** — many projects, each with its own state, advancing across sessions — is a vertical business plugin. cogni-workspace runs the same shape, but over configuration rather than projects: one workspace, not a portfolio of them. Owning the shape does not make a plugin vertical; owning projects does.
 
 
 ## Theme Infrastructure
@@ -64,6 +64,17 @@ Two consequences worth keeping straight:
 
 - **The workspace-root `CLAUDE.md` is the user's file.** Nothing in this plugin creates, copies, or overwrites it. The Obsidian launcher's per-session language switch writes the settings key instead.
 - **Subagents get none of this.** A subagent's system prompt is its own body plus a notes block and the environment info — no settings language, no memory. A plugin whose agents produce user-facing prose needs its own `SubagentStart` hook (see cogni-consult).
+
+## Output Style Register
+
+One register, `output-styles/workspace-advisor.md`, at the **plugin root**. Four decisions are load-bearing and none of them is enforced by reading the file:
+
+- **Plugin root, never nested.** Claude Code discovers `output-styles/` only at the root of a directory holding a plugin manifest. This register sat at `assets/output-styles/` and was discovered by nothing, silently — the files were present and parsed fine. `scripts/check-output-style-placement.py` is the guard; it also grades frontmatter and in-plugin resolution, so it cannot catch the other three below.
+- **Never copied into a workspace.** `manage-workspace` used to install a copy into `.claude/output-styles/`. A copied style only *appears* in the picker and is never activated, so the copy read as configuration and governed nothing — a worse state than the missing register, because it looked like a fix.
+- **Opt-in, so no `force-for-plugin`.** That key is session-global and first-loaded-wins: with the marketplace installed, cogni-workspace would govern the voice of every unrelated session, including sessions doing no workspace work at all.
+- **`keep-coding-instructions: true` stays.** Dropping it costs Claude Code's engineering defaults the moment the register is activated, which is a silent capability loss in a plugin whose users are mostly writing code alongside workspace work.
+
+Language lives in the settings key and the `SessionStart` hook above, not here: the register is language-neutral stance, which is why collapsing the old EN/DE pair into one file lost nothing.
 
 ## MCP Server Installation
 

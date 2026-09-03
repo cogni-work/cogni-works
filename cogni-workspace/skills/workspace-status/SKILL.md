@@ -1,17 +1,18 @@
 ---
 name: workspace-status
 description: >-
-  Diagnose and report on the health of an insight-wave workspace and the plugins installed in
-  it — one surface for both workspace infrastructure and plugin-level faults. Use this skill
-  whenever the user mentions workspace status, health, or diagnostics — including "check
-  workspace", "is my workspace ok", "diagnose workspace", "verify workspace" — or reports
-  something broken at the plugin level: "something is wrong", "plugin error", "skill not
-  responding", "fix my setup", or "why isn't X working". It covers workspace infrastructure
-  (env vars, themes, settings, the plugin registry, MCP servers in the session) and plugin-
-  level and cross-plugin faults (plugin availability, skill-file integrity, cross-plugin
-  dependencies, progress and state files, stale state left by retirements). Trigger it even
-  without an explicit request when the user describes symptoms of a misconfigured workspace or
-  hits an unclear error during plugin use.
+  Diagnose the health of an insight-wave workspace and its installed plugins — one surface for
+  both workspace infrastructure and plugin-level faults. Use this skill whenever the user
+  mentions workspace status, health, or diagnostics — including "check workspace", "is my
+  workspace ok", "diagnose workspace", "verify workspace" — or reports something broken at the
+  plugin level: "something is wrong", "plugin error", "skill not responding", "fix my setup",
+  or "why isn't X working". It covers workspace infrastructure (env vars, themes, settings, the
+  plugin registry, MCP servers) and plugin-level and cross-plugin faults (plugin availability,
+  skill-file integrity, cross-plugin dependencies, stale state left by retirements). It is also
+  the cross-session re-entry point for the workspace itself: "workspace resume", "resume
+  workspace", "where was I in the workspace". Trigger it even without an explicit request when
+  the user describes symptoms of a misconfigured workspace or hits an unclear error during
+  plugin use.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion, Skill, ToolSearch
 ---
 
@@ -79,7 +80,6 @@ These files form the workspace skeleton. Without them, other checks can't run re
 | `.workspace-config.json` | Yes | Stores workspace metadata — version, language, registered plugins, timestamps. All other checks read from this file. |
 | `.claude/settings.local.json` | Yes | Environment variables that Claude Code auto-injects. Plugins use these to find each other's paths. |
 | `.workspace-env.sh` | No | Same variables exported for non-Claude contexts (Obsidian Terminal, VS Code tasks, CI/CD). Missing means shell-based tooling won't resolve plugin paths. |
-| `.claude/output-styles/` | No | Behavioral anchors that shape Claude's communication style. Missing means default communication style. |
 
 Read `.workspace-config.json` to extract: version, language, installed_plugins, created_at, updated_at.
 
@@ -309,7 +309,7 @@ Present results as a compact summary. Use OK / WARNING / CRITICAL status per cat
 ```
 Workspace Status: /path/to/workspace
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Foundation:   OK       | 4/4 files present
+Foundation:   OK       | 3/3 files present
 Environment:  OK       | 12 vars set, 0 missing
 Plugins:      OK       | 5 registered, 5 installed
 Themes:       OK       | 3 themes available, 1 tiered, 0 drift advisories
@@ -351,6 +351,30 @@ MCP Servers:  WARNING  | 1/3 loaded (2 manual)
 ```
 
 Every issue should end with a concrete next step — either a skill to run (`manage-workspace`, `manage-themes`) or a command to execute.
+
+### Close with one recommended action
+
+The report orients; the recommendation commits. After the summary block, name **exactly one** next action and why it comes first — a single next step with its reason beats a list of options the user has to rank. Walk this ladder and stop at the first match:
+
+| Condition | Recommend | Because |
+|---|---|---|
+| A required foundation file is missing | `manage-workspace` | Nothing else can be trusted until the workspace exists |
+| A required dependency is missing (check 5) | Install it with the command that check named | Scripts cannot run at all, so every other finding below is unreliable |
+| Registry and installed plugins disagree | `manage-workspace` | Env vars are generated from the registry, so every downstream path is suspect |
+| An env var is missing, or set but pointing at a missing path | `manage-workspace` | Regenerating settings is the only supported repair |
+| No themes are available | `manage-themes` | Visual output across every plugin falls back to defaults until one exists |
+| A theme reports `upgrade_available` or `tier_drift` | `manage-themes` | Advisory, not an error — but it is the next thing worth doing |
+| An optional Python package is missing (check 5.5) | `manage-workspace` | It provisions the shared venv; the dependent skill degrades until it does |
+| An MCP server is built but not configured | `install-mcp` | One config write plus a new session clears it |
+| A plugin-level fault was found in check 7 | The fix named in that finding | The finding already carries its own remedy |
+| Everything is OK | Offer `workspace-dashboard` | Nothing needs fixing, so the useful next move is seeing the configuration |
+
+The last row is reachable only when **every** check reported OK. If a check reports
+CRITICAL or WARNING and no row above matches it, the ladder is out of date with the
+checks — say so and recommend the remedy that check printed, rather than falling through
+to `workspace-dashboard` while the summary block above shows a fault.
+
+If the user arrived by asking to resume — "workspace resume", "where was I in the workspace" — lead with this recommendation and keep the summary block underneath it. If they asked for a diagnosis, keep the summary first and close with the recommendation.
 
 ## Full Scan Mode
 

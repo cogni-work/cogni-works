@@ -6,7 +6,7 @@ Per-section reference for `workspace-dashboard`: data source, helper(s) reused, 
 
 **Data source**:
 - `<workspace-root>/.workspace-config.json` (if present): `version`, `language`, `installed_plugins[]`, `created_at`, `updated_at`, `tool_integrations[]`
-- Foundation file existence (boolean per file): `.workspace-config.json`, `.claude/settings.local.json`, `.workspace-env.sh`, `.claude/output-styles/`
+- Foundation file existence (boolean per file): `.workspace-config.json`, `.claude/settings.local.json`, `.workspace-env.sh`
 - Mode detection: workspace mode (has `.workspace-config.json`) vs monorepo dev mode (has `.claude-plugin/marketplace.json` but no workspace config)
 
 **Output**: header card with metadata key/value list and a small foundation-file checklist row.

@@ -38,8 +38,13 @@
 #     the case cannot pass by agreeing with a fixture nobody ships.
 #   * The namespace token class admits hyphens. `mcp__claude-in-chrome__navigate`
 #     is real, and an [A-Za-z0-9_]-only class matches none of it — the guard
-#     would go blind to two agents and a whole namespace with every case still
-#     green. H1 is the case that reds on that.
+#     would go blind to two agents and a whole namespace. H2/H2a are the cases
+#     that red on that, and H1 is NOT: ONE token grammar reads both the grant
+#     and the call site, so narrowing the class drops the two together and the
+#     ungranted state H1 asserts against never arises. H1 pins the positive
+#     round-trip and stays green under the narrowing, which is exactly why the
+#     hyphen property needs the ungranted half of the pair rather than H1 alone.
+#     Verified by mutation, not assumed.
 #   * `desktop_config_key` drives key -> namespace mapping as data. R2 uses a
 #     registry key that shares no prefix with its namespace, so an
 #     implementation that strips `mcp_` resolves nothing and R2 reds.
@@ -170,6 +175,41 @@ PYEOF
 
 # --- fixture helpers -------------------------------------------------------
 
+# assert_fixture_json <path> — abort the whole suite if a fixture registry the
+# helpers just wrote is not parseable JSON.
+#
+# Not a case, and deliberately not one: a malformed fixture means no case
+# standing on that root grades anything, so there is nothing to report a
+# verdict about. It aborts for the same reason the guard raises on an
+# unreadable registry rather than reporting a clean arm — an absence result
+# must mean "looked and found nothing wrong", not "looked at nothing".
+#
+# It earns its place because the failure it names is otherwise a MISDIAGNOSIS,
+# not merely an obscure one. The guard answers an unparseable registry with
+# exit 2 and its {"success": false, "data": {}} error envelope, so every
+# affected case reds twice over in a shape that points away from the fixture:
+# check_eq reports a count off by a constant (every expectation "got 2", the
+# exit status, whatever it expected), and py_assert raises KeyError on
+# `summary` fields the guard is emitting correctly. Two thirds of the suite
+# fails at once looking exactly like guard schema drift. One line naming the
+# unparseable file is the difference between reading that as a broken fixture
+# and reading it as a broken guard.
+#
+# The diagnostic goes to STDERR, not through red(). new_root calls the writers
+# from inside a `R="$(new_root ...)"` command substitution, which captures
+# stdout into the variable — a message printed there would be swallowed whole
+# and the abort would surface as a bare `set -e` death with no reason given,
+# which is the failure this helper exists to stop happening. stderr is not
+# captured, so the line reaches the terminal from either call path. The exit
+# likewise ends only the subshell on that path; `set -e` then takes the suite
+# down on the failed assignment, which is the intended abort either way.
+assert_fixture_json() {
+  python3 -c 'import json,sys; json.load(open(sys.argv[1]))' "$1" 2>/dev/null && return 0
+  printf '%s\n' "ABORT: fixture registry is not parseable JSON: $1" >&2
+  printf '%s\n' "ABORT: no case standing on this root can grade anything — fix the fixture writer, not the assertions" >&2
+  exit 1
+}
+
 # write_registry <root> <key> <namespace> <required_by-json-array>
 #                [provides_tools-json-array, default ["do_thing"]]
 #
@@ -181,7 +221,23 @@ PYEOF
 # which deletes the registry outright. The default is also collision-free: no
 # existing fixture body contains a backtick at all, so the provides_tools arm
 # stays silent across every pre-existing case.
+#
+# Every default is materialized into a PLAIN VARIABLE before the heredoc, never
+# written as a `${5:-...}` default word inside it, and that is portability
+# rather than taste. Bash resolves the quoting of a default word differently in
+# a here-document than in double quotes, and the two resolutions disagree
+# ACROSS BASH VERSIONS. Spelled `${5:-[\"do_thing\"]}` in an unquoted heredoc it
+# yields ["do_thing"] under bash 5, which is what CI runs, and the literal
+# [\"do_thing\"] under bash 3.2 — the system bash on macOS, which is what
+# `#!/usr/bin/env bash` resolves to there. The bare-quote spelling is no better:
+# it loses its quotes to the default word's own quote removal on BOTH, emitting
+# [do_thing]. Either way the fixture registry stops being JSON on some hosts and
+# not others, which is the failure assert_fixture_json above is written to name.
+# A variable expansion carries none of that ambiguity: its value is substituted
+# verbatim on every bash.
 write_registry() {
+  local provides
+  if [ "$#" -ge 5 ]; then provides="$5"; else provides='["do_thing"]'; fi
   mkdir -p "$1/$(dirname "$REGISTRY_REL")"
   cat > "$1/$REGISTRY_REL" <<REGEOF
 {
@@ -191,11 +247,12 @@ write_registry() {
       "name": "$2",
       "desktop_config_key": "$3",
       "required_by": $4,
-      "provides_tools": ${5:-[\"do_thing\"]}
+      "provides_tools": $provides
     }
   }
 }
 REGEOF
+  assert_fixture_json "$1/$REGISTRY_REL"
 }
 
 # write_registry_pair <root> <ns-a> <ns-b> <shared-tool> [tools-a] [tools-b]
@@ -207,11 +264,18 @@ REGEOF
 #
 # The two arrays default to the shared name plus a private one, which is what
 # keeps the multi-owner cases carrying a vocabulary; V6b overrides the second
-# to exercise a per-server empty array. The defaults escape their inner quotes
-# because they are expanded inside an UNQUOTED heredoc: the bare form loses the
-# quotes to the shell and emits [shared, only_a], which is not JSON, so the
-# guard would raise and V4/V4a would silently flip to exit 2.
+# to exercise a per-server empty array. Both defaults are built into plain
+# variables before the heredoc, for the reason recorded on write_registry
+# above, and both key on the ARGUMENT COUNT rather than on the argument being
+# non-empty. `[]` would survive an emptiness test too, so that is not the
+# difference; the difference is that an argument supplied as the empty string
+# then reaches the file as an empty `provides_tools:` value and trips
+# assert_fixture_json by name, instead of being quietly swapped for a default
+# vocabulary that makes an unwritable case look like a passing one.
 write_registry_pair() {
+  local tools_a tools_b
+  if [ "$#" -ge 5 ]; then tools_a="$5"; else tools_a="[\"$4\", \"only_a\"]"; fi
+  if [ "$#" -ge 6 ]; then tools_b="$6"; else tools_b="[\"$4\", \"only_b\"]"; fi
   mkdir -p "$1/$(dirname "$REGISTRY_REL")"
   cat > "$1/$REGISTRY_REL" <<REGEOF
 {
@@ -221,17 +285,18 @@ write_registry_pair() {
       "name": "mcp_$2",
       "desktop_config_key": "$2",
       "required_by": ["plug"],
-      "provides_tools": ${5:-[\"$4\", \"only_a\"]}
+      "provides_tools": $tools_a
     },
     "mcp_$3": {
       "name": "mcp_$3",
       "desktop_config_key": "$3",
       "required_by": ["plug"],
-      "provides_tools": ${6:-[\"$4\", \"only_b\"]}
+      "provides_tools": $tools_b
     }
   }
 }
 REGEOF
+  assert_fixture_json "$1/$REGISTRY_REL"
 }
 
 # write_agent <root> <plugin> <name> <tools-block> <body>

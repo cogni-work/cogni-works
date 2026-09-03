@@ -183,11 +183,14 @@ arc_type=$(grep "^arc_type:" "${brief_path}" | awk '{print $2}')
 
 **Read Generation Metadata section:**
 
+Since v4.1 the `## Generation Metadata` section is a fenced YAML block, so read its
+keys directly rather than grepping bold prose labels:
+
 ```bash
-# Extract metrics from Generation Metadata section at end of brief
-slides_count=$(grep "^\*\*Slides generated:\*\*" "${brief_path}" | awk '{print $NF}')
-number_plays=$(grep "^\*\*Number plays:\*\*" "${brief_path}" | awk '{print $NF}')
-headlines=$(grep "^\*\*Headlines optimized:\*\*" "${brief_path}" | awk '{print $NF}')
+# Extract metrics from the fenced Generation Metadata block at end of brief
+slides_count=$(grep "^slides_total:" "${brief_path}" | awk '{print $NF}')
+number_plays=$(grep "^number_plays:" "${brief_path}" | awk '{print $NF}')
+headlines=$(grep "^headlines_optimized:" "${brief_path}" | awk '{print $NF}')
 ```
 
 **Success criteria:** Key fields extracted successfully

@@ -46,7 +46,11 @@ REASON through schema compliance for each slide:
      → FIX: Add missing field with content from the relevant step's output
 
   3. CHECK for unknown fields
-     → Does this slide contain fields NOT defined in pptx-layouts.md?
+     → The recognized vocabulary is the layout fields defined in
+       pptx-layouts.md PLUS the 4.1 per-slide keys defined in
+       07-output-template.md: Slide-Kind, intent (sub-keys role, emphasis)
+       and visual (sub-keys kind, chart, image_prompt)
+     → Does this slide contain fields outside BOTH sets?
      → FAIL if: invented field names present
      → FIX: Remove or map to correct field names
 
@@ -67,7 +71,7 @@ REASON through schema compliance for each slide:
 
   4. CHECK for prohibited color fields
      → Does ANY slide contain Background, Text-Color, or Icon-Color?
-     → v4.0 briefs must NEVER contain color fields
+     → No brief may contain color fields, in either version
      → FAIL if: any color field present (including in optional fields)
      → FIX: Delete the color field entirely
 
@@ -79,23 +83,36 @@ REASON through schema compliance for each slide:
      → FIX: Quote strings with special characters, fix indentation
 
   6. CHECK frontmatter completeness
-     → Required keys: type ("presentation-brief"), version ("4.0"), theme,
-       theme_path (must end in /theme.md), customer, provider, language,
-       generated, arc_type, governing_thought, confidence_score (0.0-1.0)
-     → FAIL if: any key missing or value invalid
+     → Required in BOTH 4.0 and 4.1: type ("presentation-brief"), version
+       ("4.0" or "4.1"), customer, provider, language, generated, arc_type,
+       governing_thought, confidence_score (0.0-1.0)
+     → Required in 4.1 only: max_slides, slides, design, key_figures — a 4.0
+       brief carries none of them and must still pass, so never require them
+       of a 4.0 brief
+     → Conditionally required in 4.1: climax — required whenever some slide
+       carries `emphasis: climax`, omitted when no slide does; arc_id —
+       present when the arc resolves, omitted when it does not
+     → Required in 4.0 only: theme, theme_path. In 4.1 both are OPTIONAL
+       pass-through keys
+     → Authority: `07-output-template.md` → Frontmatter states the 4.1
+       requiredness rule; this rule restates it for the checker and must not
+       diverge from it
+     → When theme_path is present it must end in /theme.md, in either version
+     → FAIL if: any key required at the brief's OWN version is missing or invalid
      → FIX: Add missing keys from metadata collected in Step 1
 
-  7. CHECK PPTX Rendering Requirements section
+  7. CHECK Rendering Contract section
      → Must appear AFTER governing_thought paragraph and BEFORE ## Slide 1
      → Must be localized (EN or DE based on language parameter)
-     → Must contain all 4 rules: exact text, complete notes, source links, superscript hyperlinks
+     → Must contain all 5 clauses: frozen copy, complete notes, citation
+       hyperlinks + references last, theme-only styling, layout/visual mapping
      → FAIL if: section missing, mispositioned, or wrong language
-     → FIX: Insert the localized requirements block from SKILL.md Step 9 template
+     → FIX: Insert the localized contract block from 07-output-template.md
 ```
 
 ### Pass Criteria
 
-All slides use valid layouts, have all required fields, contain no unknown or color fields, parse as valid YAML. Frontmatter complete with correct values. PPTX Rendering Requirements section present and localized.
+All slides use valid layouts, have all required fields, contain no unknown or color fields, parse as valid YAML. Frontmatter complete with correct values. Rendering Contract section present and localized.
 
 ---
 
@@ -411,11 +428,11 @@ Before marking Step 8 complete, verify ALL items. Mark each ✅ or ❌:
 ### Layer 1: Schema Compliance
 - [ ] All slides use valid layout types from pptx-layouts.md
 - [ ] All required fields present for each layout type
-- [ ] No unknown fields present
+- [ ] No unknown fields present (the 4.1 per-slide keys Slide-Kind, intent and visual are known fields, not unknown ones)
 - [ ] ZERO color fields (Background, Text-Color, Icon-Color must be absent)
 - [ ] YAML parses without errors
-- [ ] Frontmatter complete and valid (version "4.0", theme_path ends in /theme.md)
-- [ ] PPTX Rendering Requirements section present (localized, between governing thought and Slide 1)
+- [ ] Frontmatter complete and valid for the brief's OWN declared version ("4.0" or "4.1"); theme_path required in 4.0, and when present in either version it ends in /theme.md
+- [ ] Rendering Contract section present (localized, between governing thought and Slide 1)
 
 ### Layer 2: Message Quality
 - [ ] Every slide heading is an assertion (not a topic label)

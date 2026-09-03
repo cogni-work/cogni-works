@@ -89,7 +89,7 @@ For each of the three perspectives:
 - Verify layout type variety (no 3+ consecutive same layout)
 - Number plays should isolate hero numbers, not embed them in prose
 - Speaker notes should be talking points, not prose paragraphs
-- Slide count should respect max_slides parameter from frontmatter
+- Slide count should respect the `max_slides` frontmatter key (internal-prep slides do not count against it)
 
 ### Web
 - Opening section must earn attention in 5 seconds — weak openings are automatically HIGH

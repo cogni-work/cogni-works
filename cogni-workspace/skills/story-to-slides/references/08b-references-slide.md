@@ -29,10 +29,18 @@ IF total citations > 12: Split across two References slides
 
 **Layout:** `two-columns-equal`
 
-```yaml
 ## Slide N: Sources & References
 
+```yaml
 Layout: two-columns-equal
+Slide-Kind: references
+
+intent:
+  role: evidence
+  emphasis: none
+
+visual:
+  kind: table
 
 Slide-Title: Sources & References
 
@@ -71,3 +79,5 @@ Speaker-Notes: |
 ## Positioning
 
 This slide is placed AFTER the closing-slide as the **last slide in the deck**.
+
+Since schema 4.1 it also carries `Slide-Kind: references`, so a renderer identifies it from the brief rather than inferring it from banner text or slide position.

@@ -17,8 +17,10 @@ synchronized copy of the shared block below, and
 byte. Edit the block in one file and the guard goes red until the other matches.
 
 The layer is **optional and additive**: omit any piece and the brief still
-renders. No consumer in this plugin reads the vocabulary yet; the first one
-should read it from here rather than restate it.
+renders. `story-to-slides` is the in-plugin consumer:
+`skills/story-to-slides/references/07-output-template.md` defines the emitted
+`design:`, `climax:` and `key_figures:` keys, and that skill's Step 8.2 and Step
+10 produce them.
 
 ## The shared vocabulary
 
@@ -69,6 +71,15 @@ prose buried inside bullets.
 
 <!-- PRESENTATION-INTENT:SHARED:END -->
 
+## Value shapes in the emitted brief
+
+The shared block above is vocabulary, not grammar. Where a clause spells a value
+inline it is illustrative prose; the emitted brief's shape is defined by
+`skills/story-to-slides/references/07-output-template.md`. One divergence worth
+naming: clause 5 writes `climax: slide 11`, but the emitted key is a **bare slide
+integer** — `climax: 4` — as both the output template and `EXAMPLE_BRIEF.md`
+show.
+
 ## Copy is frozen
 
 The renderer reproduces the author's copy verbatim and never rewrites it. The
@@ -94,15 +105,15 @@ layouts. This table binds each to the `type:` tag a renderer should treat it as.
 | `process-flow` | `timeline` | |
 | `gantt-chart` | `timeline` | |
 | `closing-slide` | `bluf` | |
-| references slide | `table` | **Proposal, not yet implemented** — see below |
+| references slide | `table` | Tagged by `Slide-Kind: references` — see below |
 
-**The references row is a proposal.** The references slide is real — it is
+**The references row is tagged, not laid out.** The references slide is real — it is
 documented as placement guidance in `pptx-layouts.md` under "Notes for
 Generators", and it renders after the closing slide as an appendix — but it is
-**not** one of the eleven layouts and has no layout name of its own. No marker
-distinguishing it exists in this repository today. The row above records the
-intended treatment so a later change has one place to bind it; nothing reads it
-yet, and no test asserts it.
+still **not** one of the eleven layouts and has no layout name of its own. What
+distinguishes it is the per-slide key `Slide-Kind: references`, which the brief
+grammar now emits. The row above records the type-tag treatment a renderer should
+apply to that slide.
 
 **`quote` has no layout mapping, deliberately.** It is one of the eight tags, but
 no layout in the closed set renders as a pull quote. A symmetric "every tag

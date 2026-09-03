@@ -1,15 +1,16 @@
 ---
 name: story-to-slides
 description: >
-  Transform any narrative into an optimized multi-slide presentation brief that the PPTX skill
-  renders into PowerPoint. Use this skill whenever the user mentions "presentation",
+  Transform any narrative into an optimized multi-slide presentation brief that a slide
+  renderer turns into a deck. Use this skill whenever the user mentions "presentation",
   "slide deck", "slides", "PowerPoint", "Foliensatz", "Praesentation erstellen",
   "Folien aus Bericht", "pitch deck", "create slides from report", or wants to convert
   prose into slide-level message architecture. Also trigger when the user needs pyramid
-  communication, number plays, assertion headlines, or speaker notes for a presentation.
+  communication, number plays, assertion headlines, or speaker notes.
   Covers Why Change projects, research reports, competitive intelligence, trend panoramas,
-  and both English and German output. Produces a presentation-brief.md (v4.0) that the
-  PPTX agent renders. Important: this skill CREATES the brief from a narrative source —
+  and both English and German output. Produces a presentation-brief.md (v4.1) with a
+  renderer-neutral Rendering Contract addressed to Claude Design, the PPTX skill and
+  render-html-slides. Important: this skill CREATES the brief from a narrative source —
   it does NOT render an existing brief (use PPTX skill for that), does NOT create a web page
   (use story-to-web), and does NOT enhance prose (use cogni-workspace:copywriter).
 allowed-tools: Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion, Agent, Skill
@@ -19,7 +20,7 @@ allowed-tools: Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion, Agent, Skil
 
 ## Purpose
 
-Read any narrative document with an existing story arc and produce an optimized presentation brief that the PPTX skill can render into slides. You are a **presentation strategist**: analyze the narrative's argument structure, distill it into slide-level messages using pyramid communication, apply copywriting techniques, and select the right visual layout for each message.
+Read any narrative document with an existing story arc and produce an optimized presentation brief that a slide renderer turns into slides. You are a **presentation strategist**: analyze the narrative's argument structure, distill it into slide-level messages using pyramid communication, apply copywriting techniques, and select the right visual layout for each message.
 
 A great presentation brief is not a transcript of the narrative. It is a re-architecture of the narrative's argument into a visual medium where every slide has ONE clear message, supported by evidence the audience can absorb in 3 seconds. Slides that try to convey multiple messages become walls of text that audiences tune out — the presenter loses control of the room.
 
@@ -29,7 +30,7 @@ Two-layer intelligence:
 1. **Story Arc Analysis** — read narrative, identify argument structure, extract governing thought, map section roles
 2. **Message Architecture + Slide Specification** — pyramid communication, one message per slide, copywriting, layout selection, speaker notes
 
-The brief describes WHAT each slide says and which layout to use. The PPTX renderer owns all visual decisions (colors, fonts, spacing) by reading the theme directly — briefs contain no color fields.
+The brief describes WHAT each slide says and which layout to use. The renderer owns all visual decisions (colors, fonts, spacing) by reading the theme directly — briefs contain no color fields.
 
 **Density principle:** Slides carry the anchor; speaker notes carry the detail. A McKinsey partner's slide has one assertion headline and 3-5 scannable phrases — the partner delivers the depth from memory. Same principle here: when content exceeds a layout's physical capacity, the excess moves to speaker notes. Never force-fit paragraphs on-slide.
 
@@ -61,6 +62,7 @@ These are typically set by an upstream agent (e.g., why-change-work), not by a h
 | `governing_thought` | auto-extracted | Pre-computed governing thought — Step 4 validates rather than re-derives. |
 | `section_roles` | auto-detected | Pre-mapped section roles — Step 4 validates rather than re-derives. |
 | `buyer_appendix_path` | none | Path to buyer-appendix.md for enriched Q&A prep (Step 8.2 only). |
+| `design` | per `$CLAUDE_PLUGIN_ROOT/libraries/presentation-intent.md` | The deck's design intent — `register`, `dark_slides`, `speaker_notes`, `imagery`, `variations`. Unsupplied sub-keys fall back to that library's defaults (Step 8.2). |
 
 ---
 
@@ -68,7 +70,7 @@ These are typically set by an upstream agent (e.g., why-change-work), not by a h
 
 ### Theme-driven visuals
 
-The PPTX renderer owns all visual decisions — colors, fonts, spacing — by reading the theme directly. Briefs specify content and layout only. Omit visual fields (`Background:`, `Text-Color:`, `Icon-Color:`, `Role:`, `Intensity:`, `Mood:`) because the renderer ignores them and their presence creates ambiguity about who controls styling.
+The renderer owns all visual decisions — colors, fonts, spacing — by reading the theme directly. Briefs specify content and layout only. Omit color/styling fields (`Background:`, `Text-Color:`, `Icon-Color:`, `Role:`, `Intensity:`, `Mood:`) because the renderer ignores them and their presence creates ambiguity about who controls styling. The nested `intent.role` key is a different, permitted 4.1 key and is not covered by this prohibition.
 
 ### Interactive checkpoints
 
@@ -150,11 +152,11 @@ Internal prep slides carry `Bottom-Banner` with "INTERNAL — REMOVE FROM CLIENT
 
 ## Workflow
 
-When invoked without explicit parameters, search the filesystem first (Step 0) rather than prompting for paths. Users invoke this skill from project directories that already contain their narrative — asking for a path they're sitting next to creates unnecessary friction. The two interactive checkpoints are: (1) narrative selection in Step 0, and (2) theme selection in Step 1 via `cogni-workspace:pick-theme`.
+When invoked without explicit parameters, search the filesystem first (Step 0) rather than prompting for paths.
 
 ### Execution protocol
 
-Each step: verify the previous step's output is available (entry gate), read the reference file for that step, execute, then state your output summary before moving on. Reference files contain step-specific rules that prevent downstream rework — read them at the start of each step.
+Each step: verify the previous step's output is available (entry gate), read the reference file for that step, execute, then state the output summary before moving on. Reference files contain step-specific rules that prevent downstream rework — read them at the start of each step.
 
 ---
 
@@ -201,7 +203,7 @@ If arc_id set: read `$CLAUDE_PLUGIN_ROOT/libraries/arc-taxonomy.md`, map to arc_
 
 If pick-theme is unavailable (e.g., cogni-workspace not installed), fall back to Glob scanning `$COGNI_WORKSPACE_ROOT/themes/*/theme.md` and present via AskUserQuestion manually.
 
-**Load libraries:** `cta-taxonomy.md`, `arc-taxonomy.md` (if arc_id set). The heavier libraries (`pptx-layouts.md` and `EXAMPLE_BRIEF.md`) are deferred to the steps that consume them (Steps 7 and 8) to keep context lean during the creative intelligence steps.
+**Load libraries:** `cta-taxonomy.md`, `arc-taxonomy.md` (if arc_id set). The heavier libraries (`pptx-layouts.md` and `EXAMPLE_BRIEF.md`) are deferred to the steps that consume them (Steps 7 and 8), and `presentation-intent.md` is deferred to Step 8.2, to keep context lean during the creative intelligence steps.
 
 ---
 
@@ -264,7 +266,7 @@ When caller provides `governing_thought`/`section_roles`: validate against narra
 
 ### Step 6: Apply Copywriting Techniques
 
-> Headlines are the first thing an audience reads. A topic label ("Market Overview") tells them nothing — they have to read the body to get the point, and you've lost their attention. An assertion headline ("European market contracts 12% as regulation tightens") delivers the message in 3 seconds.
+> Headlines are the first thing an audience reads. A topic label ("Market Overview") tells them nothing — they have to read the body to get the point, and their attention is gone. An assertion headline ("European market contracts 12% as regulation tightens") delivers the message in 3 seconds.
 
 **Read reference:** `references/05a-slide-copywriting.md`
 
@@ -307,7 +309,7 @@ Map each slide to best layout from `pptx-layouts.md`. Mandatory rules apply firs
 
 > Steps 5-6 optimized for message clarity. Now that layouts are assigned, compress each slide's copy to fit its layout's physical box dimensions. Speaker notes absorb the overflow. Think of this step as the difference between a draft memo and a billboard campaign — same message, radically different word budget.
 
-Apply the layout density budget (HARD LIMITS):
+Apply the layout density budget. These are ceilings the layout enforces physically — exceeding one overflows the box or shrinks the font to illegibility — not stylistic targets:
 
 | Layout | Field | Max Words | Think of it as... |
 |--------|-------|-----------|-------------------|
@@ -319,9 +321,7 @@ Apply the layout density budget (HARD LIMITS):
 | two-columns-equal | Bullets (each) | 10 | McKinsey slide bullet |
 | ALL | Bottom-Banner | 12 | Billboard tagline |
 
-Content exceeding the budget moves to speaker notes (Step 8.2 incorporates it) — it is preserved, not deleted. The slide carries the anchor; the presenter delivers the detail.
-
-**Why this works:** The audience scans each slide in ~3 seconds before the presenter speaks. A 40-word IS-box becomes a reading competition — they read instead of listen, and the presenter loses the room. A 15-word phrase lets the audience absorb the anchor and look up, ready for the presenter's elaboration. The detail lives in speaker notes, not lost.
+Content exceeding the budget moves to speaker notes (Step 8.2 incorporates it) — preserved, not deleted. This works because the audience scans each slide in ~3 seconds before the presenter speaks: a 40-word IS-box becomes a reading competition where they read instead of listen and the presenter loses the room, while a 15-word phrase lets them absorb the anchor and look up, ready for the elaboration.
 
 Content checkpoint: State slides compressed count, total words moved to notes.
 
@@ -329,15 +329,17 @@ Content checkpoint: State slides compressed count, total words moved to notes.
 
 ### Step 8: Generate YAML Slide Specifications
 
-> The YAML specification is the contract between this skill and the PPTX renderer. Every field must contain final, copy-paste-ready text because the renderer reproduces it exactly — no interpretation, no cleanup.
+> The YAML specification is the contract between this skill and the renderer. Every field must contain final, copy-paste-ready text because the renderer reproduces it exactly — no interpretation, no cleanup.
 
 **Read library:** `$CLAUDE_PLUGIN_ROOT/libraries/EXAMPLE_BRIEF.md` — output format reference needed for YAML spec generation and final brief output (Step 10). Deferred from Step 1 to keep context lean during creative Steps 2-6.
 
-**Read reference:** `references/07-output-template.md` (Slide YAML Example section)
+**Read reference:** `references/07-output-template.md` (Per-slide YAML pattern section)
 
-For each slide, generate content-only YAML following `pptx-layouts.md` field names. Omit all visual fields — the renderer reads the theme. Every slide heading is an assertion headline.
+For each slide, generate content-only YAML following `pptx-layouts.md` field names. Omit all color/styling fields — the renderer reads the theme. Every slide heading is an assertion headline.
 
-**Density enforcement (Step 7.5):** IS/DOES/MEANS boxes: billboard-line brevity (15/20/15 words max, phrase notation only). All bullets: McKinsey slide bullet density (max 10 words, phrase not sentence). No full sentences in any box or bullet field.
+Every slide also carries the three per-slide keys 4.1 requires: `Slide-Kind`, `intent` (with `role` and `emphasis`) and `visual` (with `kind`). Read `references/07-output-template.md` for their value sets — `pptx-layouts.md` defines layout fields only and does not define these three.
+
+**Density enforcement:** carry the Step 7.5 budget into the YAML unchanged — that table is the authority on every per-field word count. Phrase notation throughout: no full sentences in any box or bullet field.
 
 ---
 
@@ -353,15 +355,27 @@ Generate from citation renumber map (Step 2). Position after closing-slide as la
 
 #### Step 8.2: Enrich and Write Complete Brief (Delegated)
 
-> Speaker notes transform a deck from a document into a performance tool. Prep slides give the presenter strategic context before entering the room. The `slides-enrichment-artist` agent loads its own heavy references (1,647 lines) in a separate context, generates prep slides and speaker notes, and **writes the complete presentation-brief.md directly** — eliminating the token-heavy JSON round-trip and the integration step that can stall the orchestrator.
+> Speaker notes transform a deck from a document into a performance tool. Prep slides give the presenter strategic context before entering the room. The `slides-enrichment-artist` agent loads its own heavy references in a separate context, generates prep slides and speaker notes, and **writes the complete presentation-brief.md directly** — eliminating the token-heavy JSON round-trip and the integration step that can stall the orchestrator.
 
-**Prepare the enrichment prompt** with these fields from previous steps:
+**Deriving the `design:` values.** `register`, `dark_slides`, `speaker_notes`,
+`imagery` and `variations` come from the `design` caller-supplied override when it
+is passed, and otherwise from the defaults defined in
+`$CLAUDE_PLUGIN_ROOT/libraries/presentation-intent.md`. Resolve them here before
+interpolating the prompt — the values below are never invented at write time.
+
+**Read library:** `$CLAUDE_PLUGIN_ROOT/libraries/presentation-intent.md` — the
+design defaults the `design:` block below falls back to.
+
+**Prepare the enrichment prompt** with these fields from previous steps. Emit the
+FRONTMATTER payload per the conditionality in `references/07-output-template.md` →
+Frontmatter — omit `arc_id` when unresolved, and `climax` when no slide carries
+`emphasis: climax`:
 
 | Field | Source |
 |-------|--------|
 | `OUTPUT_PATH` | Resolved output path (from parameters or default `{source_dir}/cogni-visual/presentation-brief.md`) |
 | `OUTPUT_TEMPLATE_PATH` | `$CLAUDE_PLUGIN_ROOT/skills/story-to-slides/references/07-output-template.md` |
-| `FRONTMATTER` | All YAML frontmatter fields: type, version (4.0), theme, theme_path, customer, provider, language, generated, arc_type, arc_id, governing_thought, confidence_score, transformation_notes |
+| `FRONTMATTER` | All YAML frontmatter fields **as defined in `references/07-output-template.md` → Frontmatter**, which is the canonical key set and the authority on which keys are required, conditional or optional. Interpolated in the block below. |
 | `TITLE` / `SUBTITLE` | From Step 2 or parameters |
 | `SLIDE_SPECS` | All slide YAML specs from Steps 8 + 8.1 (the complete deck so far) |
 | `AUDIENCE_MODEL` | From Step 3 — mode (Rich/Lean), decision-maker, priorities, objections, champion, blockers |
@@ -377,6 +391,8 @@ Generate from citation renumber map (Step 2). Position after closing-slide as la
 - If `output_path` explicit: `mkdir -p "$(dirname "${output_path}")"`
 - Otherwise: set `output_path = {source_dir}/cogni-visual/presentation-brief.md` and `mkdir -p "{source_dir}/cogni-visual"`
 
+The `FRONTMATTER:` block in the prompt below is a deliberate interpolation payload — it supplies values for the keys, not a second definition of the key set; `references/07-output-template.md` → Frontmatter remains the authority, so re-derive this payload from it whenever the Frontmatter key set or any of its value annotations change.
+
 **Launch the `slides-enrichment-artist` agent:**
 
 ```
@@ -388,7 +404,7 @@ Agent tool:
 
     FRONTMATTER:
       type: presentation-brief
-      version: "4.0"
+      version: "4.1"
       theme: {theme_id}
       theme_path: "{theme_path}"
       customer: "{customer_name}"
@@ -399,6 +415,17 @@ Agent tool:
       arc_id: "{arc_id}"
       governing_thought: "{governing_thought}"
       confidence_score: {avg_confidence}
+      max_slides: {max_slides}
+      slides: {slides_total}
+      climax: {climax_slide}
+      design:
+        register: {register}
+        dark_slides: {dark_slides}
+        speaker_notes: {speaker_notes}
+        imagery: {imagery}
+        variations: {variations}
+      key_figures:
+        - "{hero number promoted out of prose, provenance marker kept if it carries one}"
       transformation_notes: |
         Story-to-slides transformation.
         Theme: {theme_id}. Arc: {arc_type}.
@@ -448,7 +475,7 @@ Agent tool:
 **Read reference:** `references/09-validation-checklist.md`
 
 Five layers — stop on first failure, fix, re-check:
-1. **Schema** — layout types exist, required fields present, no visual fields, valid YAML
+1. **Schema** — layout types exist, required fields present, no color/styling fields, valid YAML
 2. **Message quality** — assertion headlines, MECE sequence, isolated hero numbers
 3. **Copywriting** — number plays applied, bullets consolidated, no hedging
 4. **Presentation logic** — bookend slides enforced, within max_slides, layout variety
@@ -490,13 +517,11 @@ Write the review verdict to `{output_dir}/presentation-brief.review.json`.
 
 **Read reference:** `references/07-output-template.md` (Brief Output Template section)
 
-**Output path resolution** (run via Bash before writing):
-- If `output_path` explicit: `mkdir -p "$(dirname "${output_path}")"`
-- Otherwise: set `output_path = {source_dir}/cogni-visual/presentation-brief.md` and `mkdir -p "{source_dir}/cogni-visual"`
+**Output path:** reuse the value Step 8.2 resolved before the agent launch — this step runs only on the 8.2 fallback path, so the path is already set and its parent directory already `mkdir -p`ed. If it is somehow unset, resolve it by the same rule Step 8.2 states.
 
-Write the brief following the output template. YAML frontmatter must include: type, version (4.0), theme, theme_path, arc_type, arc_id, governing_thought, confidence_score. Include PPTX Rendering Requirements section (localized). Include Generation Metadata at end.
+Write the brief following the output template. Take the YAML frontmatter key set — and which keys are required, conditionally required or optional pass-through — from `references/07-output-template.md` → Frontmatter, which is the authority; do not re-derive it here. Include the Rendering Contract section (localized). Include the fenced Generation Metadata block at end.
 
-Run the validation checklist (reference `09-validation-checklist.md`) one final time against the written file. The most commonly missed items at this stage: mispositioned PPTX Rendering Requirements section, and superscript `<sup>[N](url)</sup>` in body text vs plain `[N](url)` in speaker notes.
+Run the validation checklist (reference `09-validation-checklist.md`) one final time against the written file. The most commonly missed items at this stage: a mispositioned Rendering Contract section, and superscript `<sup>[N](url)</sup>` in body text vs plain `[N](url)` in speaker notes.
 
 ---
 
@@ -530,7 +555,7 @@ Open claude.ai → new chat → attach both files → paste the prompt above.
 
 Replace `{absolute_path_to_presentation_brief}` with the resolved `output_path` and `{absolute_path_to_theme_md}` with the `theme_path` from Step 1. Both paths must be absolute — never use `~`, `$HOME`, `$CLAUDE_PLUGIN_ROOT`, or relative paths.
 
-**Why claude.ai?** The Anthropic PPTX skill in the claude.ai web interface handles file attachments natively and produces the best slide rendering results. Claude Code can also render via the `document-skills:pptx` skill, but the claude.ai path is currently the recommended workflow for highest quality output.
+**Why claude.ai?** The web interface handles file attachments natively, which is what makes the PPTX skill render best there. Claude Code can also render via the `document-skills:pptx` skill — a working fallback, not the recommended path.
 
 ---
 
@@ -546,10 +571,10 @@ Replace `{absolute_path_to_presentation_brief}` with the resolved `output_path` 
 | **05a-slide-copywriting.md** | 6 | Assertion headlines, number plays, bullet consolidation |
 | **05b-speaker-notes.md** | 8.2 | Two-section speaker notes format reference (loaded by slides-enrichment-artist agent) |
 | **06-slide-mapping-rules.md** | 7 | Layout selection, confidence scoring, fallback strategies |
-| **07-output-template.md** | 8, 8.2, 10 | Slide YAML example, brief output template, citation rules (also loaded by slides-enrichment-artist agent) |
+| **07-output-template.md** | 2, 8, 8.2, 10 | Slide YAML example, brief output template, citation rules (also loaded by slides-enrichment-artist agent) |
 | **08b-references-slide.md** | 8.1 | References slide construction |
 | **08c-presenter-prep.md** | 8.2 | Internal prep slides + per-slide speaker notes process (loaded by slides-enrichment-artist agent) |
-| **09-validation-checklist.md** | 9 | Five-layer validation framework |
+| **09-validation-checklist.md** | 9, 10 | Five-layer validation framework |
 | **2g-diagram-simplification.md** | 2.1 | Mermaid diagram detection and simplification |
 
 ### Libraries (loaded as needed — progressive disclosure)
@@ -557,12 +582,17 @@ Replace `{absolute_path_to_presentation_brief}` with the resolved `output_path` 
 | Library | Step | Purpose |
 |---------|------|---------|
 | **arc-taxonomy.md** | 1 | Arc ID → visual arc type mapping, element names |
-| **cta-taxonomy.md** | 1 | CTA types, urgency, arc-to-CTA heuristics |
+| **cta-taxonomy.md** | 1, 6.1 | CTA types, urgency, arc-to-CTA heuristics |
 | **pptx-layouts.md** | 7 | Slide layout schemas and field definitions (deferred from Step 1) |
 | **EXAMPLE_BRIEF.md** | 8 | Output format reference (deferred from Step 1) |
+| **presentation-intent.md** | 8.2 | `design` / `climax` / `key_figures` vocabulary and the design defaults the `design` override falls back to |
 
 ## Backward Compatibility
 
+- Schema 4.1 is additive over 4.0 — both versions stay valid and an unfenced 4.0 brief
+  stays readable. `references/07-output-template.md` is the authority on 4.1 frontmatter
+  requiredness; `references/09-validation-checklist.md` carries the 4.0 key set for the
+  checker.
 - `arc_type: why-change` activates Why Change file discovery
 - `project_path` parameter still accepted (mapped to `source_path`)
 - Power Position extraction still supported

@@ -1,7 +1,7 @@
 ---
 name: render-html-slides
 description: >
-  Render a presentation-brief.md (v4.0) into a self-contained HTML slide presentation
+  Render a presentation-brief.md into a self-contained HTML slide presentation
   with speaker notes toggle, keyboard navigation, themed styling, and Mermaid diagram
   support. After rendering, supports an interactive refinement loop where users can
   adjust individual slides — text fixes are applied directly to HTML, structural changes
@@ -17,7 +17,7 @@ allowed-tools: Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion, Skill
 
 # Render HTML Slides
 
-Transform a presentation-brief.md (v4.0) into a stunning, self-contained HTML slide deck
+Transform a presentation-brief.md into a stunning, self-contained HTML slide deck
 that runs in any browser. Themed styling, keyboard navigation, smooth transitions,
 speaker notes panel, Mermaid diagram rendering, touch swipe support, and print mode —
 all in a single `.html` file.
@@ -46,7 +46,7 @@ all in a single `.html` file.
 3. If multiple found, present options via AskUserQuestion
 4. Read the brief, validate frontmatter:
    - `type: presentation-brief` (must match)
-   - `version: "4.0"` (content-only schema)
+   - `version: "4.0"` or `"4.1"` (must match one of these — the 4.1 delta is content-only, so nothing this renderer parses changed)
 5. Extract metadata: `theme`, `theme_path`, `language`, `customer`, `provider`, `arc_type`, `governing_thought`
 
 **Theme resolution** (3-stage, same as enrich-report):

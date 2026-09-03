@@ -85,17 +85,13 @@ Large stat card on left (40%), context bullets on right (55%), with optional bot
 - **Impact Box**: Small callout within stat card
 - **Bottom Banner**: Footer context or metadata
 - **Left Border**: Colored accent strip
-- **Source**: Clickable source attribution link(s) — see Note 10
+- **Source**: Clickable source attribution link(s) — see Note 9
 
 ### Visual Hierarchy
 
 1. HERO (stat number - 36pt, dominant)
 2. CONTEXT (headline + bullets - 16pt/14pt)
 3. BANNER (optional footer - 12pt, muted)
-
-### Color Fields (Optional)
-
-Color fields (`Background`, `Text-Color`, `Icon-Color`) are **optional**. When present (v2-v3 briefs), the PPTX skill uses them directly. When absent (v4 briefs), the PPTX skill infers colors from the theme directly.
 
 ### Example (v4 — content-only)
 
@@ -167,7 +163,7 @@ When `Number` is absent and `Bullets` is present, each quadrant renders as a tex
 - **Sublabels**: Additional context per quadrant
 - **Icons**: Visual indicators per quadrant (stat mode only)
 - **Bottom Banner**: Footer context
-- **Source**: Clickable source attribution link(s) — see Note 10
+- **Source**: Clickable source attribution link(s) — see Note 9
 
 ### Visual Hierarchy
 
@@ -288,7 +284,7 @@ Each column can contain:
 
 - **Column Callouts**: Highlighted info boxes
 - **Bottom Banner**: Summary or conclusion
-- **Source**: Clickable source attribution link(s) — see Note 10
+- **Source**: Clickable source attribution link(s) — see Note 9
 
 ### Visual Hierarchy
 
@@ -365,7 +361,7 @@ Generators must set the `Label` field per box according to the `language` parame
 ### Optional Content
 
 - **Bottom Banner**: Value proposition summary
-- **Source**: Clickable source attribution link(s) — see Note 10
+- **Source**: Clickable source attribution link(s) — see Note 9
 
 ### Visual Hierarchy
 
@@ -430,7 +426,7 @@ Each option contains:
 - **Pricing**: Cost per option
 - **Badges**: Highlight recommended option
 - **Bottom Banner**: Selection guidance
-- **Source**: Clickable source attribution link(s) — see Note 10
+- **Source**: Clickable source attribution link(s) — see Note 9
 
 ### Visual Hierarchy
 
@@ -515,7 +511,7 @@ Each step contains:
 - **Durations**: Time per step
 - **Step 5-6**: Additional steps (adjust spacing)
 - **Bottom Banner**: Total duration or outcome
-- **Source**: Clickable source attribution link(s) — see Note 10
+- **Source**: Clickable source attribution link(s) — see Note 9
 
 ### Visual Hierarchy
 
@@ -821,14 +817,13 @@ Metadata: kontakt@t-systems.com | +49 123 456 789
 
 1. **Coordinates**: All x, y, w, h values are in inches from top-left origin (0,0)
 2. **Safe Margins**: Layouts respect contentStartX (0.7") and contentWidth (8.6")
-3. **Color Fields**: Optional in v4.0 briefs. When present, PPTX skill uses them directly. When absent, PPTX skill infers from theme directly
-4. **Layout Prefix**: Briefs should specify `Layout: stat-card-with-context` etc.
-5. **Required vs Optional**: Generators should validate required fields before rendering
-6. **Flexible Heights**: Some layouts allow variable heights within constraints
-7. **Bottom Banner**: Always optional, use for context/metadata when needed
-8. **Icons**: Icon placement varies by layout, reference icon-library.md for mappings
-9. **Speaker-Notes**: Optional field for all layouts. Contains comprehensive presenter notes in two sections, rendered via PptxGenJS `slide.addNotes()`. Format is multi-line YAML string with `>> WHAT YOU SAY` (delivery script with `[Opening]`, `[Key point]`, `[Pause]`, `[Emphasis]`, `[Transition]` tags) and `>> WHAT YOU NEED TO KNOW` (bullet list of sources, context, Q&A prep). German: `>> WAS SIE SAGEN` / `>> WAS SIE WISSEN MÜSSEN` with tags `[Einstieg]`, `[Kernaussage]`, `[Pause]`, `[Betonung]`, `[Überleitung]`. Target 100-200 words per slide.
-10. **Source**: Optional field for all content layouts (not title-slide or closing-slide). Contains markdown-formatted clickable link(s) to the data source for the slide's key claim. Format: `Source: "[Label](URL)"`. For multiple sources use pipe separation: `Source: "[Label1](URL1) | [Label2](URL2)"`. Maximum 2 sources per slide. Only generated when the source narrative actually provides URLs — never invented or guessed. When the `>> WHAT YOU NEED TO KNOW` section of Speaker-Notes references a source, use inline markdown links there as well.
+3. **Layout Prefix**: Briefs should specify `Layout: stat-card-with-context` etc.
+4. **Required vs Optional**: Generators should validate required fields before rendering
+5. **Flexible Heights**: Some layouts allow variable heights within constraints
+6. **Bottom Banner**: Always optional, use for context/metadata when needed
+7. **Icons**: Icon placement varies by layout, reference icon-library.md for mappings
+8. **Speaker-Notes**: Optional field for all layouts. Contains comprehensive presenter notes in two sections, rendered via PptxGenJS `slide.addNotes()`. Format is multi-line YAML string with `>> WHAT YOU SAY` (delivery script with `[Opening]`, `[Key point]`, `[Pause]`, `[Emphasis]`, `[Transition]` tags) and `>> WHAT YOU NEED TO KNOW` (bullet list of sources, context, Q&A prep). German: `>> WAS SIE SAGEN` / `>> WAS SIE WISSEN MÜSSEN` with tags `[Einstieg]`, `[Kernaussage]`, `[Pause]`, `[Betonung]`, `[Überleitung]`. Target 200–400 words per slide (150 minimum, 450 maximum).
+9. **Source**: Optional field for all content layouts (not title-slide or closing-slide). Contains markdown-formatted clickable link(s) to the data source for the slide's key claim. Format: `Source: "[Label](URL)"`. For multiple sources use pipe separation: `Source: "[Label1](URL1) | [Label2](URL2)"`. Maximum 2 sources per slide. Only generated when the source narrative actually provides URLs — never invented or guessed. When the `>> WHAT YOU NEED TO KNOW` section of Speaker-Notes references a source, use inline markdown links there as well.
 
     **PptxGenJS rendering:** Use `createSourceFooter()` from pptx-components.js to render the Source field as a clickable footer positioned above the Bottom-Banner area:
 
@@ -843,10 +838,10 @@ Metadata: kontakt@t-systems.com | +49 123 456 789
       text: '[Bundesbericht 2024](https://eba.bund.de/report) | [EBA Statistik](https://eba.bund.de/stats)'
     });
     ```
-11. **Section Roles** (internal concept): story-to-slides assigns section roles (hook/problem/urgency/evidence/solution/proof/options/roadmap/investment/call-to-action) during Step 3c arc analysis for internal workflow decisions (layout tiebreaking, speaker-note coaching, PEAK/RELEASE detection). These roles do NOT appear in the brief output. The PPTX skill reads `theme.md` directly for all color decisions.
-12. **Internal Prep Slides**: Slides with `Bottom-Banner` text containing "INTERNAL" (EN) or "INTERN" (DE) are presenter preparation slides auto-generated by story-to-slides Step 7c. They are numbered sequentially after Slide 1 (title): Slide 2 (Methodology — `process-flow` layout with `Detail-Grid`) and Slide 3 (Buying Center — `four-quadrants` text-card mode). Methodology comes first (shows pitch phases), Buying Center second (shows stakeholder cards). They are not counted against `max_slides`. Content slides begin at the next sequential number after the internal prep slides.
-16. **References Slide Positioning**: The references slide (consolidated citations) is placed AFTER the closing-slide as the **last slide in the deck**. This positions sources as an appendix after the call-to-action, not as a content interruption before it.
-13. **Inline Citations**: Body text fields (Bullets, Text boxes, Features, Descriptions) may contain inline citation markers in `[N](url)` format, where N is a sequential reference number. These are claim-level source attributions that complement the slide-level Source field. The PPTX skill renders these as clickable hyperlinks using `parseMarkdownLinks()` from pptx-components.js. Inline citations do NOT appear in Headlines, Bottom-Banner, Hero-Stat-Box Number/Label/Sublabel, or Step Labels/Numbers.
+11. **Section Roles**: story-to-slides assigns section roles (hook/problem/urgency/evidence/solution/proof/options/roadmap/investment/call-to-action) during Step 3c arc analysis, and uses them for internal workflow decisions (layout tiebreaking, speaker-note coaching, PEAK/RELEASE detection). In a **4.1** brief the role is **declared** in the output as `intent.role` on each slide, so read it rather than re-deriving it; `skills/story-to-slides/references/07-output-template.md` is the authority for the value set. In a 4.0 brief the role is internal only and does not appear. The PPTX skill reads `theme.md` directly for all color decisions.
+12. **Internal Prep Slides**: A **4.1** brief declares these with `Slide-Kind: internal-prep`, which is the identification mechanism; matching `Bottom-Banner` text containing "INTERNAL" (EN) or "INTERN" (DE) is the **4.0 fallback**. They are presenter preparation slides auto-generated by story-to-slides Step 7c. They are numbered sequentially after Slide 1 (title): Slide 2 (Methodology — `process-flow` layout with `Detail-Grid`) and Slide 3 (Buying Center — `four-quadrants` text-card mode). Methodology comes first (shows pitch phases), Buying Center second (shows stakeholder cards). They are not counted against `max_slides`. Content slides begin at the next sequential number after the internal prep slides.
+13. **References Slide Positioning**: A **4.1** brief declares the references slide with `Slide-Kind: references`, which is the identification mechanism; last-in-deck position is the **4.0 fallback** and, in 4.1, rendering guidance rather than identification. Either way the slide is placed AFTER the closing-slide as the **last slide in the deck**, positioning sources as an appendix after the call-to-action, not as a content interruption before it.
+14. **Inline Citations**: Body text fields (Bullets, Text boxes, Features, Descriptions) may contain inline citation markers in `[N](url)` format, where N is a sequential reference number. These are claim-level source attributions that complement the slide-level Source field. The PPTX skill renders these as clickable hyperlinks using `parseMarkdownLinks()` from pptx-components.js. Inline citations do NOT appear in Headlines, Bottom-Banner, Hero-Stat-Box Number/Label/Sublabel, or Step Labels/Numbers.
 
     **PptxGenJS rendering:** Component functions `createContextBox()` and `createLayerBox()` handle this internally. For inline PptxGenJS code in other layouts, use `parseMarkdownLinks()`:
 
@@ -862,8 +857,8 @@ Metadata: kontakt@t-systems.com | +49 123 456 789
     }
     slide.addText(parsed, { x: 1, y: 1, w: 8, h: 2, fontSize: 14 });
     ```
-14. **Diagram**: Optional field for diagram layouts (`layered-architecture`, `process-flow`, `gantt-chart`). Contains Mermaid source text as the data input — the `Layout:` value determines the rendering strategy. The PPTX skill extracts structured data (nodes, edges, tasks) from the Mermaid text and applies geometry calculations from `diagram-layouts.md` to render native PptxGenJS shapes. Mermaid source in the `Diagram:` field must be pre-simplified by story-to-slides to respect layout constraints (max nodes, max lanes, max tasks). The Mermaid text is NOT rendered as an image — it serves as a compact, previewable data description that produces editable native PPTX shapes. Backward compatible: briefs without `Diagram:` work unchanged.
-15. **Text Hyperlinks (PptxGenJS API)**: PptxGenJS supports clickable hyperlinks on text runs via the `hyperlink: { url }` option in text run arrays. This is the authoritative reference for hyperlink rendering — use it whenever generating inline PptxGenJS code for links.
+15. **Diagram**: Optional field for diagram layouts (`layered-architecture`, `process-flow`, `gantt-chart`). Contains Mermaid source text as the data input — the `Layout:` value determines the rendering strategy. The PPTX skill extracts structured data (nodes, edges, tasks) from the Mermaid text and applies geometry calculations from `diagram-layouts.md` to render native PptxGenJS shapes. Mermaid source in the `Diagram:` field must be pre-simplified by story-to-slides to respect layout constraints (max nodes, max lanes, max tasks). The Mermaid text is NOT rendered as an image — it serves as a compact, previewable data description that produces editable native PPTX shapes. Backward compatible: briefs without `Diagram:` work unchanged.
+16. **Text Hyperlinks (PptxGenJS API)**: PptxGenJS supports clickable hyperlinks on text runs via the `hyperlink: { url }` option in text run arrays. This is the authoritative reference for hyperlink rendering — use it whenever generating inline PptxGenJS code for links.
 
     ```javascript
     // Single hyperlink text

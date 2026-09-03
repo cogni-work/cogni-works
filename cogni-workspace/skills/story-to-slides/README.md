@@ -389,7 +389,7 @@ As of v4.0, presentation briefs are **content-only** — they contain no color f
 ```yaml
 ---
 type: presentation-brief
-version: "4.0"
+version: "4.1"
 theme: smarter-service
 theme_path: "/cogni-workspace/themes/smarter-service/theme.md"
 customer: "Customer Name"
@@ -399,6 +399,16 @@ generated: "2026-02-06"
 arc_type: "why-change"
 governing_thought: "Deutsche Bahn should deploy AI video analytics because 688 preventable deaths annually demand automated monitoring, resulting in 87% faster incident response."
 confidence_score: 0.87
+max_slides: 12
+slides: 12
+climax: 4
+design:
+  register: quiet-executive
+  speaker_notes: full-script
+  imagery: none
+key_figures:
+  - "688 preventable deaths annually"
+  - "87% faster incident response"
 transformation_notes: |
   Story-to-slides transformation.
   Theme: smarter-service
@@ -407,6 +417,7 @@ transformation_notes: |
   2 slides flagged for manual review.
   Copywriting: 6 number plays, 12 headlines optimized.
 ---
+```
 
 # Presentation Brief: Customer Name
 
@@ -417,13 +428,36 @@ incident response.
 ---
 
 ## Slide 1: Crisis in the Railway Network
+
+```yaml
 Layout: title-slide
+Slide-Kind: content
+
+intent:
+  role: hook
+  emphasis: none
+
+visual:
+  kind: none
+
 Title: Crisis in the Railway Network
 Subtitle: Why manual monitoring is no longer sufficient
 Metadata: Customer Name | Provider Name | 2026-02-06
+```
 
 ## Slide 2: Pitch Methodology
+
+```yaml
 Layout: process-flow
+Slide-Kind: internal-prep
+
+intent:
+  role: hook
+  emphasis: none
+
+visual:
+  kind: diagram
+
 Slide-Title: Pitch Methodology
 Diagram: |
   graph LR
@@ -454,12 +488,24 @@ Detail-Grid:
     - "34-week deployment"
     - "18-month payback"
 Bottom-Banner:
-  Text: "INTERNAL — REMOVE BEFORE CLIENT PRESENTATION"
+  Text: "INTERNAL — REMOVE FROM CLIENT PRESENTATION"
 Speaker-Notes: |
   [... coaching notes + slide-by-slide pacing guide with PEAK/RELEASE ...]
+```
 
 ## Slide 3: Buying Center
+
+```yaml
 Layout: four-quadrants
+Slide-Kind: internal-prep
+
+intent:
+  role: hook
+  emphasis: none
+
+visual:
+  kind: table
+
 Slide-Title: Buying Center
 Q1:
   Label: "Economic Buyer"
@@ -490,13 +536,26 @@ Q4:
     - "Flagship project for their agenda"
     - "Activate as internal advocate"
 Bottom-Banner:
-  Text: "INTERNAL — REMOVE BEFORE CLIENT PRESENTATION"
+  Text: "INTERNAL — REMOVE FROM CLIENT PRESENTATION"
 Speaker-Notes: |
   [... coaching notes for presenter ...]
+```
 
 ## Slide 4: 688 Lives Lost Annually to Preventable Rail Incidents
+
+```yaml
 Layout: stat-card-with-context
+Slide-Kind: content
+
+intent:
+  role: problem
+  emphasis: climax
+
+visual:
+  kind: stat
+
 [... YAML specification ...]
+```
 
 [... additional slides ...]
 
@@ -504,36 +563,29 @@ Layout: stat-card-with-context
 
 ## Generation Metadata
 
-**Story Arc:** why-change
-**Governing Thought:** Deutsche Bahn should deploy AI video analytics...
-
-**Source Files:**
-- value-story.md
-- 01-why-change/narrative.md
-- 02-why-now/narrative.md
-- 03-why-you/narrative.md
-- 04-why-pay/narrative.md
-- power-positions.md
-
-**Message Architecture:**
-- Slides generated: 12
-- Arguments (MECE groups): 4
-- Consolidation applied: yes (18 sections → 12 slides)
-
-**Copywriting Applied:**
-- Number plays: 6
-- Headlines optimized: 12
-- Bullets consolidated: 8
-
-**Average Confidence:** 0.87
-**Manual Review Recommended:** Slides 4, 9 (low confidence)
-
-**Validation:**
-- Schema compliance: PASS
-- Message quality: PASS
-- Copywriting quality: PASS
-- Presentation logic: PASS
-- Content integrity: PASS
+```yaml
+slides_total: 12
+content_slides: 10
+prep_slides: 2
+number_plays: 6
+headlines_optimized: 12
+bullets_consolidated: 8
+source_links: 9
+layout_distribution:
+  title-slide: 1
+  process-flow: 1
+  four-quadrants: 1
+  stat-card-with-context: 5
+  two-columns-equal: 3
+  closing-slide: 1
+avg_confidence: 0.87
+manual_review: [4, 9]
+validation:
+  schema: pass
+  messages: pass
+  copy: pass
+  logic: pass
+  integrity: pass
 ```
 
 ## Integration with why-change-work
@@ -602,6 +654,7 @@ graph TD
 | `references/05a-slide-copywriting.md` | Number plays, headline optimization, bullet consolidation, evidence hierarchy |
 | `references/05b-speaker-notes.md` | Speaker notes format reference: two-section structure, tags, templates, localization (used by Step 7c) |
 | `references/06-slide-mapping-rules.md` | Message-driven layout selection, confidence scoring, fallback strategies |
+| `references/07-output-template.md` | Brief output template: v4.1 grammar, per-slide fences, Rendering Contract, citation handling |
 | `references/08b-references-slide.md` | References slide construction, column splitting, citation formatting |
 | `references/09-validation-checklist.md` | Five-layer validation framework with 50+ validation rules |
 | `references/2g-diagram-simplification.md` | Mermaid diagram detection, classification decision tree, simplification rules |

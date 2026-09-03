@@ -24,7 +24,18 @@
 # success, and in a monorepo checkout the tree is always present.
 #
 # Mutation recipe (verified — mutated red, restored green):
-#   bash "${CLAUDE_PLUGIN_ROOT}/scripts/mutation-check.sh" --root . --file cogni-workspace/libraries/presentation-intent.md --expr 's/speaker_notes/speaker_note/' --test 'bash cogni-consult/tests/test-presentation-intent-sync.sh' --case pi-sync-03
+#
+#   bash "$HOME/.claude/plugins/marketplaces/managed-service/cogni-service/scripts/mutation-check.sh" \
+#     --root . \
+#     --file cogni-workspace/libraries/presentation-intent.md \
+#     --expr 's/speaker_notes/speaker_note/' \
+#     --test 'bash cogni-consult/tests/test-presentation-intent-sync.sh' \
+#     --case pi-sync-03
+#
+# Use the cogni-service harness, NOT the different scripts/mutation-check.sh that
+# cogni-consult and cogni-portfolio each ship — from here the plugin-root variable
+# resolves to the consult copy, which takes no arguments and exits 0, so the
+# replay grades nothing and reads green. See cogni-knowledge/tests/README.md.
 
 set -u
 
@@ -36,7 +47,7 @@ NESTED=0
 while [ $# -gt 0 ]; do
   case "$1" in
     --root) REPO_ROOT="$2"; NESTED=1; shift 2 ;;
-    *) shift ;;
+    *) echo "unknown argument: $1" >&2; exit 2 ;;
   esac
 done
 
@@ -164,8 +175,14 @@ else
   sed 's/speaker_notes/speaker_note/' "$LIB_FILE" > "$FIX/cogni-workspace/libraries/presentation-intent.md"
   SELF="$FIX/cogni-consult/tests/$(basename "$0")"
   cp "$0" "$SELF"
-  if bash "$SELF" --root "$FIX" >/dev/null 2>&1; then
+  # Classify the nested run by its output line, never by exit status alone: any
+  # non-zero exit -- a rejected flag, an unbound variable -- would otherwise read
+  # as "the parity assertion fired" and leave this proof vacuous.
+  NESTED_OUT="$WORK_DIR/nested.out"
+  if bash "$SELF" --root "$FIX" >"$NESTED_OUT" 2>&1; then
     fail "pi-sync-07" "a mutated library block did not make this suite fail"
+  elif ! grep -q "^FAIL: pi-sync-03" "$NESTED_OUT"; then
+    fail "pi-sync-07" "the nested run failed, but not through pi-sync-03's parity assertion"
   else
     pass "pi-sync-07"
   fi

@@ -17,8 +17,8 @@ synchronized copy of the shared block below, and
 byte. Edit the block in one file and the guard goes red until the other matches.
 
 The layer is **optional and additive**: omit any piece and the brief still
-renders. Every consumer in this plugin reads the vocabulary from here rather than
-restating it.
+renders. No consumer in this plugin reads the vocabulary yet; the first one
+should read it from here rather than restate it.
 
 ## The shared vocabulary
 

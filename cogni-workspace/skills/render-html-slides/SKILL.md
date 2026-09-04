@@ -29,7 +29,7 @@ all in a single `.html` file.
 | `brief_path` | auto-discovered | Path to presentation-brief.md |
 | `theme` | from brief frontmatter | Path to theme.md (or omit for pick-theme) |
 | `design_variables` | derived from theme | Pre-computed design-variables.json path |
-| `output_path` | `{brief_dir}/{slug}-slides.html` | HTML output path |
+| `output_path` | `{brief_dir}/{slug}-slides.html` | HTML output path. `{slug}` is the deck title Phase 1 assembles into `metadata.title`, lowercased with every run of non-alphanumerics collapsed to a single `-`. |
 | `transition` | `fade` | Slide transition: `fade`, `slide`, `none` |
 | `aspect_ratio` | `16:9` | Slide aspect ratio: `16:9`, `4:3` |
 | `language` | from brief frontmatter | `en` or `de` |
@@ -48,6 +48,7 @@ all in a single `.html` file.
    - `type: presentation-brief` (must match)
    - `version: "4.0"` or `"4.1"` (must match one of these — the 4.1 delta is content-only, so nothing this renderer parses changed)
 5. Extract metadata: `theme`, `theme_path`, `language`, `customer`, `provider`, `arc_type`, `governing_thought`
+6. Resolve `brief_dir` — the project directory that *contains* `cogni-visual/`, which every artifact path below is anchored on. A brief discovered inside a `cogni-visual/` folder (where `story-to-slides` writes it) resolves to that folder's **parent**, not the brief's own directory — otherwise `{brief_dir}/cogni-visual/` doubles the path. An explicit `brief_path` outside any `cogni-visual/` folder resolves to the brief's own directory.
 
 **Theme resolution** (3-stage, same as enrich-report):
 1. If `design_variables` parameter provided → use directly, skip to Phase 1
@@ -59,6 +60,45 @@ all in a single `.html` file.
 
 Parse the presentation-brief.md body into structured slide data. The brief uses `## Slide N: {headline}` sections with fenced YAML blocks.
 
+**Parse deterministically.** Run the shared parser rather than reading the brief yourself — it is the same parser the other brief consumers use, so this renderer cannot drift away from them:
+
+```bash
+mkdir -p "{brief_dir}/cogni-visual"
+python3 "${CLAUDE_PLUGIN_ROOT}/scripts/parse-brief.py" \
+  --brief "{brief_path}" --emit slide-data \
+  --output "{brief_dir}/cogni-visual/slide-data.json"
+```
+
+`mkdir -p` runs first because the parser opens `--output` directly without creating its parent.
+
+`--brief` is required (omitting it exits with `--brief is required`). The `{"success": ..., "data": ..., "error": ...}` envelope prints on **stdout**, while `--output` writes only the payload (`{version, slides, warnings}`) to the file.
+
+**Then add the `metadata` block.** `--emit slide-data` carries no `metadata` key, but the renderer reads `metadata.title` / `.customer` / `.provider` / `.generated` — skip this and every deck silently renders with the title "Presentation" and today's date. Run:
+
+```bash
+python3 "${CLAUDE_PLUGIN_ROOT}/scripts/parse-brief.py" --brief "{brief_path}" --emit metadata
+```
+
+That returns `{version, frontmatter, generation_metadata, cta_summary, unowned_sections, warnings}` — a source to map from, not a ready-made block. Assemble `metadata` and merge it into the written JSON as a top-level key:
+
+- `customer`, `provider`, `language`, `arc_type`, `governing_thought` — from `frontmatter`
+- `generated` — from `frontmatter.generated`, else today's date
+- `title` — slide 1's `fields.Title`, else slide 1's `headline` (the frontmatter carries no title)
+- `subtitle` — slide 1's `fields.Subtitle`
+
+Read `{brief_dir}/cogni-visual/slide-data.json` back, add the assembled `metadata` object as a
+top-level key alongside `slides`, and write the file out again. Leaving the parser's own
+`version` and `warnings` keys in place is harmless — the renderer reads only `metadata` and
+`slides`. Surface any `warnings` to the user.
+
+**Fall back to the LLM parse only when the parser fails to parse** — that is, when an envelope comes back with `success: false` for a parse reason, or the script cannot be run at all. A successful parse is authoritative and is never second-guessed or "corrected" by re-reading the brief.
+
+**A `cannot write output:` envelope is not a parse failure and must not trigger the fallback.** Fix the write — the parent directory is missing or unwritable — and re-run. Falling back on it would hide the broken write behind a silently LLM-parsed deck, which is exactly the outcome the deterministic path exists to retire.
+
+#### LLM fallback parse
+
+Used only on the failure condition above. Parse the brief body directly.
+
 For each slide section, extract:
 - `number` — slide number
 - `headline` — the assertion headline from the H2 heading
@@ -69,38 +109,14 @@ For each slide section, extract:
 - `diagram_mermaid` — the Diagram field content if it contains Mermaid syntax
 - `citations` — extracted `<sup>[N](url)</sup>` patterns
 
-Write the parsed data to `{brief_dir}/cogni-visual/slide-data.json`:
+Also assemble the top-level `metadata` block by the same mapping the deterministic path uses
+above — the renderer reads it on both paths, and omitting it carries the same silent
+"Presentation"/today's-date default.
 
-```json
-{
-  "metadata": {
-    "title": "...",
-    "subtitle": "...",
-    "customer": "...",
-    "provider": "...",
-    "language": "de",
-    "arc_type": "why-change",
-    "generated": "2026-02-09",
-    "governing_thought": "..."
-  },
-  "slides": [
-    {
-      "number": 1,
-      "headline": "Assertion headline",
-      "layout": "title-slide",
-      "fields": {
-        "Title": "...",
-        "Subtitle": "...",
-        "Metadata": "..."
-      },
-      "speaker_notes": null,
-      "bottom_banner": null,
-      "diagram_mermaid": null,
-      "citations": []
-    }
-  ]
-}
-```
+Run `mkdir -p "{brief_dir}/cogni-visual"` here too — this branch writes into the same directory
+and must not depend on the deterministic block above having run. Then write the parsed data to
+`{brief_dir}/cogni-visual/slide-data.json`, in the shape both paths share — see the
+`slide-data.json shape` section of `references/01-layout-renderers.md`.
 
 **Parsing rules:**
 - Each slide is separated by `---` (horizontal rule) in the brief
@@ -108,8 +124,8 @@ Write the parsed data to `{brief_dir}/cogni-visual/slide-data.json`:
 - Nested structures (Hero-Stat-Box, Context-Box, Detail-Grid) must be preserved as nested objects
 - Speaker-Notes is a multi-line YAML string (after `|`) — preserve the full text
 - Mermaid diagrams appear in the `Diagram:` field as multi-line strings
-- IS/DOES/MEANS labels come from the `Label:` field inside each box — but the Python script handles localization, so just pass the text content
-- Bottom-Banner can be a dict with `Text:` key or a plain string. Write it to the top-level `bottom_banner` field — the renderer emits it as a shared footer on **every** layout. The legacy nested form (`Bottom-Banner` inside `fields`) is also accepted.
+- IS/DOES/MEANS labels come from each box's `Label:` field — pass it through. The renderer prefers that `Label:` for the badge and falls back to its own `--language` localization only when it is absent
+- Bottom-Banner can be a dict with a `Text:` key or a plain string. Write it to the **top-level** `bottom_banner` field, not inside `fields` (the legacy nested form is also accepted) — footer contract in `references/01-layout-renderers.md`.
 
 ### Phase 2: Theme → Design Variables
 
@@ -194,7 +210,7 @@ If error, read the error message and attempt to fix the input data. Common issue
 
 Tier-1 tokens are wired today. Pass `theme_slug: cogni-work` to import that theme's canonical CSS custom properties. Tier-3 deck-component primitives (`title-slide.html`, `content-slide.html`, etc.) are the next increment — the loader infrastructure is in place at `cogni-workspace/scripts/load-theme-component.py` (see `cogni-workspace/references/theme-component-loader.md`), but `cogni-work` does not yet ship a `tiers.components.deck` family, so component-substitution is gated on a follow-up issue. Today's behavior: every layout renderer uses its inline template; tomorrow's behavior (after deck primitives ship): the renderer prefers theme-supplied primitives and falls back to inline on miss.
 
-**Backwards-compat contract.** Omitting `--theme-slug` preserves the legacy (pre-Theme-System-v2) rendering path byte-for-byte — `theme.md`-derived design variables still apply; only the tier-1 `tokens.css` import is skipped. With `--theme-slug` set, themes without `tiers.tokens` (and tier-0 themes generally) exercise the same fallback path — there is no failure case for unmigrated themes. `evals/run.py` enforces this with three regression cases: tier-0 baseline, tier-1 cogni-work tokens.css imported, tier-0 `_template` with `--theme-slug` set (graceful fallback).
+**Backwards-compat contract.** Omitting `--theme-slug` preserves the legacy (pre-Theme-System-v2) rendering path byte-for-byte — `theme.md`-derived design variables still apply; only the tier-1 `tokens.css` import is skipped. With `--theme-slug` set, themes without `tiers.tokens` (and tier-0 themes generally) exercise the same fallback path — there is no failure case for unmigrated themes. `evals/run.py` enforces this with dedicated regression cases — among them a tier-0 baseline, tier-1 cogni-work tokens.css imported, and tier-0 `_template` with `--theme-slug` set (graceful fallback).
 
 **Fallback diagnostics.** When `--theme-slug` is set, the output envelope's `theme_slug_resolution` field names *why* the tier-1 path was (or wasn't) taken. It is always a **bare reason code** — exact-matchable: `imported` on success, or a fallback code — `manifest_missing` (tier-0 theme), `manifest_unreadable`, `tokens_tier_absent`, `tokens_css_missing`, or `themes_dir_unresolved` (workspace not found — e.g. `$COGNI_WORKSPACE_ROOT` unset or unexported). The field is `null` when `--theme-slug` is omitted. A companion `theme_slug_resolution_detail` field carries an optional human-readable hint for the cases that warrant one (today, `themes_dir_unresolved`); it is `null` otherwise. Machines branch on `theme_slug_resolution`; humans read `theme_slug_resolution_detail`. This distinguishes "this theme is tier-0" from "I couldn't find the workspace" without re-walking the resolution. Add `--verbose` to additionally write a one-line `themes_dir=… manifest_path=… tokens_css=… resolution=…` diagnostic (using the bare reason code) to stderr (off by default; the stdout JSON contract is unchanged).
 
@@ -285,6 +301,13 @@ Apply re-render changes FIRST (they produce a fresh HTML file), then apply HTML-
 4. If counter < `max_refinements`: return to Step 6.1
 5. If counter >= `max_refinements`: inform the user the refinement cap is reached
 
+## Additional Resources
+
+- **`references/01-layout-renderers.md`** — per-layout field contracts (including the accepted
+  aliases for each slot), the Bottom-Banner footer contract, and the shared `slide-data.json` shape
+- **`references/02-slide-navigation.md`** — navigation, transitions and keyboard behaviour
+- **`references/03-speaker-notes.md`** — speaker-notes parsing and the notes-panel format
+
 ## Features
 
 **Navigation:** Arrow keys, Space, Page Up/Down, Home/End. Click right = next, left = prev. Touch swipe on mobile.
@@ -303,4 +326,4 @@ Apply re-render changes FIRST (they produce a fresh HTML file), then apply HTML-
 
 **Self-contained:** Single HTML file. All CSS inline. All JS inline. Only external dependency is Mermaid.js CDN (conditional, only included when diagrams are present).
 
-**Refinement Loop:** After viewing slides, give feedback on specific slides in natural language. Text and style fixes are applied directly to the HTML (instant). Structural changes (layout swaps, slide additions) trigger a targeted re-render via the Python script. Max 3 rounds by default.
+**Refinement Loop:** Natural-language feedback per slide after viewing — text and style fixes edit the HTML directly, structural changes trigger a targeted re-render. Channels and round cap: Phase 6.

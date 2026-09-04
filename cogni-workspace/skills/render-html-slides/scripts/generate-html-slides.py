@@ -10,7 +10,9 @@ Usage:
         --aspect-ratio <16:9|4:3> \
         --language <en|de>
 
-Input:  slide-data.json (parsed from presentation-brief.md by LLM)
+Input:  slide-data.json, produced from presentation-brief.md by
+        `parse-brief.py --emit slide-data`; the LLM free-parse is the
+        documented fallback, used only when that parser fails.
 Output: Self-contained HTML file with themed slides, navigation, speaker notes panel.
 Returns JSON: {"status": "ok", "path": "<output-path>", "slides": N} or {"error": "..."}
 """
@@ -183,6 +185,37 @@ def convert_inline(text):
     return text
 
 
+# Keys the producer writes that are metadata about a slide rather than content
+# to print. The generic fallback renderer skips them; without this they leak
+# into the deck as visible labelled paragraphs. The lowercase/capitalized split
+# is deliberate and matches what the parser emits.
+NON_CONTENT_FIELDS = (
+    "Speaker-Notes",
+    "Bottom-Banner",
+    "intent",
+    "visual",
+    "cta",
+    "Slide-Kind",
+    "Source",
+    "Slide-Title",
+)
+
+
+def _first_present(mapping, names, default=None):
+    """Return ``mapping[name]`` for the first name that is PRESENT.
+
+    Presence, not truthiness, is the test: an authored-but-empty old name must
+    keep rendering empty rather than falling through to a newer alias. Callers
+    list names old-first, so an existing brief never changes what it renders.
+    """
+    if not isinstance(mapping, dict):
+        return default
+    for name in names:
+        if name in mapping:
+            return mapping[name]
+    return default
+
+
 def render_bullets(bullets, css_class=""):
     """Render a list of bullet strings to an HTML <ul>."""
     if not bullets:
@@ -192,19 +225,65 @@ def render_bullets(bullets, css_class=""):
     return f"      <ul{cls}>\n{items}\n      </ul>"
 
 
-def render_bottom_banner(slide):
-    """Render a bottom banner if present.
+def _annotation_text(slide, top_key, field_key):
+    """Text of a slide-level annotation, or "" when it has none.
 
-    Accepts the canonical top-level ``bottom_banner`` and the legacy
-    ``fields["Bottom-Banner"]`` so the banner renders on every layout.
+    Both annotations accept the canonical top-level key and the legacy nested
+    ``fields[...]`` form, and either a plain string or a dict with ``Text``.
+    Stating that shape once keeps the two renderers from drifting apart.
     """
-    banner = slide.get("bottom_banner") or slide.get("fields", {}).get("Bottom-Banner")
-    if not banner:
+    value = slide.get(top_key) or slide.get("fields", {}).get(field_key)
+    if not value:
         return ""
-    text = banner.get("Text", "") if isinstance(banner, dict) else str(banner)
+    return value.get("Text", "") if isinstance(value, dict) else str(value)
+
+
+def render_bottom_banner(slide):
+    """Render a bottom banner if present, on every layout."""
+    text = _annotation_text(slide, "bottom_banner", "Bottom-Banner")
     if not text:
         return ""
     return f'      <div class="bottom-banner">{convert_inline(text)}</div>'
+
+
+def render_source_footer(slide):
+    """Render a per-slide source attribution if present.
+
+    Layout-agnostic, like ``render_bottom_banner`` — the producer writes
+    ``Source`` on whichever slides cite one, independently of their layout.
+    The value is a markdown link, so it goes through ``convert_inline`` (which
+    builds the anchor) rather than ``escape_html`` (which would show the raw
+    brackets). A slide that also carries a bottom banner gets a raised variant
+    so the two never overlap.
+    """
+    text = _annotation_text(slide, "source", "Source")
+    if not text:
+        return ""
+    # Ask whether a banner exists, rather than rendering one to find out.
+    raised = " source-footer-raised" if _annotation_text(slide, "bottom_banner", "Bottom-Banner") else ""
+    return f'      <div class="source-footer{raised}">{convert_inline(text)}</div>'
+
+
+def effective_layout(slide):
+    """The layout a slide actually renders as.
+
+    ``parse-brief.py`` owns the parsed ``layout`` field and deliberately never
+    lets ``Slide-Kind`` overwrite it. This is a render-time routing decision
+    layered on top of that field, not a change to it — the parsed value is left
+    alone, and ``data-layout`` reports whatever actually rendered.
+
+    ``Slide-Kind: references`` reroutes to the references renderer, but ONLY
+    when a reference payload is actually there. A slide that declares the kind
+    while carrying its content in some other shape (columns, say) must keep its
+    own ``Layout:`` renderer — rerouting it would resolve the reference list to
+    empty and silently drop everything the author wrote, which is the very
+    failure this alignment exists to close.
+    """
+    fields = slide.get("fields", {}) or {}
+    kind = slide.get("slide_kind") or fields.get("Slide-Kind")
+    if kind == "references" and _first_present(fields, ("References", "Citations"), None):
+        return "references"
+    return slide.get("layout", "generic")
 
 
 # ---------------------------------------------------------------------------
@@ -338,8 +417,9 @@ def render_four_quadrants(slide, dv):
     f = slide["fields"]
     quads = []
     for i in range(1, 5):
-        key = f"Quadrant-{i}"
-        q = f.get(key, {})
+        # The producer writes ``Q1``..``Q4``; ``Quadrant-1``..``Quadrant-4`` is
+        # the canonical name and keeps precedence when both are present.
+        q = _first_present(f, (f"Quadrant-{i}", f"Q{i}"), {})
         if not q:
             continue
         number = escape_html(q.get("Number", ""))
@@ -400,6 +480,9 @@ def render_is_does_means(slide, dv, language="en"):
     for key, badge in [("IS-Box", is_l), ("DOES-Box", does_l), ("MEANS-Box", means_l)]:
         box = f.get(key, {})
         text = convert_inline(box.get("Text", "")) if isinstance(box, dict) else convert_inline(str(box))
+        # The badge the author wrote wins; --language supplies the fallback.
+        if isinstance(box, dict) and box.get("Label"):
+            badge = escape_html(str(box["Label"]))
         bands.append(f"""
           <div class="idm-band">
             <span class="idm-badge">{badge}</span>
@@ -421,12 +504,17 @@ def render_three_options(slide, dv):
         opt = f.get(key, {})
         if not opt:
             continue
-        title = escape_html(opt.get("Title", opt.get("Label", f"Option {i}")))
-        subtitle = escape_html(opt.get("Subtitle", ""))
-        bullets = opt.get("Bullets", [])
-        is_recommended = opt.get("Recommended", False)
+        # Old names keep precedence; the producer's Name/Price/Badge/Features
+        # are accepted after them so no existing brief changes what it renders.
+        title = escape_html(_first_present(opt, ("Title", "Label", "Name"), f"Option {i}"))
+        subtitle = escape_html(_first_present(opt, ("Subtitle", "Price"), ""))
+        bullets = _first_present(opt, ("Bullets", "Features"), [])
+        badge_text = opt.get("Badge", "")
+        # A non-empty Badge string means recommended, as does a truthy Recommended.
+        is_recommended = bool(opt.get("Recommended", False)) or bool(badge_text)
         rec_class = " option-recommended" if is_recommended else ""
-        rec_badge = '<span class="rec-badge">&#9733;</span>' if is_recommended else ""
+        badge_inner = escape_html(str(badge_text)) if badge_text else "&#9733;"
+        rec_badge = f'<span class="rec-badge">{badge_inner}</span>' if is_recommended else ""
 
         options.append(f"""
           <div class="option-card{rec_class}">
@@ -459,21 +547,35 @@ def render_timeline_steps(slide, dv):
     nodes = []
     for i, step in enumerate(steps):
         if isinstance(step, dict):
-            title = escape_html(step.get("Title", step.get("Label", f"Step {i+1}")))
-            detail = escape_html(step.get("Detail", step.get("Date", "")))
-            bullets = step.get("Bullets", [])
+            title = escape_html(_first_present(step, ("Title", "Label"), f"Step {i+1}"))
+            # Detail/Date keep precedence; the producer's Duration is accepted
+            # after them.
+            detail = escape_html(_first_present(step, ("Detail", "Date", "Duration"), ""))
+            # Bullets keeps precedence; a scalar Description fills the same slot
+            # only when no Bullets list was authored.
+            if "Bullets" in step:
+                bullets = step["Bullets"]
+            elif step.get("Description"):
+                bullets = [str(step["Description"])]
+            else:
+                bullets = []
+            number = step.get("Number", "")
         else:
             title = escape_html(str(step))
             detail = ""
             bullets = []
+            number = ""
 
         bullets_html = render_bullets(bullets, "step-bullets") if bullets else ""
+        number_html = (
+            f'<span class="timeline-number">{escape_html(str(number))}</span>' if number else ""
+        )
 
         nodes.append(f"""
           <div class="timeline-node">
             <div class="timeline-dot"></div>
             <div class="timeline-label">
-              <strong>{title}</strong>
+              {number_html}<strong>{title}</strong>
               <span class="timeline-detail">{detail}</span>
               {bullets_html}
             </div>
@@ -546,9 +648,11 @@ def render_process_flow(slide, dv):
 def render_closing_slide(slide, dv):
     """Layout: closing-slide — Full dark background with CTA headline."""
     f = slide["fields"]
-    headline = escape_html(f.get("Headline", f.get("Title", "")))
-    takeaway = convert_inline(f.get("Key-Takeaway", f.get("Takeaway", "")))
-    cta = convert_inline(f.get("CTA", ""))
+    headline = escape_html(_first_present(f, ("Headline", "Title"), ""))
+    # Old names keep precedence; the producer's Subtitle and Metadata fill the
+    # same two slots, so no new CSS class is needed.
+    takeaway = convert_inline(_first_present(f, ("Key-Takeaway", "Takeaway", "Subtitle"), ""))
+    cta = convert_inline(_first_present(f, ("CTA", "Metadata"), ""))
 
     cta_html = f'<p class="closing-cta">{cta}</p>' if cta else ""
 
@@ -566,7 +670,7 @@ def render_closing_slide(slide, dv):
 def render_references_slide(slide, dv):
     """Layout: references — Numbered citation list with clickable links."""
     f = slide["fields"]
-    refs = f.get("References", f.get("Citations", []))
+    refs = _first_present(f, ("References", "Citations"), [])
 
     if isinstance(refs, list):
         items = []
@@ -594,7 +698,7 @@ def render_generic_slide(slide, dv):
     f = slide["fields"]
     content_parts = []
     for key, val in f.items():
-        if key in ("Speaker-Notes", "Bottom-Banner"):
+        if key in NON_CONTENT_FIELDS:
             continue
         if isinstance(val, dict):
             content_parts.append(f"<h3>{escape_html(key)}</h3>")
@@ -633,9 +737,10 @@ LAYOUT_RENDERERS = {
 }
 
 
-def render_slide(slide, dv, language="en"):
+def render_slide(slide, dv, language="en", layout=None):
     """Dispatch to the appropriate layout renderer."""
-    layout = slide.get("layout", "generic")
+    if layout is None:
+        layout = effective_layout(slide)
     renderer = LAYOUT_RENDERERS.get(layout, render_generic_slide)
 
     # Special case: is-does-means needs language
@@ -777,6 +882,26 @@ def generate_css(dv, transition="fade", aspect_ratio="16:9"):
     font-weight: 600;
     text-align: center;
     letter-spacing: 0.03em;
+  }}
+
+  /* ---- Source Footer ---- */
+  .source-footer {{
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 0.8vh 5vw;
+    color: var(--text-muted);
+    font-size: clamp(0.65rem, 0.85vw, 0.8rem);
+    text-align: right;
+    font-style: italic;
+  }}
+
+  /* Clear the bottom banner, which is itself pinned to bottom: 0. */
+  .source-footer-raised {{
+    bottom: 4.2vh;
+  }}
+
+  .source-footer a {{
+    color: inherit;
+    text-decoration: underline;
   }}
 
   /* ======== LAYOUT: Title Slide ======== */
@@ -1104,6 +1229,12 @@ def generate_css(dv, transition="fade", aspect_ratio="16:9"):
   .timeline-label {{
     text-align: center;
     padding: 0 0.5vw;
+  }}
+  .timeline-number {{
+    display: block;
+    color: var(--accent);
+    font-weight: 700;
+    font-size: clamp(0.8rem, 1vw, 1rem);
   }}
   .timeline-label strong {{
     display: block;
@@ -1719,12 +1850,21 @@ def assemble_html(slide_data, dv, transition="fade", aspect_ratio="16:9", langua
 
     for slide in slides:
         num = slide.get("number", 0)
-        headline = escape_html(slide.get("headline", ""))
-        layout = slide.get("layout", "generic")
+        # The authored short Slide-Title wins over the long assertion headline.
+        headline = escape_html(
+            slide.get("fields", {}).get("Slide-Title") or slide.get("headline", "")
+        )
+        # One resolution for dispatch, the title guard and data-layout, so the
+        # three can never disagree about what this slide actually rendered as.
+        layout = effective_layout(slide)
         notes = slide.get("speaker_notes", "")
 
         # Render slide content
-        content_html = render_slide(slide, dv, language)
+        content_html = render_slide(slide, dv, language, layout=layout)
+        source_html = render_source_footer(slide)
+        # Contribute nothing at all when there is no source, so a source-less
+        # slide's markup stays byte-identical to what it was before.
+        source_block = f"\n{source_html}" if source_html else ""
         banner_html = render_bottom_banner(slide)
 
         # Slide title (not shown on title-slide or closing-slide)
@@ -1736,7 +1876,7 @@ def assemble_html(slide_data, dv, transition="fade", aspect_ratio="16:9", langua
   <section class="slide" data-slide="{num}" data-layout="{layout}">
     <div class="slide-content">
 {title_html}
-{content_html}
+{content_html}{source_block}
 {banner_html}
     </div>
   </section>""")

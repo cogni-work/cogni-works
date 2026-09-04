@@ -39,9 +39,11 @@ You will receive:
 - `research_question` (optional) -- original research question for narrative framing
 - `content_map` (optional) -- YAML map of content category keys to file/directory paths for additional entity context
 
+`interactive` is not among them. This agent always invokes the skill with `--interactive false`, so a caller cannot re-enable a prompt this agent's own rules forbid; a supplied value is ignored rather than relayed.
+
 ## Execution
 
-1. Invoke the `cogni-workspace:narrative` skill using the Skill tool, passing all received parameters as skill arguments
+1. Invoke the `cogni-workspace:narrative` skill using the Skill tool, passing the received parameters as skill arguments, always with `--interactive false` so the skill skips its AskUserQuestion calls (today, the Phase 2 arc confirmation)
 2. The skill handles ALL narrative logic: content loading, arc selection, pattern loading, transformation, validation, and output writing
 3. Follow the skill's complete 6-phase workflow -- do NOT skip phases or override skill decisions
 4. Do NOT ask user questions during execution -- use auto-detection for arc selection if `arc_id` is not provided

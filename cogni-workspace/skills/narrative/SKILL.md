@@ -33,6 +33,7 @@ Transform input markdown files into a structured executive narrative using one o
 | `--target-length` | No | Target total word count as a single number (e.g., `2500`). System applies +/-15% band to derive the acceptable range. Default: `1675` (yields ~1,424-1,926 words). Recommended: 800-4,000 — outside this range, arc rhetorical structure may not scale well |
 | `--format` | No | Derivative mode. One of `executive-brief`, `talking-points`, `one-pager`. When set, `--source-path` is a single finished narrative `.md` file, the generation pipeline (Phases 0.5-6) is skipped, and the Derivative Formats section below runs instead. Output defaults to `{source-dir}/{format}.md` |
 | `--content-map` | No | YAML map of content category keys to file/directory paths for additional context |
+| `--interactive` | No | Whether the skill may pause for user input. `true` or `false`. Default: `true`. When `false`, skip all AskUserQuestion calls — today that is the Phase 2 arc confirmation, which keeps its ladder selection and its `detection_reason` and continues straight into Phase 3 with no prompt. Same semantics as the `interactive` parameter in `story-to-slides`, `story-to-web` and `story-to-infographic`, spelled `--interactive` here to match this skill's flag-style argument surface |
 
 **Content map keys:** `executive_summary`, `dimension_syntheses`, `trends_summary`, `trend_entities`, `megatrends_summary`, `megatrend_entities`, `domain_concepts`, `research_hub`, `initial_question`
 
@@ -186,6 +187,8 @@ The arc registry contains the detection algorithm, keyword sets, and content-typ
 5. Fallback: `corporate-visions`. `detection_reason = "default fallback"`.
 
 Present selected arc to user for confirmation using AskUserQuestion. Show the detected arc with detection reason and offer alternatives. For priority-2 picks, label the prompt "Inherited from source research/knowledge project — preserves the long-form report's arc". Accept user confirmation or override.
+
+When `--interactive` is `false`, this confirmation does not run -- keep the arc selected above, record its `detection_reason` unchanged, and continue to Phase 3.
 
 Store: `arc_id`, `arc_display_name`, `detection_reason`
 

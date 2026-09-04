@@ -12,7 +12,7 @@ Structural correctness. Every field must exist and conform to its type.
 
 | Check | Pass | Fail |
 |-------|------|------|
-| Brief frontmatter present | `type: infographic-brief`, `version: "1.0"` | Missing or wrong type/version |
+| Brief frontmatter present | `type: infographic-brief`, `version: "1.1"` | Missing frontmatter, wrong type, or any version other than `"1.1"` |
 | Required frontmatter fields | All present: theme, theme_path, language, layout_type, style_preset, orientation, dimensions, governing_thought | Any missing |
 | Block types valid | Every `Block-Type` is one of: title, kpi-card, stat-row, chart, process-strip, text-block, comparison-pair, icon-grid, svg-diagram, cta, footer | Unknown block type |
 | Required block fields | Each block has all required fields per infographic-layouts.md | Missing required field |

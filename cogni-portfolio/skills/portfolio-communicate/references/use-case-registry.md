@@ -93,7 +93,7 @@ Each scope produces a main component of a portfolio-driven website, driven by a 
 
 **Key differentiator**: Pitch output includes `arc_id` in frontmatter — this makes it directly consumable by story-to-slides and story-to-web (including its `mode=storyboard` print storyboards) without an intermediate `/narrative` step. Default arc: `jtbd-portfolio`.
 
-**Downstream pipeline:** `/narrative-review` → `/copywrite` → `story-to-slides`, `story-to-web` (`mode=storyboard` for print storyboards)
+**Downstream pipeline:** `/review-doc` → `/copywrite` → `story-to-slides`, `story-to-web` (`mode=storyboard` for print storyboards)
 
 ---
 

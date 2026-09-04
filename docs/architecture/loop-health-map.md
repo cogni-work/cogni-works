@@ -84,7 +84,7 @@ hands-off.
 | — | trend-research enrichment stage | `cogni-trends/skills/trend-research/SKILL.md` | — | — *(not a loop — excluded)* | single-pass fan-out with retry-once + deterministic JSON gate; manifest hashes hand drift detection downstream |
 | — | trend-synthesis composer pipeline | `cogni-trends/skills/trend-synthesis/SKILL.md` | — | — *(not a loop — excluded)* | single-pass ordered assembly with resume gates; verification lives in verify-trend-report (Loop 4) |
 | — | narrative transform | `cogni-workspace/skills/narrative/SKILL.md` | — | — *(not a loop — excluded)* | single-pass transform; Phase-5 gates are inline deterministic checks (header count, citation count, word bands) |
-| — | narrative-review scorer | `cogni-workspace/skills/narrative-review/SKILL.md` | — | — *(not a loop — excluded)* | single-pass read-only scorer; the fresh-context Verification resource other loops cite |
+| — | narrative-review scorer (retired) | `cogni-workspace/skills/narrative-review/SKILL.md` | — | — *(not a loop — excluded)* | single-pass read-only scorer; the fresh-context Verification resource other loops cite |
 | — | campaign-builder | `cogni-marketing/skills/campaign-builder/SKILL.md` | — | — *(not a loop — excluded)* | single-pass campaign assembly with gap inventory |
 | — | marketing-setup | `cogni-marketing/skills/marketing-setup/SKILL.md` | — | — *(not a loop — excluded)* | single-pass interactive project scaffold with hard/soft validation gates |
 | — | website-plan | `cogni-website/skills/website-plan/SKILL.md` | — | — *(not a loop — excluded)* | single-pass interactive planning; step-4 iterate-until-confirm is a human conversation, not a machine loop |

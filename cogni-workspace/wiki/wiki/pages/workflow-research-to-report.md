@@ -36,7 +36,7 @@ A slide deck (or web narrative) whose every substantive claim traces back to a s
 
 **1 — Research.** `cogni-knowledge:knowledge-run`, or describe the topic and let the plan phase decompose it. Input is a research question or topic brief; output is a cited synthesis, verified zero-network against each source's extracted claims and deposited into the bound wiki. The plan decomposes the topic into 3–7 sub-questions, and deeper runs ingest more sources. Citations are verified during `knowledge-verify`; for a live-source re-check run `knowledge-refresh` with a resweep, which dispatches [[plugin-cogni-workspace]]. Every run deposits its synthesis back into the wiki, so the next run reads it as prior framing.
 
-**2 — Narrative.** `/narrative` (or `cogni-workspace:narrative`). Takes the synthesis in, hands back an executive narrative shaped by a story arc. Choose the arc for the audience: SCQA for problem-solution, Minto Pyramid for recommendation-first, Hero's Journey for transformation. Review before proceeding — this is where the story takes shape. `/narrative-review` scores it.
+**2 — Narrative.** `/narrative` (or `cogni-workspace:narrative`). Takes the synthesis in, hands back an executive narrative shaped by a story arc. Choose the arc for the audience: SCQA for problem-solution, Minto Pyramid for recommendation-first, Hero's Journey for transformation. Review before proceeding — this is where the story takes shape.
 
 **3 — Visual.** `cogni-workspace:story-to-slides` produces the presentation brief; `/render-html-slides` renders it. The theme comes from workspace settings — see [[concept-theme-inheritance]]. State a slide count up front if you are time-constrained. For web delivery use `cogni-workspace:story-to-web` instead.
 

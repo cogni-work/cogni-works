@@ -51,7 +51,7 @@ Apply these rules wherever a product or feature is rendered:
 
 ## YAML Frontmatter (all scopes)
 
-Every generated file includes frontmatter that `story-to-web`, `/narrative-review`, `/copywrite` and friends all understand:
+Every generated file includes frontmatter that `story-to-web`, `/copywrite` and friends all understand:
 
 ```yaml
 ---

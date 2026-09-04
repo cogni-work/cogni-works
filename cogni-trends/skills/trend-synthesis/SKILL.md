@@ -90,7 +90,7 @@ Read references **only when needed** for the specific phase:
 | [references/report-length-tiers.md](references/report-length-tiers.md) | Phase 1 — length tier definitions and budget formula |
 | [references/capability-imperative.md](references/capability-imperative.md) | Phase 2.5 — "The Capability Imperative" synthesis pattern |
 | [references/claims-registry-format.md](references/claims-registry-format.md) | Phase 2.4 — claims registry table format |
-| [references/story-arc-loop.md](references/story-arc-loop.md) | Authoring-time only — methodology audit of how the storytelling guidance in this SKILL.md was derived (closed-loop reviews with `cogni-workspace:narrative-reviewer`). Read when extending storytelling guidance. |
+| [references/story-arc-loop.md](references/story-arc-loop.md) | Authoring-time only — methodology audit of how the storytelling guidance in this SKILL.md was derived (closed-loop review against the per-arc gates). Read when extending storytelling guidance. |
 | [references/i18n/labels-en.md](references/i18n/labels-en.md) | English headings and labels |
 | [references/i18n/labels-de.md](references/i18n/labels-de.md) | German headings and labels |
 
@@ -112,8 +112,8 @@ The 4 dimensions are not 4 parallel essays. They trace a single CxO arc:
 the report opens on an inciting incident, climbs through rising tension and a
 decision threshold, and lands on a capability test the reader must answer.
 Writer and composer agents must trace this arc — `references/story-arc-loop.md`
-records how this guidance was derived through closed-loop reviews with
-`cogni-workspace:narrative-reviewer` as the storytelling expert.
+records how this guidance was derived by closed-loop review against the
+`narrative` skill's per-arc `story-arc/{arc_id}/arc-definition.md` gates.
 
 | Dimension | Story role | Reader question this section answers |
 |-----------|------------|---------------------------------------|

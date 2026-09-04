@@ -6,9 +6,8 @@ description: >
   story-to-infographic dispatching a stakeholder review right after drafting their brief; a user
   asking to "review brief", "review my presentation brief" or "is this brief ready" via the
   review-brief command; and re-scoring a revised brief in a second round. The brief_type input —
-  slides, web, storyboard or infographic — selects which three perspectives apply. Not for scoring
-  a narrative against story-arc gates; that is narrative-reviewer. See "When to Use" in the agent
-  body for the full scenario list.
+  slides, web, storyboard or infographic — selects which three perspectives apply. See "When to Use"
+  in the agent body for the full scenario list.
 model: haiku
 color: yellow
 tools: ["Read", "Glob"]
@@ -39,8 +38,6 @@ verdict with prioritized revision guidance.
 - story-to-infographic has drafted an `infographic-brief.md`
 - User asks to "review brief", "review my presentation brief" or "is this brief ready" via the review-brief command
 - A revised brief needs re-scoring in a second review round
-
-**Not for:** Scoring a narrative against story-arc gates (use narrative-reviewer)
 
 ## Input
 

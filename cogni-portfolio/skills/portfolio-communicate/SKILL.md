@@ -359,7 +359,7 @@ List generated files with paths AND their review status.
 **If all files accepted**, show per-file review scores, then suggest the downstream pipeline appropriate for the use case:
 
 For **customer-narrative**:
-- **Score quality**: "Run `/narrative-review` on any generated file to score against its arc's quality gates (each file already carries `arc_id` in frontmatter)"
+- **Second-opinion review**: "Run `/review-doc` on any generated file for an independent read from parallel personas — a different lens from Step 4"
 - **Polish prose**: "Run `/copywrite` on any generated file to polish for executive readability while preserving arc structure"
 - **Visual formats** (direct — no intermediate `/narrative` step needed, because each file already carries `arc_id`):
   - `story-to-web` → scrollable web page (one per file, or an indexed multi-page site)
@@ -368,7 +368,7 @@ For **customer-narrative**:
 - **Marketing content** (if cogni-marketing installed): "These customer narratives are automatically discovered by `/marketing-setup` and used as voice/messaging enrichment when generating marketing content — ensuring consistency between how the website speaks to buyers and how your marketing speaks to the same audience"
 
 For **pitch**:
-- **Score quality**: "Run `/narrative-review` to score against the arc's quality gates"
+- **Second-opinion review**: "Run `/review-doc` to read the pitch back from parallel personas"
 - **Polish prose**: "Run `/copywrite` to polish for executive readability while preserving arc structure"
 - **Visual formats** (direct — no intermediate step needed):
   - `story-to-slides` → PowerPoint presentation

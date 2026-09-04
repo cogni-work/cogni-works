@@ -136,15 +136,19 @@ import sys
 # while a README or a data file sitting beside it is not.
 #
 # It also sidesteps a decode hazard on this surface, though only on this one. A
-# git pathspec * crosses /, so */scripts/* would also match the two bytecode
-# files tracked under cogni-portfolio-evals/scripts/__pycache__/, and scan_file()
-# re-raises the resulting UnicodeDecodeError as a RuntimeError that main() renders
-# as exit 2 — one tracked binary would take the whole run down on a decode error
-# instead of reporting a dispatch finding. Do NOT read that as a property this
-# enumeration establishes guard-wide: */hooks/* and */hooks/*/* are already
-# type-agnostic and already carry the identical exposure, verified by observation.
-# Closing it properly means changing scan_file()'s decode policy, which is out of
-# scope here and filed separately.
+# git pathspec * crosses /, so */scripts/* would also match any undecodable file
+# sitting beside a script, and scan_file() re-raises the resulting
+# UnicodeDecodeError as a RuntimeError that main() renders as exit 2 — one such
+# file would take the whole run down on a decode error instead of reporting a
+# dispatch finding. The canonical shape is compiled bytecode under a
+# scripts/__pycache__/ tree: two such files were tracked under
+# cogni-portfolio-evals/scripts/__pycache__/ when this enumeration was written,
+# and have since been removed from the index — which retires that instance, not
+# the hazard. Do NOT read that as a property this enumeration establishes
+# guard-wide: */hooks/* and */hooks/*/* are already type-agnostic and already
+# carry the identical exposure, verified by observation. Closing it properly
+# means changing scan_file()'s decode policy, which is out of scope here and
+# filed separately.
 #
 # The remedy lives in discovery, not in scan_file(): an explicit-file invocation
 # naming an undecodable path still exits 2, by design.

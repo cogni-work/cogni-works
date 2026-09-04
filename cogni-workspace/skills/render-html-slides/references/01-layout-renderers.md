@@ -65,6 +65,9 @@ Quadrant-3: ...
 Quadrant-4: ...
 ```
 
+Accepted alias: the producer may write `Q1:`..`Q4:` instead of `Quadrant-1:`..`Quadrant-4:`.
+The canonical `Quadrant-N` name keeps precedence when both are present.
+
 Rendered as: CSS Grid 2x2. Each card with accent left-border.
 
 ### two-columns-equal
@@ -101,8 +104,9 @@ MEANS-Box:
   Text: "What it means"
 ```
 
-Rendered as: 3 horizontal bands with localized badges. The Python script uses the
-`--language` parameter for badge labels, not the Label field.
+Rendered as: 3 horizontal bands with badges. Each box's `Label:` supplies its badge
+when present; the `--language` parameter supplies the fallback (IS/DOES/MEANS,
+IST/MACHT/BEDEUTET) only for a box that authored no `Label:`.
 
 ### three-options
 
@@ -121,6 +125,11 @@ Option-2:
 Option-3: ...
 ```
 
+Accepted aliases: the producer writes `Name` / `Price` / `Features`, which map to
+`Title` / `Subtitle` / `Bullets`; the old names keep precedence when both are present.
+A non-empty `Badge:` string also means recommended, and is rendered as the badge text
+in place of the default star.
+
 Rendered as: 3-column pricing cards. Recommended option has accent border and scale bump.
 
 ### timeline-steps
@@ -135,7 +144,11 @@ Steps:
     Detail: "Q2 2026"
 ```
 
-Alternative format: `Step-1:`, `Step-2:`, etc. as separate fields.
+Alternative format: `Step-1:`, `Step-2:`, etc. as separate fields, each a map of
+`Number` / `Label` / `Description` / `Duration`. `Title` and `Label` share the title
+slot; `Detail`, `Date` and `Duration` share the detail slot; `Bullets` keeps precedence
+over a scalar `Description`, which fills the same slot only when no `Bullets` is given.
+In every pair the older name wins when both are present.
 
 Rendered as: Horizontal timeline with connected accent dots and labels below.
 
@@ -171,10 +184,13 @@ Same structure as process-flow (Diagram field only). Uses Mermaid `gantt`.
 ### closing-slide
 
 ```yaml
-Headline: "Call to action headline"
-Key-Takeaway: "One-sentence takeaway"
-CTA: "Action text"          # optional
+Title: "Call to action headline"
+Subtitle: "One-sentence takeaway"
+Metadata: "Contact or closing detail"    # optional
 ```
+
+Accepted aliases: `Headline`, `Key-Takeaway` (or `Takeaway`) and `CTA` are the older
+names for those three slots and keep precedence when both are present.
 
 Rendered as: Full-viewport dark background matching title-slide. Accent underline.
 
@@ -190,4 +206,47 @@ References:
 
 Alternative: plain text list or numbered items.
 
+A slide may also reach this renderer through `Slide-Kind: references` — but only when it
+actually carries a `References` or `Citations` payload. A slide that declares that kind
+while holding its content in some other shape (two columns, say) keeps its own `Layout:`
+renderer, so nothing it authored is dropped.
+
 Rendered as: Numbered citation list with clickable links, auto-counted via CSS counter.
+
+## slide-data.json shape
+
+Both Phase 1 parse paths — the deterministic `parse-brief.py` run and the LLM fallback —
+write `{brief_dir}/cogni-visual/slide-data.json` in this shape. The renderer reads only
+`metadata` and `slides`; extra top-level keys the parser emits (`version`, `warnings`)
+are harmless.
+
+```json
+{
+  "metadata": {
+    "title": "...",
+    "subtitle": "...",
+    "customer": "...",
+    "provider": "...",
+    "language": "de",
+    "arc_type": "why-change",
+    "generated": "2026-02-09",
+    "governing_thought": "..."
+  },
+  "slides": [
+    {
+      "number": 1,
+      "headline": "Assertion headline",
+      "layout": "title-slide",
+      "fields": {
+        "Title": "...",
+        "Subtitle": "...",
+        "Metadata": "..."
+      },
+      "speaker_notes": null,
+      "bottom_banner": null,
+      "diagram_mermaid": null,
+      "citations": []
+    }
+  ]
+}
+```

@@ -321,6 +321,20 @@ revert_claim() {
   return "$rc"
 }
 
+# try_mutate <file> <old> <new> — mutate() with its abort converted into a
+# return status, for a real-tree mutation whose literal does not reduce to the
+# <prefix>N<suffix> shape revert_claim takes. Same discipline and same reason as
+# that wrapper: a literal that has gone stale must fail its own case, never
+# abort the suite and take every case after it with it.
+try_mutate() {
+  local rc
+  set +e
+  mutate "$1" "$2" "$3"
+  rc=$?
+  set -e
+  return "$rc"
+}
+
 # ---------------------------------------------------------------- case 1
 CONSISTENT="$WORK/consistent"
 consistent_fixture "$CONSISTENT"
@@ -535,11 +549,26 @@ assert d['data']['rollup_present'] is True, d['data']
 # the guard under test enforces on that file, applied to its own suite. An
 # anchor that will not resolve fails its own case here and lets the cases after
 # it run, rather than aborting the suite and taking ris22-ris29 with it.
+#
+# BOTH digits in each anchor are derived, not just the reverted one. Every claim
+# site here states a skills count beside an agents count, and an anchor that
+# reverts one while restating the other as a literal stops matching the day the
+# RESTATED count moves — a plugin retirement that changes only the agent digit
+# then reddens ris21-ris25 on their own stale anchors while the guard they exist
+# to prove is behaving correctly. That is a false red on a correct change, and
+# it is the harder kind to read, because the failure names the guard rather than
+# the anchor. The sibling digit is read through readme_count exactly as the
+# reverted one is; an unresolvable sibling leaves the literal unmatchable, which
+# revert_claim reports as this case's own failure rather than a suite abort.
+WS_AGENTS=$(readme_count 's/.*management\. [0-9]+ skills and ([0-9]+) agents\..*/\1/p') || WS_AGENTS=''
+WS_TABLE_AGENTS=$(readme_count 's/.*\| Workspace Infrastructure \| [0-9]+ \| ([0-9]+) \|.*/\1/p') || WS_TABLE_AGENTS=''
+ROLLUP_AGENTS=$(readme_count 's/.*\*\*[0-9]+ skills, ([0-9]+) agents\*\*.*/\1/p') || ROLLUP_AGENTS=''
+
 REAL_PROSE=$(real_scratch real-prose-reverted)
 ANCHOR_OK=0
 revert_claim "$REAL_PROSE/README.md" \
-  's/.*management\. ([0-9]+) skills and 26 agents\..*/\1/p' \
-  'management. ' ' skills and 26 agents.' || ANCHOR_OK=1
+  's/.*management\. ([0-9]+) skills and [0-9]+ agents\..*/\1/p' \
+  'management. ' " skills and $WS_AGENTS agents." || ANCHOR_OK=1
 run_guard "$REAL_PROSE"
 check "ris21 real README with the workspace prose count reverted exits 1" "$([ "$ANCHOR_OK" -eq 0 ] && [ "$CODE" -eq 1 ] && echo 0 || echo 1)"
 assert_json "ris22 reverted prose reports prose-count-mismatch naming cogni-workspace" "$OUT" "
@@ -553,27 +582,34 @@ assert v[0]['plugin']=='cogni-workspace', v
 REAL_TABLE=$(real_scratch real-table-reverted)
 ANCHOR_OK=0
 revert_claim "$REAL_TABLE/README.md" \
-  's/.*\| Workspace Infrastructure \| ([0-9]+) \| 26 \|.*/\1/p' \
-  '| Workspace Infrastructure | ' ' | 26 |' || ANCHOR_OK=1
+  's/.*\| Workspace Infrastructure \| ([0-9]+) \| [0-9]+ \|.*/\1/p' \
+  '| Workspace Infrastructure | ' " | $WS_TABLE_AGENTS |" || ANCHOR_OK=1
 run_guard "$REAL_TABLE"
 check "ris23 real README with the workspace table cell reverted exits 1" "$([ "$ANCHOR_OK" -eq 0 ] && [ "$CODE" -eq 1 ] && echo 0 || echo 1)"
 
 REAL_ROLLUP=$(real_scratch real-rollup-reverted)
 ANCHOR_OK=0
 revert_claim "$REAL_ROLLUP/README.md" \
-  's/.*\*\*([0-9]+) skills, 88 agents\*\*.*/\1/p' \
-  '**' ' skills, 88 agents**' || ANCHOR_OK=1
+  's/.*\*\*([0-9]+) skills, [0-9]+ agents\*\*.*/\1/p' \
+  '**' " skills, $ROLLUP_AGENTS agents**" || ANCHOR_OK=1
 run_guard "$REAL_ROLLUP"
 check "ris24 real README with the roll-up total reverted exits 1" "$([ "$ANCHOR_OK" -eq 0 ] && [ "$CODE" -eq 1 ] && echo 0 || echo 1)"
 
 # ---------------------------------------------------------------- case 14
 # The singular arm against the real tree: one plugin's claim reads
 # "1 skill and N agents." Pluralising it must redden, which proves the singular
-# form was being read as a claim rather than skipped.
+# form was being read as a claim rather than skipped. N is derived for the same
+# reason case 13's siblings are — the singular skills count is what this arm is
+# about, and restating the agents count beside it would make an unrelated
+# agent-inventory change abort this suite through mutate()'s uniqueness assert.
+SINGULAR_AGENTS=$(readme_count 's/.*pitches\. 1 skill and ([0-9]+) agents\..*/\1/p') || SINGULAR_AGENTS=''
 REAL_SINGULAR=$(real_scratch real-singular)
-mutate "$REAL_SINGULAR/README.md" "pitches. 1 skill and 4 agents." "pitches. 2 skills and 4 agents."
+ANCHOR_OK=0
+try_mutate "$REAL_SINGULAR/README.md" \
+  "pitches. 1 skill and $SINGULAR_AGENTS agents." \
+  "pitches. 2 skills and $SINGULAR_AGENTS agents." || ANCHOR_OK=1
 run_guard "$REAL_SINGULAR"
-check "ris25 real README with the singular claim pluralized exits 1" "$([ "$CODE" -eq 1 ] && echo 0 || echo 1)"
+check "ris25 real README with the singular claim pluralized exits 1" "$([ "$ANCHOR_OK" -eq 0 ] && [ "$CODE" -eq 1 ] && echo 0 || echo 1)"
 
 # ---------------------------------------------------------------- case 15
 # Section scoping. A pipe table OUTSIDE the glance section whose first cell is a

@@ -27,7 +27,7 @@
 # argument-less in-repo copies (cogni-consult/scripts/, cogni-portfolio/scripts/)
 # and replays to a false green. Run from the repo root:
 #
-#   bash /Users/stephandehaas/.claude/plugins/marketplaces/managed-service/cogni-service/scripts/mutation-check.sh \
+#   bash "$HOME/.claude/plugins/marketplaces/managed-service/cogni-service/scripts/mutation-check.sh" \
 #     --root . \
 #     --file cogni-workspace/skills/narrative/SKILL.md \
 #     --expr 's/this confirmation does not run/this confirmation always runs/' \
@@ -98,8 +98,13 @@ fi
 # ---------------------------------------------------------------------------
 # P2 -- the Phase 2 non-interactive branch is documented. This is the case the
 # mutation recipe above drives red.
+#
+# The literal spans the CONDITION as well as the consequent. Binding only
+# 'this confirmation does not run' would leave the branch green after the leading
+# 'When `--interactive` is `false`, ' was deleted -- i.e. green on precisely the
+# unconditional-skip over-reach the acceptance contract exists to forbid.
 # ---------------------------------------------------------------------------
-branch_hits=$(grep -c 'this confirmation does not run' "$SKILL")
+branch_hits=$(grep -c 'When `--interactive` is `false`, this confirmation does not run' "$SKILL")
 if [ "$branch_hits" -eq 1 ]; then
   pass "P2 the Phase 2 non-interactive branch is documented exactly once"
 else

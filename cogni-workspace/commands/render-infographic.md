@@ -39,10 +39,10 @@ Follow these steps. Do not invent alternative workflows.
 Read the brief and confirm:
 
 - Frontmatter contains `type: infographic-brief`
-- Frontmatter contains `version: "1.0"`
+- Frontmatter contains `version: "1.0"`, `"1.1"`, or `"1.2"` — all three are accepted
 - Frontmatter contains `style_preset: <value>`
 
-If any of these are missing or `type`/`version` do not match, abort with a clear error.
+If any of these are missing, or `type` is not `infographic-brief`, or the version is outside the accepted set, abort with a clear error naming the version found and the three accepted values (`"1.0"`, `"1.1"`, `"1.2"`).
 
 ### Step 3: Route to the right agent
 
@@ -56,6 +56,8 @@ Match the `style_preset` value and dispatch via the `Agent` tool:
   agent. If the user picks hand-drawn without specifying, ask a second `AskUserQuestion` to
   disambiguate between sketchnote and whiteboard — the two traditions have opposite
   discipline rules and the agents refuse to render the wrong preset.
+
+**Hand-drawn version ceiling.** `render-infographic-sketchnote` and `render-infographic-whiteboard` accept only `version: "1.0"` and `"1.1"`. This ceiling binds all four routes above: the `sketchnote` bullet, the `whiteboard` bullet, and both arms of the `AskUserQuestion` fallback — the family choice and the sketchnote/whiteboard disambiguation. If the resolved preset is `sketchnote` or `whiteboard` and the brief version is `"1.2"`, do not dispatch: abort with an error naming the preset and the version found. The editorial route (`render-infographic-pencil`) stays open for all three accepted versions.
 
 Pass the absolute `BRIEF_PATH` and, if the user provided `--output`, the `OUTPUT_PATH`.
 Prompt template:

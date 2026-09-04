@@ -712,10 +712,12 @@ printf -- '#!/usr/bin/env python3\n"""Dispatches cogni-foo:s, which resolves."""
 # on it today: it is a regression fence against a future widening, not a file
 # the guard actively skips. The ed37 recipe in the header is what gives it teeth.
 printf '\377\376\000\001' > "$SXC/cogni-foo/scripts/blob.bin"
-# The head incident as filed, placement and extension included: the two tracked
-# files are cogni-portfolio-evals/scripts/__pycache__/*.cpython-314.pyc. A git
+# The head incident as filed, placement and extension included: the two files
+# that prompted this were tracked under cogni-portfolio-evals/scripts/__pycache__/
+# as *.cpython-314.pyc, and have since been removed from the index. A git
 # pathspec *.py does not match a *.pyc suffix, so the extension-scoped globs
-# never discover this either — which is the property ed37's exit 1 pins.
+# would never discover that shape either — which is the property ed37's exit 1
+# pins.
 mkdir -p "$SXC/cogni-foo/scripts/__pycache__"
 printf '\377\376\000\001' > "$SXC/cogni-foo/scripts/__pycache__/mod.cpython-314.pyc"
 git -C "$SXC" add -A >/dev/null 2>&1

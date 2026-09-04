@@ -10,7 +10,9 @@ Usage:
         --aspect-ratio <16:9|4:3> \
         --language <en|de>
 
-Input:  slide-data.json (parsed from presentation-brief.md by LLM)
+Input:  slide-data.json, produced from presentation-brief.md by
+        `parse-brief.py --emit slide-data`; the LLM free-parse is the
+        documented fallback, used only when that parser fails.
 Output: Self-contained HTML file with themed slides, navigation, speaker notes panel.
 Returns JSON: {"status": "ok", "path": "<output-path>", "slides": N} or {"error": "..."}
 """

@@ -126,7 +126,9 @@ Option-3: ...
 ```
 
 Accepted aliases: the producer writes `Name` / `Price` / `Features`, which map to
-`Title` / `Subtitle` / `Bullets`; the old names keep precedence when both are present.
+`Title` / `Subtitle` / `Bullets`; the title slot takes a third name, `Label`, between
+those two. In every group the older name wins when more than one is present, so the
+title slot resolves `Title`, then `Label`, then `Name`.
 A non-empty `Badge:` string also means recommended, and is rendered as the badge text
 in place of the default star.
 
@@ -245,8 +247,20 @@ are harmless.
       "speaker_notes": null,
       "bottom_banner": null,
       "diagram_mermaid": null,
-      "citations": []
+      "citations": [],
+      "slide_kind": null,
+      "source": null,
+      "cta": null,
+      "intent": null,
+      "visual": null
     }
   ]
 }
 ```
+
+`SLIDE_KEYS` in `parse-brief.py` is the published contract for that per-slide object:
+every slide carries every key it names, and an absent one is `null` or `[]`, never
+omitted. Of the keys past `citations`, the renderer reads `slide_kind` and `source`
+from the top level and falls back to the legacy nested `Slide-Kind` / `Source` under
+`fields`; `cta`, `intent` and `visual` are carried for other consumers and this
+renderer reads neither form.

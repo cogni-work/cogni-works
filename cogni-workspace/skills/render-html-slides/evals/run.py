@@ -300,11 +300,20 @@ def case_5_example_brief_end_to_end():
         failures.append("case 5: no closing-slide found in the parsed fixture")
     else:
         subtitle = closing["fields"].get("Subtitle", "")
-        if subtitle and subtitle not in html:
+        # Pinned: without this the check below no-ops the moment the producer
+        # stops emitting Subtitle at all, which is the regression it guards.
+        if not subtitle:
+            failures.append("case 5: closing slide carries no Subtitle — the fixture must parse one")
+        elif subtitle not in html:
             failures.append("case 5: closing subtitle {!r} absent from the render".format(subtitle))
 
     # One source footer per Source-carrying slide, each an actual link.
     with_source = [s for s in slides if s.get("source") or s.get("fields", {}).get("Source")]
+    # Pinned: a bare count comparison comes out 0 == 0 and passes when the
+    # producer emits no Source at all, so require the fixture to carry some.
+    if len(with_source) < 2:
+        failures.append("case 5: {} Source-carrying slide(s) parsed, expected at least 2".format(
+            len(with_source)))
     if html.count('class="source-footer') != len(with_source):
         failures.append("case 5: {} source footer(s) for {} Source-carrying slide(s)".format(
             html.count('class="source-footer'), len(with_source)))
@@ -402,6 +411,23 @@ def case_6_field_aliases_direct():
              "fields": {"Source": "[SRCTEXT](https://example.invalid/doc)",
                         "Left-Column": {"Headline": "L", "Bullets": ["b"]},
                         "Right-Column": {"Headline": "R", "Bullets": ["c"]}}},
+            # Slide 6 covers only the Step-N map shape; the Steps[] list form is
+            # the other live shape and was untested.
+            {"number": 13, "layout": "timeline-steps", "headline": "steps list form",
+             "fields": {"Steps": [{"Title": "LISTSTEPA", "Detail": "LISTDETA",
+                                   "Bullets": ["listbullet-a"]},
+                                  {"Title": "LISTSTEPB", "Detail": "LISTDETB"}]}},
+            # Slide 6 uses Label; Title is the older name that must win over it.
+            {"number": 14, "layout": "timeline-steps", "headline": "steps old name wins",
+             "fields": {"Step-1": {"Number": "02", "Title": "OLDSTEPTITLE",
+                                   "Label": "NEWSTEPLABEL", "Detail": "OLDSTEPDETAIL",
+                                   "Duration": "NEWSTEPDUR"}}},
+            # Slide 7 tests only the Label-wins direction of the badge contract.
+            # With no Label anywhere, --language de must supply the defaults.
+            {"number": 15, "layout": "is-does-means", "headline": "idm no label",
+             "fields": {"IS-Box": {"Text": "nolabel-is"},
+                        "DOES-Box": {"Text": "nolabel-does"},
+                        "MEANS-Box": {"Text": "nolabel-means"}}},
         ],
     }
     # German, so a badge falling back to --language would read IST/MACHT/BEDEUTET.
@@ -447,10 +473,22 @@ def case_6_field_aliases_direct():
     for needle in ("01", "STEPLABEL", "STEPDESC", "STEPDUR"):
         want(6, needle)
 
+    # The Steps[] list form is the other live shape and must render the same slots.
+    for needle in ("LISTSTEPA", "LISTDETA", "listbullet-a", "LISTSTEPB", "LISTDETB"):
+        want(13, needle)
+    # Within a Step-N map the older Title/Detail win over Label/Duration.
+    want(14, "OLDSTEPTITLE")
+    want(14, "NEWSTEPLABEL", present=False, why="Title must keep precedence over Label")
+    want(14, "OLDSTEPDETAIL")
+    want(14, "NEWSTEPDUR", present=False, why="Detail must keep precedence over Duration")
+
     # The authored badge beats the --language default.
     for needle in ("CUSTOMIS", "CUSTOMDOES", "CUSTOMMEANS"):
         want(7, needle)
     want(7, "IST", present=False, why="--language fallback must not override an authored Label")
+    # ...and the untested direction: with no Label at all, --language de supplies them.
+    for needle in ("IST", "MACHT", "BEDEUTET"):
+        want(15, needle, why="Label-less box must fall back to the --language default badge")
 
     # slide_kind routing: WITH a payload it routes...
     want(8, "references-list")

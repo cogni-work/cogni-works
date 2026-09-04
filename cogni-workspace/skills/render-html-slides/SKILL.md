@@ -29,7 +29,7 @@ all in a single `.html` file.
 | `brief_path` | auto-discovered | Path to presentation-brief.md |
 | `theme` | from brief frontmatter | Path to theme.md (or omit for pick-theme) |
 | `design_variables` | derived from theme | Pre-computed design-variables.json path |
-| `output_path` | `{brief_dir}/{slug}-slides.html` | HTML output path |
+| `output_path` | `{brief_dir}/{slug}-slides.html` | HTML output path. `{slug}` is the deck title Phase 1 assembles into `metadata.title`, lowercased with every run of non-alphanumerics collapsed to a single `-`. |
 | `transition` | `fade` | Slide transition: `fade`, `slide`, `none` |
 | `aspect_ratio` | `16:9` | Slide aspect ratio: `16:9`, `4:3` |
 | `language` | from brief frontmatter | `en` or `de` |
@@ -48,6 +48,7 @@ all in a single `.html` file.
    - `type: presentation-brief` (must match)
    - `version: "4.0"` or `"4.1"` (must match one of these — the 4.1 delta is content-only, so nothing this renderer parses changed)
 5. Extract metadata: `theme`, `theme_path`, `language`, `customer`, `provider`, `arc_type`, `governing_thought`
+6. Resolve `brief_dir` — the project directory that *contains* `cogni-visual/`, which every artifact path below is anchored on. A brief discovered inside a `cogni-visual/` folder (where `story-to-slides` writes it) resolves to that folder's **parent**, not the brief's own directory — otherwise `{brief_dir}/cogni-visual/` doubles the path. An explicit `brief_path` outside any `cogni-visual/` folder resolves to the brief's own directory.
 
 **Theme resolution** (3-stage, same as enrich-report):
 1. If `design_variables` parameter provided → use directly, skip to Phase 1
@@ -62,10 +63,13 @@ Parse the presentation-brief.md body into structured slide data. The brief uses 
 **Parse deterministically.** Run the shared parser rather than reading the brief yourself — it is the same parser the other brief consumers use, so this renderer cannot drift away from them:
 
 ```bash
+mkdir -p "{brief_dir}/cogni-visual"
 python3 "${CLAUDE_PLUGIN_ROOT}/scripts/parse-brief.py" \
   --brief "{brief_path}" --emit slide-data \
   --output "{brief_dir}/cogni-visual/slide-data.json"
 ```
+
+`mkdir -p` runs first because the parser opens `--output` directly without creating its parent.
 
 `--brief` is required (omitting it exits with `--brief is required`). The `{"success": ..., "data": ..., "error": ...}` envelope prints on **stdout**, while `--output` writes only the payload (`{version, slides, warnings}`) to the file.
 
@@ -87,7 +91,9 @@ top-level key alongside `slides`, and write the file out again. Leaving the pars
 `version` and `warnings` keys in place is harmless — the renderer reads only `metadata` and
 `slides`. Surface any `warnings` to the user.
 
-**Fall back to the LLM parse only when the parser fails** — that is, when an envelope comes back with `success: false`, or the script cannot be run at all. A successful parse is authoritative and is never second-guessed or "corrected" by re-reading the brief.
+**Fall back to the LLM parse only when the parser fails to parse** — that is, when an envelope comes back with `success: false` for a parse reason, or the script cannot be run at all. A successful parse is authoritative and is never second-guessed or "corrected" by re-reading the brief.
+
+**A `cannot write output:` envelope is not a parse failure and must not trigger the fallback.** Fix the write — the parent directory is missing or unwritable — and re-run. Falling back on it would hide the broken write behind a silently LLM-parsed deck, which is exactly the outcome the deterministic path exists to retire.
 
 #### LLM fallback parse
 
@@ -104,11 +110,13 @@ For each slide section, extract:
 - `citations` — extracted `<sup>[N](url)</sup>` patterns
 
 Also assemble the top-level `metadata` block by the same mapping the deterministic path uses
-above: the renderer reads `metadata.title` / `.customer` / `.provider` / `.generated` on both
-paths, and omitting it silently yields the title "Presentation" and today's date.
+above — the renderer reads it on both paths, and omitting it carries the same silent
+"Presentation"/today's-date default.
 
-Write the parsed data to `{brief_dir}/cogni-visual/slide-data.json`, in the shape both paths
-share — see the `slide-data.json shape` section of `references/01-layout-renderers.md`.
+Run `mkdir -p "{brief_dir}/cogni-visual"` here too — this branch writes into the same directory
+and must not depend on the deterministic block above having run. Then write the parsed data to
+`{brief_dir}/cogni-visual/slide-data.json`, in the shape both paths share — see the
+`slide-data.json shape` section of `references/01-layout-renderers.md`.
 
 **Parsing rules:**
 - Each slide is separated by `---` (horizontal rule) in the brief
@@ -318,4 +326,4 @@ Apply re-render changes FIRST (they produce a fresh HTML file), then apply HTML-
 
 **Self-contained:** Single HTML file. All CSS inline. All JS inline. Only external dependency is Mermaid.js CDN (conditional, only included when diagrams are present).
 
-**Refinement Loop:** After viewing slides, give feedback on specific slides in natural language. Text and style fixes are applied directly to the HTML (instant). Structural changes (layout swaps, slide additions) trigger a targeted re-render via the Python script. Max 3 rounds by default.
+**Refinement Loop:** Natural-language feedback per slide after viewing — text and style fixes edit the HTML directly, structural changes trigger a targeted re-render. Channels and round cap: Phase 6.

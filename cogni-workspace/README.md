@@ -36,7 +36,7 @@ cogni-workspace is the ecosystem's infrastructure-as-plugin layer: a dedicated p
 9. **File and track issues** — `cogni-issues` uses the authenticated GitHub CLI to consult, deduplicate, create, list, and inspect plugin issues with atomic labels
 10. **Troubleshoot plugin failures** — `workspace-status`'s plugin-level tier diagnoses plugin integrity, cross-plugin dependencies, stale state, and common setup errors; reachable through `/troubleshoot`
 11. **Verify claims against their cited sources** — `claims` runs the six-mode claim-verification lifecycle (submit, verify, dashboard, inspect, resolve, cobrowse) that cogni-trends, cogni-portfolio, cogni-consult and cogni-knowledge submit sourced assertions to; `claim-entity` is the cross-plugin data contract those plugins write against
-12. **Shape content into an executive narrative** — `narrative` transforms structured input using one of 11 story arc frameworks and, with `--format`, condenses an existing narrative into executive briefs, talking points or one-pagers, and `narrative-review` scores the result against quality gates, returning a pass/warn/fail verdict per gate
+12. **Shape content into an executive narrative** — `narrative` transforms structured input using one of 11 story arc frameworks and, with `--format`, condenses an existing narrative into executive briefs, talking points or one-pagers
 13. **Polish documents for executive readability** — `copywriter` applies seven messaging frameworks (BLUF, Pyramid, SCQA, STAR, PSB, FAB, Inverted Pyramid) with arc-aware preservation and EN/DE-pivot translation across seven languages; `copy-reader` runs parallel stakeholder personas over a document; `copy-json` polishes text fields inside JSON
 
 ## What it means for you
@@ -144,17 +144,15 @@ State lives in two layers that other plugins consume. Configuration (env vars, t
 | `claim-verifier` | agent | Fetches one source URL and verifies every claim against it, returning deviation analysis as strict JSON |
 | `source-inspector` | agent | Opens a source URL via claude-in-chrome and walks the user to the relevant passage (cobrowse / inspect) |
 | `narrative` | skill | Transform structured input into an executive narrative using one of 11 story arc frameworks; with `--format`, condense one into an executive brief, talking points or a one-pager |
-| `narrative-review` | skill | Score a narrative against story-arc quality gates — a pass/warn/fail verdict per gate and the top 3 fixes |
 | `copywriter` | skill | Polish, rewrite or create business documents with 7 messaging frameworks, arc-aware preservation, and EN/DE-pivot translation |
 | `copy-reader` | skill | Review a document through parallel stakeholder persona Q&A, then synthesize the feedback |
 | `copy-json` | skill | Adapter that polishes text fields inside JSON — extracts, polishes via `copywriter`, writes back |
 | `narrative-writer` | agent | Parallel narrative generation across content sets |
-| `narrative-reviewer` | agent | Quality-gate scoring and scorecard generation |
 | `narrative-adapter` | agent | Parallel format adaptation across narratives |
 | `copywriter` | agent | Delegation wrapper for the `copywriter` skill |
 | `reader` | agent | Delegation wrapper for the `copy-reader` skill |
 | `commands/claims.md` | command | Registers `/claims` as the entry point to the verification lifecycle |
-| `commands/narrative.md` | command | Registers `/narrative`, with `/narrative-review` and `/narrative-adapt` alongside it |
+| `commands/narrative.md` | command | Registers `/narrative`, with `/narrative-adapt` alongside it |
 | `commands/copywrite.md` | command | Registers `/copywrite`, with `/review-doc` alongside it |
 | `commands/render-infographic.md` | command | Registers `/render-infographic`, the style-agnostic renderer entry point that auto-routes on the brief's `style_preset` |
 | `commands/render-infographic-handdrawn.md` | command | Registers `/render-infographic-handdrawn` for direct sketchnote / whiteboard dispatch |
@@ -211,7 +209,7 @@ State lives in two layers that other plugins consume. Configuration (env vars, t
 ```
 cogni-workspace/
 ├── .claude-plugin/plugin.json    Plugin manifest
-├── skills/                       22 workspace and visual-rendering skills
+├── skills/                       21 workspace and visual-rendering skills
 │   ├── audit-region-sources/     Audit per-plugin region-source overlays against the registry
 │   ├── claim-entity/             Cross-plugin ClaimEntity data contract and store layout
 │   ├── claims/                   Claim-verification lifecycle (+ scripts/claims-store.sh)
@@ -229,18 +227,18 @@ cogni-workspace/
 │   ├── story-to-web/             Narrative -> scrollable web-narrative or printed-poster brief
 │   ├── workspace-dashboard/      Interactive HTML workspace status dashboard
 │   └── workspace-status/
-│                                  narrative, narrative-review, copywriter,
+│                                  narrative, copywriter,
 │                                  copy-json and copy-reader are omitted here for brevity
-├── agents/                       26 subagents (claim verification, narrative, copywriting, visual rendering)
+├── agents/                       25 subagents (claim verification, narrative, copywriting, visual rendering)
 │   ├── claim-verifier.md         Verify claims against one source URL (JSON out)
 │   ├── source-inspector.md       Open a source via claude-in-chrome for cobrowse/inspect
 │   ├── story-to-*.md             Four narrative -> brief drivers (slides, web, storyboard, infographic)
 │   ├── render-infographic-*.md   Three infographic renderers (pencil, sketchnote, whiteboard)
 │   └── concept-diagram*.md       Diagram workers (Excalidraw and inline-SVG variants)
 ├── libraries/                    18 layout, taxonomy and worked-example files read at render time
-├── commands/                     13 slash commands
+├── commands/                     12 slash commands
 │   ├── claims.md                 Registers /claims
-│   ├── narrative*.md             Registers /narrative, /narrative-review, /narrative-adapt
+│   ├── narrative*.md             Registers /narrative, /narrative-adapt
 │   ├── copywrite.md              Registers /copywrite and /review-doc
 │   ├── render-infographic*.md    Registers /render-infographic and its two direct-dispatch variants
 │   ├── render-html-slides.md     Registers /render-html-slides

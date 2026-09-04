@@ -403,7 +403,7 @@ Portfolio data may be incomplete. Handle gaps gracefully:
 
 After generating a pitch narrative, suggest:
 
-1. **Score quality**: `/narrative-review` — scores against the arc's quality gates (structural compliance, evidence density, technique application)
+1. **Stakeholder review**: `/review-doc` — scores the pitch from parallel stakeholder personas and synthesizes their feedback
 2. **Polish prose**: `/copywrite` — applies executive readability standards while preserving arc structure
 3. **Visualize**:
    - `story-to-slides` → PowerPoint presentation via PPTX skill

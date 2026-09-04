@@ -299,9 +299,9 @@ Eleven arc frameworks are available, each a fixed sequence of four named element
 
 The skill analyses the input's structure and proposes a best-fit arc; `--arc {arc-id}` overrides it. Target length defaults to ~1,675 words, with section proportions preserved rather than sections cut.
 
-`narrative-review` scores an existing narrative against the arc's quality gates across five dimensions — structural compliance, critical accuracy, evidence density, structure, language — producing a pass/warn/fail verdict per gate and the top three actionable fixes. With `--format`, `narrative` also condenses an existing narrative into an executive brief, talking points, or a one-pager, condensing proportionally so the arc survives the reduction.
+With `--format`, `narrative` also condenses an existing narrative into an executive brief, talking points, or a one-pager, condensing proportionally so the arc survives the reduction.
 
-Commands: `/narrative`, `/narrative-review`, `/narrative-adapt`.
+Commands: `/narrative`, `/narrative-adapt`.
 
 ### `copywriter` — Polish documents for executive readability
 

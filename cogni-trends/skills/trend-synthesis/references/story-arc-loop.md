@@ -4,9 +4,10 @@ This document is an **authoring-time** record, not a runtime feature. It
 captures the closed-loop review process used to harden the storytelling
 guidance baked into `trend-synthesis/SKILL.md`. The methodology mirrors
 `skill-creator`'s iterate-against-evals pattern, with a domain-specific
-reviewer in the grader role: `cogni-workspace:narrative-reviewer`, treated
-as a storytelling expert that scores prose against narrative quality gates
-(structural, critical, evidence, structure, language) and returns the top
+reviewer in the grader role: a fresh-context reviewer treated
+as a storytelling expert, scoring prose against the narrative quality gates
+defined per arc in `cogni-workspace/skills/narrative/references/story-arc/{arc_id}/arc-definition.md`
+(structural, critical, evidence, structure, language) and returning the top
 three improvements.
 
 At runtime, `trend-synthesis` is expected to produce a story-arc-strong
@@ -125,9 +126,10 @@ The same methodology can be re-applied whenever the storytelling guidance
 drifts (new audience, new arc, new evidence pattern):
 
 1. Snapshot the current SKILL.md and a representative sample report.
-2. Run `cogni-workspace:narrative-reviewer` on the report (or, in a
-   code-only review, on the SKILL.md itself treated as a meta-narrative
-   about how the report should land). Persist the scorecard.
+2. Grade the report against the per-arc quality gates in
+   `cogni-workspace/skills/narrative/references/story-arc/{arc_id}/arc-definition.md`
+   (or, in a code-only review, grade the SKILL.md itself treated as a
+   meta-narrative about how the report should land). Persist the scorecard.
 3. Apply the top three improvements to the *writer/composer prompts* and
    the *Storytelling Spine* in this SKILL.md — not to runtime behaviour.
 4. Re-score. Terminate when the scorecard passes or when the same gate

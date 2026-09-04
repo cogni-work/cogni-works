@@ -188,7 +188,7 @@ The arc registry contains the detection algorithm, keyword sets, and content-typ
 
 Present selected arc to user for confirmation using AskUserQuestion. Show the detected arc with detection reason and offer alternatives. For priority-2 picks, label the prompt "Inherited from source research/knowledge project — preserves the long-form report's arc". Accept user confirmation or override.
 
-When `--interactive` is `false`, this confirmation does not run -- keep the arc selected above, record its `detection_reason` unchanged, and continue to Phase 3.
+When `--interactive` is `false`, this confirmation does not run -- keep the arc selected above, store it with its `detection_reason` unchanged as below, then continue to Phase 3.
 
 Store: `arc_id`, `arc_display_name`, `detection_reason`
 

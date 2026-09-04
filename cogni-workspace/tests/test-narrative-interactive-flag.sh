@@ -64,14 +64,21 @@ fail() { echo "FAIL: $1"; failures=$((failures + 1)); }
 # otherwise make every grep return 0 and read as a content failure rather than
 # a path failure.
 # ---------------------------------------------------------------------------
+missing_inputs=""
 for f in "$SKILL" "$AGENT"; do
-  if [ ! -f "$f" ]; then
-    echo "FAIL: setup expected file not found: $f"
-    echo ""
-    echo "RESULT: 1 narrative-interactive case(s) failed."
-    exit 1
-  fi
+  [ -f "$f" ] || missing_inputs="$missing_inputs $f"
 done
+
+if [ -n "$missing_inputs" ]; then
+  for m in $missing_inputs; do
+    printf '%s\n' "  missing input: $m"
+  done
+  fail "P0 setup expected files are readable"
+  echo ""
+  echo "RESULT: $failures narrative-interactive case(s) failed."
+  exit 1
+fi
+pass "P0 setup expected files are readable"
 
 # ---------------------------------------------------------------------------
 # P1 -- the flag is documented where every other narrative argument is documented.
@@ -129,6 +136,18 @@ if grep -q 'interactive false' "$AGENT"; then
   pass "P4 narrative-writer passes --interactive false on its skill invocation"
 else
   fail "P4 narrative-writer passes --interactive false on its skill invocation"
+fi
+
+# ---------------------------------------------------------------------------
+# P5 -- the agent must not reference AskUserQuestion at all. The skill keeps the
+# grant (P3); the agent is the non-interactive caller, so a prompt reaching it is
+# the regression this whole change exists to prevent. Asserted here rather than
+# assumed, because this diff adds agent-body prose in exactly that neighbourhood.
+# ---------------------------------------------------------------------------
+if grep -q 'AskUserQuestion' "$AGENT"; then
+  fail "P5 narrative-writer.md must not reference AskUserQuestion"
+else
+  pass "P5 narrative-writer.md must not reference AskUserQuestion"
 fi
 
 # ---------------------------------------------------------------------------

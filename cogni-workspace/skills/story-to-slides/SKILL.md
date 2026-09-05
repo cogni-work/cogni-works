@@ -40,7 +40,7 @@ The brief describes WHAT each slide says and which layout to use. The renderer o
 |-----------|---------|-------------|
 | `source_path` | auto-discovered | Narrative file or directory. When omitted with `interactive=true`, Step 0 searches nearby. |
 | `project_path` | none | Accepted alias for `source_path`, mapped before Step 0 runs. |
-| `theme` | interactive | Absolute path to theme.md, or omit to trigger `cogni-workspace:pick-theme` interactive selection. |
+| `theme` | none | Optional absolute path to theme.md; recorded in frontmatter for the renderer, never prompted for here. |
 | `language` | `en` | Language code (en/de) |
 | `title` / `subtitle` | auto-detected | Extracted from narrative if not provided |
 | `customer_name` / `provider_name` | from metadata | Organization names |
@@ -75,7 +75,7 @@ The renderer owns all visual decisions — colors, fonts, spacing — by reading
 
 ### Interactive checkpoints
 
-Interactive prompts let the user steer creative decisions at two points: narrative selection (Step 0) and theme selection (Step 1). Use the structured format below — unstructured prose renders as empty prompts:
+Interactive prompts let the user steer creative decisions at two points: narrative selection (Step 0) and the Render checkpoint (Step 11). Use the structured format below — unstructured prose renders as empty prompts:
 
 ```
 questions: [{
@@ -168,7 +168,7 @@ Set `source_dir` = parent directory of selected `source_path`.
 
 ### Step 1: Parse Parameters & Resolve Context
 
-> Arc resolution and theme loading happen before reading the narrative because they shape how you interpret the story — a pre-resolved arc_type tells you what argument pattern to look for.
+> Arc resolution happens before reading the narrative because it shapes how you interpret the story — a pre-resolved arc_type tells you what argument pattern to look for.
 
 Determine input type (directory with metadata vs single file) and load metadata.
 
@@ -179,14 +179,7 @@ Determine input type (directory with metadata vs single file) and load metadata.
 
 If arc_id set: read `$CLAUDE_PLUGIN_ROOT/libraries/arc-taxonomy.md`, map to arc_type. If `arc_definition_path` provided: extract element names for methodology slide.
 
-**Theme resolution:** Delegate to `cogni-workspace:pick-theme` — the ecosystem-standard theme picker.
-
-1. If `theme` parameter was explicitly provided with an absolute path: use it directly, skip the picker.
-2. Otherwise: invoke the `cogni-workspace:pick-theme` skill via the Skill tool. The picker scans standard and workspace theme directories, presents an interactive AskUserQuestion, and returns the absolute `theme_path`.
-3. Store the returned `theme_path` (absolute path to `theme.md`), `theme_name`, and `theme_slug` for downstream use.
-4. Read the selected `theme.md` to confirm it loads correctly.
-
-If pick-theme is unavailable (e.g., cogni-workspace not installed), fall back to Glob scanning `$COGNI_WORKSPACE_ROOT/themes/*/theme.md` and present via AskUserQuestion manually.
+**Theme pass-through:** when the `theme` parameter is an absolute path, record it verbatim as `theme_path` and its parent directory name as `theme` in the brief frontmatter; otherwise omit both keys. This skill never reads `theme.md` — no picker runs here, and the renderer chosen at the Render checkpoint (Step 11) resolves a theme if it needs one.
 
 **Load libraries:** `cta-taxonomy.md`, `arc-taxonomy.md` (if arc_id set). The heavier libraries (`pptx-layouts.md` and `EXAMPLE_BRIEF.md`) are deferred to the steps that consume them (Steps 7 and 8), and `presentation-intent.md` is deferred to Step 8.2, to keep context lean during the creative intelligence steps.
 
@@ -443,21 +436,20 @@ Run the validation checklist (reference `09-validation-checklist.md`) one final 
 
 ---
 
-### Step 11: Guide User to PPTX Rendering
+### Step 11: Render checkpoint
 
-> The presentation brief is ready. Produce both render handoffs — **PPTX** via claude.ai chat with the Anthropic PPTX skill, and an **outline** for Claude Design. Neither handoff asks the user anything, so `interactive=false` changes nothing in this step; the `narrative-publish` pipeline runs it non-interactively.
+> The brief is ready. Every render path owns its styling, so a theme is chosen here — by the renderer that needs one — and never earlier. `references/10-render-handoff.md` carries the box text, the prompts and the dispatch rules for each path; this step only decides which path runs.
 
-#### Handoff A — PPTX (claude.ai chat)
+**Export the outline first, unconditionally.** Run `python3 "$CLAUDE_PLUGIN_ROOT/skills/story-to-slides/scripts/brief-to-outline.py" --brief "{absolute_path_to_presentation_brief}"` and keep `data.outline_path`. Claude Design consumes an outline, not a brief — handed the brief it re-derives the structure and paraphrases approved copy. On `success: false` report the error and continue: a failed export degrades the handoff, it does not invalidate the brief. Report a `slide_points capped` warning, since it names slides whose on-slide copy did not fit.
 
-After the brief is written and validated, print the PPTX hand-off in `references/10-render-handoff.md`: the two files to attach (`presentation-brief.md` and `theme.md`) as absolute paths — never `~`, `$HOME`, `$CLAUDE_PLUGIN_ROOT` or relative paths — and the one-line claude.ai prompt. claude.ai is preferred because it handles attachments natively; `document-skills:pptx` inside Claude Code is a working fallback. The absolute-path rule governs printed paths only; `$CLAUDE_PLUGIN_ROOT` remains the correct way to invoke a bundled script.
+**Then, when `interactive` is `true`, ask one structured AskUserQuestion** (header "Render") with these options in this order:
 
-#### Handoff B — Outline (claude.ai/design)
+1. **Claude Design** — print the outline attachment box. Never resolves a theme: the organization design system applies.
+2. **claude.ai attachment** — resolve a theme *now*: use the brief's `theme_path` when present, otherwise invoke `cogni-workspace:pick-theme`; then print both absolute paths and the three-line prompt.
+3. **HTML** — dispatch `cogni-workspace:render-html-slides` with `brief_path`; it resolves its own theme (falling back to `cogni-workspace:pick-theme` itself).
+4. **Later** — print the brief and outline paths and stop.
 
-Claude Design consumes an **outline**, not a brief: it has no meaning for the brief's `Layout:` vocabulary, so handed the brief unchanged it re-derives the structure and paraphrases copy the client already approved. Export the outline as well by running `python3 "$CLAUDE_PLUGIN_ROOT/skills/story-to-slides/scripts/brief-to-outline.py" --brief "{absolute_path_to_presentation_brief}"`.
-
-It writes `presentation-outline.md` next to the brief and returns the absolute path as `data.outline_path`. Pass `--include-internal` only when the presenter-prep slides (Methodology, Buying Center) belong in the handoff; by default they are excluded, since they are internal preparation rather than client-facing copy. The exporter derives each slide's `type` tag by parsing the `## Layout to type mapping` table out of `libraries/presentation-intent.md` at run time — it holds no layout name as a literal, so reshaping that table breaks the export.
-
-The exporter prints one `{success, data, error}` envelope. On `success: false`, report the `error` to the user, skip the outline box, and still deliver Handoff A — a failed outline export degrades the handoff, it does not invalidate the brief. `data.warnings` entries are advisory; report a `slide_points capped` warning, since it names slides whose on-slide copy did not fit the outline. Then print the outline attachment box from `references/10-render-handoff.md`, with `data.outline_path` as the printed path — the same absolute-path rule applies.
+When `interactive` is `false`, or on an empty response: print the brief and outline paths, render nothing, prompt for nothing — the `narrative-publish` pipeline runs this step that way. Printed paths are always absolute — never `~`, `$HOME`, `$CLAUDE_PLUGIN_ROOT` or relative; `$CLAUDE_PLUGIN_ROOT` remains the correct way to invoke a bundled script.
 
 ---
 
@@ -477,7 +469,7 @@ The exporter prints one `{success, data, error}` envelope. On `success: false`, 
 | **08b-references-slide.md** | 8.1 | References slide construction |
 | **08c-presenter-prep.md** | 8.2 | Internal prep slides + per-slide speaker notes process (loaded by slides-enrichment-artist agent) |
 | **09-validation-checklist.md** | 9, 10 | Five-layer validation framework |
-| **10-render-handoff.md** | 11 | Both attachment boxes printed to the user after validation — PPTX (Handoff A) and Claude Design outline (Handoff B) — plus what `presentation-outline.md` carries |
+| **10-render-handoff.md** | 11 | The Render checkpoint's paths — box text, prompts and dispatch rules per option — plus what `presentation-outline.md` carries |
 | **2g-diagram-simplification.md** | 2.1 | Mermaid diagram detection and simplification |
 
 ### Libraries (loaded as needed — progressive disclosure)

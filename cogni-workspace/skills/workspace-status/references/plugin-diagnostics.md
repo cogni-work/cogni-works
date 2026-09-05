@@ -104,7 +104,7 @@ remedy. Each has a `references/known-issues.md` entry that carries the fix.
   authentication or login error. `gh` is not among the tools check 5 (Dependencies)
   probes, so `references/known-issues.md` stays its documented owner — see
   "GitHub not logged in".
-- **PPTX rendering skill unavailable** — `document-skills:pptx` renders the
-  story-to-slides brief and does not ship from this marketplace. Confirm the
-  session provides it before dispatching the `pptx` agent; otherwise take
-  story-to-slides Step 11, "Guide User to PPTX Rendering".
+- **PPTX rendering skill unavailable** — the skill that renders a
+  story-to-slides brief into a `.pptx` does not ship from this marketplace.
+  Take story-to-slides Step 11, the Render checkpoint: the claude.ai attachment
+  path or the HTML deck need nothing installed here.

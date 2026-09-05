@@ -388,6 +388,12 @@ VISUAL_CONSUMERS=(
   "cogni-workspace:render-html-slides"
   "cogni-workspace:enrich-report"
   "cogni-workspace:story-to-infographic"
+  # story-to-slides is a PASS-THROUGH consumer, kept here by decision: the skill
+  # never reads a theme itself — it records a caller-supplied theme_path verbatim
+  # and the renderer resolves a theme at its Render checkpoint. Its SKILL.md
+  # carries a contract sentence naming theme.md for exactly that reason, so the
+  # tbc20 grep still asserts the contract reference. Deleting the entry silently
+  # would remove the only guard on that sentence.
   "cogni-workspace:story-to-slides"
   "cogni-workspace:story-to-web"
   "cogni-portfolio:portfolio-dashboard"

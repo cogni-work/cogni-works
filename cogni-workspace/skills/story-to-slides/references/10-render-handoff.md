@@ -1,40 +1,20 @@
 # Render Hand-off
 
-What story-to-slides Step 11 tells the user once the brief is written and validated — two attachment boxes, one per render path. Handoff A is the PPTX path via claude.ai chat, with the prompt and why that path is preferred over rendering inside Claude Code. Handoff B is the Claude Design path, which consumes the `presentation-outline.md` that `scripts/brief-to-outline.py` exports from the brief.
+What story-to-slides Step 11 — the Render checkpoint — prints and dispatches once the brief is written and validated. The checkpoint offers one path per renderer; each path below carries its box text, its prompt where one exists, and the rule for resolving a theme. The theme is a render-time parameter: the producer records a caller-supplied `theme_path` verbatim and never prompts for one, so a path that needs a theme resolves it here and a path that does not never asks.
 
-## Handoff A — PPTX (claude.ai chat)
+## Before the question: export the outline
 
-After the brief is written and validated, tell the user:
+Claude Design consumes a prompt plus attachments against an organization design system, and it has no meaning for the brief's `Layout:` vocabulary (`title-slide`, `is-does-means`, `four-quadrants`, ...) — handed the brief unchanged it re-derives the structure and paraphrases copy the client already approved. Step 11 therefore exports `presentation-outline.md` next to the brief with `scripts/brief-to-outline.py` before asking anything, on every path, interactive or not:
 
-1. **Open a new chat on claude.ai** (not Claude Code — the PPTX skill works best in the claude.ai web interface)
-2. **Paste these two files** into the chat window as attachments:
-   - `presentation-brief.md` (the brief you just generated)
-   - `theme.md` (the theme file used in this workflow)
-3. **Use this prompt:**
-
-```
-Please create a PPTX presentation using the attached presentation-brief.md and theme.md
+```bash
+python3 "$CLAUDE_PLUGIN_ROOT/skills/story-to-slides/scripts/brief-to-outline.py" --brief "{absolute_path_to_presentation_brief}"
 ```
 
-Print the absolute paths to both files so the user can locate them easily:
+It returns the absolute path as `data.outline_path`. Pass `--include-internal` only when the presenter-prep slides (Methodology, Buying Center) belong in the handoff; by default they are excluded, since they are internal preparation rather than client-facing copy. On `success: false`, report the `error`, skip the outline box, and still offer the other paths.
 
-```
-─── Files to attach in claude.ai ───
+## Option 1 — Claude Design (claude.ai/design)
 
-Presentation brief: {absolute_path_to_presentation_brief}
-Theme:              {absolute_path_to_theme_md}
-
-Open claude.ai → new chat → attach both files → paste the prompt above.
-─────────────────────────────────────────────────
-```
-
-Replace `{absolute_path_to_presentation_brief}` with the resolved `output_path` and `{absolute_path_to_theme_md}` with the `theme_path` from Step 1. Both paths **printed to the user** must be absolute — never use `~`, `$HOME`, `$CLAUDE_PLUGIN_ROOT`, or relative paths. That governs printed handoff paths only; `$CLAUDE_PLUGIN_ROOT` remains the correct way to invoke a bundled script.
-
-**Why claude.ai?** The web interface handles file attachments natively, which is what makes the PPTX skill render best there. Claude Code can also render via the `document-skills:pptx` skill — a working fallback, not the recommended path.
-
-## Handoff B — Outline (claude.ai/design)
-
-Claude Design consumes a prompt plus attachments against an organization design system, and it has no meaning for the brief's `Layout:` vocabulary (`title-slide`, `is-does-means`, `four-quadrants`, ...) — handed the brief unchanged it re-derives the structure and paraphrases copy the client already approved. Step 11 therefore exports `presentation-outline.md` next to the brief with `scripts/brief-to-outline.py`, and once the exporter's envelope reports `success: true`, prints this second box:
+No theme is resolved: the organization design system applies. Print:
 
 ```
 ─── File to attach in claude.ai/design ───
@@ -46,9 +26,51 @@ design system applies, so attach theme.md only when none is configured.
 ──────────────────────────────────────────
 ```
 
-Replace `{absolute_path_to_presentation_outline}` with the exporter's `data.outline_path`. As above, the printed path must be absolute — never `~`, `$HOME`, `$CLAUDE_PLUGIN_ROOT`, or relative. On `success: false`, report the `error`, skip this box, and still deliver Handoff A — a failed outline export degrades the handoff, it does not invalidate the brief.
+Replace `{absolute_path_to_presentation_outline}` with the exporter's `data.outline_path`.
 
-### What the outline carries
+## Option 2 — claude.ai attachment (Anthropic PPTX skill)
+
+Resolve a theme **now**, and only now: use the brief's `theme_path` when the frontmatter carries one; otherwise invoke `cogni-workspace:pick-theme` via the Skill tool and take the absolute `theme_path` it returns. Then tell the user:
+
+1. **Open a new chat on claude.ai** — the PPTX skill handles attachments natively there
+2. **Attach two files:** `presentation-brief.md` and the resolved `theme.md`
+3. **Use this prompt:**
+
+```
+Build a .pptx from the attached presentation-brief.md, styled by the attached theme.md.
+Follow the brief's Rendering Contract: copy is frozen, speaker notes travel complete into the notes channel,
+citation markers become hyperlinks and the references slide stays last.
+```
+
+Print both paths:
+
+```
+─── Files to attach in claude.ai ───
+
+Presentation brief: {absolute_path_to_presentation_brief}
+Theme:              {absolute_path_to_theme_md}
+
+Open claude.ai → new chat → attach both files → paste the prompt above.
+─────────────────────────────────────────────────
+```
+
+## Option 3 — HTML deck (render-html-slides)
+
+Dispatch `cogni-workspace:render-html-slides` via the Skill tool with `brief_path={absolute_path_to_presentation_brief}`. The renderer resolves its own theme — the brief's `theme_path` when present, otherwise the ecosystem picker — so nothing is resolved here. Report the HTML path it returns.
+
+## Option 4 — Later
+
+Print the brief path and the outline path, render nothing, and stop.
+
+## Headless runs
+
+When `interactive` is `false`, or the user answers with an empty response, the checkpoint behaves as Option 4 after the outline export: it prints the brief and outline paths, renders nothing, and asks nothing. The `narrative-publish` pipeline relies on this.
+
+## Printed paths
+
+Every path **printed to the user** must be absolute — never `~`, `$HOME`, `$CLAUDE_PLUGIN_ROOT`, or relative. That governs printed handoff paths only; `$CLAUDE_PLUGIN_ROOT` remains the correct way to invoke a bundled script.
+
+## What the outline carries
 
 The outline is written in the shape `libraries/presentation-intent.md` defines. It gives Claude Design what it does read:
 

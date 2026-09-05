@@ -4,13 +4,13 @@ description: >
   Transform any narrative into an optimized multi-slide presentation brief that a slide
   renderer turns into a deck. Use this skill whenever the user mentions "presentation",
   "slide deck", "slides", "PowerPoint", "Foliensatz", "Praesentation erstellen",
-  "Folien aus Bericht", "pitch deck", "create slides from report", or wants to convert
-  prose into slide-level message architecture. Also trigger when the user needs pyramid
-  communication, number plays, assertion headlines, or speaker notes.
-  Covers Why Change projects, research reports, competitive intelligence, trend panoramas,
-  and both English and German output. Produces a presentation-brief.md (v4.1) with a
-  renderer-neutral Rendering Contract addressed to Claude Design, the PPTX skill and
-  render-html-slides. Important: this skill CREATES the brief from a narrative source —
+  "Folien aus Bericht", "pitch deck", "create slides from report", "presentation outline",
+  or wants to convert prose into slide-level message architecture. Also trigger when the
+  user needs pyramid communication, number plays, assertion headlines, or speaker notes.
+  Covers Why Change projects, research reports, competitive intelligence and trend
+  panoramas, in English and German. Produces a presentation-brief.md (v4.1) under a
+  renderer-neutral Rendering Contract, plus a presentation-outline.md render handoff for
+  claude.ai/design. Important: this skill CREATES the brief from a narrative source —
   it does NOT render an existing brief (use PPTX skill for that), does NOT create a web page
   (use story-to-web), and does NOT enhance prose (use cogni-workspace:copywriter).
 allowed-tools: Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion, Agent, Skill
@@ -118,22 +118,6 @@ The `is-does-means` layout uses layer labels rendered as badges on each box. The
 | `de` | IST | MACHT | BEDEUTET |
 
 Apply the localized labels in every `IS-Box.Label`, `DOES-Box.Label`, `MEANS-Box.Label` field. English labels in a German presentation signal "template not adapted" and undermine credibility.
-
----
-
-## Quick Reference: Good vs Bad Output
-
-**Headlines** — assert, don't label:
-- Bad: "Market Overview" (topic label — audience must read the body to get the point)
-- Good: "European Rail Market Contracts 12% as Regulation Tightens" (assertion — message lands in 3 seconds)
-
-**Number plays** — reframe for impact:
-- Bad: "There were 688 rail suicides in 2023" (buried in prose)
-- Good: Hero number `688` isolated in stat-card, sublabel `+ 2,661 station attacks`, context box explains why manual monitoring fails
-
-**Bullets** — scan-optimized, not sentences:
-- Bad: "The security staff are unable to adequately cover all areas of the rail network on a 24/7 basis" (19 words)
-- Good: "Staff cannot cover all areas 24/7" (6 words — scannable in ~3 seconds at presentation distance, ~8-10 words max)
 
 ---
 
@@ -269,7 +253,7 @@ When caller provides `governing_thought`/`section_roles`: validate against narra
 
 > Headlines are the first thing an audience reads. A topic label ("Market Overview") tells them nothing — they have to read the body to get the point, and their attention is gone. An assertion headline ("European market contracts 12% as regulation tightens") delivers the message in 3 seconds.
 
-**Read reference:** `references/05a-slide-copywriting.md`
+**Read reference:** `references/05a-slide-copywriting.md` (its Good vs Bad quick reference shows each rule as a before/after pair)
 
 - **6a. Headline optimization** — every title is a complete action assertion (up to ~100 chars, contains verb + quantified consequence)
 - **6b. Number plays** — ratio framing, hero number isolation, before/after contrast
@@ -461,9 +445,19 @@ Run the validation checklist (reference `09-validation-checklist.md`) one final 
 
 ### Step 11: Guide User to PPTX Rendering
 
-> The presentation brief is ready. Now guide the user to the best rendering path — currently **claude.ai chat** with the Anthropic PPTX skill, which produces the highest quality output.
+> The presentation brief is ready. Produce both render handoffs — **PPTX** via claude.ai chat with the Anthropic PPTX skill, and an **outline** for Claude Design. Neither handoff asks the user anything, so `interactive=false` changes nothing in this step; the `narrative-publish` pipeline runs it non-interactively.
 
-After the brief is written and validated, print the hand-off in `references/10-render-handoff.md`: the two files to attach (`presentation-brief.md` and `theme.md`) as absolute paths — never `~`, `$HOME`, `$CLAUDE_PLUGIN_ROOT` or relative paths — and the one-line claude.ai prompt. claude.ai is preferred because it handles attachments natively; `document-skills:pptx` inside Claude Code is a working fallback.
+#### Handoff A — PPTX (claude.ai chat)
+
+After the brief is written and validated, print the PPTX hand-off in `references/10-render-handoff.md`: the two files to attach (`presentation-brief.md` and `theme.md`) as absolute paths — never `~`, `$HOME`, `$CLAUDE_PLUGIN_ROOT` or relative paths — and the one-line claude.ai prompt. claude.ai is preferred because it handles attachments natively; `document-skills:pptx` inside Claude Code is a working fallback. The absolute-path rule governs printed paths only; `$CLAUDE_PLUGIN_ROOT` remains the correct way to invoke a bundled script.
+
+#### Handoff B — Outline (claude.ai/design)
+
+Claude Design consumes an **outline**, not a brief: it has no meaning for the brief's `Layout:` vocabulary, so handed the brief unchanged it re-derives the structure and paraphrases copy the client already approved. Export the outline as well by running `python3 "$CLAUDE_PLUGIN_ROOT/skills/story-to-slides/scripts/brief-to-outline.py" --brief "{absolute_path_to_presentation_brief}"`.
+
+It writes `presentation-outline.md` next to the brief and returns the absolute path as `data.outline_path`. Pass `--include-internal` only when the presenter-prep slides (Methodology, Buying Center) belong in the handoff; by default they are excluded, since they are internal preparation rather than client-facing copy. The exporter derives each slide's `type` tag by parsing the `## Layout to type mapping` table out of `libraries/presentation-intent.md` at run time — it holds no layout name as a literal, so reshaping that table breaks the export.
+
+The exporter prints one `{success, data, error}` envelope. On `success: false`, report the `error` to the user, skip the outline box, and still deliver Handoff A — a failed outline export degrades the handoff, it does not invalidate the brief. `data.warnings` entries are advisory; report a `slide_points capped` warning, since it names slides whose on-slide copy did not fit the outline. Then print the outline attachment box from `references/10-render-handoff.md`, with `data.outline_path` as the printed path — the same absolute-path rule applies.
 
 ---
 
@@ -483,7 +477,7 @@ After the brief is written and validated, print the hand-off in `references/10-r
 | **08b-references-slide.md** | 8.1 | References slide construction |
 | **08c-presenter-prep.md** | 8.2 | Internal prep slides + per-slide speaker notes process (loaded by slides-enrichment-artist agent) |
 | **09-validation-checklist.md** | 9, 10 | Five-layer validation framework |
-| **10-render-handoff.md** | 11 | claude.ai attachment box and prompt printed to the user after validation |
+| **10-render-handoff.md** | 11 | Both attachment boxes printed to the user after validation — PPTX (Handoff A) and Claude Design outline (Handoff B) — plus what `presentation-outline.md` carries |
 | **2g-diagram-simplification.md** | 2.1 | Mermaid diagram detection and simplification |
 
 ### Libraries (loaded as needed — progressive disclosure)
@@ -494,4 +488,10 @@ After the brief is written and validated, print the hand-off in `references/10-r
 | **cta-taxonomy.md** | 1, 6.1 | CTA types, urgency, arc-to-CTA heuristics |
 | **pptx-layouts.md** | 7 | Slide layout schemas and field definitions (deferred from Step 1) |
 | **EXAMPLE_BRIEF.md** | 8 | Output format reference (deferred from Step 1) |
-| **presentation-intent.md** | 8.2 | `design` / `climax` / `key_figures` vocabulary and the design defaults the `design` override falls back to |
+| **presentation-intent.md** | 8.2, 11 | `design` / `climax` / `key_figures` vocabulary and the design defaults the `design` override falls back to; also holds the `## Layout to type mapping` table (see `brief-to-outline.py` below) |
+
+### Scripts (executed, never loaded into context)
+
+| Script | Step | Purpose |
+|--------|------|---------|
+| **brief-to-outline.py** | 11 | Export the Claude Design outline from a written brief; returns `data.outline_path`. Reads `## Layout to type mapping` from `libraries/presentation-intent.md` as the single run-time authority for a slide's `type` tag — reshaping that table breaks the export |

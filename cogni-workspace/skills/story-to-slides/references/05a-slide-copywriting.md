@@ -10,6 +10,22 @@ Define how to transform narrative prose into slide-optimized copy: assertion hea
 > The audience spends 3-5 seconds scanning a slide before the presenter speaks.
 > In that window: headline = message, numbers = proof, bullets = structure.
 
+## Quick Reference: Good vs Bad Output
+
+**Headlines** — assert, don't label:
+- Bad: "Market Overview" (topic label — audience must read the body to get the point)
+- Good: "European Rail Market Contracts 12% as Regulation Tightens" (assertion — message lands in 3 seconds)
+
+**Number plays** — reframe for impact:
+- Bad: "There were 688 rail suicides in 2023" (buried in prose)
+- Good: Hero number `688` isolated in stat-card, sublabel `+ 2,661 station attacks`, context box explains why manual monitoring fails
+
+**Bullets** — scan-optimized, not sentences:
+- Bad: "The security staff are unable to adequately cover all areas of the rail network on a 24/7 basis" (19 words)
+- Good: "Staff cannot cover all areas 24/7" (6 words — scannable in ~3 seconds at presentation distance, ~8-10 words max)
+
+The sections below reason through each rule in full.
+
 ---
 
 ## Headline Optimization

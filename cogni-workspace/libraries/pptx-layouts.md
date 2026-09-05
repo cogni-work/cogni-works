@@ -652,6 +652,7 @@ Node widths are computed dynamically: `nodeWidth = min(2.0, (8.6 - (nodeCount - 
 
 - **Bottom Banner**: Summary or outcome statement
 - **Speaker-Notes**: Process detail
+- **Detail-Grid**: Per-node key concepts (3-4 short items keyed by node id) — the Methodology prep slide uses this to list each phase's concepts under the pipeline
 
 ### Node Internal Layout
 

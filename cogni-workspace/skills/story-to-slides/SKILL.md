@@ -390,8 +390,8 @@ Frontmatter — omit `arc_id` when unresolved, and `climax` when no slide carrie
 
 **Read reference:** `references/09-validation-checklist.md`
 
-Five layers — stop on first failure, fix, re-check:
-1. **Schema** — layout types exist, required fields present, no color/styling fields, valid YAML
+Run the checker first — `python3 "$CLAUDE_PLUGIN_ROOT/scripts/check-brief.py" --type slides "{output_path}"` — and fix every `fail` it reports; it owns Layer 1 and the mechanizable items of Layers 3–5 (density, citations, notes structure, deck shape). Then reason through the remaining layers — stop on first failure, fix, re-check:
+1. **Schema** — the checker's verdict; nothing here is verified by eye
 2. **Message quality** — assertion headlines, MECE sequence, isolated hero numbers
 3. **Copywriting** — number plays applied, bullets consolidated, no hedging
 4. **Presentation logic** — bookend slides enforced, within max_slides, layout variety
@@ -495,3 +495,4 @@ The exporter prints one `{success, data, error}` envelope. On `success: false`, 
 | Script | Step | Purpose |
 |--------|------|---------|
 | **brief-to-outline.py** | 11 | Export the Claude Design outline from a written brief; returns `data.outline_path`. Reads `## Layout to type mapping` from `libraries/presentation-intent.md` as the single run-time authority for a slide's `type` tag — reshaping that table breaks the export |
+| **check-brief.py** (`$CLAUDE_PLUGIN_ROOT/scripts/`) | 9, 10 | Lint the written brief against the mechanizable checklist items; exit 0 clean, 1 findings, 2 unparseable |

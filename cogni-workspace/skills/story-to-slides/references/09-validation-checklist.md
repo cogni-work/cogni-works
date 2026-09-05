@@ -23,18 +23,37 @@ Reason through each layer sequentially. For each check within a layer:
 
 ## Layer 1: Schema Compliance
 
-Verify all slides conform to `pptx-layouts.md` specifications, YAML parses correctly, and frontmatter is complete.
+Layer 1 is mechanized. Run the checker and fix every `fail` before reasoning through Layers 2–5:
 
-### Reasoning Approach
+```bash
+python3 "$CLAUDE_PLUGIN_ROOT/scripts/check-brief.py" --type slides "{brief_path}"
+```
+
+It exits 0 when clean, 1 with findings, 2 when the brief cannot be parsed, and prints one `{success, data, error}` envelope whose `data.findings[]` names the check, the slide and the defect. The checks below map onto its names — `layout-enum`, `layout-required-fields`, `layout-unknown-fields`, `diagram-constraints`, `no-color-fields`, `fm-core-keys`, `fm-type-version`, `fm-theme-path`, `fm-confidence`, `unit-fenced`, `unit-numbering`, `render-contract-section` — and its Layer 3–5 siblings (`density-*`, `notes-*`, `cite-*`, `deck-*`, `idm-labels-localized`, `headline-length`, `jargon-client-facing`, `cta-summary-consistent`, `metadata-block`) run in the same pass. A `warn` is advisory; `--strict` promotes it. Do not verify any of these by eye — the prose that follows records what the checker enforces so a finding can be read, not so the model re-derives it.
+
+### Closed layout set
+
+The checker's `layout-enum` accepts exactly these eleven names. `tests/test-brief-layout-sync.sh` pins this list to the `## Layout N:` headings in `pptx-layouts.md`, the HTML renderer's dispatcher and the checker's own enum — add a layout in all four or in none.
+
+- `title-slide`
+- `stat-card-with-context`
+- `four-quadrants`
+- `two-columns-equal`
+- `is-does-means`
+- `three-options`
+- `timeline-steps`
+- `layered-architecture`
+- `process-flow`
+- `gantt-chart`
+- `closing-slide`
+
+### What the checker enforces here
 
 ```text
-REASON through schema compliance for each slide:
+SCHEMA compliance, as check-brief.py grades it:
 
   1. CHECK layout type
-     → Is the layout one of: title-slide, stat-card-with-context, four-quadrants,
-       two-columns-equal, is-does-means, three-options, timeline-steps,
-       layered-architecture, process-flow, gantt-chart,
-       closing-slide?
+     → Is the layout one of the eleven names in the closed layout set above?
      → FAIL if: layout name misspelled or invented
      → FIX: Replace with exact layout name from pptx-layouts.md
 

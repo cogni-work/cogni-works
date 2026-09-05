@@ -359,16 +359,6 @@ Absorbed from the retired cogni-visual plugin. Extracts the three to five most i
 
 `/render-infographic` is the universal entry point: it reads the brief's `style_preset` and routes to the right family. Unlike the two skills above, this one renders by default — after writing the brief it auto-dispatches `/render-infographic` (pass `render: false` to produce the brief only). One constraint to respect: both hand-drawn render agents share a single Excalidraw MCP canvas, so hand-drawn renders must be serialized and never dispatched in parallel. Pencil-rendered editorial briefs are file-backed and can run alongside one Excalidraw render safely.
 
-### `review-brief` — Stakeholder review of a visual brief before rendering
-
-Reviews any brief the `story-to-*` skills produce — presentation, web, storyboard, or infographic — from three stakeholder perspectives: design quality, audience experience, and usability. Returns a structured verdict (accept / revise / reject) with prioritized improvements.
-
-The point is where it sits in the pipeline: rendering is the expensive step, so catching a weak brief here costs one review instead of a full render-and-redo. Run it after a brief is generated, or after you have hand-edited one, before handing it to the PPTX, Excalidraw, or Pencil pipeline.
-
-```
-/review-brief
-```
-
 ### `enrich-report` — Turn a finished report into a visual deliverable
 
 Absorbed from the retired cogni-visual plugin. Post-processes an *already-written* markdown report into a self-contained themed HTML rendition — it never authors a new report from scratch, never creates slides, and never rewrites prose (that is `copywriter`). The layout follows the consulting-deliverable pattern: the report's executive summary, then a full-width editorial infographic distilled from the whole report, then the report body with sidebar navigation and sparse inline Chart.js charts and SVG concept diagrams. The infographic is where the data visualization concentrates; the body stays prose unless a visual genuinely aids a specific passage.

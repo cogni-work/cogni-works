@@ -1,531 +1,197 @@
 # Story Arc Registry
 
-## Overview
-
-This registry indexes all available story arcs for the `narrative` skill. Each arc provides a different narrative framework for transforming structured content (research syntheses, analyses, reports) into compelling executive narratives.
+The selection contract for the `narrative` skill: which arc a run should follow, and how that is decided. Each arc's structure — headings, composition, elements, validation — lives in its own contract at `{arc-id}/arc-definition.md`; this file carries only what selection needs, as one declarative block per arc, and the algorithm that reads those blocks.
 
 ## Quick Reference
 
-| # | Arc ID | Elements (Short) | TIPS | Best For | Detection Priority |
-|---|--------|-----------------|------|----------|--------------------|
-| 1 | `corporate-visions` | Change → Now → You → Pay | - | Market research, B2B, sales | Default fallback |
-| 2 | `technology-futures` | Emerging → Converging → Possible → Required | - | Innovation, R&D, tech trends | `content_type: "technology"` |
-| 3 | `competitive-intelligence` | Landscape → Shifts → Positioning → Implications | - | Competitive analysis, threats | `content_type: "competitive"` |
-| 4 | `strategic-foresight` | Signals → Scenarios → Strategies → Decisions | - | Long-range planning, scenarios | `content_type: "foresight"` |
-| 5 | `industry-transformation` | Forces → Friction → Evolution → Leadership | - | Industry analysis, regulation | `content_type: "industry"` |
-| 6 | `trend-panorama` | Forces → Impact → Horizons → Foundations | T→I→P→S | Trend-scout output (theme-less), TIPS panoramas | Structural: `trend-scout-output.json` without value model |
-| 7 | `theme-thesis` | Change → Now → You → Pay | T→I→P→S | Theme-level investment narratives | `content_type: "theme"` |
-| 8 | `jtbd-portfolio` | Jobs → Friction → Portfolio → Invitation | - | Portfolio introductions, capability overviews, pre-sales | `content_type: "jtbd"` |
-| 9 | `company-credo` | Mission → Conviction → Credibility → Promise | - | About-Us pages, company introductions, brand identity narratives | `content_type: "company-credo"` or `"about-us"` |
-| 10 | `engagement-model` | Principles → Process → Partnership → Outcomes | - | How-We-Work pages, engagement sections of proposals, partner onboarding | `content_type: "engagement-model"` or `"how-we-work"` |
-| 11 | `smarter-service` | Forces → Impact → Horizons → Foundations | T→I→P→S | TIPS reports with investment themes (theme-aware sibling of trend-panorama) | Structural: `tips-value-model.json` present |
+| Arc ID | Elements | Governing question (short) | Primary signal |
+|--------|----------|----------------------------|----------------|
+| `corporate-visions` | Why Change → Why Now → Why You → Why Pay | Why change, why now, why us, why pay? | default candidate |
+| `technology-futures` | What's Emerging → What's Converging → What's Possible → What's Required | What matures, combines, unlocks, requires? | `content_type: technology` |
+| `competitive-intelligence` | Landscape → Shifts → Positioning → Implications | Where do competitors stand, how is that moving, where are the gaps, by when? | `content_type: competitive` |
+| `strategic-foresight` | Signals → Scenarios → Strategies → Decisions | Which futures are plausible, what holds across them, what must be decided now? | `content_type: foresight` |
+| `industry-transformation` | Forces → Friction → Evolution → Leadership | What restructures the industry, what resists, what emerges, who leads? | `content_type: industry` |
+| `trend-panorama` | Forces → Impact → Horizons → Foundations | What is the whole TIPS landscape and what does it demand? | structural: trend-scout output, no value model |
+| `smarter-service` | Forces → Impact → Horizons → Foundations | Where do the investment themes anchor in the TIPS landscape? | structural: `tips-value-model.json` |
+| `theme-thesis` | Why Change → Why Now → Why You → Why Pay | Why invest in this one theme, now? | `content_type: theme` |
+| `jtbd-portfolio` | Job Landscape → Friction Map → Portfolio Map → Invitation | Which jobs, which friction, which solution per job, where to start? | `content_type: jtbd` |
+| `company-credo` | Mission → Conviction → Credibility → Promise | Why do we exist, what do we believe, why trust us, what can you expect? | `content_type: company-credo` |
+| `engagement-model` | Principles → Process → Partnership → Outcomes | How do we work, step by step, and what will you point to? | `content_type: engagement-model` |
 
 ## Arc Selection Logic
 
-1. **Explicit selection**: Caller specifies `arc_id` directly (highest priority)
-2. **Structural detection**: Check for arc-specific file signatures (e.g., `trend-scout-output.json`)
-3. **Content type mapping**: Automatic detection based on `content_type` or `research_type` metadata
-4. **Content analysis**: Keyword density analysis of input content
-5. **Fallback default**: corporate-visions
-
-## Available Story Arcs
-
-### 1. Corporate Visions (Default)
-
-**Arc ID:** `corporate-visions`
-**Display Name:** Corporate Visions
-**Elements:** Why Change → Why Now → Why You → Why Pay
-
-**Best For:**
-- Market research
-- Competitive positioning
-- Sales enablement
-- B2B value propositions
-
-**Detection Signals:**
-- `content_type: "generic"` or `"market"`
-- Default fallback when no other arc matches
-
-**Section Proportions:**
-- Hook: 10%
-- Why Change: 27%
-- Why Now: 21%
-- Why You: 27%
-- Why Pay: 15%
-- **Default total:** 1,675 words (customizable via `--target-length`)
-
-**Contract:** `corporate-visions/arc-definition.md`
-
----
-
-### 2. Technology Futures
-
-**Arc ID:** `technology-futures`
-**Display Name:** Technology Futures
-**Elements:** What's Emerging → What's Converging → What's Possible → What's Required
-
-**Best For:**
-- Technology trend research
-- Innovation scouting
-- R&D strategy
-- Capability roadmapping
-
-**Detection Signals:**
-- `content_type: "technology"`
-- Keywords (>=15% density): "emerging", "innovation", "capability", "technology", "R&D", "breakthrough"
-
-**Section Proportions:**
-- Hook: 11%
-- What's Emerging: 24%
-- What's Converging: 24%
-- What's Possible: 24%
-- What's Required: 17%
-- **Default total:** 1,675 words (customizable via `--target-length`)
-
-**Contract:** `technology-futures/arc-definition.md`
-
----
-
-### 3. Competitive Intelligence
-
-**Arc ID:** `competitive-intelligence`
-**Display Name:** Competitive Intelligence
-**Elements:** Landscape → Shifts → Positioning → Implications
-
-**Best For:**
-- Competitive analysis
-- Market positioning
-- Threat assessment
-- Strategic differentiation
-
-**Detection Signals:**
-- `content_type: "competitive"`
-- Keywords (>=12% density): "competitor", "market share", "positioning", "differentiation", "threat", "rivalry"
-
-**Section Proportions:**
-- Hook: 10%
-- Landscape: 24%
-- Shifts: 21%
-- Positioning: 27%
-- Implications: 18%
-- **Default total:** 1,675 words (customizable via `--target-length`)
-
-**Contract:** `competitive-intelligence/arc-definition.md`
-
----
-
-### 4. Strategic Foresight
-
-**Arc ID:** `strategic-foresight`
-**Display Name:** Strategic Foresight
-**Elements:** Signals → Scenarios → Strategies → Decisions
-
-**Best For:**
-- Long-range planning
-- Scenario analysis
-- Uncertainty navigation
-- Strategic options generation
-
-**Detection Signals:**
-- `content_type: "foresight"` or `"scenarios"`
-- Keywords (>=10% density): "scenario", "future", "signal", "uncertainty", "planning", "foresight"
-
-**Section Proportions:**
-- Hook: 10%
-- Signals: 21%
-- Scenarios: 27%
-- Strategies: 24%
-- Decisions: 18%
-- **Default total:** 1,675 words (customizable via `--target-length`)
-
-**Contract:** `strategic-foresight/arc-definition.md`
-
----
-
-### 5. Industry Transformation
-
-**Arc ID:** `industry-transformation`
-**Display Name:** Industry Transformation
-**Elements:** Forces → Friction → Evolution → Leadership
-
-**Best For:**
-- Industry analysis
-- Sector transformation
-- Regulatory impact
-- Structural change analysis
-
-**Detection Signals:**
-- `content_type: "industry"`
-- Keywords (>=12% density): "regulatory", "sector", "structural", "industry", "transformation", "policy"
-
-**Section Proportions:**
-- Hook: 10%
-- Forces: 24%
-- Friction: 21%
-- Evolution: 27%
-- Leadership: 18%
-- **Default total:** 1,675 words (customizable via `--target-length`)
-
-**Contract:** `industry-transformation/arc-definition.md`
-
----
-
-### 6. Trend Panorama
-
-**Arc ID:** `trend-panorama`
-**Display Name:** Trend Panorama
-**Elements:** Forces → Impact → Horizons → Foundations (TIPS: T → I → P → S)
-
-**Best For:**
-- Trend-scout output summarization (52 trend candidates)
-- TIPS trend report narratives
-- Multi-horizon trend landscape overviews
-- Industry-specific trend panoramas
-
-**Detection Signals:**
-- `content_type: "trend"` or `"trends"` or `"tips"`
-- `research_type: "smarter-service"` (trend-scout output)
-- `synthesis_format: "TIPS"` in source metadata
-- Structural: presence of `trend-scout-output.json` or `tips-trend-report.md`
-- Keywords (>=12% density): "trend", "horizon", "act", "plan", "observe", "TIPS", "signal intensity", "dimension"
-
-**TIPS Dimension Mapping:**
-- Forces = T (Externe Effekte): economy, regulation, society
-- Impact = I (Digitale Wertetreiber): CX, products, processes
-- Horizons = P (Neue Horizonte): strategy, leadership, governance
-- Foundations = S (Digitales Fundament): culture, workforce, technology
-
-**Horizon Cascade:** Each element applies Act → Plan → Observe progression internally.
-
-**Section Proportions:**
-- Hook: 10%
-- Forces: 24%
-- Impact: 24%
-- Horizons: 24%
-- Foundations: 18%
-- **Default total:** 1,675 words (customizable via `--target-length`)
-
-**Contract:** `trend-panorama/arc-definition.md`
-
----
-
-### 7. Theme Thesis
-
-**Arc ID:** `theme-thesis`
-**Display Name:** Theme Thesis
-**Elements:** Why Change → Why Now → Why You → Why Pay (Corporate Visions adapted for themes)
-
-**Best For:**
-- Individual theme sections within TIPS trend reports
-- Investment thesis narratives with portfolio-backed solutions
-- Theme-level persuasion with IS-DOES-MEANS Power Positions
-- CxO-level theme justification
-
-**Detection Signals:**
-- `content_type: "theme"` or `"investment-theme"`
-- Structural: presence of `value_chains[]` with `candidate_ref` and `solution_templates[]`
-- Keywords (>=15% density): "theme", "investment thesis", "value chain", "solution template", "strategic question"
-
-**TIPS Candidate Mapping (cross-dimensional, not 1:1):**
-- Why Change = T-candidates (unconsidered need) + I-candidates (impact)
-- Why Now = Act-horizon candidates from any dimension (forcing functions)
-- Why You = Solution Templates (IS) + P-candidates (DOES) + S-candidates (MEANS)
-- Why Pay = I-candidates (disruption cost) + S-candidates (capability gap cost)
-
-**Section Proportions:**
-- Hook: 8%
-- Why Change: 25%
-- Why Now: 20%
-- Why You: 30%
-- Why Pay: 17%
-- **Target:** Variable (600-1200 words based on theme complexity)
-
-**Contract:** `theme-thesis/arc-definition.md`
-
----
-
-### 8. JTBD Portfolio
-
-**Arc ID:** `jtbd-portfolio`
-**Display Name:** JTBD Portfolio
-**Elements:** Job Landscape → Friction Map → Portfolio Map → Invitation
-
-**Best For:**
-- Portfolio introductions (presenting a solution portfolio to new prospects)
-- Capability overviews (executive briefings on what the company solves)
-- Pre-sales positioning (framing the portfolio before deal-specific tailoring)
-- B2B portfolio narratives organized by buyer jobs, not product features
-
-**Description:**
-A 5-stage B2B portfolio narrative structured around Jobs-to-be-Done. Organises a solution portfolio by the functional jobs the buyer hires solutions for, rather than by product features. Suitable for portfolio introductions, capability overviews, and pre-sales positioning.
-
-**Detection Signals:**
-- `content_type: "jtbd"`
-- Keywords (>=12% density): "jobs-to-be-done", "functional job", "jtbd", "job landscape", "hire", "portfolio map", "capability overview", "pre-sales positioning"
-
-**JTBD-Specific Constraints:**
-- Jobs must be verb phrases, not product category names
-- Strict 1:1 job-to-solution mapping; orphaned solutions flagged
-- No feature lists -- IS/DOES/MEANS only per solution
-- Invitation stage explicitly signals cogni-sales handoff
-
-**Section Proportions:**
-- Hook (Context Setter): 10%
-- Job Landscape: 24%
-- Friction Map: 21%
-- Portfolio Map: 27%
-- Invitation: 18%
-- **Default total:** 1,675 words (customizable via `--target-length`)
-
-**Contract:** `jtbd-portfolio/arc-definition.md`
-
----
-
-### 9. Company Credo
-
-**Arc ID:** `company-credo`
-**Display Name:** Company Credo
-**Elements:** Mission → Conviction → Credibility → Promise
-
-**Best For:**
-- Website "About Us" pages (primary use)
-- Company introductions at the start of proposals and sales decks
-- Investor and partner relationship pages where the buyer is choosing the company before any specific offering
-- Brand identity documents that need to read as a narrative, not a brochure
-
-**Description:**
-A 4-element B2B narrative that answers the buyer's first unasked question: "Why does this company exist, and why should I believe it?" Mission states the belief that drives the company; Conviction names 3–4 non-negotiable judgment calls; Credibility provides the receipts; Promise closes with a forward commitment in You-voice.
-
-**Detection Signals:**
-- `content_type: "company-credo"` or `"about-us"`
-- Keywords (>=12% density): "about us", "our mission", "why we exist", "what we believe", "our story", "company values", "our credo", "who we are", "why us"
-
-**Company-Credo-Specific Constraints:**
-- Mission must be first-person plural ("we")
-- Each Conviction must pass the disagreement test (a named competitor could plausibly disagree)
-- Each Conviction must pair belief with buyer-visible consequence
-- Every quantitative Credibility claim must be cited
-- Named customers in Credibility only with explicit `disclosure_permission: true`
-- Promise MUST NOT commit to anything in `announce`-mode products
-- Every Promise item must use You-Phrasing
-- Final invitation is a single link, not a menu
-
-**Section Proportions:**
-- Hook (Founding lens): 10%
-- Mission: 24%
-- Conviction: 22%
-- Credibility: 26%
-- Promise: 18%
-- **Default total:** 1,400 words (customizable via `--target-length`)
-
-**Contract:** `company-credo/arc-definition.md`
-
----
-
-### 10. Engagement Model
-
-**Arc ID:** `engagement-model`
-**Display Name:** Engagement Model
-**Elements:** Principles → Process → Partnership → Outcomes
-
-**Best For:**
-- Website "How We Work" / "Our Approach" pages (primary use)
-- The engagement-model section of proposals (explaining how the work will land, not what will be delivered)
-- Partner onboarding pages
-- Internal documentation for new hires explaining company defaults
-
-**Description:**
-A 4-element B2B narrative that answers "how will this work land in my organization?" Principles name 3–4 operating disciplines; Process walks the canonical 4–6 phases with artifacts and time bands; Partnership names what the buyer must bring; Outcomes summarizes cross-cutting results the buyer can observe.
-
-**Detection Signals:**
-- `content_type: "engagement-model"` or `"how-we-work"`
-- Keywords (>=12% density): "how we work", "engagement model", "working with us", "our process", "delivery model", "partnership", "our approach", "principles", "ways of working"
-
-**Engagement-Model-Specific Constraints:**
-- Every Principle must be operational (observable in week 1), not a value
-- Every Process phase must name at least one artifact and one time band
-- No Process phase may be specific to one solution (solution-specific phases belong on capability pages)
-- Every Partnership expectation must name a concrete thing (a person, data source, approval, or timebox)
-- Every Partnership expectation must state a consequence if missing
-- Every Outcome must describe buyer-visible change, not company activity
-- Every Outcome must be cross-cutting (true across most of the portfolio)
-- Pricing, ROI numbers, and per-capability metrics are FORBIDDEN in this arc (they belong on capability pages or proposals)
-
-**Section Proportions:**
-- Hook (Working with us): 8%
-- Principles: 22%
-- Process: 28%
-- Partnership: 20%
-- Outcomes: 22%
-- **Default total:** 1,400 words (customizable via `--target-length`)
-
-**Contract:** `engagement-model/arc-definition.md`
-
----
-
-### 11. Smarter Service
-
-**Arc ID:** `smarter-service`
-**Display Name:** Smarter Service
-**Elements:** Forces → Impact → Horizons → Foundations (TIPS: T → I → P → S, theme-aware)
-
-**Best For:**
-- TIPS trend reports built on top of a value model with investment themes (primary)
-- CxO-level reports where investment themes need a coherent macro spine
-- Strategic foresight briefings with cross-dimensional theme anchoring
-- Multi-theme transformation roadmaps grounded in dimensional forces
-
-**Description:**
-A theme-aware sibling of `trend-panorama`. Same four elements and same TIPS dimension mapping, but each macro element doubles as an H2 section that nests one or more investment-theme cases (H3) anchored to that dimension. The arc adds a Foundations-anchored synthesis section ("The Capability Imperative") that aggregates capability requirements across themes. Selected over `trend-panorama` whenever `tips-value-model.json` is present in the project.
-
-**Detection Signals:**
-- Structural (highest confidence): `tips-value-model.json` present in source directory or `.metadata/`
-- `content_type: "smarter-service"` or `"investment-theme-report"`
-- `research_type: "smarter-service-themed"`
-- Keywords (≥12% density): "investment theme", "Handlungsfeld", "value chain", "solution template", "Smarter Service", "Trendradar"
-
-**Smarter-Service-Specific Constraints:**
-- Each investment theme appears exactly once in main flow — anchored to its dominant TIPS pole, not duplicated across elements
-- Anchoring rule deterministic: dominant `candidate_ref` count, tiebreaker = highest single-candidate composite score
-- Secondary poles get one-line callouts, not full sub-sections
-- Theme-cases must NOT restate macro Forces/Impact/Horizons/Foundations context — that lives in dimension narratives once
-- Synthesis section "The Capability Imperative" is required in theme-aware mode and aggregates across themes (not per-theme summary)
-
-**TIPS Candidate Mapping:**
-- Forces (T): Externe Effekte — economy, regulation, society
-- Impact (I): Digitale Wertetreiber — CX, products, processes
-- Horizons (P): Neue Horizonte — strategy, leadership, governance
-- Foundations (S): Digitales Fundament — culture, workforce, technology
-- Theme anchoring: each theme's dominant pole determines the macro section it nests under
-
-**Section Proportions (theme-aware mode, with N themes):**
-- Executive Summary: 10%
-- Forces (dimension narrative + nested theme-cases): 22%
-- Impact (dimension narrative + nested theme-cases): 22%
-- Horizons (dimension narrative + nested theme-cases): 22%
-- Foundations (dimension narrative + nested theme-cases): 16%
-- Synthesis ("The Capability Imperative"): 8%
-- **Default total:** scales with cogni-trends length tiers (4,000–8,000 prose words)
-
-**Section Proportions (insight-summary fallback, no themes):**
-- Hook: 10% / Forces: 24% / Impact: 24% / Horizons: 24% / Foundations: 18%
-- Default total: 1,675 words (degrades to trend-panorama-equivalent structure)
-
-**Contract:** `smarter-service/arc-definition.md`
-
----
+1. **Explicit selection** — `--arc-id` on the invocation, or an arc inherited from the source project's metadata (SKILL.md Phase 1 step 8). Highest priority; no detection runs.
+2. **Structural detection** — arc-specific file signatures (the TIPS pair).
+3. **Content-type mapping** — `content_type` or `research_type` metadata.
+4. **Execution-fit ranking** — compare the strongest registered candidates against the Phase 0 brief: audience, decision purpose, perspective, geography and each arc's governing question. The decision purpose takes precedence over keyword density: a diagnostic purpose ranks a diagnostic arc above a persuasion arc even when the persuasion keywords are denser.
+5. **Content analysis** — keyword density against each block's `signals`, discounted by its `anti_signals`.
+6. **Fallback** — `corporate-visions` as a candidate for the shortlist, never an automatic winner.
+
+The output of steps 2-6 is a ranked candidate set. Phase 2 presents the top two or three as a shortlist (see Interactive Selection Format); under `--interactive false` the top-ranked candidate is taken.
+
+## Arc Blocks
+
+One block per arc directory. Every block carries the same six fields; a block whose `distinguish_from` is empty is a registry defect, because it leaves the shortlist with nothing to weigh the arc against. Adding an arc means adding a block here and a contract in its directory — the guards enumerate both at run time.
+
+### corporate-visions
+
+- **question:** Why should the reader change, why now, why with this capability, and why does it pay?
+- **best_for:** market research syntheses, competitive positioning, sales enablement, B2B value propositions, executive decision support.
+- **signals:** `content_type: generic` or `market`; a problem executives underestimate; deadlines, regulatory dates, tipping points; recommended capabilities; quantified costs, risks or penalties.
+- **anti_signals:** a documented customer journey with verified outcomes; named alternatives weighed against criteria; a solution portfolio for buyers who already want it; a company self-description; TIPS value chains.
+- **distinguish_from:** `theme-thesis` (the same persuasion for one investment theme inside a TIPS report); `jtbd-portfolio` (buyers who already accept the need and want the portfolio explained); `industry-transformation` (structural change of a sector rather than one reader's decision); `competitive-intelligence` (positioning within a category rather than a case for change). Corporate Visions persuades a reader to change, act now, prefer a position and justify investment — it is not the arc for diagnosing an open problem or choosing among credible options.
+- **fallback_priority:** the default *candidate* when no specialized content type is detected — always on the shortlist in that case, never the automatic winner; the execution-fit step and the alternatives' governing questions decide.
+
+### technology-futures
+
+- **question:** Which capabilities are reaching practical maturity, how do they combine, what do the combinations make possible, and what must be in place to capture it?
+- **best_for:** innovation and R&D syntheses, technology-trend research, capability roadmapping, technology scouting.
+- **signals:** `content_type: technology`; keywords "emerging", "innovation", "capability", "technology", "R&D", "breakthrough", maturity markers, convergence, prerequisites.
+- **anti_signals:** competitor positions and shares; a purchase or investment case; multiple divergent scenarios.
+- **distinguish_from:** `competitive-intelligence` (competitors, not capabilities); `strategic-foresight` (uncertainty across futures rather than one capability path); `corporate-visions` (persuasion rather than a roadmap).
+- **fallback_priority:** never a fallback.
+
+### competitive-intelligence
+
+- **question:** Where do the competitors stand, how is that changing, where are the gaps, and by when must we move?
+- **best_for:** competitive analysis, threat assessment, positioning studies, market-structure research.
+- **signals:** `content_type: competitive`; keywords "competitor", "market share", "positioning", "differentiation", "threat", "rivalry"; strategic moves with dates; white spaces.
+- **anti_signals:** the source argues the category itself is wrong; the forces are regulatory or structural rather than competitive; a capability roadmap.
+- **distinguish_from:** `industry-transformation` (macro forces on a sector rather than competitors' moves); `technology-futures` (capabilities rather than positions); `corporate-visions` (a case for change rather than a position within a stable category).
+- **fallback_priority:** never a fallback.
+
+### strategic-foresight
+
+- **question:** What weak signals point to divergent futures, what plausible scenarios follow, which strategies hold across them, and what must be decided now?
+- **best_for:** long-range planning, scenario analysis, foresight studies, strategy under regulatory or technological uncertainty.
+- **signals:** `content_type: foresight` or `scenarios`; keywords "scenario", "future", "signal", "uncertainty", "planning", "foresight"; contradictory indicators; robust versus bet.
+- **anti_signals:** evidence converging on one future; options already named and awaiting a choice; pressure to act now on a known need.
+- **distinguish_from:** `technology-futures` (one capability path); `corporate-visions` (a known need and a present decision); `trend-panorama` (a landscape summary rather than divergent futures).
+- **fallback_priority:** never a fallback.
+
+### industry-transformation
+
+- **question:** Which macro forces are restructuring the industry, what resists them, what does the industry become, and how does one lead in that new structure?
+- **best_for:** industry analysis, regulatory-impact studies, sector-transformation research, thought leadership on structural change.
+- **signals:** `content_type: industry`; keywords "regulatory", "sector", "structural", "industry", "transformation", "policy"; incumbents and barriers; a future industry structure.
+- **anti_signals:** competitors' moves rather than macro forces; a single company's investment case; a new-category argument.
+- **distinguish_from:** `competitive-intelligence` (positions within a stable category); `corporate-visions` (one reader's decision rather than a sector's transition); `trend-panorama` (a TIPS landscape rather than one industry's structural change).
+- **fallback_priority:** never a fallback.
+
+### trend-panorama
+
+- **question:** Which external forces are reshaping the landscape, how do they disrupt value creation, what strategic possibilities open, and what capabilities are required?
+- **best_for:** trend-scout output summaries, TIPS trend-report narratives without themes, multi-horizon trend landscapes, industry trend panoramas.
+- **signals:** structural — `trend-scout-output.json` (in the source or `.metadata/`), trend entities with `planning_horizon` and `dimension` frontmatter, `tips-trend-report.md` — with **no** `tips-value-model.json`; `content_type: trend`, `trends` or `tips`; `research_type: smarter-service`; keywords "trend", "horizon", "act", "plan", "observe", "TIPS", "signal intensity", "dimension".
+- **anti_signals:** `tips-value-model.json` present; a single theme with value chains; no horizon or dimension structure.
+- **distinguish_from:** `smarter-service` (the same four elements with investment themes anchored — the value model decides); `theme-thesis` (one theme's thesis rather than the landscape); `strategic-foresight` (divergent futures rather than a horizon cascade).
+- **fallback_priority:** never a fallback; the structural signal decides between this arc and `smarter-service` before keyword analysis.
+
+### smarter-service
+
+- **question:** Which external forces reshape the landscape, how do they disrupt value creation, where do the investment themes position, and what shared foundations must be built first?
+- **best_for:** CxO-level TIPS trend reports with investment themes, board-level foresight briefings, multi-theme transformation roadmaps.
+- **signals:** structural, highest confidence — `tips-value-model.json` (in the source or `.metadata/`), `tips-trend-report.md` with investment-theme sections; `content_type: smarter-service` or `investment-theme-report`; `research_type: smarter-service-themed`; keywords "investment theme", "Handlungsfeld", "value chain", "solution template", "Smarter Service", "Trendradar", "Externe Effekte", "Digitale Wertetreiber", "Neue Horizonte", "Digitales Fundament".
+- **anti_signals:** trend-scout output with no value model; a single theme's value chains.
+- **distinguish_from:** `trend-panorama` (theme-less sibling — fall back to it when the value model is absent); `theme-thesis` (the arc for one theme section inside a report built on this one).
+- **fallback_priority:** never a fallback.
+
+### theme-thesis
+
+- **question:** Why must this theme change how the reader thinks, why is the window closing now, which portfolio capabilities answer it, and what does inaction cost?
+- **best_for:** individual theme sections within TIPS trend reports, investment-thesis narratives for strategic themes, CxO-level theme justification.
+- **signals:** `content_type: theme` or `investment-theme`; input carrying `theme_id`, `strategic_question`, `value_chains[]` with `candidate_ref`, `solution_templates[]`; keywords "theme", "investment thesis", "value chain", "solution template", "strategic question", "candidate_ref", "chain_score".
+- **anti_signals:** a whole landscape with no theme boundary; persuasion with no TIPS value chains.
+- **distinguish_from:** `corporate-visions` (the whole-report persuasion arc this one adapts); `smarter-service` (the report spine a theme sits inside); `trend-panorama` (the landscape, not one bet).
+- **fallback_priority:** never a fallback.
+
+### jtbd-portfolio
+
+- **question:** What jobs does the buyer hire for, what stands in the way of each, which solution does each job, and where does the buyer start?
+- **best_for:** portfolio introductions, capability overviews, pre-sales positioning, the `home` and `persona` scopes of cogni-portfolio's customer narrative.
+- **signals:** `content_type: jtbd`; portfolio entities as the source (propositions, customers, markets, solutions, competitors); keywords "jobs-to-be-done", "functional job", "jtbd", "job landscape", "hire", "portfolio map", "capability overview", "pre-sales positioning".
+- **anti_signals:** a single named prospect with deal-specific research; research syntheses with no propositions; a company self-description.
+- **distinguish_from:** `corporate-visions` (persuading a buyer who has not accepted the need — JTBD explains a portfolio to one who has); `company-credo` and `engagement-model` (the company rather than its solutions).
+- **fallback_priority:** never a fallback.
+
+### company-credo
+
+- **question:** Why does this company exist, what does it believe that others do not, why should the reader trust that, and what can the reader expect?
+- **best_for:** About-Us pages, company introductions, brand-identity narratives, the `about` scope of cogni-portfolio's customer narrative.
+- **signals:** `content_type: company-credo` or `about-us`; a company description, positioning or mission, recurring MEANS themes; keywords "about us", "our mission", "why we exist", "what we believe", "our story", "company values", "our credo", "who we are", "why us".
+- **anti_signals:** a delivery process; solutions mapped to buyer jobs; market research about someone else.
+- **distinguish_from:** `engagement-model` (how the company works rather than why it exists); `jtbd-portfolio` (what it sells rather than what it believes); `corporate-visions` (a case for the reader's change rather than the company's identity).
+- **fallback_priority:** never a fallback.
+
+### engagement-model
+
+- **question:** How does this company work, what does an engagement look like step by step, what must the buyer bring, and what will they be able to point to at the end?
+- **best_for:** How-We-Work pages, engagement sections of proposals, partner onboarding, the `approach` scope of cogni-portfolio's customer narrative.
+- **signals:** `content_type: engagement-model` or `how-we-work`; delivery phases, cadences, artifacts, buyer inputs; keywords "how we work", "engagement model", "working with us", "our process", "delivery model", "partnership", "our approach", "principles", "ways of working".
+- **anti_signals:** one solution's scope; why the company exists; pricing tiers or ROI models.
+- **distinguish_from:** `company-credo` (why we exist rather than how we work); `jtbd-portfolio` (the solutions rather than the way of working); a capability page or proposal (where pricing and per-solution scope belong).
+- **fallback_priority:** never a fallback.
 
 ## Arc Detection Algorithm
 
-### Step 1: Explicit Selection
+### Step 1: Explicit selection
 
-If the caller provides `arc_id` directly, use it without detection.
+If the caller provides `arc_id` directly, or Phase 1 inherited one from the source project's metadata, use it without detection.
 
-### Step 2: Structural Detection (trend-panorama / smarter-service)
+### Step 2: Structural detection (trend-panorama / smarter-service)
 
-Before content-type mapping, check for structural signals that uniquely identify TIPS reports. The presence of `tips-value-model.json` is the deciding signal between the theme-less (`trend-panorama`) and theme-aware (`smarter-service`) variants.
+Before content-type mapping, check for structural signals that uniquely identify TIPS reports. The presence of `tips-value-model.json` is the deciding signal between the theme-less and theme-aware variants.
 
 ```javascript
-// Step 2a: theme-aware TIPS report — value model present means themes exist
 if (fileExists("tips-value-model.json") || fileExists(".metadata/tips-value-model.json")) {
   detected_arc = "smarter-service"
   detection_reason = "structural: tips-value-model.json detected (theme-aware TIPS report)"
 }
-
-// Step 2b: theme-less TIPS panorama — trend-scout output without a value model
 else if (fileExists(".metadata/trend-scout-output.json") || fileExists("trend-scout-output.json")) {
   detected_arc = "trend-panorama"
   detection_reason = "structural: trend-scout-output.json detected (theme-less TIPS panorama)"
 }
 else if (fileExists("tips-trend-report.md")) {
-  // Existing report with H2 investment-theme sections strongly implies value model;
-  // fall back to trend-panorama only if value model was deleted post-generation.
   detected_arc = "trend-panorama"
   detection_reason = "structural: tips-trend-report.md detected (no value model — fallback)"
 }
 ```
 
-### Step 3: Content Type Mapping
+### Step 3: Content-type mapping
 
 ```javascript
 const arcMap = {
-  "trend": "trend-panorama",
-  "trends": "trend-panorama",
-  "tips": "trend-panorama",
-  "smarter-service": "smarter-service",
-  "investment-theme-report": "smarter-service",
-  "theme": "theme-thesis",
-  "investment-theme": "theme-thesis",
+  "trend": "trend-panorama", "trends": "trend-panorama", "tips": "trend-panorama",
+  "smarter-service": "smarter-service", "investment-theme-report": "smarter-service",
+  "theme": "theme-thesis", "investment-theme": "theme-thesis",
   "technology": "technology-futures",
   "competitive": "competitive-intelligence",
-  "foresight": "strategic-foresight",
-  "scenarios": "strategic-foresight",
+  "foresight": "strategic-foresight", "scenarios": "strategic-foresight",
   "industry": "industry-transformation",
   "jtbd": "jtbd-portfolio",
-  "company-credo": "company-credo",
-  "about-us": "company-credo",
-  "engagement-model": "engagement-model",
-  "how-we-work": "engagement-model",
-  "market": "corporate-visions",
-  "generic": "corporate-visions"
+  "company-credo": "company-credo", "about-us": "company-credo",
+  "engagement-model": "engagement-model", "how-we-work": "engagement-model",
+  "market": "corporate-visions", "generic": "corporate-visions"
 }
 
-// Also check research_type field — note: theme-aware variant takes precedence
-// when a value model exists (Step 2 already handled the structural signal).
-if (research_type === "smarter-service-themed") {
-  detected_arc = "smarter-service"
-  detection_reason = `research_type="smarter-service-themed"`
-}
-else if (research_type === "smarter-service") {
-  detected_arc = "trend-panorama"
-  detection_reason = `research_type="smarter-service" (theme-less)`
-}
+if (research_type === "smarter-service-themed") { detected_arc = "smarter-service"; detection_reason = 'research_type="smarter-service-themed"' }
+else if (research_type === "smarter-service") { detected_arc = "trend-panorama"; detection_reason = 'research_type="smarter-service" (theme-less)' }
 
-if (content_type in arcMap) {
-  detected_arc = arcMap[content_type]
-  detection_reason = `content_type="${content_type}"`
-}
+if (content_type in arcMap) { detected_arc = arcMap[content_type]; detection_reason = `content_type="${content_type}"` }
 ```
 
-### Step 4: Content Analysis (if no content_type match)
+### Step 4: Execution-fit ranking
 
-Analyze the input content for keyword density:
+Take the arcs whose `signals` the source matches and rank them against the Phase 0 brief. For each candidate ask whether its governing question is the question the brief's decision purpose needs answered, whether its `best_for` fits the audience and perspective, and whether its `anti_signals` are present. The decision purpose outranks keyword density: when the purpose is "decide between make, buy and partner", an arc whose question is a choice ranks above one whose question is persuasion, whatever the keyword counts say. The `distinguish_from` field names the neighbours to weigh each candidate against, so a shortlist always carries the arcs that would make something materially different of the evidence.
 
-```javascript
-keyword_sets = {
-  "trend-panorama": ["trend", "horizon", "act", "plan", "observe", "TIPS", "signal intensity", "dimension"],
-  "smarter-service": ["investment theme", "Handlungsfeld", "value chain", "solution template", "Smarter Service", "Trendradar", "Externe Effekte", "Digitale Wertetreiber", "Neue Horizonte", "Digitales Fundament"],
-  "theme-thesis": ["theme", "investment thesis", "value chain", "solution template", "strategic question", "candidate_ref", "chain_score"],
-  "technology-futures": ["emerging", "innovation", "capability", "technology", "R&D", "breakthrough"],
-  "competitive-intelligence": ["competitor", "market share", "positioning", "differentiation", "threat", "rivalry"],
-  "strategic-foresight": ["scenario", "future", "signal", "uncertainty", "planning", "foresight"],
-  "industry-transformation": ["regulatory", "sector", "structural", "industry", "transformation", "policy"],
-  "jtbd-portfolio": ["jobs-to-be-done", "functional job", "jtbd", "job landscape", "hire", "portfolio map", "capability overview", "pre-sales positioning"],
-  "company-credo": ["about us", "our mission", "why we exist", "what we believe", "our story", "company values", "our credo", "who we are", "why us"],
-  "engagement-model": ["how we work", "engagement model", "working with us", "our process", "delivery model", "partnership", "our approach", "principles", "ways of working"]
-}
+### Step 5: Content analysis
 
-thresholds = {
-  "trend-panorama": 0.12,
-  "smarter-service": 0.12,
-  "theme-thesis": 0.15,
-  "technology-futures": 0.15,
-  "competitive-intelligence": 0.12,
-  "strategic-foresight": 0.10,
-  "industry-transformation": 0.12,
-  "jtbd-portfolio": 0.12,
-  "company-credo": 0.12,
-  "engagement-model": 0.12
-}
-```
+When no content type matched, score keyword density per arc against its `signals`, discounted by `anti_signals`. Thresholds: `theme-thesis` and `technology-futures` 15% (their terms are distinctive); `strategic-foresight` 10%; every other arc 12%.
 
-### Step 5: Fallback Default
+### Step 6: Fallback
 
 ```javascript
-if (!detected_arc) {
-  detected_arc = "corporate-visions"
-  detection_reason = "default (no specific signals detected)"
-}
+if (!ranked_candidates.length) { ranked_candidates = ["corporate-visions"]; detection_reason = "default candidate (no specific signals detected)" }
 ```
 
 ## Arc Directory Structure
@@ -550,7 +216,7 @@ Which arc should this narrative follow?
 
 1. {Recommended arc} — Recommended: {one sentence keyed to the decision purpose}
    Elements: {element1} → {element2} → {element3} → {element4}
-   Governing question: {from the arc's declarative block}
+   Governing question: {from the arc's block above}
    Fit: {one reason this evidence suits this arc}
 
 2. {Alternative arc}
@@ -565,32 +231,19 @@ Rules: 2-3 candidates, never padded to three when only two fit; when only one ar
 
 ## Extension Guidelines
 
-### Adding New Arcs
+### Adding an arc
 
-1. Choose a unique `arc_id` (lowercase, hyphens, descriptive)
-2. Create `story-arc/{arc-id}/arc-definition.md` on the v2 contract shape — copy a migrated contract such as `corporate-visions/arc-definition.md` and replace every section
-3. Add the arc to this registry (quick-reference table, detailed section, and detection algorithm: `content_type` mapping in Step 3, keyword set and threshold in Step 4, structural detection in Step 2 if the arc has a unique file signature)
-4. Add the arc's EN/DE `##` headers to `language-templates.md` byte-equal to the contract's `## Headings`
-5. Add a column to the application matrix in `narrative-techniques/techniques-overview.md`
-6. Add a mapping row and an element block to `cogni-workspace/libraries/arc-taxonomy.md` (short names are the pre-colon segments of the contract's headings)
-7. Run `bash cogni-workspace/tests/test-arc-contract-shape.sh` and `bash cogni-workspace/tests/test-arc-taxonomy-sync.sh` — both enumerate the arc directories at run time, so the new arc is checked with no test edit
+1. Choose a unique `arc_id` (lowercase, hyphens, descriptive).
+2. Create `story-arc/{arc-id}/arc-definition.md` on the v2 contract shape — copy a migrated contract such as `corporate-visions/arc-definition.md` and replace every section. Headings carry real characters per language, never ASCII substitutes.
+3. Add the arc's block under Arc Blocks above with all six fields, a `distinguish_from` naming at least one existing arc, and the reciprocal mention in each neighbour's block; add a Quick Reference row; add its `content_type` mapping to Step 3 and its threshold to Step 5, and a structural signal to Step 2 if the arc has a unique file signature.
+4. Add a column to the application matrix in `../narrative-techniques/techniques-overview.md`.
+5. Add a mapping row and an element block to `cogni-workspace/libraries/arc-taxonomy.md` — short names are the pre-colon segments of the contract's headings.
+6. Update the arc list in `SKILL.md`'s frontmatter description and every prose surface that states an arc count.
+7. Run `bash cogni-workspace/tests/test-arc-contract-shape.sh` and `bash cogni-workspace/tests/test-arc-taxonomy-sync.sh` — both enumerate the arc directories at run time, so the new arc is checked with no test edit.
 
-### Quality Standards for New Arcs
+### Quality standards
 
-**Structural:**
-- Section proportions must sum to 100%. Default total: 1,675 words (customizable via `--target-length`)
-- EXACTLY 4 elements (consistent with all arcs)
-- Each element has distinct purpose (no overlap)
-- Clear detection signals (content_type + keywords + optional structural)
-
-**Content:**
-- The contract's `## Elements` carries, per element, Purpose, Evidence sought (content-map keys, never a fixed directory layout), Argument move, Techniques (names linked to `techniques-overview.md`, never re-taught), Hard rules and Failure modes
-- `## Validation` carries only assertions specific to the arc; every universal gate lives in `../validation.md`
-
-**Localization:**
-- German headings for all four elements, with real umlauts (no ASCII fallbacks anywhere in the contract)
-
-**Cross-references:**
-- Technique application matrix updated in `techniques-overview.md`
-- Arc registry quick reference table and detailed section updated
-- `cogni-workspace/libraries/arc-taxonomy.md` mapping row and element block added
+- Exactly four elements, each with a distinct purpose; proportions sum to 100%.
+- `## Elements` carries, per element, Purpose, Evidence sought (content-map keys, never a fixed directory layout), Argument move, Techniques (names linked to `techniques-overview.md`, never re-taught), Hard rules and Failure modes.
+- `## Validation` carries only assertions specific to the arc; every universal gate lives in `../validation.md`.
+- German headings for all four elements with real umlauts.

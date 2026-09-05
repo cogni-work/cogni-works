@@ -65,9 +65,9 @@ set -u
 HERE="$(cd "$(dirname "$0")" && pwd)"
 WS_ROOT="$(cd "$HERE/.." && pwd)"
 
-# Upstream (the narrative skill) — the contract source.
+# Upstream (the narrative skill) — the contract source. Each arc's localized headings live in
+# its contract's `## Headings` table; there is no separate templates file any more.
 ARC_DIR="$WS_ROOT/skills/narrative/references/story-arc"
-LANG_TEMPLATES="$WS_ROOT/skills/narrative/references/language-templates.md"
 
 # Downstream (the copywriter skill) — the mirror under audit. Overridable only so the
 # executed negative case M1 can aim this same file at a mutant under mktemp -d. The
@@ -121,7 +121,7 @@ trim() { printf '%s' "$1" | sed 's/^ *//; s/ *$//'; }
 # empty and every case passes vacuously.
 # ---------------------------------------------------------------------------
 missing_inputs=""
-for f in "$LANG_TEMPLATES" "$PRESERVATION" "$TECHNIQUE_MAP"; do
+for f in "$PRESERVATION" "$TECHNIQUE_MAP"; do
   [ -f "$f" ] || missing_inputs="$missing_inputs $f"
 done
 [ -d "$ARC_DIR" ] || missing_inputs="$missing_inputs $ARC_DIR"
@@ -250,36 +250,39 @@ else
 fi
 
 # ---------------------------------------------------------------------------
-# A5 — localized headings match upstream byte-for-byte.
+# A5 — localized headings match the upstream arc contract byte-for-byte.
 #
 # Byte-exact is the whole point. The repo mandates real characters per language and
 # never ASCII substitutes — DE ae/oe/ue/ss for ä/ö/ü/ß, FR e for é, PL l for ł. A
 # substitution keeps the heading readable and breaks the positional substitution the
 # copywriter performs in its translate-then-polish pass, because the string it writes
-# no longer equals the string the narrative skill emits.
+# no longer equals the string the narrative skill emits. The authority is each arc's
+# contract `## Headings` table at story-arc/{arc}/arc-definition.md.
 # ---------------------------------------------------------------------------
 a5_bad=""
 a5_checked=0
 for arc in $TRANSLATION_SCOPE; do
+  contract="$ARC_DIR/$arc/arc-definition.md"
+  headings_block="$(awk '/^## Headings$/{f=1; next} /^## /{f=0} f' "$contract" 2>/dev/null)"
   while IFS='|' read -r _lead rowarc _num en de fr it pl nl es _rest; do
     [ "$(trim "$rowarc")" = "$arc" ] || continue
     for cell in "$en" "$de" "$fr" "$it" "$pl" "$nl" "$es"; do
       c="$(trim "$cell")"
       [ -n "$c" ] || continue
       a5_checked=$((a5_checked + 1))
-      if ! grep -Fq "$c" "$LANG_TEMPLATES"; then
-        printf '%s\n' "  localized heading not found in language-templates.md: $arc :: $c"
+      if ! printf '%s\n' "$headings_block" | grep -Fq "$c"; then
+        printf '%s\n' "  localized heading not found in the arc contract's ## Headings: $arc :: $c"
         a5_bad="yes"
       fi
     done
   done < "$PRESERVATION"
 done
 if [ "$a5_checked" -eq 0 ]; then
-  fail "A5 localized headings match language-templates.md byte-for-byte (parsed zero headings)"
+  fail "A5 localized headings match the arc contracts' ## Headings byte-for-byte (parsed zero headings)"
 elif [ -n "$a5_bad" ]; then
-  fail "A5 localized headings match language-templates.md byte-for-byte"
+  fail "A5 localized headings match the arc contracts' ## Headings byte-for-byte"
 else
-  pass "A5 localized headings match language-templates.md byte-for-byte ($a5_checked headings)"
+  pass "A5 localized headings match the arc contracts' ## Headings byte-for-byte ($a5_checked headings)"
 fi
 
 # ---------------------------------------------------------------------------

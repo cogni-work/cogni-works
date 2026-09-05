@@ -63,7 +63,7 @@ subtitle: "..."
 
 Match rule: Compare the document's H2 headings against the element columns above. A partial match on the first word is sufficient (e.g., "Why" matches "Why Change", "Job" matches "Job Landscape"). If 3 or more of the 4 elements match a single arc row, activate arc-aware mode with that arc_id.
 
-**Localized headings are also valid.** Arc element headings may appear in a non-English language. This table holds the **canonical full headings** for the arcs supported by EN/DE-pivot arc-mode translation (any of de/en/fr/it/pl/nl/es, with EN or DE on one end of the pair), mirrored byte-for-byte from the `narrative` skill's `language-templates.md` (the "Insight Summary (Arc Element Headers)" EN/DE tables plus the "Arc-mode translation headings (FR/IT/PL/NL/ES)" subsection). `cogni-workspace/tests/test-arc-reference-sync.sh` cases A4/A5 keep this mirror in sync with the `narrative` skill's definitions.
+**Localized headings are also valid.** Arc element headings may appear in a non-English language. This table holds the **canonical full headings** for the arcs supported by EN/DE-pivot arc-mode translation (any of de/en/fr/it/pl/nl/es, with EN or DE on one end of the pair), mirrored byte-for-byte from each arc's contract — the `## Headings` table in `cogni-workspace/skills/narrative/references/story-arc/{arc}/arc-definition.md`, which is the one upstream authority for an arc's headings in every language. `cogni-workspace/tests/test-arc-reference-sync.sh` cases A4/A5 keep this mirror in sync with those contracts.
 
 | Arc | # | EN (canonical) | DE (canonical) | FR | IT | PL | NL | ES |
 |-----|---|----------------|----------------|----|----|----|----|----|

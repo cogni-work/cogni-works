@@ -20,6 +20,7 @@ One responsibility per file. Read a file when its phase runs, not before.
 - **The registry chooses** — `references/story-arc/arc-registry.md`: detection algorithm, one declarative block per arc, confirmation format.
 - **The contract structures** — `references/story-arc/{arc_id}/arc-definition.md`: headings, composition, four elements, arc-specific validation.
 - **Techniques strengthen** — `references/narrative-techniques/techniques-overview.md`: the eight techniques and which element each serves.
+- **Language expresses** — `references/language/shared.md` plus `en.md` or `de.md`: executive prose rules and, for German, sentence craft. Loaded at Pass 3 only.
 - **Validation checks** — `references/validation.md`: every universal gate, run by `scripts/validate-narrative.py` and then by the writer.
 - **Derivatives condense** — `references/derivative-formats.md`, only when `--format` is set.
 
@@ -184,7 +185,7 @@ Read two files, in full, before writing anything:
 1. `references/story-arc/{arc_id}/arc-definition.md` — the arc contract: `## Headings`, `## Composition`, `## Elements`, `## Validation`.
 2. `references/narrative-techniques/techniques-overview.md` — the eight techniques and the application matrix.
 
-Every arc carries `contract: 2`; `cogni-workspace/tests/test-arc-contract-shape.sh` keeps that true, so there is no other file to read for an arc. The EN/DE heading tables in `references/language-templates.md` mirror the contracts' `## Headings` until that file is retired.
+Every arc carries `contract: 2`; `cogni-workspace/tests/test-arc-contract-shape.sh` keeps that true, so there is no other file to read for an arc. The language references are not loaded here — Pass 3 loads them.
 
 **After reading,** name the four elements in order with their proportions, and say which techniques the matrix assigns to each. Re-read until both come without looking.
 
@@ -196,9 +197,15 @@ Draft in four passes. Each pass has one job; doing two at once is how a narrativ
 
 **Pass 2 — argument edit.** Apply each element's `Argument move` and `Techniques`; enforce its `Hard rules`; build the transitions from `## Composition`; write the closing per the closing pattern, so that emphasis, implications and close serve the brief's `--purpose` and pronouns and ownership follow its `--perspective`. Then — last, from the finished elements — write the title (arc-specific, never "Insight Summary") and the Executive TL;DR, weighting it as the contract's TL;DR-emphasis line says. Writing the TL;DR after the elements is what makes "synthesizes all four" enforceable rather than aspirational.
 
-**Pass 3 — language edit.** Localize the four headings from `## Headings` for the output language and make the prose read as executive prose: one idea per sentence, concrete actors and verbs, specificity over intensifiers, no corporate fog. Tune vocabulary, acronym expansion and explanation depth to the brief's `--audience` and inferred knowledge level. When `language: de`, proper umlauts and ß throughout.
+**Pass 3 — language edit.** Now, and not earlier, read `references/language/shared.md` and `references/language/{language}.md` (`en.md` or `de.md`). Localize the four headings from `## Headings` for the output language and make the prose read as executive prose per those two files: one idea per sentence, concrete actors and verbs, specificity over intensifiers, no corporate fog; for `de`, the sentence craft in `de.md` — Satzklammer, Mittelfeld, Funktionsverbgefüge, Nominalstil, anglicisms — and proper umlauts and ß throughout. Tune vocabulary, acronym expansion and explanation depth to the brief's `--audience` and inferred knowledge level.
 
-**Pass 4 — rhythm and readability.** Vary sentence length; make transitions consequential rather than topical; read each paragraph for cadence and land it on its consequential idea. Count words per element against `## Composition` and adjust by adding evidence to a thin element or trimming redundant transitions, never evidence.
+**Pass 4 — rhythm and readability.** Vary sentence length; make transitions consequential rather than topical; run `shared.md`'s final editorial pass. Then measure:
+
+```bash
+bash "${CLAUDE_PLUGIN_ROOT}/skills/copywriter/scripts/readability.sh" --file "${DRAFT_PATH}" --lang "${LANGUAGE}" --json
+```
+
+Compare `flesch_score` with the language's target band in `skills/copywriter/contracts/readability.yml`. On a miss, revise once — the script's sub-metrics point at the passages — and measure again; report the final score as `readability_score` whatever the outcome. Count words per element against `## Composition` and adjust by adding evidence to a thin element or trimming redundant transitions, never evidence.
 
 #### Why exactly 4 sections matters
 

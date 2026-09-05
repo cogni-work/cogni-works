@@ -409,6 +409,11 @@
     {
       "skill": "narrative",
       "arm": "reference-depth",
+      "file": "cogni-workspace/skills/narrative/references/language"
+    },
+    {
+      "skill": "narrative",
+      "arm": "reference-depth",
       "file": "cogni-workspace/skills/narrative/references/narrative-techniques"
     },
     {

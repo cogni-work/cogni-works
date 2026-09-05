@@ -46,7 +46,7 @@ HERE="$(cd "$(dirname "$0")" && pwd)"
 PLUGIN_DIR="$(cd "$HERE/.." && pwd)"
 ARC_DIR="${ARC_CONTRACT_STORY_ARC_DIR:-$PLUGIN_DIR/skills/narrative/references/story-arc}"
 PHASE_DIR="${ARC_CONTRACT_PHASE_DIR:-$PLUGIN_DIR/skills/narrative/references/phase-workflows}"
-LANG_TEMPLATES="$PLUGIN_DIR/skills/narrative/references/language-templates.md"
+REGISTRY="${ARC_CONTRACT_REGISTRY:-$ARC_DIR/arc-registry.md}"
 
 # Arcs still on the three-layer shape. Shrink-only — see THE RATCHET above.
 UNMIGRATED=""
@@ -55,7 +55,7 @@ UNMIGRATED=""
 HEADINGS="Intent Selection Headings Composition Elements Validation See_Also"
 SUBFIELDS="Purpose|Evidence sought|Argument move|Techniques|Hard rules|Failure modes"
 
-ALL_CASES="V1 C1 C2 C3 C4 U1 M1"
+ALL_CASES="V1 C1 C2 C3 C4 C5 U1 M1"
 
 TMPROOT="$(mktemp -d)"
 trap 'rm -rf "$TMPROOT"' EXIT
@@ -80,7 +80,7 @@ in_list() { case " $2 " in *" $1 "*) return 0 ;; *) return 1 ;; esac; }
 arcs="$(find "$ARC_DIR" -mindepth 1 -maxdepth 1 -type d -exec basename {} \; 2>/dev/null | sort)"
 if [ -z "$arcs" ]; then
   fail "V1 story-arc root yielded no arc directory at $ARC_DIR"
-  for c in C1 C2 C3 C4 U1; do fail "$c not evaluated — non-vacuity guard failed"; done
+  for c in C1 C2 C3 C4 C5 U1; do fail "$c not evaluated — non-vacuity guard failed"; done
   finish
 fi
 pass "V1 story-arc root yielded $(printf '%s\n' "$arcs" | wc -l | tr -d ' ') arc directory/ies"
@@ -123,12 +123,13 @@ for part in parts:
 sys.exit(0)
 PY
   then c2_bad="$c2_bad $arc"; fi
-  # C3: ## Headings carries EN and DE columns, four rows, cells byte-equal to language-templates.md
-  if ! python3 - "$f" "$LANG_TEMPLATES" <<'PY'
+  # C3: ## Headings carries EN and DE columns and exactly four rows of non-empty cells whose
+  # DE cells carry real umlauts rather than an ASCII digraph where one is expected. The contract
+  # is the single heading authority; there is no second file to compare against.
+  if ! python3 - "$f" <<'PY'
 import re, sys
-path, templates = sys.argv[1], sys.argv[2]
+path = sys.argv[1]
 text = open(path, encoding="utf-8").read()
-tpl = open(templates, encoding="utf-8").read() if templates and __import__("os").path.exists(templates) else None
 m = re.search(r"^## Headings\n(.*?)(?=^## )", text, flags=re.S | re.M)
 if not m:
     sys.exit(1)
@@ -143,16 +144,31 @@ if len(data) != 4:
     sys.exit(1)
 en, de = header.index("EN"), header.index("DE")
 for r in data:
-    for idx in (en, de):
-        cell = r[idx]
-        if not cell:
-            sys.exit(1)
-        if tpl is not None and cell not in tpl:
-            sys.exit(1)
+    if not r[en] or not r[de]:
+        sys.exit(1)
+    # A DE cell spelling a real umlaut word with a digraph is the substitution A5 downstream
+    # exists to catch; the same words with real umlauts are what every contract carries today.
+    if re.search(r"\b(?:fuer|ueber|Aenderung|Veraenderung|Kraefte|Fuehrung|Moeglich|Loesung|Ueberzeugung|Glaubwuerdigkeit|Einfluesse|Begruendung|Hindernisse und Handlungsdruck ss)\b", r[de]):
+        sys.exit(1)
 sys.exit(0)
 PY
   then c3_bad="$c3_bad $arc"; fi
 done
+
+# C5: the registry carries one declarative block per arc directory, with all six fields.
+c5_bad=""
+if [ -f "$REGISTRY" ]; then
+  for arc in $arcs; do
+    [ -f "$ARC_DIR/$arc/arc-definition.md" ] || continue
+    block="$(awk -v a="### $arc" '$0==a{f=1; next} /^### |^## /{f=0} f' "$REGISTRY")"
+    [ -n "$block" ] || { c5_bad="$c5_bad $arc(no-block)"; continue; }
+    for field in question best_for signals anti_signals distinguish_from fallback_priority; do
+      printf '%s\n' "$block" | grep -Eq "^\- \*\*$field:\*\* *[^ ]" || c5_bad="$c5_bad $arc($field)"
+    done
+  done
+else
+  c5_bad=" registry-missing"
+fi
 
 if [ -z "$migrated" ]; then
   fail "C1 no migrated contract found — nothing carries contract: 2"
@@ -161,7 +177,12 @@ if [ -z "$migrated" ]; then
 else
   [ -z "$c1_bad" ] && pass "C1 every migrated contract carries the seven headings in order" || fail "C1 heading set or order wrong in:$c1_bad"
   [ -z "$c2_bad" ] && pass "C2 every migrated contract carries four ### N. elements with six subfields" || fail "C2 element sections incomplete in:$c2_bad"
-  [ -z "$c3_bad" ] && pass "C3 every migrated contract's ## Headings has EN and DE columns byte-equal to language-templates.md" || fail "C3 headings table wrong in:$c3_bad"
+  [ -z "$c3_bad" ] && pass "C3 every migrated contract's ## Headings has EN and DE columns, four rows, real umlauts" || fail "C3 headings table wrong in:$c3_bad"
+fi
+if [ -z "$c5_bad" ]; then
+  pass "C5 the registry carries a six-field declarative block for every arc directory"
+else
+  fail "C5 registry block missing or incomplete:$c5_bad"
 fi
 
 # ---------------------------------------------------------------------------- C4

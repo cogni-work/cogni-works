@@ -424,6 +424,11 @@
     {
       "skill": "narrative",
       "arm": "reference-depth",
+      "file": "cogni-workspace/skills/narrative/references/story-arc/category-creation"
+    },
+    {
+      "skill": "narrative",
+      "arm": "reference-depth",
       "file": "cogni-workspace/skills/narrative/references/story-arc/company-credo"
     },
     {
@@ -434,7 +439,17 @@
     {
       "skill": "narrative",
       "arm": "reference-depth",
+      "file": "cogni-workspace/skills/narrative/references/story-arc/consulting-problem-solving"
+    },
+    {
+      "skill": "narrative",
+      "arm": "reference-depth",
       "file": "cogni-workspace/skills/narrative/references/story-arc/corporate-visions"
+    },
+    {
+      "skill": "narrative",
+      "arm": "reference-depth",
+      "file": "cogni-workspace/skills/narrative/references/story-arc/customer-transformation"
     },
     {
       "skill": "narrative",
@@ -455,6 +470,11 @@
       "skill": "narrative",
       "arm": "reference-depth",
       "file": "cogni-workspace/skills/narrative/references/story-arc/smarter-service"
+    },
+    {
+      "skill": "narrative",
+      "arm": "reference-depth",
+      "file": "cogni-workspace/skills/narrative/references/story-arc/strategic-choice"
     },
     {
       "skill": "narrative",

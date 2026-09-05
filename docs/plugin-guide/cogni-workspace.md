@@ -283,7 +283,7 @@ Absorbed from the retired cogni-narrative plugin. Takes structured input — res
 
 Each arc is one contract file (`references/story-arc/{arc}/arc-definition.md`) that fixes its headings per language, its composition, its four elements and its own validation rules; the arc registry chooses between arcs and confirms the choice as a two-to-three arc shortlist; the universal gates live once in `references/validation.md`, with the deterministic half run by a script; and the language rules — English executive prose, German sentence craft — are loaded late, at the language pass. A Phase 0 execution brief (`--audience`, `--purpose`, `--perspective`, `--geography`) steers the drafting passes, and a banded release review reports `qa_verdict` in the result.
 
-Eleven arc frameworks are available, each a fixed sequence of four named elements with defined rhetorical intent:
+Fifteen arc frameworks are available, each a fixed sequence of four named elements with defined rhetorical intent:
 
 | Arc | Element flow | Best for |
 |-----|--------------|----------|
@@ -298,6 +298,10 @@ Eleven arc frameworks are available, each a fixed sequence of four named element
 | `jtbd-portfolio` | Jobs → Friction → Portfolio → Invitation | Portfolio introductions, pre-sales |
 | `company-credo` | Mission → Conviction → Credibility → Promise | About-Us pages |
 | `engagement-model` | Principles → Process → Partnership → Outcomes | How-We-Work pages |
+| `consulting-problem-solving` | Situation → Complication → Resolution → Implications | Diagnostic memos, problem-solving reports |
+| `strategic-choice` | Context → Tension → Options → Choice | Make/buy/partner, market entry, sequencing |
+| `customer-transformation` | Before → Struggle → Change → Outcome | Case studies, reference stories |
+| `category-creation` | Status Quo → Shift → New Frame → Leadership | Market reframes, category design |
 
 The skill analyses the input's structure and proposes a best-fit arc; `--arc {arc-id}` overrides it. Target length defaults to ~1,675 words, with section proportions preserved rather than sections cut.
 

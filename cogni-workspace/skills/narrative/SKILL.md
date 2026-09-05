@@ -171,9 +171,9 @@ The script writes `narrative-input/report-for-narrative.md` (content with `[sour
 4. Otherwise analyze the loaded content for keyword density per the registry. `detection_reason = "keyword density analysis"`.
 5. Fallback: `corporate-visions`. `detection_reason = "default fallback"`.
 
-Present selected arc to user for confirmation using AskUserQuestion. Show the detected arc with its detection reason and offer alternatives in the registry's confirmation format; for a priority-2 pick label the prompt "Inherited from source research/knowledge project — preserves the long-form report's arc". Accept confirmation or an override.
+Present selected arc to user for confirmation using AskUserQuestion — as a **shortlist**, in the registry's confirmation format. When the arc was not explicit (priorities 3-5), shortlist the 2-3 arcs that would produce materially different but defensible narratives from the evidence and the brief's decision purpose; for each show the display name, the four-element progression, the governing question and one fit reason, drawn from the registry's declarative blocks; mark exactly one **Recommended** with a one-sentence reason keyed to the decision purpose. If only one arc is defensible, say so and ask for confirmation rather than padding the list. Never present the full registry unless the user asks for it. For a priority-1 or priority-2 pick, confirm that single arc — a priority-2 prompt is labelled "Inherited from source research/knowledge project — preserves the long-form report's arc". Accept confirmation or an override.
 
-When `--interactive` is `false`, this confirmation does not run -- keep the arc selected above, store it with its `detection_reason` unchanged, and continue to Phase 3.
+When `--interactive` is `false`, this confirmation does not run -- take the top-ranked arc selected above, store it with its `detection_reason` unchanged, and continue to Phase 3.
 
 Store: `arc_id`, `arc_display_name`, `detection_reason`. An unknown `arc_id` halts with the registry's arc list.
 

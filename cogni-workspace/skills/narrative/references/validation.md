@@ -92,7 +92,7 @@ The narrative opens with an answer, not a tension. Between the `*{Subtitle}*` li
 
 ## Release review
 
-A narrative can clear every gate above and still be a bad narrative — sound structure carrying weak reasoning, a broken arc, committee prose, nothing a reader could act on. After the deterministic gates are green and the judged gates are checked, run a distinct self-review pass over the whole draft. It is a review, not an edit: it **diagnoses and never rewrites**, returning findings that the revision step acts on. It uses no numeric score, no weighted formula and no threshold.
+A narrative can clear every gate above and still be a bad narrative — sound structure carrying weak reasoning, a broken arc, committee prose, nothing a reader could act on. After the deterministic gates are green and the judged gates are checked, run a distinct self-review pass over the whole draft. It is a review, not an edit: it **diagnoses and never rewrites**, returning findings that the revision step acts on. It uses no numeric score, no formula that sums or averages dimensions, and no threshold — a number invites tuning the number instead of fixing the narrative.
 
 Score five dimensions, each `strong` / `adequate` / `weak`:
 

@@ -541,23 +541,27 @@ A contract carries `contract: 2` in its frontmatter and the seven `##` sections 
 
 ## Interactive Selection Format
 
-When presenting arc selection to users:
+The confirmation is a **shortlist, not a menu**. The user has no basis to ratify a single detected arc, and the full registry is a catalogue rather than a recommendation, so Phase 2 presents the 2-3 arcs that would produce materially different but defensible narratives from this evidence and this decision purpose. Every candidate carries the same four facts, and exactly one is marked Recommended:
 
 ```
-Auto-detected: {arc_display_name} ({detection_reason})
+Detected: {arc_display_name} ({detection_reason})
 
-Please select story arc:
+Which arc should this narrative follow?
 
-Option 1: {Detected Arc} (Recommended)
-  Elements: {element1} → {element2} → {element3} → {element4}
-  Best for: {use_case_summary}
+1. {Recommended arc} — Recommended: {one sentence keyed to the decision purpose}
+   Elements: {element1} → {element2} → {element3} → {element4}
+   Governing question: {from the arc's declarative block}
+   Fit: {one reason this evidence suits this arc}
 
-Option 2: {Alternative Arc 1}
-  Elements: {element1} → {element2} → {element3} → {element4}
-  Best for: {use_case_summary}
+2. {Alternative arc}
+   Elements: {element1} → {element2} → {element3} → {element4}
+   Governing question: {…}
+   Fit: {one reason — and what it would make of this evidence that the Recommended arc would not}
 
-[... remaining options ...]
+[3. {second alternative, only when defensible}]
 ```
+
+Rules: 2-3 candidates, never padded to three when only two fit; when only one arc is defensible, say so and ask for confirmation of that one; the full arc list appears only when the user asks for it. Under `--interactive false` the top-ranked candidate is taken with its `detection_reason` recorded and no prompt is shown.
 
 ## Extension Guidelines
 

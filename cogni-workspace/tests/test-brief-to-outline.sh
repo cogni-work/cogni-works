@@ -542,6 +542,36 @@ else
   failures=$((failures + 1))
 fi
 
+# --- bo21
+if python3 -c "
+import os, re, sys
+from outline_probe import BRIEF, section_of
+out = open(os.environ['OUT'], encoding='utf-8').read()
+# Every brief slide carrying a Source: must have that value reach its section's
+# notes. Derived from the brief at run time, so a corpus that gains a third
+# Source-bearing slide is covered without editing this case. The teeth are the
+# slide that has a Source: and NO Speaker-Notes — for a slide that has both, the
+# notes block is non-empty either way, so only this one falsifies dropping the
+# Source append.
+blocks = re.split(r'^## Slide (\d+): ', BRIEF, flags=re.M)[1:]
+witnesses, bare = [], 0
+for number, rest in zip(blocks[0::2], blocks[1::2]):
+    headline = rest.split('\n', 1)[0].strip()
+    found = re.search(r'^Source:\s*(.+?)\s*\$', rest, re.M)
+    if not found or re.search(r'^Slide-Kind: internal-prep\s*\$', rest, re.M):
+        continue
+    witnesses.append((headline, found.group(1).strip().strip('\"')))
+    if 'Speaker-Notes' not in rest:
+        bare += 1
+ok = len(witnesses) >= 2 and bare >= 1
+ok = ok and all(source in section_of(out, headline) for headline, source in witnesses)
+sys.exit(0 if ok else 1)"; then
+  echo "ok: bo21-source-travels-into-notes"
+else
+  echo "FAIL: bo21-source-travels-into-notes a slide's Source: value did not reach its section notes"
+  failures=$((failures + 1))
+fi
+
 if [ "$failures" -eq 0 ]; then
   echo "All brief-to-outline tests passed."
   exit 0

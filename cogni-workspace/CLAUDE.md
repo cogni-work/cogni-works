@@ -38,8 +38,11 @@ The harness verifies the Theme System v2 contract end-to-end:
 - **Consumer contracts.** Each known visual consumer (cogni-workspace:
   render-html-slides + story-to-* siblings, cogni-portfolio:
   portfolio-dashboard, cogni-website:website-build) and voice consumer
-  (cogni-sales, cogni-knowledge, and this plugin's own narrative and copywriter skills) must
-  still reference the theme contract in its SKILL.md.
+  (cogni-sales — the one plugin the harness's `VOICE_PLUGINS` array lists) must
+  still reference the theme contract in its SKILL.md. This plugin's own
+  `narrative` and `copywriter` skills carry no theme token and are deliberately
+  not in that array: the harness's own comment records that listing consumers
+  the loop then skipped made the check pass silently.
 
 The harness complements the per-skill validators
 (`validate-theme-manifest.py`, `check-skill-names.sh`) — those catch

@@ -108,7 +108,7 @@ bare form.
 
 | Value | Prompts presented |
 |---|---|
-| `front` (default) | Exactly two — the narrative arc confirmation and one `pick-theme` prompt. Every `story-to-*` hop receives `interactive=false`. |
+| `front` (default) | At most three, all up front — the narrative Phase 0 clarification (only when a brief field is unresolved and material), the narrative arc-shortlist confirmation, and one `pick-theme` prompt. Every `story-to-*` hop receives `interactive=false`. |
 | `full` | Each hop stays interactive. |
 | `false` | None. `--theme` is required, and the narrative hop receives `--interactive false`. |
 
@@ -120,8 +120,10 @@ One envelope per run.
 {
   "narrative": {
     "output_path": "...", "arc_id": "...", "arc_display_name": "...",
+    "detection_reason": "keyword density analysis",
     "target_length": 1675, "word_count": 1502, "citation_count": 14,
-    "elements": [], "language": "en",
+    "elements": 4, "language": "en",
+    "readability_score": 48.2, "qa_verdict": "pass",
     "generated": true
   },
   "polish": null,
@@ -134,9 +136,12 @@ One envelope per run.
 }
 ```
 
-- The `narrative` block carries only fields the narrative hop actually returns.
-  **There is no `readability` field** — that skill does not compute one, so this
-  envelope must not claim it.
+- The `narrative` block carries only fields the narrative hop actually returns,
+  copied through unchanged: `readability_score` is the Pass 4 measurement (or
+  `null` when it was not computed) and `qa_verdict` is the release review's
+  rollup, one of `pass` / `needs_revision` / `fail`. Read `qa_verdict` as a
+  verdict, never as a number — the same insulation this contract applies to the
+  brief review's `overall` field.
 - `generated` is `false` when `<source>` was an existing narrative `.md`, and
   `output_path` is then the path that was passed in, unchanged.
 - `polish` is `null` unless `--polish` ran.

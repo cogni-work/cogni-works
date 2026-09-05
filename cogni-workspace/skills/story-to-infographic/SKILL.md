@@ -69,7 +69,7 @@ Briefs contain no color fields.
 | `conversion_goal` | `consultation` | CTA type: consultation, demo, download, trial, contact, calculate |
 | `arc_type` | `auto` | Story arc hint: why-change, problem-solution, journey, argument, report |
 | `arc_id` | from frontmatter | Narrative arc ID from the `narrative` skill |
-| `voice_tone` | auto-detected | Micro-copy register: `executive`, `analytical`, `punchy`, `playful`. Inherits from upstream narrative frontmatter if present; otherwise inferred in Step 2 from tone cues. Renderers use it to calibrate section subheads and CTA verbs — they never override brief text with it. |
+| `voice_tone` | auto-detected | Micro-copy register: `executive`, `analytical`, `punchy`, `playful`. Taken from the caller when passed; otherwise inferred in Step 2 from tone cues. (The `narrative` skill does not write a `voice_tone` field — its tone is an inferred brief field it never emits — so the frontmatter of an upstream narrative is not a source for it.) Renderers use it to calibrate section subheads and CTA verbs — they never override brief text with it. |
 | `palette_override` | `theme` | Either `theme` (default — renderers derive the Economist-discipline palette from the project theme) or `canonical` (force Economist's canonical red/amber/near-black/cream regardless of theme). Only meaningful for `style_preset: economist`. |
 | `interactive` | `true` | When `true`, present choices via AskUserQuestion |
 | `stakeholder_review` | `interactive` | When `true`, run brief-review-assessor after validation |

@@ -309,6 +309,12 @@ With `--format`, `narrative` also condenses an existing narrative into an execut
 
 Commands: `/narrative`, `/narrative-adapt`.
 
+### `narrative-publish` — One invocation from sources to briefs
+
+A thin pipeline over the hops above and below: it runs `narrative`, then an optional `copywriter` polish (`--polish`, tone by default), resolves the theme once through `pick-theme`, and produces one or more `story-to-*` briefs for the targets named in `--to` (slides, web, storyboard, infographic). It owns no transformation logic of its own — every step dispatches an existing skill — and rendering is **opt-in**: nothing is rendered unless `--render` is given, and renders then run sequentially. The argument matrix, the per-hop parameter translation, the reject rule and the consolidated JSON envelope live in `cogni-workspace/skills/narrative-publish/references/pipeline-contract.md`.
+
+Commands: `/narrative-publish`.
+
 ### `copywriter` — Polish documents for executive readability
 
 Absorbed from the retired cogni-copywriting plugin. Applies seven messaging frameworks — BLUF, McKinsey Pyramid, SCQA, STAR, PSB, FAB, Inverted Pyramid — plus persuasion techniques (number plays, power words, rhetorical devices) to memos, briefs, reports, proposals, one-pagers and blog posts.

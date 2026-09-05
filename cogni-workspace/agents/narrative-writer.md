@@ -38,14 +38,16 @@ You will receive:
 - `project_path` (optional) -- full research project directory (parent of entity dirs)
 - `research_question` (optional) -- original research question for narrative framing
 - `content_map` (optional) -- YAML map of content category keys to file/directory paths for additional entity context
+- `target_length` (optional) -- target total word count, relayed as `--target-length`; without it the skill's default of 1,675 applies
+- `audience`, `purpose`, `perspective`, `geography` (optional) -- the Phase 0 execution-brief fields, relayed as `--audience`, `--purpose`, `--perspective`, `--geography`
 
 `interactive` is not among them. This agent always invokes the skill with `--interactive false`, so a caller cannot re-enable a prompt this agent's own rules forbid; a supplied value is ignored rather than relayed.
 
 ## Execution
 
 1. Invoke the `cogni-workspace:narrative` skill using the Skill tool, passing the received parameters as skill arguments, always with `--interactive false` so the skill skips every prompt that would wait on a user (today, the Phase 2 arc confirmation)
-2. The skill handles ALL narrative logic: content loading, arc selection, pattern loading, transformation, validation, and output writing
-3. Follow the skill's complete 6-phase workflow -- do NOT skip phases or override skill decisions
+2. The skill handles ALL narrative logic: the execution brief, content loading, arc selection, contract loading, the four drafting passes, validation, the release review and output writing
+3. Follow the skill's complete workflow, Phase 0 through Phase 6 -- do NOT skip phases or override skill decisions
 4. Do NOT ask user questions during execution -- use auto-detection for arc selection if `arc_id` is not provided
 5. Return the skill's JSON summary as your output
 
@@ -69,10 +71,14 @@ On success, the skill returns:
   "output_path": "path/to/insight-summary.md",
   "arc_id": "corporate-visions",
   "arc_display_name": "Corporate Visions",
+  "detection_reason": "keyword density analysis",
+  "target_length": 1675,
   "word_count": 1650,
   "citation_count": 22,
   "elements": 4,
-  "language": "en"
+  "language": "en",
+  "readability_score": 48.2,
+  "qa_verdict": "pass"
 }
 ```
 

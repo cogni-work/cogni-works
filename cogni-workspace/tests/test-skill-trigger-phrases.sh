@@ -7,9 +7,9 @@
 # descriptions. When two skills quote the same phrase, the router has no
 # tiebreaker, and which one fires is not a property of the repo at all. Nothing
 # else in CI looks at description *content*: check-skill-names.sh checks the
-# `name:` field, check-frontmatter.sh checks that required keys exist, and
-# plugin-validator checks structure. A duplicated phrase is well-formed by every
-# one of those and still broken.
+# `name:` field, scripts/check-skill-spec.py checks that the required keys exist
+# and stay within the published limits, and plugin-validator checks structure.
+# A duplicated phrase is well-formed by every one of those and still broken.
 #
 # The failure is silent in the worst way. Both skills load, both look correct in
 # isolation, and the only symptom is that a user asking the shared phrase

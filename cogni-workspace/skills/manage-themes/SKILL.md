@@ -14,7 +14,7 @@ description: >-
   "visual standards", "author tokens", "build a tiered theme system", "deepen a
   theme", and "match the cogni-work pattern". Also triggers on a Claude Design
   bundle URL (api.anthropic.com/v1/design/h/...).
-allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Skill
+allowed-tools: Read, Write, Edit, Glob, Bash, AskUserQuestion
 ---
 
 # Manage Themes
@@ -55,7 +55,7 @@ Operation numbers are stable identifiers, not a running sequence. The live-websi
 
 When the user asks for theme advice — e.g., "what theme for my brand?", "help me pick a theme", "I need a visual identity" — guide them through a short discovery to route them to the best creation path.
 
-**Discovery questions** (ask only what's needed, skip what you can infer from context):
+**Discovery questions** (ask only what's needed, skip what the context already answers):
 
 1. **Existing assets?** — "Do you have a website, PowerPoint template, or brand guidelines (colors/fonts) I can use as a starting point?"
 2. **Industry & audience** — "What's the domain (fintech, healthcare, creative agency, etc.) and who sees these outputs?"
@@ -106,7 +106,7 @@ When the user wants feedback on an existing theme — e.g., "my theme feels off"
 **Contrast & Accessibility** — measured, never estimated. Build a flat `{"role": "#rrggbb"}` JSON map of the palette, then read the verdicts out of the script:
 
 ```bash
-python3 cogni-workspace/scripts/check-contrast.py <palette.json>
+python3 "${CLAUDE_PLUGIN_ROOT}/scripts/check-contrast.py" <palette.json>
 ```
 
 Build the map from whichever source the theme actually has: `tokens/colors.json` when the theme is tiered, otherwise the `## Color Palette` bullets in its `theme.md` (`- **Role**: \`#RRGGBB\``). Write it to a scratch path such as `/tmp/<slug>-palette.json`.
@@ -158,7 +158,7 @@ When a theme outgrows the single-file `theme.md` and the user wants structured a
 
 1. **Tier 1 — Tokens** (`tokens/`). Canonical design variables as flat JSON maps. Six canonical files: `colors.json`, `typography.json`, `spacing.json`, `radii.json`, `shadows.json`, `motion.json`. Each is a `{key: value}` map with primitive values (string, integer, or float — nested values are silently skipped in v1.0). Generate `tokens/tokens.css` deterministically from these JSON sources — never hand-edit the CSS:
    ```bash
-   python3 cogni-workspace/scripts/generate-tokens-css.py \
+   python3 "${CLAUDE_PLUGIN_ROOT}/scripts/generate-tokens-css.py" \
        --tokens-dir <themes-dir>/<slug>/tokens --write
    ```
    The generator emits a single `:root { ... }` block with `--<stem>-<key>` custom properties in canonical-file then alphabetical-key order. Re-running it must produce a byte-identical file (idempotency check via `git diff --exit-code`).
@@ -189,7 +189,7 @@ Reserved keys `live`, `live_within_session`, and `copy` must never appear at any
 **Validate before completing**: Always run the validator after touching a tiered theme — it checks schema conformance, that declared tier paths exist, and (when `tokens.css` is present) that it matches `generate()` byte-for-byte:
 
 ```bash
-python3 cogni-workspace/scripts/validate-theme-manifest.py <themes-dir>/<slug>
+python3 "${CLAUDE_PLUGIN_ROOT}/scripts/validate-theme-manifest.py" <themes-dir>/<slug>
 ```
 
 A non-zero exit means the theme is not shippable; fix the failure before declaring the operation complete.
@@ -258,19 +258,17 @@ The recommended authoring path for tiered themes under Theme System v2. The user
 2. Resolve the target theme directory: `{themes-dir}/{slug}/`. If the directory already exists and is non-empty, ask the user to confirm overwrite (the operation passes `--allow-overwrite` to the importer).
 3. Run the importer:
    ```bash
-   python3 cogni-workspace/scripts/import-claude-design-bundle.py \
+   python3 "${CLAUDE_PLUGIN_ROOT}/scripts/import-claude-design-bundle.py" \
        --url <bundle-url> --target <themes-dir>/<slug> [--allow-overwrite]
    ```
    For testing or air-gapped flows, swap `--url` for `--bundle <path>` against a local `.tar.gz`. Use `--dry-run` to preview what would be written without touching the target.
-4. Inspect the JSON envelope. The importer reports the materialised slug, sha256 of the bundle, populated tiers, allowlisted components written, specimens skipped, components warned-about (preview files matching no rule — review and either extend the allowlist in `references/claude-design-bundle-mapping.md` or accept the skip), assets, and the validator payload.
-5. The importer runs `validate-theme-manifest.py` itself before writing the `.claude-design-source` sidecar — a successful import means the theme is already schema-valid. Then run `bash cogni-workspace/scripts/verify-theme-backcompat.sh` to confirm the broader integration contract (Phase A discover, Phase B consumer references, Phase D voice section).
+4. Inspect the JSON envelope. The importer reports the materialised slug, sha256 of the bundle, populated tiers, allowlisted components written, specimens skipped, components warned-about (preview files matching no rule — review and either extend the allowlist in `${CLAUDE_PLUGIN_ROOT}/references/claude-design-bundle-mapping.md` or accept the skip), assets, and the validator payload.
+5. The importer runs `validate-theme-manifest.py` itself before writing the `.claude-design-source` sidecar — a successful import means the theme is already schema-valid. Then run `bash "${CLAUDE_PLUGIN_ROOT}/scripts/verify-theme-backcompat.sh"` to confirm the broader integration contract (Phase A discover, Phase B consumer references, Phase D voice section).
 6. Offer to regenerate the theme showcase (Operation 8) so the new tokens render against the canonical primitives. Operation 7 (deep theme authoring) is unnecessary after Op 10 — the bundle ships tiered already.
 
 **Re-syncability**: When the user re-exports the bundle from Claude Design (e.g., after iterating on the design), they get a new URL. Re-run the importer with the new URL and `--allow-overwrite`; the materialised theme refreshes from upstream. Idempotency is preserved at the sha256 level — running the importer against an unchanged URL is a no-op.
 
-**Mapping details**: The bundle → theme materialisation rules (which preview files become components, how `colors_and_type.css` projects into the six canonical token JSON files, which bundle directories are ignored) live in `cogni-workspace/references/claude-design-bundle-mapping.md`. Edits to that mapping doc are the right place to extend or constrain importer behaviour; the script reads its rules from there as the source of truth.
-
-**Cogni-work canary status**: The first cogni-work bundle export (2026-04-25) omits a structured `## Voice & Copy Guidelines` section, so the auto-inject policy in Prerequisites applies — the import succeeds with a clearly-tagged stub inserted before `## Source`, and the result passes Phase D of `verify-theme-backcompat.sh`. Replacing that stub with real voice content follows the same re-author-and-re-import remedy stated there.
+**Mapping details**: The bundle → theme materialisation rules (which preview files become components, how `colors_and_type.css` projects into the six canonical token JSON files, which bundle directories are ignored) live in `${CLAUDE_PLUGIN_ROOT}/references/claude-design-bundle-mapping.md`. Edits to that mapping doc are the right place to extend or constrain importer behaviour; the script reads its rules from there as the source of truth. A bundle that omits a structured `## Voice & Copy Guidelines` section takes the auto-inject policy in Prerequisites: the import succeeds with a clearly-tagged stub inserted before `## Source`, and replacing that stub with real voice content follows the re-author-and-re-import remedy stated there.
 
 ## Theme File Format
 
@@ -296,12 +294,12 @@ Operations 5 and (conditionally) 6 emit a minimal `manifest.json` next to `theme
 }
 ```
 
-- `schema_version` is always `"1.0"` for now — it pins the file to the current `references/theme-manifest.schema.json`.
+- `schema_version` is always `"1.0"` for now — it pins the file to the current `${CLAUDE_PLUGIN_ROOT}/references/theme-manifest.schema.json`.
 - `name` is the human-readable theme name (e.g., `"Cogni Work"`).
 - `slug` matches the directory name (kebab-case, see [Naming Convention](#naming-convention) below).
 - `tiers` starts empty (`{}`); tiers are added by Operation 7 only when the user explicitly populates them.
 
-Operation 5 finishes by running `python3 cogni-workspace/scripts/validate-theme-manifest.py <themes-dir>/<slug>` to confirm the manifest is schema-valid before the operation reports success.
+Operation 5 finishes by running `python3 "${CLAUDE_PLUGIN_ROOT}/scripts/validate-theme-manifest.py" <themes-dir>/<slug>` to confirm the manifest is schema-valid before the operation reports success.
 
 **Backwards-compat:** `_template/` and any pre-existing tier-0 theme without a manifest stay valid forever — Operation 6 (Audit/Improve) preserves the manifestless layout unless the user explicitly asks to promote via Operation 7.
 

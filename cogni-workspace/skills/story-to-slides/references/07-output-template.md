@@ -85,7 +85,7 @@ The final brief uses this structure. Read it before writing Step 9 output.
 Schema **4.1** is additive over 4.0: every renderer accepts both, and an unfenced
 4.0 brief stays readable. Three of the frontmatter keys added below — `climax`,
 `design` and `key_figures` — are defined in
-`cogni-workspace/libraries/presentation-intent.md`, and this template cites that
+`${CLAUDE_PLUGIN_ROOT}/libraries/presentation-intent.md`, and this template cites that
 vocabulary rather than restating it. The remaining two, `max_slides` and
 `slides`, are defined here.
 
@@ -405,6 +405,77 @@ validation:
 ```
 
 ---
+
+## Step 8.2 Enrichment Prompt Payload
+
+The `slides-enrichment-artist` launch payload story-to-slides Step 8.2 interpolates. The `FRONTMATTER:` block is an interpolation payload — it supplies values for the keys defined under [Frontmatter](#frontmatter) above, not a second definition of the key set; re-derive it from that section whenever the key set or any value annotation changes.
+
+```
+Agent tool:
+  subagent_type: "cogni-workspace:slides-enrichment-artist"
+  prompt: |
+    OUTPUT_PATH: {resolved_output_path}
+    OUTPUT_TEMPLATE_PATH: $CLAUDE_PLUGIN_ROOT/skills/story-to-slides/references/07-output-template.md
+
+    FRONTMATTER:
+      type: presentation-brief
+      version: "4.1"
+      theme: {theme_id}
+      theme_path: "{theme_path}"
+      customer: "{customer_name}"
+      provider: "{provider_name}"
+      language: "{language}"
+      generated: "{date}"
+      arc_type: "{arc_type}"
+      arc_id: "{arc_id}"
+      governing_thought: "{governing_thought}"
+      confidence_score: {avg_confidence}
+      max_slides: {max_slides}
+      slides: {slides_total}
+      climax: {climax_slide}
+      design:
+        register: {register}
+        dark_slides: {dark_slides}
+        speaker_notes: {speaker_notes}
+        imagery: {imagery}
+        variations: {variations}
+      key_figures:
+        - "{hero number promoted out of prose, provenance marker kept if it carries one}"
+      transformation_notes: |
+        Story-to-slides transformation.
+        Theme: {theme_id}. Arc: {arc_type}.
+        {N} slides, {avg}% avg confidence.
+        {number_plays} number plays, {headlines_optimized} headlines optimized.
+
+    TITLE: {title}
+    SUBTITLE: {subtitle}
+
+    SLIDE_SPECS:
+    {all slide YAML from Steps 8 + 8.1}
+
+    AUDIENCE_MODEL:
+    {audience model from Step 3}
+
+    ARC_ANALYSIS:
+    {arc analysis from Step 4}
+
+    LANGUAGE: {language}
+    ARC_ID: {arc_id or "none"}
+    ARC_DEFINITION_PATH: {path or "none"}
+    BUYER_APPENDIX_PATH: {path or "none"}
+
+    CTA_SUMMARY:
+    {cta_summary from Step 6.1 or "none"}
+
+    GENERATION_METADATA_STATS:
+      number_plays: {count}
+      headlines_optimized: {count}
+      bullets_consolidated: {count}
+      source_links: {count}
+      layout_distribution: "{layout_type: count, ...}"
+      avg_confidence: {score}
+      manual_review: [{slide list or "none"}]
+```
 
 ## Citation Handling Rules
 

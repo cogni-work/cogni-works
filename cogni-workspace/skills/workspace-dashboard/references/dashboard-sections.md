@@ -14,7 +14,7 @@ Per-section reference for `workspace-dashboard`: data source, helper(s) reused, 
 ## 2. Installed Plugins
 
 **Data source** (in priority order):
-1. Output of `cogni-workspace/scripts/discover-plugins.sh` — JSON envelope with `data.plugins[]` (name, version, description, path, root_var, plugin_var)
+1. Output of `${CLAUDE_PLUGIN_ROOT}/scripts/discover-plugins.sh` — JSON envelope with `data.plugins[]` (name, version, description, path, root_var, plugin_var)
 2. Fallback (monorepo dev mode): glob `<workspace-root>/cogni-*/.claude-plugin/plugin.json` directly and synthesize the same shape
 3. Per-plugin enrichment: read each plugin's `plugin.json` for `keywords[]` and `archived` flag
 
@@ -57,7 +57,7 @@ Per-section reference for `workspace-dashboard`: data source, helper(s) reused, 
   - `cogni-research/references/market-sources.json`
   - `cogni-trends/skills/trend-research/references/region-authority-sources.json`
 
-cogni-portfolio is intentionally not a column: under the centralized markets model it reads the registry directly via `cogni-workspace/scripts/get-market-config.py`, so its market set is structurally identical to the registry by construction.
+cogni-portfolio is intentionally not a column: under the centralized markets model it reads the registry directly via `${CLAUDE_PLUGIN_ROOT}/scripts/get-market-config.py`, so its market set is structurally identical to the registry by construction.
 
 **Output**: heatmap grid. Rows = markets (sorted by `tier` then alphabetically). Columns = the two consuming plugins. Cell = green when the market is present in that plugin's overlay, neutral when absent. Below the matrix: per-market summary chips (authority-domain counts, primary authorities).
 

@@ -14,13 +14,14 @@ description: >
   post-processes existing content, it never creates new reports from
   scratch (that is cogni-trends or upstream research), never creates slides (that
   is story-to-slides), and never rewrites prose (that is the `copywriter` skill).
+allowed-tools: Read, Write, Bash, Glob, AskUserQuestion, Agent, Skill
 ---
 
 # Enrich Report
 
 ## Purpose
 
-Read a completed markdown report and produce a **self-contained HTML file** that presents the same content with interactive data visualizations and conceptual diagrams injected at semantically appropriate positions. The original markdown stays untouched — you are creating a visual rendition, not editing the source.
+Read a completed markdown report and produce a **self-contained HTML file** that presents the same content with interactive data visualizations and conceptual diagrams injected at semantically appropriate positions. The original markdown stays untouched — the skill creates a visual rendition, not editing the source.
 
 A great enriched report does not just decorate prose with random charts. Each visualization earns its place by making a data pattern visible that would otherwise require the reader to mentally parse numbers from text, or by making a conceptual relationship (like a T→I→P→S value chain) spatially comprehensible. If a section has no data worth charting and no concept worth diagramming, leave it as styled prose — over-enrichment is worse than no enrichment.
 
@@ -141,7 +142,7 @@ This ensures the skill finds pre-existing infographic artifacts regardless of wh
 
 **Theme setup:**
 1. If `design_variables` path provided: load and validate against schema.
-2. If `theme` path provided: derive design-variables.json from theme.md (read `cogni-workspace/references/design-variables-pattern.md` for derivation rules, validate against `schemas/design-variables.schema.json`).
+2. If `theme` path provided: derive design-variables.json from theme.md (read `${CLAUDE_PLUGIN_ROOT}/references/design-variables-pattern.md` for derivation rules, validate against `schemas/design-variables.schema.json`).
 3. Otherwise: invoke `cogni-workspace:pick-theme`, then derive.
 
 **Output path resolution:**
@@ -191,35 +192,11 @@ Output: section map (held in memory — not written to disk).
 
 This phase produces a DIN A4 portrait infographic (Economist data-page style). Before generating anything, check for pre-existing artifacts — the user may have already run `story-to-infographic` + `/render-infographic` on this report for a higher-quality infographic (10-step distillation with 4-layer validation and reviewer agent, vs. the simplified inline distillation below).
 
-**Step 2a.0 — Artifact detection (check before generating):**
+**Step 2a.0 — Artifact detection.** Read `references/09-infographic-artifacts.md` and walk its ladder against `{source_dir}/cogni-visual/` (the canonical location for visual working artifacts; if no `infographic-preview.webp`/`.png` is present, rename a legacy `preview.png` to `infographic-preview.png` first). Three outcomes:
 
-Check for rendered infographic artifacts in `{source_dir}/cogni-visual/` only (the canonical location for all visual working artifacts):
-- `{source_dir}/cogni-visual/infographic-fragment.html` (HTML fragment — highest quality, responsive, selectable text)
-- `{source_dir}/cogni-visual/infographic-preview.webp` (WebP — preferred image format, 25-35% smaller than PNG)
-- `{source_dir}/cogni-visual/infographic-preview.png` (PNG — pixel-perfect fallback)
-
-**Migration:** If neither `.webp` nor `.png` is found, also check for the legacy filename `preview.png` in `{source_dir}/cogni-visual/`. If found, rename it to `infographic-preview.png` and continue.
-
-1. **Rendered artifacts exist:** `{source_dir}/cogni-visual/infographic-fragment.html` OR `{source_dir}/cogni-visual/infographic-preview.webp` OR `{source_dir}/cogni-visual/infographic-preview.png`
-   - If any file exists: **skip all of Phase 2a**. The infographic is already rendered.
-   - Tell the user: "Reusing existing infographic artifacts (skipping distillation + render)."
-   - Store the path to the best artifact found (HTML fragment preferred over PNG).
-   - If `{source_dir}/cogni-visual/infographic-brief.md` also exists, read its `style_preset` from YAML frontmatter and note it: "Detected style_preset: {preset}." This is informational only — do not block or re-generate based on preset.
-   - `infographic-data.json` is NOT required when rendered artifacts exist — the post-processor uses the HTML fragment (highest quality) or PNG directly.
-   - Proceed to Phase 2b.
-
-2. **Brief exists but no render:** `{source_dir}/cogni-visual/infographic-brief.md` exists but no rendered artifact (fragment HTML or PNG) was found
-   - The brief was generated (by story-to-infographic or a prior interrupted run) but never rendered.
-   - Tell the user: "Found existing infographic-brief.md without rendered output. Dispatching renderer."
-   - Dispatch the `render-infographic-pencil` agent with the brief:
-     - Input: `{source_dir}/cogni-visual/infographic-brief.md`
-     - Output .pen: `{source_dir}/cogni-visual/infographic.pen`
-     - Export PNG: `{source_dir}/cogni-visual/infographic-preview.png`
-     - Export HTML fragment: `{source_dir}/cogni-visual/infographic-fragment.html` (generated by Step 5b of the agent — best-effort, the PNG is the minimum)
-   - If Pencil MCP is not available: ask the user to open Pencil. If they decline, fall through to path 3 below to generate `infographic-data.json` for the HTML fallback.
-   - Proceed to Phase 2b.
-
-3. **Neither exists:** Run the full distillation below (Step 2a.1 + Step 2a.2).
+1. **Rendered artifacts exist** (`infographic-fragment.html`, `infographic-preview.webp` or `infographic-preview.png`): skip all of Phase 2a, tell the user the artifacts are being reused, store the best one (HTML fragment preferred), note any `style_preset` found in `infographic-brief.md` as information only, and proceed to Phase 2b.
+2. **Brief exists but no render**: tell the user, dispatch the `render-infographic-pencil` agent on the brief (same inputs and outputs as Step 2a.2), and proceed to Phase 2b. If Pencil MCP is unavailable and the user declines to open it, fall through to path 3.
+3. **Neither exists**: run the full distillation below (Step 2a.1 + Step 2a.2).
 
 **Step 2a.1 — Generate infographic brief (only if path 3):**
 
@@ -253,15 +230,7 @@ The agent uses Pencil MCP tools (`open_document`, `batch_design`, `export_nodes`
 
 **If Pencil MCP is not available** (not open, not installed): Ask the user to open Pencil. Do NOT silently fall back to the HTML-based infographic — the Pencil-rendered version is the intended output quality. If the user declines, fall back to the HTML infographic from `infographic-data.json` and note the limitation.
 
-**Output artifacts (vary by path):**
-
-| Path | infographic-brief.md | infographic.pen | infographic-preview.png | infographic-preview.webp | infographic-fragment.html | infographic-data.json |
-|------|---------------------|----------------|------------------------|-------------------------|--------------------------|----------------------|
-| 1 (render exists) | pre-existing | pre-existing | pre-existing (reused) | pre-existing or absent | pre-existing or absent | not needed |
-| 2 (brief only) | pre-existing | generated | generated | generated (best-effort) | generated (best-effort) | not generated |
-| 3 (from scratch) | generated | generated | generated | generated (best-effort) | generated (best-effort) | generated |
-
-**Three-tier infographic priority in Phase 4:** The post-processor uses the highest-quality artifact available: HTML fragment (native responsive HTML with Pencil's editorial precision, selectable text, responsive layout) > WebP/PNG image (pixel-perfect base64 with magazine peek strip + lightbox — WebP preferred over PNG for ~30% smaller base64) > JSON fallback (template-generated inline HTML). The HTML fragment is preferred because it preserves text selectability, link clickability, and responsive layout from Pencil's tree-walk conversion.
+**Output artifacts** vary by path — the per-path table and the Phase 4 artifact priority (HTML fragment > WebP/PNG > JSON fallback) are in `references/09-infographic-artifacts.md`.
 
 ---
 
@@ -451,31 +420,7 @@ The agent takes 3 screenshots (infographic header, report body, chart-heavy sect
 
 This phase only runs when `formats` includes `pdf` or `docx`. The scroll HTML from Phase 4/5 is the starting point for format export.
 
-**PDF export:**
-
-1. Read `references/07-citation-normalization.md` — not for HTML citations (which are already correct), but for understanding the citation landscape in case pre-processing is needed.
-2. **Mermaid pre-rendering**: If the HTML contains `<pre class="mermaid">` blocks, these render client-side via JavaScript and will appear blank in static PDF conversion. Pre-render them before PDF generation:
-   - Try `mmdc` (mermaid-cli): extract Mermaid source → render to SVG → replace in HTML
-   - Fallback: use Excalidraw MCP (`mcp__excalidraw__create_from_mermaid` → `export_to_image`)
-   - Last resort: leave as code blocks and note the limitation to the user
-3. **Chart.js pre-rendering**: Chart.js `<canvas>` elements also require JavaScript. For PDF with charts, `document-skills:pdf` can execute JS during rendering. If using weasyprint (no JS), charts will be blank — inform the user and suggest `density=none` for chart-free PDF.
-4. **Generate PDF**:
-   - Preferred: `Skill(document-skills:pdf)` from the enriched HTML. Pass `design-variables.json` for theme token access.
-   - Fallback: If weasyprint is available: `python3 -c "import weasyprint; weasyprint.HTML(filename='{html_path}').write_pdf('{pdf_path}')"`
-   - Last resort: Inform user the HTML is available and suggest browser print-to-PDF
-5. Output: `{output_dir}/{stem}-enriched.pdf` (scroll) or `{output_dir}/{stem}-enriched-flipbook.pdf` (flipbook). Mirror the layout suffix from the HTML filename.
-
-**DOCX export:**
-
-DOCX cannot represent interactive charts or inline SVG. Convert from the original markdown source (not the HTML) to preserve clean document structure.
-
-1. Read `references/07-citation-normalization.md` for citation normalization patterns.
-2. Normalize citations in the markdown: parse the `## References` section, replace inline citation patterns with numbered superscript markers, strip the original references section.
-3. **Generate DOCX**:
-   - Preferred: `Skill(document-skills:docx)` from the normalized markdown. Pass theme tokens: `heading_font` (fonts.headers), `body_font` (fonts.body), `accent_color` (colors.accent).
-   - Fallback: If pandoc is available: `pandoc {md_path} -o {docx_path} --from markdown --to docx`
-   - Last resort: Inform user and suggest `brew install pandoc` or `pip install pandoc`
-4. Output: `{output_dir}/{stem}.docx`
+Follow the procedures in `references/10-format-export.md`. In short: **PDF** converts the enriched HTML — pre-render Mermaid blocks (`mmdc`, else Excalidraw MCP, else leave as code and say so) because static conversion renders them blank, prefer `Skill(document-skills:pdf)` with `design-variables.json`, fall back to weasyprint (charts stay blank without JS — say so), last resort browser print; output mirrors the HTML's layout suffix. **DOCX** converts the original markdown, not the HTML, because DOCX cannot hold charts or inline SVG — normalize citations per `references/07-citation-normalization.md`, prefer `Skill(document-skills:docx)` with the theme's heading font, body font and accent colour, fall back to pandoc, last resort tell the user how to install it.
 
 **Report to user:**
 
@@ -496,6 +441,8 @@ After all requested formats are generated:
 | `references/03-enrichment-catalog.md` | Phase 2b | Enrichment types, trigger conditions, scoring model, density thresholds |
 | `references/04-chart-patterns.md` | — (script) | Chart.js config templates (used internally by Python script, not by LLM) |
 | `references/08-infographic-distillation.md` | Phase 2a | Infographic distillation principles, hero number selection, 60-second read test |
+| `references/09-infographic-artifacts.md` | Phase 2a | Artifact detection ladder, per-path output table, Phase 4 artifact priority |
+| `references/10-format-export.md` | Phase 6 | PDF and DOCX export procedures with their fallback chains |
 | `${CLAUDE_PLUGIN_ROOT}/libraries/svg-patterns.md` | Phase 4 | SVG element recipes for inline concept diagrams (shared library — also used by concept-diagram-svg agent) |
 | `references/06-html-structure.md` | Phase 4 | HTML layout reference — sidebar + continuous scroll, CSS architecture, responsive breakpoints. The agent writes scroll HTML; the flipbook variant is derived by the post-processor in Step 4b. |
 | `references/07-flipbook-structure.md` | — (script) | Flipbook architecture documentation. CSS and JS are embedded in the Python post-processor as constants; the agent does not read this file. |

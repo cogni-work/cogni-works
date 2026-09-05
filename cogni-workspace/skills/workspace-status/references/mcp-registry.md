@@ -13,7 +13,7 @@ only once it is actually installed.
 ### excalidraw (yctimlin/mcp_excalidraw)
 
 - **Needed by:** cogni-portfolio, cogni-workspace
-- **Type:** git-installed (cloned and built by `cogni-workspace/scripts/install-mcp.sh`)
+- **Type:** git-installed (cloned and built by `${CLAUDE_PLUGIN_ROOT}/scripts/install-mcp.sh`)
 - **Install path:** `~/.claude/mcp-servers/mcp_excalidraw/`
 - **Entry point:** `~/.claude/mcp-servers/mcp_excalidraw/start.sh` (wrapper that starts canvas + MCP)
 - **Source repo:** https://github.com/yctimlin/mcp_excalidraw.git

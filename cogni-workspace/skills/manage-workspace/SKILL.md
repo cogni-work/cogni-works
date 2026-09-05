@@ -23,9 +23,9 @@ An insight-wave workspace is the shared foundation that all marketplace plugins 
 
 This skill handles both initial creation and ongoing updates. It auto-detects which mode to use based on whether a workspace already exists.
 
-## Before You Start
+## Before Starting
 
-Run the dependency checker — it returns JSON so you can parse the result and tell the user exactly what's missing:
+Run the dependency checker — it returns JSON, so parse the result and tell the user exactly what's missing:
 
 ```bash
 bash ${CLAUDE_PLUGIN_ROOT}/scripts/check-dependencies.sh
@@ -107,7 +107,7 @@ bash ${CLAUDE_PLUGIN_ROOT}/scripts/install-workspace-deps.sh
 `{"success":false,...}` envelope; warn and continue (do not abort init). On
 success it returns `data.action` of `installed` / `updated` / `skipped` and the
 provisioned package list. Packages are declared in
-`references/python-deps-registry.json`.
+`${CLAUDE_PLUGIN_ROOT}/references/python-deps-registry.json`.
 
 ### 4. Install Theme Template
 
@@ -262,7 +262,7 @@ workspace needs its own pointers even when `cogni-workspace` is deselected.
 ### 3.5. Refresh Optional Python Dependencies
 
 Re-provision the optional-dep venv so any newly declared packages (or version
-bumps) in `references/python-deps-registry.json` are picked up. `--force`
+bumps) in `${CLAUDE_PLUGIN_ROOT}/references/python-deps-registry.json` are picked up. `--force`
 reinstalls/upgrades into the existing `~/.claude/workspace-python-venv/`:
 
 ```bash

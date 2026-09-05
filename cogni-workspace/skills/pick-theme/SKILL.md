@@ -13,7 +13,7 @@ description: >-
   Also triggers on "apply a theme", "use this theme", or "theme my output".
   This is the single standard entry point for theme selection across the
   insight-wave marketplace.
-allowed-tools: Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion
+allowed-tools: Read, Glob, Bash, AskUserQuestion
 ---
 
 # Pick Theme
@@ -70,7 +70,7 @@ The `mtime` field is the file modification timestamp (Unix epoch). The script pr
 
 #### Optional fields (Theme System v2)
 
-Two fields are optional and only appear when a theme ships a `manifest.json` (see `references/theme-manifest.md`):
+Two fields are optional and only appear when a theme ships a `manifest.json` (see `${CLAUDE_PLUGIN_ROOT}/references/theme-manifest.md`):
 
 | Field | When present | Shape |
 |-------|--------------|-------|
@@ -113,7 +113,7 @@ Present discovered themes via AskUserQuestion. Build the options from the discov
 }
 ```
 
-**Option format:** `label` = theme name, `description` = `{primary} + {accent} · {font} · {source}`. Keep a mental map of label → path from the discovery output so you can resolve the user's selection back to the absolute theme path.
+**Option format:** `label` = theme name, `description` = `{primary} + {accent} · {font} · {source}`. Keep a mental map of label → path from the discovery output so the user's selection resolves back to the absolute theme path.
 
 ### Step 3: Resolve Selection
 

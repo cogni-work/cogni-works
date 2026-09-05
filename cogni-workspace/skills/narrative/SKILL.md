@@ -100,11 +100,12 @@ Exactly four `##` headings, byte-equal to the contract's `## Headings` cells for
   "citation_count": 22,
   "elements": 4,
   "language": "en",
-  "readability_score": null
+  "readability_score": null,
+  "qa_verdict": "pass"
 }
 ```
 
-`readability_score` is reported when Pass 4 computes it and `null` otherwise.
+`readability_score` is reported when Pass 4 computes it and `null` otherwise. `qa_verdict` is the release review's rollup — exactly one of `pass`, `needs_revision`, `fail`.
 
 ## Core Workflow
 
@@ -213,6 +214,8 @@ python3 "${CLAUDE_PLUGIN_ROOT}/skills/narrative/scripts/validate-narrative.py" \
 ```
 
 Then read `references/validation.md` and check its judged gates plus the contract's `## Validation` section. Fix any failure and re-run everything — a fix can break a gate that passed. A structural failure is fixed by rewriting against `## Composition`, never by renaming headings.
+
+**Release review (after the gates are green).** Run the banded self-review defined in `references/validation.md`: five dimensions — strategic reasoning, arc integrity, executive language, decision usefulness, execution fit — each `strong` / `adequate` / `weak`, rolled up to `pass`, `needs_revision` (revise once, review once more, then report) or `fail` (a gate could not be cleared and the run was abandoned). The review diagnoses and never rewrites the draft; the revision step acts on its findings. Its rollup is the JSON summary's `qa_verdict`.
 
 ### Phase 6: Write output
 

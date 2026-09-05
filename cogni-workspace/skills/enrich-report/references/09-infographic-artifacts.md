@@ -9,8 +9,6 @@ What enrich-report Phase 2a checks before generating anything: which pre-existin
 
 ## Artifact detection ladder (Step 2a.0)
 
-**Step 2a.0 — Artifact detection (check before generating):**
-
 Check for rendered infographic artifacts in `{source_dir}/cogni-visual/` only (the canonical location for all visual working artifacts):
 - `{source_dir}/cogni-visual/infographic-fragment.html` (HTML fragment — highest quality, responsive, selectable text)
 - `{source_dir}/cogni-visual/infographic-preview.webp` (WebP — preferred image format, 25-35% smaller than PNG)
@@ -37,11 +35,9 @@ Check for rendered infographic artifacts in `{source_dir}/cogni-visual/` only (t
    - If Pencil MCP is not available: ask the user to open Pencil. If they decline, fall through to path 3 below to generate `infographic-data.json` for the HTML fallback.
    - Proceed to Phase 2b.
 
-3. **Neither exists:** Run the full distillation below (Step 2a.1 + Step 2a.2).
+3. **Neither exists:** Run the full distillation in SKILL.md Phase 2a (Step 2a.1 + Step 2a.2).
 
 ## Output artifacts by path
-
-**Output artifacts (vary by path):**
 
 | Path | infographic-brief.md | infographic.pen | infographic-preview.png | infographic-preview.webp | infographic-fragment.html | infographic-data.json |
 |------|---------------------|----------------|------------------------|-------------------------|--------------------------|----------------------|

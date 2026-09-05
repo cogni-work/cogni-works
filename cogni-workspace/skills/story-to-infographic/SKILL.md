@@ -352,8 +352,8 @@ dimensions: "{dimensions}"
 arc_type: "{arc_type}"
 arc_id: "{arc_id}"
 governing_thought: "{governing_thought}"
-voice_tone: "{executive|analytical|punchy|playful}"   # v1.1 — micro-copy register
-palette_override: "{theme|canonical}"                 # v1.1 — economist palette source
+voice_tone: "{executive|analytical|punchy|playful}"
+palette_override: "{theme|canonical}"
 confidence_score: {0.0-1.0}
 transformation_notes: |
   Story-to-infographic transformation.

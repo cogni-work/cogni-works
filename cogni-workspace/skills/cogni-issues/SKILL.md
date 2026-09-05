@@ -57,7 +57,7 @@ cannot be found, report the missing path to the user — never guess paths.
 ## gh CLI commands
 
 All GitHub operations route through `scripts/gh-issues-helper.sh`. JSON on stdout,
-errors on stderr.
+errors on stderr. This table and the script's `usage()` describe the same surface — update both when adding or renaming a subcommand.
 
 | Operation | Command |
 |-----------|---------|

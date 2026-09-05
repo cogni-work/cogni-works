@@ -16,9 +16,9 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion
 
 ## Why This Exists
 
-`cogni-workspace/references/supported-markets-registry.json` is the
+`${CLAUDE_PLUGIN_ROOT}/references/supported-markets-registry.json` is the
 canonical taxonomy that every market-aware insight-wave plugin reads
-from via `cogni-workspace/scripts/get-market-config.py`. There is one
+from via `${CLAUDE_PLUGIN_ROOT}/scripts/get-market-config.py`. There is one
 source of truth and no sync — plugin overlays carry only plugin-specific
 metadata keyed against the registry's canonical domain set, and the merge
 utility joins them at read time.
@@ -132,8 +132,8 @@ only; use this skill when the goal is to add a market.
 
 ## References
 
-- `cogni-workspace/references/supported-markets-registry.json` — canonical registry
-- `cogni-workspace/scripts/get-market-config.py` — merge utility (read entry point for plugins)
+- `${CLAUDE_PLUGIN_ROOT}/references/supported-markets-registry.json` — canonical registry
+- `${CLAUDE_PLUGIN_ROOT}/scripts/get-market-config.py` — merge utility (read entry point for plugins)
 - `cogni-research/references/market-sources.json` — research overlay (`authority_metadata` keyed by domain)
 - `cogni-trends/skills/trend-research/references/region-authority-sources.json` — trends overlay (`site_searches[]` keyed by dimension)
-- `cogni-workspace/skills/audit-region-sources/SKILL.md` — read-only sibling skill
+- `${CLAUDE_PLUGIN_ROOT}/skills/audit-region-sources/SKILL.md` — read-only sibling skill

@@ -13,7 +13,7 @@ description: >-
   Also triggers on "apply a theme", "use this theme", or "theme my output".
   This is the single standard entry point for theme selection across the
   insight-wave marketplace.
-allowed-tools: Read, Glob, Grep, Bash, AskUserQuestion
+allowed-tools: Read, Glob, Bash, AskUserQuestion
 ---
 
 # Pick Theme

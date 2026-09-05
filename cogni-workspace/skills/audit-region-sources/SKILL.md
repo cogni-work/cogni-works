@@ -19,7 +19,7 @@ allowed-tools: Read, Glob, Grep, Bash
 ## Core Concept
 
 There is one canonical market taxonomy:
-`cogni-workspace/references/supported-markets-registry.json` — codes,
+`${CLAUDE_PLUGIN_ROOT}/references/supported-markets-registry.json` — codes,
 names, locales, currencies, languages, regional qualifiers, regulatory
 bodies, and the authority-domain set per market.
 

@@ -176,11 +176,11 @@ PROHIBITED PATTERNS:
 
 ---
 
-### Section Capacity Is the Binding Cap
+## Section Capacity Is the Binding Cap
 
-**Section capacity — `poster_count` x 3 — is the binding cap here, not `max_sections`.** Resolve it before item 2's station mapping: Step 5 caps the raw section count at `max_sections`, which can exceed capacity whenever the resolved poster count sits at the low end of the 3-5 bound. When `section_count` exceeds `poster_count` x 3, re-run the too-many-sections reduction in `references/02-section-architecture.md` (§ Step 4: Enforce Section Count -> Too Many Sections (> 10)) with `poster_count` x 3 as the target in place of `max_sections`, including in that block's own validation checkpoint. Adding posters is not an alternative — item 1's count is final.
+**Section capacity — `poster_count` x 3 — is the binding cap here, not `max_sections`.** Resolve it before the station mapping (Step 5b item 2): Step 5 caps the raw section count at `max_sections`, which can exceed capacity whenever the resolved poster count sits at the low end of the 3-5 bound. When `section_count` exceeds `poster_count` x 3, re-run the too-many-sections reduction in `../02-section-architecture.md` (§ Step 4: Enforce Section Count -> Too Many Sections (> 10)) with `poster_count` x 3 as the target in place of `max_sections`, including in that block's own validation checkpoint. Adding posters is not an alternative — the poster count from Step 5b item 1 is final.
 
-The reference's poster-count constraints and prohibited patterns bind here rather than advise: a title-only or summary-only poster spends a whole station on nothing the reader can act on, so the first poster opens on `hero`, the last closes on `cta`, and related stations merge instead of the count ever exceeding 5.
+The poster-count constraints and prohibited patterns above bind here rather than advise: a title-only or summary-only poster spends a whole station on nothing the reader can act on, so the first poster opens on `hero`, the last closes on `cta`, and related stations merge instead of the count ever exceeding 5.
 
 ## Arc Label Assignment
 

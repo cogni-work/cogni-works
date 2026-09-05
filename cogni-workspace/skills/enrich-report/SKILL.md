@@ -14,6 +14,7 @@ description: >
   post-processes existing content, it never creates new reports from
   scratch (that is cogni-trends or upstream research), never creates slides (that
   is story-to-slides), and never rewrites prose (that is the `copywriter` skill).
+allowed-tools: Read, Write, Bash, Glob, AskUserQuestion, Agent, Skill
 ---
 
 # Enrich Report
@@ -141,7 +142,7 @@ This ensures the skill finds pre-existing infographic artifacts regardless of wh
 
 **Theme setup:**
 1. If `design_variables` path provided: load and validate against schema.
-2. If `theme` path provided: derive design-variables.json from theme.md (read `cogni-workspace/references/design-variables-pattern.md` for derivation rules, validate against `schemas/design-variables.schema.json`).
+2. If `theme` path provided: derive design-variables.json from theme.md (read `${CLAUDE_PLUGIN_ROOT}/references/design-variables-pattern.md` for derivation rules, validate against `schemas/design-variables.schema.json`).
 3. Otherwise: invoke `cogni-workspace:pick-theme`, then derive.
 
 **Output path resolution:**
@@ -191,7 +192,7 @@ Output: section map (held in memory — not written to disk).
 
 This phase produces a DIN A4 portrait infographic (Economist data-page style). Before generating anything, check for pre-existing artifacts — the user may have already run `story-to-infographic` + `/render-infographic` on this report for a higher-quality infographic (10-step distillation with 4-layer validation and reviewer agent, vs. the simplified inline distillation below).
 
-**Step 2a.0 — Artifact detection.** Read `references/09-infographic-artifacts.md` and walk its ladder against `{source_dir}/cogni-visual/` (the canonical location for visual working artifacts; rename a legacy `preview.png` to `infographic-preview.png` first). Three outcomes:
+**Step 2a.0 — Artifact detection.** Read `references/09-infographic-artifacts.md` and walk its ladder against `{source_dir}/cogni-visual/` (the canonical location for visual working artifacts; if no `infographic-preview.webp`/`.png` is present, rename a legacy `preview.png` to `infographic-preview.png` first). Three outcomes:
 
 1. **Rendered artifacts exist** (`infographic-fragment.html`, `infographic-preview.webp` or `infographic-preview.png`): skip all of Phase 2a, tell the user the artifacts are being reused, store the best one (HTML fragment preferred), note any `style_preset` found in `infographic-brief.md` as information only, and proceed to Phase 2b.
 2. **Brief exists but no render**: tell the user, dispatch the `render-infographic-pencil` agent on the brief (same inputs and outputs as Step 2a.2), and proceed to Phase 2b. If Pencil MCP is unavailable and the user declines to open it, fall through to path 3.

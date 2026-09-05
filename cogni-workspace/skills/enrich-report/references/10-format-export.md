@@ -6,7 +6,7 @@ The PDF and DOCX procedures enrich-report Phase 6 follows when `formats` include
 - PDF export
 - DOCX export
 
-**PDF export:**
+## PDF export
 
 1. Read `references/07-citation-normalization.md` — not for HTML citations (which are already correct), but for understanding the citation landscape in case pre-processing is needed.
 2. **Mermaid pre-rendering**: If the HTML contains `<pre class="mermaid">` blocks, these render client-side via JavaScript and will appear blank in static PDF conversion. Pre-render them before PDF generation:
@@ -20,7 +20,7 @@ The PDF and DOCX procedures enrich-report Phase 6 follows when `formats` include
    - Last resort: Inform user the HTML is available and suggest browser print-to-PDF
 5. Output: `{output_dir}/{stem}-enriched.pdf` (scroll) or `{output_dir}/{stem}-enriched-flipbook.pdf` (flipbook). Mirror the layout suffix from the HTML filename.
 
-**DOCX export:**
+## DOCX export
 
 DOCX cannot represent interactive charts or inline SVG. Convert from the original markdown source (not the HTML) to preserve clean document structure.
 

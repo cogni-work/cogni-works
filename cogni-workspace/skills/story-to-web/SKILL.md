@@ -283,12 +283,10 @@ For each section:
 
 > A poster is one arc station holding 1-3 stacked sections. Skip this step entirely when `mode=web`. **Read reference:** `references/print/01-poster-architecture.md`
 
-1. **Poster count from narrative length**, then cap at `max_posters` — take the word-count thresholds and the 3-5 bound from the reference's poster-count decision tree. Then resolve section capacity (`poster_count` x 3) per the capacity note below before mapping stations in item 2.
+1. **Poster count from narrative length**, then cap at `max_posters` — take the word-count thresholds and the 3-5 bound from the reference's poster-count decision tree. Then resolve section capacity (`poster_count` x 3) before mapping stations in item 2 — it, not `max_sections`, is the binding cap; when `section_count` exceeds it, the reduction procedure, the prohibited poster patterns and the hero/cta bookends are owned by the reference § Section Capacity Is the Binding Cap.
 2. **Map arc stations to posters** using the poster templates in the reference.
 3. **Stack 1-3 sections per poster**, taking the height splits, the split-ratio selection rules and the portrait adaptations from `$CLAUDE_PLUGIN_ROOT/libraries/storyboard-layouts.md` — the same library item 4 reads for geometry, and the authoritative home for all three. `references/print/01-poster-architecture.md` restates them for readers arriving from the poster templates.
 4. **Resolve poster geometry from `poster_size`.** Read the scale-factor table in `$CLAUDE_PLUGIN_ROOT/libraries/storyboard-layouts.md` (A0-A3, portrait only): that row gives `print_width`, `print_height` and `scale_factor`. `base_width` / `base_height` are the fixed design resolution 1440 x 2036, and `poster_gap` defaults to that library's base gap of 200px. With `poster_size` and the `poster_count` from item 1, these are exactly the eight frontmatter fields Step 10 writes.
-
-**Section capacity (`poster_count` x 3) is the binding cap, not `max_sections`** — resolve it before item 2, and when `section_count` exceeds it re-run the too-many-sections reduction in `references/02-section-architecture.md` with `poster_count` x 3 as the target; adding posters is not an alternative. The reference's poster-count constraints and prohibited patterns bind rather than advise (first poster opens on `hero`, last closes on `cta`, related stations merge instead of exceeding 5) — see `references/print/01-poster-architecture.md` § Section Capacity Is the Binding Cap.
 
 **Content checkpoint:** State poster count, the station-to-poster mapping, the height split per poster, and the resolved poster geometry, and confirm `section_count` is at most `poster_count` x 3.
 

@@ -34,7 +34,7 @@ all in a single `.html` file.
 | `aspect_ratio` | `16:9` | Slide aspect ratio: `16:9`, `4:3` |
 | `language` | from brief frontmatter | `en` or `de` |
 | `max_refinements` | `3` | Max refinement rounds after rendering (0 = skip refinement) |
-| `theme_slug` | `` (off) | Optional Theme System v2 slug (e.g. `cogni-work`). When set, imports `tokens.css` from the resolved tiered theme. Omit for byte-equivalent legacy output. See the Theme System v2 subsection in Phase 3 and `cogni-workspace/references/theme-component-loader.md`. |
+| `theme_slug` | `` (off) | Optional Theme System v2 slug (e.g. `cogni-work`). When set, imports `tokens.css` from the resolved tiered theme. Omit for byte-equivalent legacy output. See the Theme System v2 subsection in Phase 3 and `${CLAUDE_PLUGIN_ROOT}/references/theme-component-loader.md`. |
 | `themes_dir` | auto-discovered | Override the workspace `themes/` directory used to resolve `theme_slug`. Default: `$COGNI_WORKSPACE_ROOT/themes`, then auto-discovery. |
 
 ## Execution Protocol

@@ -37,13 +37,21 @@ SIX ARMS, in two classes.
   These are the progressive-disclosure rules, and satisfying them on a skill
   that has grown past them is a restructure, not an edit. A guard that failed
   the tree on day one would be turned off; a guard that admits the measured
-  population and refuses any growth is the shape this repo already uses
+  population and refuses any NEW finding is the shape this repo already uses
   (`check-breadcrumbs.py`, and `KNOWN_UNMIRRORED` in
-  `cogni-workspace/tests/test-arc-reference-sync.sh`). The baseline captured
+  `cogni-workspace/tests/test-arc-reference-sync.sh`). The baseline key is
+  (skill, arm, file) and carries no measurement, so an admitted length finding
+  suppresses that SKILL.md at any line count: the ratchet refuses a new
+  over-length skill and refuses a stale entry, but does not refuse growth
+  inside a skill already admitted. Recording the measured value on length
+  entries would close that gap and is deliberately not done at adoption --
+  the admitted skills are each tracked as their own restructure, and a
+  per-entry number would go stale on every edit to a file the guard is not
+  gating yet. The baseline captured
   at adoption admits two populations: the deep reference trees of four
   cogni-workspace skills (copywriter, narrative, copy-reader, story-to-web)
   plus copywriter's CHANGELOG, whose flattening is tracked as its own
-  restructure; and the length, depth and orphan findings in five other
+  restructure; and the length, depth and orphan findings in six other
   plugins, each of which is that plugin's own piece of work. No cogni-workspace
   skill is admitted on the length arm.
 
@@ -51,7 +59,7 @@ SIX ARMS, in two classes.
       main SKILL.md under 500 lines"; the best-practices page says the same of
       the body. The file count is the stricter reading and the one a `wc -l`
       reproduces, so it is the one asserted. Ratcheted rather than hard
-      because the adoption measurement found nine skills across five other
+      because the adoption measurement found nine skills across four other
       plugins over the ceiling, and moving a hundred lines of procedure into a
       reference is precisely the restructure a ratchet arm exists to admit.
 

@@ -39,6 +39,7 @@ The brief describes WHAT each slide says and which layout to use. The renderer o
 | Parameter | Default | Description |
 |-----------|---------|-------------|
 | `source_path` | auto-discovered | Narrative file or directory. When omitted with `interactive=true`, Step 0 searches nearby. |
+| `project_path` | none | Accepted alias for `source_path`, mapped before Step 0 runs. |
 | `theme` | interactive | Absolute path to theme.md, or omit to trigger `cogni-workspace:pick-theme` interactive selection. |
 | `language` | `en` | Language code (en/de) |
 | `title` / `subtitle` | auto-detected | Extracted from narrative if not provided |
@@ -476,12 +477,12 @@ After the brief is written and validated, print the hand-off in `references/10-r
 | **05a-slide-copywriting.md** | 6 | Assertion headlines, number plays, bullet consolidation |
 | **05b-speaker-notes.md** | 8.2 | Two-section speaker notes format reference (loaded by slides-enrichment-artist agent) |
 | **06-slide-mapping-rules.md** | 7 | Layout selection, confidence scoring, fallback strategies |
-| **07-output-template.md** | 2, 8, 8.2, 10 | Slide YAML example, brief output template, citation rules (also loaded by slides-enrichment-artist agent) |
+| **07-output-template.md** | 2, 8, 8.2, 10 | Slide YAML example, brief output template, Step 8.2 enrichment prompt payload, citation rules (also loaded by slides-enrichment-artist agent) |
 | **08b-references-slide.md** | 8.1 | References slide construction |
 | **08c-presenter-prep.md** | 8.2 | Internal prep slides + per-slide speaker notes process (loaded by slides-enrichment-artist agent) |
 | **09-validation-checklist.md** | 9, 10 | Five-layer validation framework |
-| **2g-diagram-simplification.md** | 2.1 | Mermaid diagram detection and simplification |
 | **10-render-handoff.md** | 11 | claude.ai attachment box and prompt printed to the user after validation |
+| **2g-diagram-simplification.md** | 2.1 | Mermaid diagram detection and simplification |
 
 ### Libraries (loaded as needed — progressive disclosure)
 

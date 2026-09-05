@@ -127,15 +127,19 @@ assert_case "skill-spec-04-description-over-cap" 1 "[description]" "$T" - \
   "a folded description over 1024 characters is reported"
 
 # --- 05  description measured AFTER folding, not on the raw block -------------
-# 50 indented lines of 20 characters fold to ~1050 raw bytes with indentation
-# and newlines but 1049 characters joined by spaces... so use 48 lines: raw
-# block is 48*23 = 1104 bytes; folded value is 48*20 + 47 spaces = 1007 chars.
+# Each fixture line is `  twenty characters.\n` = 21 bytes raw, 18 characters
+# once the indent and newline fold away. The line count must put the RAW block
+# over the cap and the FOLDED value under it, or the case is entailed by 01 and
+# discriminates nothing: 52 lines is raw 52*21 = 1092 (over) against folded
+# 52*18 + 51 joining spaces = 987 (under). Any n in [49, 53] works; 48 does not
+# (raw 1008, folded 911 -- both under, so a guard grading the raw region would
+# still pass). A guard measuring anything but the folded scalar goes red here.
 T="$(new_tree folded)"
 add_plugin "$T" cogni-alpha
 mkdir -p "$T/cogni-alpha/skills/folded"
 {
   printf -- '---\nname: folded\ndescription: >-\n'
-  for _ in $(seq 1 48); do printf '  twenty characters.\n'; done
+  for _ in $(seq 1 52); do printf '  twenty characters.\n'; done
   printf -- '---\n\n# Folded\n\nBody.\n'
 } > "$T/cogni-alpha/skills/folded/SKILL.md"
 assert_case "skill-spec-05-description-folded-measure" 0 - "$T" - \
@@ -256,16 +260,32 @@ add_plugin "$T" cogni-alpha
 assert_case "skill-spec-18-zero-skills" 2 "zero discovery" "$T" - \
   "plugins holding no SKILL.md exit 2, not 0"
 
-# --- 19  a quoted multi-line description is resolved --------------------------
+# --- 19  a quoted multi-line description is resolved across both lines --------
+# The first line alone is 620 characters (under the cap); with the continuation
+# it is 1241 (over). So the case is red only if the guard actually consumes the
+# continuation line -- a resolver that stops at the first line measures 620,
+# the orphaned continuation carries no `key:` and cannot re-match FM_KEY, and
+# the guard would exit 0. Asserting exit 1 is what makes the case discriminate.
 T="$(new_tree quoted)"
 add_plugin "$T" cogni-alpha
 mkdir -p "$T/cogni-alpha/skills/quoted"
-printf -- '---\nname: quoted\ndescription: "Grades a fixture with a \\"quoted\\" scalar.\n  Use when the suite needs one."\n---\n\nBody.\n' \
-  > "$T/cogni-alpha/skills/quoted/SKILL.md"
-assert_case "skill-spec-19-quoted-description" 0 - "$T" - \
-  "a double-quoted description spanning two lines passes"
+{
+  printf -- '---\nname: quoted\ndescription: "Grades a fixture with a \\"quoted\\" scalar'
+  for _ in $(seq 1 29); do printf ' twenty characters.'; done
+  printf -- '\n  and a continuation line'
+  for _ in $(seq 1 30); do printf ' twenty characters.'; done
+  printf -- '"\n---\n\nBody.\n'
+} > "$T/cogni-alpha/skills/quoted/SKILL.md"
+assert_case "skill-spec-19-quoted-description" 1 "[description]" "$T" - \
+  "a double-quoted description spanning two lines is measured across both, not just the first"
 
 # --- 20  the live repo is clean against the shipped baseline ------------------
+# Deliberately grades the LIVE tree, so a real skill-spec violation reds two CI
+# jobs: the dedicated skill-spec job (correctly labelled) and the plugin-test
+# sweep that discovers this suite. The duplicate report is accepted on purpose:
+# the fixture cases above prove the guard discriminates, and this one proves the
+# shipped baseline still matches the tree it was captured from -- the property a
+# fixture cannot carry. workflow-guard.yml accepts the same tradeoff.
 python3 "$GUARD" --root "$REPO_ROOT" > "$OUT" 2>"$ERR"
 if [ $? -eq 0 ]; then
   pass "skill-spec-20-live-tree-clean the repository passes its own guard against the shipped baseline"

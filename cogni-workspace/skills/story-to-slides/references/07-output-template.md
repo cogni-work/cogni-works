@@ -85,7 +85,7 @@ The final brief uses this structure. Read it before writing Step 9 output.
 Schema **4.1** is additive over 4.0: every renderer accepts both, and an unfenced
 4.0 brief stays readable. Three of the frontmatter keys added below — `climax`,
 `design` and `key_figures` — are defined in
-`cogni-workspace/libraries/presentation-intent.md`, and this template cites that
+`${CLAUDE_PLUGIN_ROOT}/libraries/presentation-intent.md`, and this template cites that
 vocabulary rather than restating it. The remaining two, `max_slides` and
 `slides`, are defined here.
 

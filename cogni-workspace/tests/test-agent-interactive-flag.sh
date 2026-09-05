@@ -233,10 +233,12 @@ fi
 #
 # An earlier draft of this case asserted the opposite of the grant conjunct --
 # that no in-scope AGENT may hold an `AskUserQuestion` grant. That was wrong on
-# base facts: `references/agent-tool-declarations.md` records that an agent's
-# `tools:` deliberately mirrors the skill's `allowed-tools`, because the Skill
-# tool runs the skill in the agent's own context, and that a least-privilege
-# trim of exactly this kind was raised and declined on PR #1672. The grant is
+# base facts: `references/agent-tool-declarations.md` records, per agent, why a
+# `tools:` line carries what it does -- `story-to-infographic` mirrors its
+# skill's `allowed-tools`, `narrative-adapter` covers what that skill needs --
+# the common reason being that the Skill tool runs the skill in the agent's own
+# context, and that a least-privilege trim of exactly this kind was raised and
+# declined on PR #1672. The grant is
 # capability the skill exercises, not privilege the agent uses; the pin, not the
 # grant, is what stops the prompt.
 #

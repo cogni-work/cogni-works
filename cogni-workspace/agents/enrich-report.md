@@ -29,10 +29,11 @@ The non-interactive value is not a pass-through parameter — it is fixed at ste
 always sent. The skill defaults it to `true` (`skills/enrich-report/SKILL.md:77`) and Phase 3 is its "Interactive
 Review" checkpoint (`:295`), which branches on the flag at `:299` / `:307`. A subagent has no
 user to answer a prompt, so an unpinned dispatch stalls in Phase 3 rather than returning — which
-is why step 2 above can promise to run "all phases in order" at all. The `AskUserQuestion` grant on the `tools:` line above is deliberately kept: it mirrors the
-skill's own `allowed-tools`, which the skill exercises in this agent's context. See
-`cogni-workspace/references/agent-tool-declarations.md`. The pin, not the grant, is what stops
-the prompt.
+is why step 2 above can promise to run "all phases in order" at all. The `AskUserQuestion` grant on
+the `tools:` line above is deliberately kept: `AskUserQuestion` is itself in the skill's own
+`allowed-tools` (`skills/enrich-report/SKILL.md:17`), and the skill exercises it in this agent's
+context. See `cogni-workspace/references/agent-tool-declarations.md`. The pin, not the grant, is
+what stops the prompt.
 
 6. Return a compact JSON response:
 

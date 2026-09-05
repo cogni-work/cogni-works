@@ -279,9 +279,11 @@ The directory keeps the name `cogni-claims/` because it holds accumulated per-pr
 
 ### `narrative` — Shape content into an executive narrative
 
-Absorbed from the retired cogni-narrative plugin. Takes structured input — research syntheses, portfolio entities, plain markdown — and writes `insight-summary.md`: an arc-driven executive narrative with YAML frontmatter carrying `arc_id`, `arc_display_name` and element metadata.
+Absorbed from the retired cogni-narrative plugin. Takes structured input — research syntheses, portfolio entities, plain markdown — and writes `insight-summary.md`: an arc-driven executive narrative with YAML frontmatter carrying `arc_id`, `arc_display_name` and element metadata, opening with an answer-first Executive TL;DR and running exactly four arc-element sections.
 
-Eleven arc frameworks are available, each a fixed sequence of four named elements with defined rhetorical intent:
+Each arc is one contract file (`references/story-arc/{arc}/arc-definition.md`) that fixes its headings per language, its composition, its four elements and its own validation rules; the arc registry chooses between arcs and confirms the choice as a two-to-three arc shortlist; the universal gates live once in `references/validation.md`, with the deterministic half run by a script; and the language rules — English executive prose, German sentence craft — are loaded late, at the language pass. A Phase 0 execution brief (`--audience`, `--purpose`, `--perspective`, `--geography`) steers the drafting passes, and a banded release review reports `qa_verdict` in the result.
+
+Fifteen arc frameworks are available, each a fixed sequence of four named elements with defined rhetorical intent:
 
 | Arc | Element flow | Best for |
 |-----|--------------|----------|
@@ -296,6 +298,10 @@ Eleven arc frameworks are available, each a fixed sequence of four named element
 | `jtbd-portfolio` | Jobs → Friction → Portfolio → Invitation | Portfolio introductions, pre-sales |
 | `company-credo` | Mission → Conviction → Credibility → Promise | About-Us pages |
 | `engagement-model` | Principles → Process → Partnership → Outcomes | How-We-Work pages |
+| `consulting-problem-solving` | Situation → Complication → Resolution → Implications | Diagnostic memos, problem-solving reports |
+| `strategic-choice` | Context → Tension → Options → Choice | Make/buy/partner, market entry, sequencing |
+| `customer-transformation` | Before → Struggle → Change → Outcome | Case studies, reference stories |
+| `category-creation` | Status Quo → Shift → New Frame → Leadership | Market reframes, category design |
 
 The skill analyses the input's structure and proposes a best-fit arc; `--arc {arc-id}` overrides it. Target length defaults to ~1,675 words, with section proportions preserved rather than sections cut.
 
@@ -303,14 +309,20 @@ With `--format`, `narrative` also condenses an existing narrative into an execut
 
 Commands: `/narrative`, `/narrative-adapt`.
 
+### `narrative-publish` — One invocation from sources to briefs
+
+A thin pipeline over the hops above and below: it runs `narrative`, then an optional `copywriter` polish (`--polish`, tone by default), resolves the theme once through `pick-theme`, and produces one or more `story-to-*` briefs for the targets named in `--to` (slides, web, storyboard, infographic). It owns no transformation logic of its own — every step dispatches an existing skill — and rendering is **opt-in**: nothing is rendered unless `--render` is given, and renders then run sequentially. The argument matrix, the per-hop parameter translation, the reject rule and the consolidated JSON envelope live in `cogni-workspace/skills/narrative-publish/references/pipeline-contract.md`.
+
+Commands: `/narrative-publish`.
+
 ### `copywriter` — Polish documents for executive readability
 
 Absorbed from the retired cogni-copywriting plugin. Applies seven messaging frameworks — BLUF, McKinsey Pyramid, SCQA, STAR, PSB, FAB, Inverted Pyramid — plus persuasion techniques (number plays, power words, rhetorical devices) to memos, briefs, reports, proposals, one-pagers and blog posts.
 
 Two modes matter beyond ordinary polish:
 
-- **Arc-aware preservation.** When the document carries an `arc_id` in frontmatter, the polish strengthens writing *within* each arc element without altering the skeleton — the title, subtitle, four elements in sequence, and bridge section stay intact. The arc contract it polishes against is mirrored in `skills/copywriter/references/09-preservation-modes/`, and `tests/test-arc-reference-sync.sh` keeps that mirror honest against `skills/narrative/`'s definitions.
-- **Translate-then-polish.** A two-pass flow across seven languages (de/en/fr/it/pl/nl/es), every direction pivoting on English or German. Arc-element and bridge headings are *substituted* from the canonical set rather than freely translated, and only for the `corporate-visions` and `jtbd-portfolio` arcs.
+- **Arc-aware preservation.** When the document carries an `arc_id` in frontmatter, the polish strengthens writing *within* each arc element without altering the skeleton — the title, subtitle, four elements in sequence, and bridge section stay intact. The arc contract it polishes against is read at runtime from `skills/narrative/references/story-arc/{arc}/arc-definition.md` — headings, per-element techniques and validation — so every registered arc activates arc mode; `tests/test-arc-reference-sync.sh` pins that every upstream path the copywriter cites resolves.
+- **Translate-then-polish.** A two-pass flow across seven languages (de/en/fr/it/pl/nl/es), every direction pivoting on English or German. Arc-element and bridge headings are *substituted* from the arc contract's `## Headings` rather than freely translated, for every language that contract carries — all seven for `corporate-visions` and `jtbd-portfolio`, EN and DE for the rest — and an arc with no column for the target language fails closed.
 
 `copy-reader` reviews a document through five parallel stakeholder personas and synthesises their feedback. `copy-json` is the adapter for structured data — it extracts text fields from a JSON file, polishes them through `copywriter`, and writes them back in place.
 
@@ -346,16 +358,6 @@ Absorbed from the retired cogni-visual plugin. Extracts the three to five most i
 - **Editorial** — the `economist`, `editorial`, `data-viz` and `corporate` presets, rendered through `/render-infographic-editorial` into a `.pen` file.
 
 `/render-infographic` is the universal entry point: it reads the brief's `style_preset` and routes to the right family. Unlike the two skills above, this one renders by default — after writing the brief it auto-dispatches `/render-infographic` (pass `render: false` to produce the brief only). One constraint to respect: both hand-drawn render agents share a single Excalidraw MCP canvas, so hand-drawn renders must be serialized and never dispatched in parallel. Pencil-rendered editorial briefs are file-backed and can run alongside one Excalidraw render safely.
-
-### `review-brief` — Stakeholder review of a visual brief before rendering
-
-Reviews any brief the `story-to-*` skills produce — presentation, web, storyboard, or infographic — from three stakeholder perspectives: design quality, audience experience, and usability. Returns a structured verdict (accept / revise / reject) with prioritized improvements.
-
-The point is where it sits in the pipeline: rendering is the expensive step, so catching a weak brief here costs one review instead of a full render-and-redo. Run it after a brief is generated, or after you have hand-edited one, before handing it to the PPTX, Excalidraw, or Pencil pipeline.
-
-```
-/review-brief
-```
 
 ### `enrich-report` — Turn a finished report into a visual deliverable
 

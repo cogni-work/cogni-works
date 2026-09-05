@@ -36,7 +36,7 @@ cogni-workspace is the ecosystem's infrastructure-as-plugin layer: a dedicated p
 9. **File and track issues** — `cogni-issues` uses the authenticated GitHub CLI to consult, deduplicate, create, list, and inspect plugin issues with atomic labels
 10. **Troubleshoot plugin failures** — `workspace-status`'s plugin-level tier diagnoses plugin integrity, cross-plugin dependencies, stale state, and common setup errors; reachable through `/troubleshoot`
 11. **Verify claims against their cited sources** — `claims` runs the six-mode claim-verification lifecycle (submit, verify, dashboard, inspect, resolve, cobrowse) that cogni-trends, cogni-portfolio, cogni-consult and cogni-knowledge submit sourced assertions to; `claim-entity` is the cross-plugin data contract those plugins write against
-12. **Shape content into an executive narrative** — `narrative` transforms structured input using one of 11 story arc frameworks and, with `--format`, condenses an existing narrative into executive briefs, talking points or one-pagers
+12. **Shape content into an executive narrative** — `narrative` transforms structured input using one of 15 story arc frameworks and, with `--format`, condenses an existing narrative into executive briefs, talking points or one-pagers
 13. **Polish documents for executive readability** — `copywriter` applies seven messaging frameworks (BLUF, Pyramid, SCQA, STAR, PSB, FAB, Inverted Pyramid) with arc-aware preservation and EN/DE-pivot translation across seven languages; `copy-reader` runs parallel stakeholder personas over a document; `copy-json` polishes text fields inside JSON
 
 ## What it means for you
@@ -143,7 +143,7 @@ State lives in two layers that other plugins consume. Configuration (env vars, t
 | `claim-entity` | skill | Cross-plugin ClaimEntity data contract — record shapes, claim types, severity levels, on-disk `cogni-claims/` store layout |
 | `claim-verifier` | agent | Fetches one source URL and verifies every claim against it, returning deviation analysis as strict JSON |
 | `source-inspector` | agent | Opens a source URL via claude-in-chrome and walks the user to the relevant passage (cobrowse / inspect) |
-| `narrative` | skill | Transform structured input into an executive narrative using one of 11 story arc frameworks; with `--format`, condense one into an executive brief, talking points or a one-pager |
+| `narrative` | skill | Transform structured input into an executive narrative using one of 15 story arc frameworks; with `--format`, condense one into an executive brief, talking points or a one-pager |
 | `copywriter` | skill | Polish, rewrite or create business documents with 7 messaging frameworks, arc-aware preservation, and EN/DE-pivot translation |
 | `copy-reader` | skill | Review a document through parallel stakeholder persona Q&A, then synthesize the feedback |
 | `copy-json` | skill | Adapter that polishes text fields inside JSON — extracts, polishes via `copywriter`, writes back |
@@ -160,7 +160,6 @@ State lives in two layers that other plugins consume. Configuration (env vars, t
 | `commands/render-infographic-editorial.md` | command | Registers `/render-infographic-editorial` for direct Pencil-backed editorial dispatch |
 | `commands/render-html-slides.md` | command | Registers `/render-html-slides` — presentation brief to self-contained HTML slides |
 | `commands/enrich-report.md` | command | Registers `/enrich-report` — markdown report to themed HTML with charts and diagrams |
-| `commands/review-brief.md` | command | Registers `/review-brief` — stakeholder scoring of a visual brief before rendering |
 | `commands/troubleshoot.md` | command | Registers `/troubleshoot` as the diagnostic entry point |
 | `claims-store.sh` | script | JSON state manager for the claim store, shipped with the `claims` skill (`skills/claims/scripts/`) |
 | `on-session-start.sh` | hook (SessionStart) | Sources workspace environment and validates plugin availability at session start |
@@ -181,7 +180,6 @@ State lives in two layers that other plugins consume. Configuration (env vars, t
 | `story-to-infographic` | skill | Distil a narrative into a single-page infographic brief |
 | `render-html-slides` | skill | Render a presentation brief into self-contained HTML slides with speaker notes |
 | `enrich-report` | skill | Turn a markdown report into a themed HTML deliverable with charts and inline SVG diagrams |
-| `review-brief` | skill | Score a visual brief from three stakeholder perspectives before rendering |
 | `narrative-publish` | skill | Sequence narrative, optional polish, theme and brief generation in one invocation; render is opt-in |
 | `story-to-slides` | agent | Drive the story-to-slides skill as an autonomous subprocess |
 | `story-to-web` | agent | Drive the story-to-web skill as an autonomous subprocess |
@@ -211,7 +209,7 @@ State lives in two layers that other plugins consume. Configuration (env vars, t
 ```
 cogni-workspace/
 ├── .claude-plugin/plugin.json    Plugin manifest
-├── skills/                       22 workspace and visual-rendering skills
+├── skills/                       21 workspace and visual-rendering skills
 │   ├── audit-region-sources/     Audit per-plugin region-source overlays against the registry
 │   ├── claim-entity/             Cross-plugin ClaimEntity data contract and store layout
 │   ├── claims/                   Claim-verification lifecycle (+ scripts/claims-store.sh)
@@ -224,7 +222,6 @@ cogni-workspace/
 │   ├── narrative-publish/        One invocation: narrative -> brief(s) -> optional render
 │   ├── pick-theme/
 │   ├── render-html-slides/       Presentation brief -> self-contained HTML slides
-│   ├── review-brief/             Score a visual brief from three stakeholder perspectives
 │   ├── story-to-infographic/     Narrative -> single-page infographic brief
 │   ├── story-to-slides/          Narrative -> presentation brief
 │   ├── story-to-web/             Narrative -> scrollable web-narrative or printed-poster brief
@@ -239,14 +236,13 @@ cogni-workspace/
 │   ├── render-infographic-*.md   Three infographic renderers (pencil, sketchnote, whiteboard)
 │   └── concept-diagram*.md       Diagram workers (Excalidraw and inline-SVG variants)
 ├── libraries/                    18 layout, taxonomy and worked-example files read at render time
-├── commands/                     13 slash commands
+├── commands/                     12 slash commands
 │   ├── claims.md                 Registers /claims
 │   ├── narrative*.md             Registers /narrative, /narrative-adapt, /narrative-publish
 │   ├── copywrite.md              Registers /copywrite and /review-doc
 │   ├── render-infographic*.md    Registers /render-infographic and its two direct-dispatch variants
 │   ├── render-html-slides.md     Registers /render-html-slides
 │   ├── enrich-report.md          Registers /enrich-report
-│   ├── review-brief.md           Registers /review-brief
 │   └── troubleshoot.md           Registers /troubleshoot
 ├── wiki/                         Bundled vendor-curated insight-wave reference wiki (read directly; start at wiki/index.md)
 │   ├── .cogni-wiki/              Wiki config + lockfile

@@ -20,7 +20,7 @@ Map narrative arc IDs from the `narrative` skill to visual arc types used by cog
 
 ## Arc ID to Visual Arc Type Mapping
 
-When the source narrative carries an `arc_id` from the `narrative` skill (in YAML frontmatter or passed as parameter), map it to the visual arc type used for decomposition. This bridges the rich narrative taxonomy (11 arc types with 4-element structures) to the visual taxonomy (5 visual arc types optimized for layout selection).
+When the source narrative carries an `arc_id` from the `narrative` skill (in YAML frontmatter or passed as parameter), map it to the visual arc type used for decomposition. This bridges the rich narrative taxonomy (every registered arc, each a 4-element structure) to the visual taxonomy (5 visual arc types optimized for layout selection).
 
 | the `narrative` skill `arc_id` | Visual `arc_type` | Display Name | Reasoning |
 |--------------------------|-------------------|--------------|-----------|
@@ -35,6 +35,10 @@ When the source narrative carries an `arc_id` from the `narrative` skill (in YAM
 | `company-credo` | `argument` | Company Credo | Elements (Mission/Conviction/Credibility/Promise) build a belief-driven argument: the company states what it believes, backs it with receipts, and closes with a forward commitment |
 | `engagement-model` | `journey` | Engagement Model | Elements (Principles/Process/Partnership/Outcomes) describe a chronological progression through an engagement — Process is the longest element and reads as a phase sequence with artifacts and time bands |
 | `smarter-service` | `journey` | Smarter Service | Elements (Forces/Impact/Horizons/Foundations) describe the same progression from external pressures to capability requirements as Trend Panorama — the theme-aware sibling arc shares the identical TIPS dimension mapping, so it takes the same visual arc type |
+| `consulting-problem-solving` | `problem-solution` | Consulting Problem-Solving | Elements (Situation/Complication/Resolution/Implications) move from a problem through its diagnosis to the answer — the only arc that maps to the problem-solution visual type by `arc_id` rather than by auto-detection |
+| `strategic-choice` | `argument` | Strategic Choice | Elements (Context/Tension/Options/Choice) build an analytical case: criteria, alternatives evaluated against them, one recommendation |
+| `customer-transformation` | `journey` | Customer Transformation | Elements (Before/Struggle/Change/Outcome) follow one customer chronologically from starting point to verified result |
+| `category-creation` | `why-change` | Category Creation | Elements (Status Quo/Shift/New Frame/Leadership) follow the tension-release-action pattern: the old frame breaks, a new one resolves it, leadership acts on it |
 
 **Fallback:** If `arc_id` is not in this table, fall back to auto-detection from narrative content (same behavior as when no `arc_id` is present).
 
@@ -48,9 +52,9 @@ Each arc has 4 ordered elements that represent the phases of the narrative struc
 
 | # | Element (EN) | Element (DE) | Narrative Function |
 |---|-------------|-------------|-------------------|
-| 1 | Why Change | Warum Veränderung | What drives the need for change |
+| 1 | Why Change | Warum Wandel | What drives the need for change |
 | 2 | Why Now | Warum Jetzt | Why the change is urgent |
-| 3 | Why You | Warum Wir | How the solution addresses the need |
+| 3 | Why You | Warum Sie | How the solution addresses the need |
 | 4 | Why Pay | Warum Investieren | The business case and path forward |
 
 ### industry-transformation
@@ -66,10 +70,10 @@ Each arc has 4 ordered elements that represent the phases of the narrative struc
 
 | # | Element (EN) | Element (DE) | Narrative Function |
 |---|-------------|-------------|-------------------|
-| 1 | Emerging | Aufkommend | Technologies that are emerging |
-| 2 | Converging | Konvergierend | Technologies that are converging |
-| 3 | Possible | Möglich | What becomes possible |
-| 4 | Required | Erforderlich | What actions are required |
+| 1 | What's Emerging | Was Entsteht | Technologies that are emerging |
+| 2 | What's Converging | Was Konvergiert | Technologies that are converging |
+| 3 | What's Possible | Was Möglich Ist | What becomes possible |
+| 4 | What's Required | Was Erforderlich Ist | What actions are required |
 
 ### strategic-foresight
 
@@ -84,7 +88,7 @@ Each arc has 4 ordered elements that represent the phases of the narrative struc
 
 | # | Element (EN) | Element (DE) | Narrative Function |
 |---|-------------|-------------|-------------------|
-| 1 | Landscape | Wettbewerbslandschaft | Current competitive landscape |
+| 1 | Landscape | Landschaft | Current competitive landscape |
 | 2 | Shifts | Verschiebungen | Market and competitive shifts |
 | 3 | Positioning | Positionierung | Strategic positioning options |
 | 4 | Implications | Implikationen | Business implications and actions |
@@ -103,9 +107,9 @@ Each arc has 4 ordered elements that represent the phases of the narrative struc
 | # | Element (EN) | Element (DE) | Narrative Function |
 |---|-------------|-------------|-------------------|
 | 1 | Why Change | Warum Veränderung | Investment context and market forces |
-| 2 | Why Now | Warum Jetzt | Urgency and window of opportunity |
-| 3 | Why You | Warum Wir | Strategic capabilities and differentiation |
-| 4 | Why Pay | Warum Investieren | Business case and expected returns |
+| 2 | Why Now | Warum jetzt | Urgency and window of opportunity |
+| 3 | Why You | Warum Sie | Strategic capabilities and differentiation |
+| 4 | Why Pay | Geschäftliche Auswirkungen | Business case and expected returns |
 
 ### jtbd-portfolio
 
@@ -144,6 +148,42 @@ Each arc has 4 ordered elements that represent the phases of the narrative struc
 | 4 | Foundations | Fundamente | Capability requirements and digital foundations (TIPS S-dimension) |
 
 Same four elements as Trend Panorama — `smarter-service` is its theme-aware sibling. Element labels are identical; only the narrative wrapper differs (investment themes nest under each element).
+
+### consulting-problem-solving
+
+| # | Element (EN) | Element (DE) | Narrative Function |
+|---|-------------|-------------|-------------------|
+| 1 | Situation | Situation | The agreed, material baseline |
+| 2 | Complication | Komplikation | What breaks the baseline |
+| 3 | Resolution | Lösung | The evidence-led answer |
+| 4 | Implications | Implikationen | Decisions and next moves that follow |
+
+### strategic-choice
+
+| # | Element (EN) | Element (DE) | Narrative Function |
+|---|-------------|-------------|-------------------|
+| 1 | Context | Kontext | The decision frame and its constraints |
+| 2 | Tension | Spannungsfeld | The discriminating trade-offs |
+| 3 | Options | Optionen | The alternatives evaluated against the same criteria |
+| 4 | Choice | Entscheidung | The recommended path, its trade-off, its trigger |
+
+### customer-transformation
+
+| # | Element (EN) | Element (DE) | Narrative Function |
+|---|-------------|-------------|-------------------|
+| 1 | Before | Ausgangslage | Where the customer stood, with its baseline |
+| 2 | Struggle | Herausforderung | What stood in the way |
+| 3 | Change | Veränderung | The intervention and the turning point |
+| 4 | Outcome | Ergebnis | The verified transformation and the transferable lesson |
+
+### category-creation
+
+| # | Element (EN) | Element (DE) | Narrative Function |
+|---|-------------|-------------|-------------------|
+| 1 | Status Quo | Status Quo | The existing category, represented fairly |
+| 2 | Shift | Verschiebung | What breaks the old frame |
+| 3 | New Frame | Neuer Bezugsrahmen | The category that fits the new reality |
+| 4 | Leadership | Führungsanspruch | What defines the category leader |
 
 ---
 
@@ -246,7 +286,7 @@ IF `arc_definition_path` parameter provided AND file exists:
 
 ## Arc Definition File Format
 
-Arc definition files live in the `narrative` skill at:
+Arc contracts live in the `narrative` skill at:
 `cogni-workspace/skills/narrative/references/story-arc/{arc-id}/arc-definition.md`
 
-Each file defines the 4 arc elements with their English and German names, descriptions, and narrative function. The skill extracts the element name lists from these files.
+Each contract's `## Headings` table carries the four full section headings per language (EN, DE, and further columns where the arc supports them). The short element names in this file are derived from those headings — the segment before the first colon, or the whole heading when it carries none — and `cogni-workspace/tests/test-arc-taxonomy-sync.sh` case H1 checks that derivation for every migrated arc.

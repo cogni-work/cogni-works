@@ -34,7 +34,7 @@ all in a single `.html` file.
 | `aspect_ratio` | `16:9` | Slide aspect ratio: `16:9`, `4:3` |
 | `language` | from brief frontmatter | `en` or `de` |
 | `max_refinements` | `3` | Max refinement rounds after rendering (0 = skip refinement) |
-| `theme_slug` | `` (off) | Optional Theme System v2 slug (e.g. `cogni-work`). When set, imports `tokens.css` from the resolved tiered theme. Omit for byte-equivalent legacy output. See the Theme System v2 subsection in Phase 3 and `cogni-workspace/references/theme-component-loader.md`. |
+| `theme_slug` | `` (off) | Optional Theme System v2 slug (e.g. `cogni-work`). When set, imports `tokens.css` from the resolved tiered theme. Omit for byte-equivalent legacy output. See the Theme System v2 subsection in Phase 3 and `${CLAUDE_PLUGIN_ROOT}/references/theme-component-loader.md`. |
 | `themes_dir` | auto-discovered | Override the workspace `themes/` directory used to resolve `theme_slug`. Default: `$COGNI_WORKSPACE_ROOT/themes`, then auto-discovery. |
 
 ## Execution Protocol
@@ -208,7 +208,7 @@ If error, read the error message and attempt to fix the input data. Common issue
 
 #### Theme System v2 (tier-aware rendering)
 
-Tier-1 tokens are wired today. Pass `theme_slug: cogni-work` to import that theme's canonical CSS custom properties. Tier-3 deck-component primitives (`title-slide.html`, `content-slide.html`, etc.) are the next increment — the loader infrastructure is in place at `cogni-workspace/scripts/load-theme-component.py` (see `cogni-workspace/references/theme-component-loader.md`), but `cogni-work` does not yet ship a `tiers.components.deck` family, so component-substitution is gated on a follow-up issue. Today's behavior: every layout renderer uses its inline template; tomorrow's behavior (after deck primitives ship): the renderer prefers theme-supplied primitives and falls back to inline on miss.
+Tier-1 tokens are wired: pass `theme_slug: cogni-work` to import that theme's canonical CSS custom properties. Tier-3 deck-component substitution is not: every layout renderer uses its inline template regardless of theme, because no shipped theme carries a `tiers.components.deck` family. The loader at `${CLAUDE_PLUGIN_ROOT}/scripts/load-theme-component.py` (see `${CLAUDE_PLUGIN_ROOT}/references/theme-component-loader.md`) is the probe a deck family would go through; a renderer that prefers theme-supplied primitives and falls back to inline on miss is the intended shape once one ships.
 
 **Backwards-compat contract.** Omitting `--theme-slug` preserves the legacy (pre-Theme-System-v2) rendering path byte-for-byte — `theme.md`-derived design variables still apply; only the tier-1 `tokens.css` import is skipped. With `--theme-slug` set, themes without `tiers.tokens` (and tier-0 themes generally) exercise the same fallback path — there is no failure case for unmigrated themes. `evals/run.py` enforces this with dedicated regression cases — among them a tier-0 baseline, tier-1 cogni-work tokens.css imported, and tier-0 `_template` with `--theme-slug` set (graceful fallback).
 

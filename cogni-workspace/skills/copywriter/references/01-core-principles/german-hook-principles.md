@@ -7,7 +7,6 @@ audience: [all]
 related:
   - german-style-principles
   - arc-preservation
-  - arc-technique-map
 version: 1.0
 last_updated: 2026-02-25
 ---
@@ -271,4 +270,4 @@ Minimum passing: Tests 1-5 must all pass. Tests 6-7 should pass for excellent ho
 
 - `german-style-principles.md` (Satzklammer, Mittelfeld, Floskeln -- sentence-level rules)
 - `09-preservation-modes/arc-preservation.md` (When and how to restructure arc hooks)
-- `09-preservation-modes/arc-technique-map.md` (Hook technique assignments per arc)
+- `skills/narrative/references/story-arc/{arc}/arc-definition.md` (each arc's `## Composition` — what its opening emphasizes)

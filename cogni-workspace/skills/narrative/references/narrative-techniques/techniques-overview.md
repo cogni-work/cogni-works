@@ -4,7 +4,7 @@
 
 These techniques are applied during narrative transformation to convert structured content into compelling executive narratives.
 
-> **Note:** Word counts in technique descriptions below are illustrative for a ~1,675-word default narrative. For production targets, use the proportional allocations in each arc's `arc-definition.md` and pattern files. Actual counts scale with `--target-length`.
+> **Note:** Every allocation below is a proportion — of the narrative or of the element the technique is applied in — never an absolute count, so it scales with `--target-length`. The arc contract's `## Composition` fixes each element's share of the whole; a technique's shares are of that element.
 
 ---
 
@@ -14,13 +14,13 @@ These techniques are applied during narrative transformation to convert structur
 
 **Structure:**
 ```
-LEVEL 1 (Executive): Answer + Recommendations (600 words)
+LEVEL 1 (Executive): Answer + Recommendations — the Executive TL;DR and each element's opening claim
     ↓ [Got answer? STOP]
-LEVEL 2 (Context): Scope & Methodology (250 words)
+LEVEL 2 (Context): Scope & Methodology — roughly a sixth of each element
     ↓ [Need evidence? CONTINUE]
-LEVEL 3 (Evidence): Patterns + Landscape (500-800 words)
+LEVEL 3 (Evidence): Patterns + Landscape — the body of each element, about two thirds
     ↓ [Need detail? DRILL DOWN]
-LEVEL 4 (Technical): Appendix + Source links
+LEVEL 4 (Technical): Citations to the source files
 ```
 
 **Application:** Structure the overall narrative so the most important conclusion comes first.
@@ -32,9 +32,9 @@ LEVEL 4 (Technical): Appendix + Source links
 **Purpose:** Reframe findings as unconsidered needs.
 
 **Structure:**
-- **Problem (150 words):** Current assumption/status quo and why it's incomplete
-- **Solution (150 words):** Unconsidered reality revealed by evidence
-- **Benefit (100-200 words):** Competitive advantage for early recognizers
+- **Problem (~33% of the element):** Current assumption/status quo and why it's incomplete
+- **Solution (~33% of the element):** Unconsidered reality revealed by evidence
+- **Benefit (the remaining ~33%):** Competitive advantage for early recognizers
 
 **Key Techniques:**
 - Contrast structure: "Most organizations think X. But evidence shows Y."
@@ -158,13 +158,15 @@ Total Cost of Inaction =
 
 ## Application by Arc Element
 
-| Technique | Corporate Visions | Tech Futures | Competitive Intel | Strategic Foresight | Industry Transform | Trend Panorama | Theme Thesis | JTBD Portfolio |
-|-----------|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
-| Pyramid Principle | All | All | All | All | All | All | All | All |
-| PSB | Why Change | - | Landscape | - | Forces | Forces | Why Change | Job Landscape |
-| IS-DOES-MEANS | Why You | What's Required | Positioning | Strategies | Leadership | Horizons, Foundations | Why You | Portfolio Map |
-| Number Plays | All | All | All | All | All | All | All | All |
-| Forcing Functions | Why Now | What's Required | Shifts | Signals | Friction | Forces, Foundations | Why Now | Friction Map |
-| Contrast Structure | Why Change | What's Emerging | Shifts | Scenarios | Forces | Forces, Impact | Why Change | Job Landscape |
-| You-Phrasing | Why You | What's Possible | Positioning | Strategies | Leadership | Horizons, Foundations | Why You | Portfolio Map, Invitation |
-| Compound Impact | Why Pay | What's Required | Implications | Decisions | Leadership | Impact, Foundations | Why Pay | Friction Map |
+One column per registered arc (arc ids in the header). Each cell names the element(s) the technique serves in that arc; `-` means the arc does not call for it.
+
+| Technique | corporate-visions | technology-futures | competitive-intelligence | strategic-foresight | industry-transformation | trend-panorama | smarter-service | theme-thesis | jtbd-portfolio | company-credo | engagement-model | consulting-problem-solving | strategic-choice | customer-transformation | category-creation |
+|-----------|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+| Pyramid Principle | All | All | All | All | All | All | All | All | All | All | All | All | All | All | All |
+| PSB | Why Change | - | Landscape | - | Forces | Forces | Forces | Why Change | Job Landscape | - | - | Complication, Resolution | - | Struggle, Change | Shift, New Frame |
+| IS-DOES-MEANS | Why You | What's Possible, What's Required | Positioning | Strategies | Leadership | Horizons, Foundations | Horizons, Foundations | Why You | Portfolio Map | Promise | Outcomes | Resolution | Options | Change | New Frame, Leadership |
+| Number Plays | All | All | All | All | All | All | All | All | All | Credibility | Process | All | All | All | All |
+| Forcing Functions | Why Now | What's Required | Shifts, Implications | Signals, Decisions | Forces | Forces, Impact, Foundations | Forces, Impact, Foundations | Why Now | Friction Map | Mission | Principles | Complication | Context, Tension, Choice | Struggle | Shift |
+| Contrast Structure | Why Change | What's Emerging, What's Converging | Landscape, Shifts | Signals, Scenarios, Strategies | Forces, Friction, Evolution | Forces, Impact, Horizons | Forces, Impact, Horizons | Why Change, Why Now | Job Landscape | Mission, Conviction, Credibility | Principles, Partnership | Situation, Complication | Tension, Options | Before, Struggle, Outcome | Status Quo, Shift, New Frame |
+| You-Phrasing | Why You | What's Possible | Positioning | Strategies | Leadership | Horizons, Foundations | Horizons, Foundations | Why You | Portfolio Map, Invitation | Conviction, Promise | Process, Partnership, Outcomes | Implications | Choice | Outcome | Leadership |
+| Compound Impact | Why Pay | What's Required | Implications | Decisions | Friction, Leadership | Impact, Foundations | Impact, Foundations | Why Pay | Friction Map | - | - | Implications | Tension, Choice | Struggle | Shift |

@@ -70,7 +70,7 @@ hands-off.
 | 4 | verify-trend-report reviewer→revisor loop | `cogni-trends/skills/verify-trend-report/SKILL.md` | No | ✅ Clean pass *(rubric exemplar)* | — |
 | 5 | compete stakeholder-review auto-rewrite loop | `cogni-portfolio/skills/compete/SKILL.md` | No | ✅ Clean pass | — |
 | 6 | propositions ordered quality-gate chain | `cogni-portfolio/skills/propositions/SKILL.md` | No | ✅ Clean pass | — |
-| 7 | review-brief assessor verdict loop | `cogni-workspace/skills/review-brief/SKILL.md` | No | ✅ Clean pass | — |
+| 7 | review-brief assessor verdict loop (retired) | `cogni-workspace/skills/review-brief/SKILL.md` | No | ✅ Clean pass | — |
 | 8 | story-to-slides stakeholder-review loop (story-to-* family) | `cogni-workspace/skills/story-to-slides/SKILL.md` | No | ✅ Clean pass | — |
 | 9 | why-change assess-revise-reassess loop | `cogni-sales/skills/why-change/SKILL.md` | No | ✅ Clean pass | — |
 | 10 | copy-reader persona review + auto-improvement | `cogni-workspace/skills/copy-reader/SKILL.md` | No (but agent-callable) | ⚠ 1 major | nodding (Verification) |
@@ -249,9 +249,11 @@ bracketed by user checkpoints).
 
 ---
 
-## Loop 7 — review-brief assessor verdict loop
+## Loop 7 — review-brief assessor verdict loop (retired)
 
-**Source:** `cogni-workspace/skills/review-brief/SKILL.md`.
+**Source:** `cogni-workspace/skills/review-brief/SKILL.md` (retired — the standalone skill was
+deleted after this sweep; brief scoring survives as the `brief-review-assessor` agent, dispatched
+in-pipeline by the three `story-to-*` skills, graded here as Loop 8).
 **Unattended?** No — standalone interactive review; `auto_improve` defaults to
 `false`.
 
@@ -275,8 +277,10 @@ bracketed by user checkpoints).
 representative of the story-to-infographic / story-to-storyboard /
 story-to-web siblings, which integrate the same `brief-review-assessor` loop
 per the plugin's shared `stakeholder_review` convention.
-**Unattended?** No — interactive checkpoints at narrative and theme selection;
-`stakeholder_review` defaults to interactive.
+**Unattended?** No — interactive checkpoints at narrative and theme selection.
+`stakeholder_review` defaults to `true` independent of `interactive`, so brief
+review runs even headless, and its reject branch is headless-safe: the verdict is
+written to the `.review.json` sibling and the run continues without a prompt.
 
 The human-gated iterate here **does** count as a loop under the rubric: it is
 a generate→evaluate→revise gate (brief generated in Steps 0–8.2, graded in
@@ -470,7 +474,7 @@ publish steps are all human checkpoints).
 
 **Anti-pattern:** nodding (Verification skipped on the revise leg — the flow that produces the edited deliverable also grades it).
 **Evidence location:** `cogni-workspace/skills/copy-reader/SKILL.md :: Step 5 ("Apply Auto-Improvement Loop")` — edits are applied in the orchestrator's context and validated only deterministically (charset, citation count, protected content), with no re-dispatch of any persona agent; and `:: Step 6 ("Report Results")` — the user-facing report template asserts post-improvement score effects ("raised Executive score to 88", "raised End-user score to 95") that no evaluator re-measured, and the JSON contract for "agent/skill callers" carries `overall_score` + `improvements_applied` downstream on the same unverified basis.
-**Why major, not minor:** this is the rubric's priority case and it is statically confirmable — there is no dispatch between the edit-write and the accept/report, and the report's score-delta claims are structurally unmeasurable in the flow as written. `AUTO_IMPROVE` defaults to `true`, so the self-graded improvement pass is the default path, including when other skills invoke copy-reader programmatically. Mitigations that keep it from being worse (fresh-context *initial* grading, deterministic guardrails with revert-to-backup, an interactive human reading the report in the common case) are real but do not close the gap the rubric targets: bad edits are laundered past the only quality gate with asserted-not-measured scores. The healthy contrast is in this same repo: `cogni-workspace/skills/review-brief/SKILL.md :: Step 5` re-launches its assessor after applying improvements. A follow-up could look at re-grading applied edits (or reporting only pre-improvement scores) — evidence-gated, out of this sweep's scope.
+**Why major, not minor:** this is the rubric's priority case and it is statically confirmable — there is no dispatch between the edit-write and the accept/report, and the report's score-delta claims are structurally unmeasurable in the flow as written. `AUTO_IMPROVE` defaults to `true`, so the self-graded improvement pass is the default path, including when other skills invoke copy-reader programmatically. Mitigations that keep it from being worse (fresh-context *initial* grading, deterministic guardrails with revert-to-backup, an interactive human reading the report in the common case) are real but do not close the gap the rubric targets: bad edits are laundered past the only quality gate with asserted-not-measured scores. The healthy contrast is in this same repo: `cogni-workspace/skills/review-brief/SKILL.md :: Step 5` re-launched its assessor after applying improvements (that skill is now retired — the same contrast holds at HEAD in Loop 8, `cogni-workspace/skills/story-to-slides/SKILL.md :: Step 9b`, which re-launches the assessor for round 2). A follow-up could look at re-grading applied edits (or reporting only pre-improvement scores) — evidence-gated, out of this sweep's scope.
 
 <a id="f2"></a>
 ### F2 — consult-design-thinking · nodding-adjacent (Verification) · advisory minor

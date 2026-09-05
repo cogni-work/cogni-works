@@ -35,7 +35,7 @@ portfolio_path: "{portfolio_path}"
 
 ### The Current Reality
 
-[What {customer_name} assumes is "good enough" — the status quo belief that feels reasonable. Use PSB Problem section from why-change-patterns.md.]
+[What {customer_name} assumes is "good enough" — the status quo belief that feels reasonable. Use PSB Problem section from the corporate-visions contract, element 1 (Why Change).]
 
 ### Unconsidered Needs
 
@@ -51,7 +51,7 @@ portfolio_path: "{portfolio_path}"
 
 ### Timing Triggers
 
-[2-3 forcing functions: regulatory deadlines, competitive pressure, market timing. Specific dates, not "soon". From why-now-patterns.md.]
+[2-3 forcing functions: regulatory deadlines, competitive pressure, market timing. Specific dates, not "soon". From the corporate-visions contract, element 2 (Why Now).]
 
 ### Cost of Inaction
 
@@ -63,7 +63,7 @@ portfolio_path: "{portfolio_path}"
 
 ### Key Differentiators
 
-[2-3 Key Differentiators using IS-DOES-MEANS structure from why-you-patterns.md. You-Phrasing throughout DOES layer. Mapped to buyer needs from Phase 1.]
+[2-3 Key Differentiators using IS-DOES-MEANS structure from the corporate-visions contract, element 3 (Why You). You-Phrasing throughout DOES layer. Mapped to buyer needs from Phase 1.]
 
 | Position | IS (your solution/capability) | DOES (for {customer_name}) | MEANS (competitive moat) |
 |----------|-------------------------------|---------------------------|--------------------------|
@@ -130,7 +130,7 @@ portfolio_path: "{portfolio_path}"
 
 ### The Current Reality
 
-[What organizations in {segment_name} typically assume is "good enough" — the prevailing industry belief. Use PSB Problem section from why-change-patterns.md.]
+[What organizations in {segment_name} typically assume is "good enough" — the prevailing industry belief. Use PSB Problem section from the corporate-visions contract, element 1 (Why Change).]
 
 ### Unconsidered Needs
 
@@ -146,7 +146,7 @@ portfolio_path: "{portfolio_path}"
 
 ### Timing Triggers
 
-[2-3 forcing functions affecting the segment: regulatory deadlines, competitive dynamics, technology shifts. Specific timelines, not "soon". From why-now-patterns.md.]
+[2-3 forcing functions affecting the segment: regulatory deadlines, competitive dynamics, technology shifts. Specific timelines, not "soon". From the corporate-visions contract, element 2 (Why Now).]
 
 ### Cost of Inaction
 
@@ -158,7 +158,7 @@ portfolio_path: "{portfolio_path}"
 
 ### Key Differentiators
 
-[2-3 Key Differentiators using IS-DOES-MEANS structure from why-you-patterns.md. You-Phrasing throughout DOES layer. Mapped to typical buyer needs in this segment.]
+[2-3 Key Differentiators using IS-DOES-MEANS structure from the corporate-visions contract, element 3 (Why You). You-Phrasing throughout DOES layer. Mapped to typical buyer needs in this segment.]
 
 | Position | IS (your solution/capability) | DOES (for {segment_name}) | MEANS (competitive moat) |
 |----------|-------------------------------|---------------------------|--------------------------|
@@ -195,7 +195,7 @@ portfolio_path: "{portfolio_path}"
 
 ### Quality Criteria (both modes)
 
-Apply the quality gates from `cogni-workspace/skills/narrative/references/story-arc/corporate-visions/arc-definition.md`:
+Apply the `## Validation` assertions and per-element Hard rules from `cogni-workspace/skills/narrative/references/story-arc/corporate-visions/arc-definition.md`:
 - All 4 elements present (Why Change, Why Now, Why You, Why Pay)
 - PSB structure in Why Change
 - 2-3 forcing functions in Why Now with specific timelines

@@ -1,0 +1,660 @@
+{
+  "_comment": "Skill-spec ratchet baseline for the four progressive-disclosure arms (length, stray-file, reference-depth, unreferenced-resource). Each entry is a finding present when the baseline was captured and therefore allowed to pass; the hard arms (name, description) are never baselined. The baseline can only shrink: an entry that no longer matches a live finding fails the guard as stale-baseline until it is deleted. Regenerate with `python3 scripts/check-skill-spec.py --update-baseline` and justify any new entry in the PR.",
+  "entries": [
+    {
+      "skill": "consult-design-thinking",
+      "arm": "length",
+      "file": "cogni-consult/skills/consult-design-thinking/SKILL.md"
+    },
+    {
+      "skill": "copy-reader",
+      "arm": "reference-depth",
+      "file": "cogni-workspace/skills/copy-reader/references/personas"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "reference-depth",
+      "file": "cogni-workspace/skills/copywriter/references/01-core-principles"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "reference-depth",
+      "file": "cogni-workspace/skills/copywriter/references/02-messaging-frameworks"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "reference-depth",
+      "file": "cogni-workspace/skills/copywriter/references/03-formatting-standards"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "reference-depth",
+      "file": "cogni-workspace/skills/copywriter/references/04-deliverable-types"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "reference-depth",
+      "file": "cogni-workspace/skills/copywriter/references/05-examples"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "reference-depth",
+      "file": "cogni-workspace/skills/copywriter/references/06-templates"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "reference-depth",
+      "file": "cogni-workspace/skills/copywriter/references/07-impact-techniques"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "reference-depth",
+      "file": "cogni-workspace/skills/copywriter/references/08-sales-techniques"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "reference-depth",
+      "file": "cogni-workspace/skills/copywriter/references/09-preservation-modes"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "reference-depth",
+      "file": "cogni-workspace/skills/copywriter/references/10-stakeholder-review"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "reference-depth",
+      "file": "cogni-workspace/skills/copywriter/references/workflow"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "stray-file",
+      "file": "cogni-workspace/skills/copywriter/CHANGELOG.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/01-core-principles/active-voice-principles.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/01-core-principles/clarity-principles.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/01-core-principles/conciseness-principles.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/01-core-principles/german-hook-principles.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/01-core-principles/plain-language-principles.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/01-core-principles/readability-principles.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/01-core-principles/translation-de-to-en.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/01-core-principles/translation-de-to-es.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/01-core-principles/translation-de-to-it.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/01-core-principles/translation-de-to-nl.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/01-core-principles/translation-de-to-pl.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/01-core-principles/translation-en-to-es.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/01-core-principles/translation-en-to-it.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/01-core-principles/translation-en-to-nl.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/01-core-principles/translation-en-to-pl.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/01-core-principles/translation-es-to-de.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/01-core-principles/translation-es-to-en.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/01-core-principles/translation-fr-to-de.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/01-core-principles/translation-fr-to-en.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/01-core-principles/translation-it-to-de.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/01-core-principles/translation-it-to-en.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/01-core-principles/translation-nl-to-de.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/01-core-principles/translation-nl-to-en.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/01-core-principles/translation-pl-to-en.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/02-messaging-frameworks/bluf-framework.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/02-messaging-frameworks/fab-framework.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/02-messaging-frameworks/inverted-pyramid-framework.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/02-messaging-frameworks/psb-framework.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/02-messaging-frameworks/pyramid-framework.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/02-messaging-frameworks/scqa-framework.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/02-messaging-frameworks/star-framework.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/03-formatting-standards/heading-hierarchy.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/03-formatting-standards/markdown-basics.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/03-formatting-standards/visual-elements.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/04-deliverable-types/blogs.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/04-deliverable-types/briefs.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/04-deliverable-types/business-letters.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/04-deliverable-types/emails.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/04-deliverable-types/executive-summaries.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/04-deliverable-types/memos.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/04-deliverable-types/one-pagers.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/04-deliverable-types/proposals.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/04-deliverable-types/reports.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/05-examples/example-acronyms-audience.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/05-examples/example-brief-pyramid.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/05-examples/example-email-scqa.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/05-examples/example-memo-bluf.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/05-examples/example-proposal-fab.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/06-templates/template-brief.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/06-templates/template-email.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/06-templates/template-memo.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/06-templates/template-proposal.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/07-impact-techniques/executive-impact.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/07-impact-techniques/number-plays.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/07-impact-techniques/power-words.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/07-impact-techniques/rhetorical-devices.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/08-sales-techniques/power-positions.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/10-stakeholder-review/end-user-review.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/10-stakeholder-review/executive-review.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/10-stakeholder-review/legal-review.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/10-stakeholder-review/marketing-review.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/10-stakeholder-review/technical-review.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/references/workflow/step-by-step-guide.md"
+    },
+    {
+      "skill": "copywriter",
+      "arm": "unreferenced-resource",
+      "file": "cogni-workspace/skills/copywriter/scripts/readability.sh"
+    },
+    {
+      "skill": "features",
+      "arm": "length",
+      "file": "cogni-portfolio/skills/features/SKILL.md"
+    },
+    {
+      "skill": "knowledge-finalize",
+      "arm": "length",
+      "file": "cogni-knowledge/skills/knowledge-finalize/SKILL.md"
+    },
+    {
+      "skill": "knowledge-verify",
+      "arm": "length",
+      "file": "cogni-knowledge/skills/knowledge-verify/SKILL.md"
+    },
+    {
+      "skill": "narrative",
+      "arm": "reference-depth",
+      "file": "cogni-workspace/skills/narrative/references/language"
+    },
+    {
+      "skill": "narrative",
+      "arm": "reference-depth",
+      "file": "cogni-workspace/skills/narrative/references/narrative-techniques"
+    },
+    {
+      "skill": "narrative",
+      "arm": "reference-depth",
+      "file": "cogni-workspace/skills/narrative/references/story-arc"
+    },
+    {
+      "skill": "narrative",
+      "arm": "reference-depth",
+      "file": "cogni-workspace/skills/narrative/references/story-arc/category-creation"
+    },
+    {
+      "skill": "narrative",
+      "arm": "reference-depth",
+      "file": "cogni-workspace/skills/narrative/references/story-arc/company-credo"
+    },
+    {
+      "skill": "narrative",
+      "arm": "reference-depth",
+      "file": "cogni-workspace/skills/narrative/references/story-arc/competitive-intelligence"
+    },
+    {
+      "skill": "narrative",
+      "arm": "reference-depth",
+      "file": "cogni-workspace/skills/narrative/references/story-arc/consulting-problem-solving"
+    },
+    {
+      "skill": "narrative",
+      "arm": "reference-depth",
+      "file": "cogni-workspace/skills/narrative/references/story-arc/corporate-visions"
+    },
+    {
+      "skill": "narrative",
+      "arm": "reference-depth",
+      "file": "cogni-workspace/skills/narrative/references/story-arc/customer-transformation"
+    },
+    {
+      "skill": "narrative",
+      "arm": "reference-depth",
+      "file": "cogni-workspace/skills/narrative/references/story-arc/engagement-model"
+    },
+    {
+      "skill": "narrative",
+      "arm": "reference-depth",
+      "file": "cogni-workspace/skills/narrative/references/story-arc/industry-transformation"
+    },
+    {
+      "skill": "narrative",
+      "arm": "reference-depth",
+      "file": "cogni-workspace/skills/narrative/references/story-arc/jtbd-portfolio"
+    },
+    {
+      "skill": "narrative",
+      "arm": "reference-depth",
+      "file": "cogni-workspace/skills/narrative/references/story-arc/smarter-service"
+    },
+    {
+      "skill": "narrative",
+      "arm": "reference-depth",
+      "file": "cogni-workspace/skills/narrative/references/story-arc/strategic-choice"
+    },
+    {
+      "skill": "narrative",
+      "arm": "reference-depth",
+      "file": "cogni-workspace/skills/narrative/references/story-arc/strategic-foresight"
+    },
+    {
+      "skill": "narrative",
+      "arm": "reference-depth",
+      "file": "cogni-workspace/skills/narrative/references/story-arc/technology-futures"
+    },
+    {
+      "skill": "narrative",
+      "arm": "reference-depth",
+      "file": "cogni-workspace/skills/narrative/references/story-arc/theme-thesis"
+    },
+    {
+      "skill": "narrative",
+      "arm": "reference-depth",
+      "file": "cogni-workspace/skills/narrative/references/story-arc/trend-panorama"
+    },
+    {
+      "skill": "portfolio-scan",
+      "arm": "length",
+      "file": "cogni-portfolio/skills/portfolio-scan/SKILL.md"
+    },
+    {
+      "skill": "solutions",
+      "arm": "length",
+      "file": "cogni-portfolio/skills/solutions/SKILL.md"
+    },
+    {
+      "skill": "story-to-web",
+      "arm": "reference-depth",
+      "file": "cogni-workspace/skills/story-to-web/references/print"
+    },
+    {
+      "skill": "trend-booklet",
+      "arm": "reference-depth",
+      "file": "cogni-trends/skills/trend-booklet/references/i18n"
+    },
+    {
+      "skill": "trend-research",
+      "arm": "reference-depth",
+      "file": "cogni-trends/skills/trend-research/references/i18n"
+    },
+    {
+      "skill": "trend-research",
+      "arm": "unreferenced-resource",
+      "file": "cogni-trends/skills/trend-research/references/region-authority-sources.json"
+    },
+    {
+      "skill": "trend-scout",
+      "arm": "length",
+      "file": "cogni-trends/skills/trend-scout/SKILL.md"
+    },
+    {
+      "skill": "trend-scout",
+      "arm": "reference-depth",
+      "file": "cogni-trends/skills/trend-scout/references/i18n"
+    },
+    {
+      "skill": "trend-scout",
+      "arm": "reference-depth",
+      "file": "cogni-trends/skills/trend-scout/references/workflow-phases"
+    },
+    {
+      "skill": "trend-scout",
+      "arm": "unreferenced-resource",
+      "file": "cogni-trends/skills/trend-scout/schemas/trend-scout-config.schema.json"
+    },
+    {
+      "skill": "trend-synthesis",
+      "arm": "length",
+      "file": "cogni-trends/skills/trend-synthesis/SKILL.md"
+    },
+    {
+      "skill": "trend-synthesis",
+      "arm": "reference-depth",
+      "file": "cogni-trends/skills/trend-synthesis/references/i18n"
+    },
+    {
+      "skill": "trends-bridge",
+      "arm": "length",
+      "file": "cogni-portfolio/skills/trends-bridge/SKILL.md"
+    },
+    {
+      "skill": "value-modeler",
+      "arm": "reference-depth",
+      "file": "cogni-trends/skills/value-modeler/references/workflow-phases"
+    },
+    {
+      "skill": "website-legal",
+      "arm": "reference-depth",
+      "file": "cogni-website/skills/website-legal/references/jurisdictions"
+    },
+    {
+      "skill": "website-legal",
+      "arm": "reference-depth",
+      "file": "cogni-website/skills/website-legal/references/jurisdictions/at"
+    },
+    {
+      "skill": "website-legal",
+      "arm": "reference-depth",
+      "file": "cogni-website/skills/website-legal/references/jurisdictions/ch"
+    },
+    {
+      "skill": "website-legal",
+      "arm": "reference-depth",
+      "file": "cogni-website/skills/website-legal/references/jurisdictions/de"
+    },
+    {
+      "skill": "website-legal",
+      "arm": "reference-depth",
+      "file": "cogni-website/skills/website-legal/references/jurisdictions/eu"
+    },
+    {
+      "skill": "website-legal",
+      "arm": "unreferenced-resource",
+      "file": "cogni-website/skills/website-legal/references/jurisdictions/at/cookies.md.tmpl"
+    },
+    {
+      "skill": "website-legal",
+      "arm": "unreferenced-resource",
+      "file": "cogni-website/skills/website-legal/references/jurisdictions/at/datenschutz.md.tmpl"
+    },
+    {
+      "skill": "website-legal",
+      "arm": "unreferenced-resource",
+      "file": "cogni-website/skills/website-legal/references/jurisdictions/at/impressum.md.tmpl"
+    },
+    {
+      "skill": "website-legal",
+      "arm": "unreferenced-resource",
+      "file": "cogni-website/skills/website-legal/references/jurisdictions/ch/cookies.md.tmpl"
+    },
+    {
+      "skill": "website-legal",
+      "arm": "unreferenced-resource",
+      "file": "cogni-website/skills/website-legal/references/jurisdictions/ch/datenschutz.md.tmpl"
+    },
+    {
+      "skill": "website-legal",
+      "arm": "unreferenced-resource",
+      "file": "cogni-website/skills/website-legal/references/jurisdictions/ch/impressum.md.tmpl"
+    },
+    {
+      "skill": "website-legal",
+      "arm": "unreferenced-resource",
+      "file": "cogni-website/skills/website-legal/references/jurisdictions/de/cookies.md.tmpl"
+    },
+    {
+      "skill": "website-legal",
+      "arm": "unreferenced-resource",
+      "file": "cogni-website/skills/website-legal/references/jurisdictions/de/datenschutz.md.tmpl"
+    },
+    {
+      "skill": "website-legal",
+      "arm": "unreferenced-resource",
+      "file": "cogni-website/skills/website-legal/references/jurisdictions/de/impressum.md.tmpl"
+    },
+    {
+      "skill": "website-legal",
+      "arm": "unreferenced-resource",
+      "file": "cogni-website/skills/website-legal/references/jurisdictions/eu/cookies.md.tmpl"
+    },
+    {
+      "skill": "website-legal",
+      "arm": "unreferenced-resource",
+      "file": "cogni-website/skills/website-legal/references/jurisdictions/eu/legal-notice.md.tmpl"
+    },
+    {
+      "skill": "website-legal",
+      "arm": "unreferenced-resource",
+      "file": "cogni-website/skills/website-legal/references/jurisdictions/eu/privacy-policy.md.tmpl"
+    },
+    {
+      "skill": "why-change",
+      "arm": "unreferenced-resource",
+      "file": "cogni-sales/skills/why-change/references/pitch-data-model.md"
+    }
+  ]
+}

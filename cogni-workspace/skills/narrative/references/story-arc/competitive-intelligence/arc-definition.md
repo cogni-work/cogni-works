@@ -1,258 +1,132 @@
-# Competitive Intelligence Story Arc
-
-## Arc Metadata
-
-**Arc ID:** `competitive-intelligence`
-**Display Name:** Competitive Intelligence
-**Display Name (German):** Wettbewerbsanalyse
-
-**Elements (Ordered):**
-1. Landscape: Current Competitive Positioning
-2. Shifts: Momentum Changes and Strategic Moves
-3. Positioning: Strategic Gaps and Opportunities
-4. Implications: Time-Bound Actions
-
-**Elements (German):**
-1. Landschaft: Aktuelle Wettbewerbspositionierung
-2. Verschiebungen: Momentum-Änderungen und strategische Züge
-3. Positionierung: Strategische Lücken und Chancen
-4. Implikationen: Zeitgebundene Handlungen
-
-## Word Proportions
-
-Section lengths are expressed as proportions of the total target length. This keeps the arc's rhetorical balance intact regardless of narrative length. To compute word ranges for a given `--target-length T`: apply +/-15% band to get `[T*0.85, T*1.15]`, then multiply each proportion.
-
-| Element | English Header | German Header | Proportion | Default Range (T=1675) |
-|---------|----------------|---------------|-----------|------------------------|
-| Hook | *(Dynamic based on finding)* | *(Dynamic)* | 10% | 143-193 |
-| Landscape | Landscape: Current State | Landschaft: Aktueller Stand | 24% | 342-462 |
-| Shifts | Shifts: Momentum Changes | Verschiebungen: Momentum-Änderungen | 21% | 299-404 |
-| Positioning | Positioning: Strategic Gaps | Positionierung: Strategische Lücken | 27% | 384-519 |
-| Implications | Implications: Required Actions | Implikationen: Erforderliche Handlungen | 18% | 256-347 |
-
-**Proportions sum to 100%.** Default total: 1,675 words (customizable via `--target-length`). Tolerance: +/-10% of computed section midpoint.
-
-## Detection Configuration
-
-### Research Type Mapping
-
-This arc is selected when:
-- `research_type: "competitive"`
-
-### Content Analysis Keywords
-
-When `research_type` doesn't match, analyze Executive Summary for keyword density:
-- **Keywords:** "competitor", "market share", "positioning", "differentiation", "threat", "rivalry", "strategic move", "competitive advantage"
-- **Threshold:** ≥12% keyword density
-
-### Use Cases
-
-**Best For:**
-- Competitive analysis projects
-- Market positioning studies
-- Threat assessment
-- Strategic differentiation planning
-- Competitive response strategy
-- Market share analysis
-
-## Element Definitions
-
-### Element 1: Landscape (Current State)
-
-**Purpose:**
-Map current competitive positions, market structure, and established power dynamics.
-
-**Source Content:**
-- Executive Summary (competitive overview)
-- Dimension syntheses (market structure analysis)
-- Trends (current state indicators)
-
-**Transformation Approach:**
-- Market structure (fragmented, concentrated, oligopoly)
-- Current leader positions and share
-- Competitive bases (cost, differentiation, focus)
-- Established moats and barriers
-
-**Pattern Reference:** `landscape-patterns.md`
-
+---
+arc_id: competitive-intelligence
+display_name: Competitive Intelligence
+display_name_de: Wettbewerbsanalyse
+contract: 2
 ---
 
-### Element 2: Shifts (Momentum Changes)
+# Competitive Intelligence
 
-**Purpose:**
-Identify momentum changes, strategic moves, and competitive repositioning underway.
+## Intent
 
-**Source Content:**
-- Trends (especially "Act" column with competitive moves)
-- Executive Summary (strategic shift indicators)
-- Dimension syntheses (competitive dynamics)
+**Governing question:** Where do the competitors stand, how is that changing, where are the gaps, and by when must we move?
 
-**Transformation Approach:**
-- Momentum indicators (market share trends, investment patterns)
-- Strategic moves (M&A, partnerships, pivots)
-- Capability building races
-- Emerging threats vs. declining threats
+**Rhetorical job:** Build an analytical case from the current landscape through the shifts reshaping it to a defensible position and a time-bound set of actions. It positions within a category that exists; it does not try to change the category.
 
-**Pattern Reference:** `shifts-patterns.md`
+**Not for:** reframing the buyer's category (`category-creation`), describing structural industry change beyond competition (`industry-transformation`), persuading a reader to change (`corporate-visions`), or exploring uncertainty with scenarios (`strategic-foresight`).
 
----
+## Selection
 
-### Element 3: Positioning (Strategic Gaps)
+**Best for:** competitive analysis, threat assessment, positioning studies, market-structure research.
 
-**Purpose:**
-Identify strategic gaps, white spaces, and positioning opportunities emerging from landscape + shifts.
+**Signals:** the source names competitors, market shares, positions and moves; it tracks momentum (share trends, investment, M&A, partnerships); it identifies gaps or white spaces; it recommends time-bound moves.
 
-**Source Content:**
-- Strategic Recommendations (primary)
-- Cross-Dimensional Patterns (opportunity intersections)
-- Executive Summary (positioning insights)
+**Anti-signals:** the source argues the category itself is wrong (`category-creation`); its forces are regulatory or structural rather than competitive (`industry-transformation`); it is a capability roadmap (`technology-futures`).
 
-**Transformation Approach:**
-- Uncontested spaces (where competitors aren't playing)
-- Capability gaps (what competitors lack)
-- Timing advantages (windows before competitors move)
-- Differentiation axes (how to compete differently)
+**Fallback priority:** never a fallback. Selected on content type `competitive` or on keyword density.
 
-**Pattern Reference:** `positioning-patterns.md`
+## Headings
 
----
+Byte-exact section headers by output language. Renderers, the copywriter and the validation script all match these strings; never paraphrase, re-case or re-punctuate them.
 
-### Element 4: Implications (Time-Bound Actions)
+| # | EN | DE |
+|---|----|----|
+| 1 | Landscape: Competitive Overview | Landschaft: Wettbewerbsübersicht |
+| 2 | Shifts: Market Dynamics | Verschiebungen: Marktdynamik |
+| 3 | Positioning: Strategic Options | Positionierung: Strategische Optionen |
+| 4 | Implications: Action Priorities | Implikationen: Handlungsprioritäten |
 
-**Purpose:**
-Specify time-bound actions to exploit gaps before they close or competitors fill them.
+## Composition
 
-**Source Content:**
-- Strategic Recommendations (action items)
-- Trends (urgency indicators)
-- Dimension syntheses (implementation timelines)
+Section lengths are proportions of `--target-length` (default 1,675 words). Word ranges for a target `T` are `[T × 0.85, T × 1.15]` multiplied by each proportion. Proportions sum to 100%.
 
-**Transformation Approach:**
-- Immediate actions (0-6 months)
-- Near-term moves (6-18 months)
-- Capability building (18-36 months)
-- Competitive response scenarios
+| Segment | Proportion |
+|---------|-----------:|
+| Landscape | 27% |
+| Shifts | 23% |
+| Positioning | 30% |
+| Implications | 20% |
 
-**Pattern Reference:** `implications-patterns.md`
+**Executive TL;DR emphasis:** current landscape → competitive shift → defensible position → time-bound action. The narrative opens with the TL;DR defined in `../../validation.md`; the surprising competitive shift belongs in its first sentence as the conclusion.
 
-## Narrative Flow
+**Transitions:**
 
-### Hook Construction
+1. Landscape → Shifts: "[N] momentum shifts are reshaping this landscape."
+2. Shifts → Positioning: "These shifts create strategic gaps in [areas]."
+3. Positioning → Implications: "Capturing these gaps requires time-bound action."
 
-**Approach:**
-Open with a surprising competitive shift or market structure change that challenges conventional wisdom about the competitive landscape.
+**Closing pattern:** a clear deadline for the competitive window — "Strategic gaps close by [quarter]. Organizations moving by [date] capture positions. Delay means competing for crowded spaces."
 
-**Pattern:**
-```markdown
-[Established player] losing [market share %] to [unexpected competitor] signals [structural shift]<sup>[1]</sup>. [Conventional wisdom] no longer predicts [competitive outcome].
-```
+## Elements
 
----
+### 1. Landscape
 
-### Element Transitions
+**Purpose:** map current competitive positions, market structure and established power dynamics.
 
-**Hook → Landscape:**
-- Hook introduces surprising competitive shift
-- Landscape explains current state that makes shift surprising
-- **Transition pattern:** "This shift emerges from a competitive landscape defined by [structure]."
+**Evidence sought:** the competitive overview in the executive summary, market-structure analysis in the dimension syntheses, current-state indicators in trends, competitor entities when a `--content-map` supplies them.
 
-**Landscape → Shifts:**
-- Landscape establishes current positions
-- Shifts shows how positions are changing
-- **Transition pattern:** "Three momentum shifts are reshaping this landscape."
+**Argument move:** market structure (fragmented, concentrated, oligopoly) → current leaders and their share → the competitive bases each plays on (cost, differentiation, focus) → established moats. Move from aggregate share to segment-level detail; cluster competitors by the logic they compete on and tie each cluster to its business model.
 
-**Shifts → Positioning:**
-- Shifts identifies what's changing
-- Positioning identifies gaps created by changes
-- **Transition pattern:** "These shifts create strategic gaps in [areas]."
+**Techniques:** [Number Plays](../../narrative-techniques/techniques-overview.md#4-number-plays-6-techniques), [Contrast Structure](../../narrative-techniques/techniques-overview.md#6-contrast-structure) (aggregate versus segment view).
 
-**Positioning → Implications:**
-- Positioning identifies where to compete
-- Implications specifies when and how to move
-- **Transition pattern:** "Capturing these gaps requires time-bound action."
+**Hard rules:** the market structure is named; positions are quantified; competitive bases are mapped for the leaders.
 
----
+**Failure modes:** a list of company names; share with no segment view; "highly competitive market".
 
-### Closing Pattern
+### 2. Shifts
 
-**Final Sentence:**
-Clear timeline for competitive window closing.
+**Purpose:** identify the momentum changes, strategic moves and repositioning under way.
 
-**Examples:**
-- "Strategic gaps close by [quarter]. Organizations moving by [date] capture positions. Delay means competing for crowded spaces."
-- "The competitive window is [timeframe]. Required moves take [duration]. Action deadline: [date]."
+**Evidence sought:** Act-horizon trends carrying competitive moves, strategic-shift indicators in the executive summary, competitive dynamics in the syntheses.
 
-## Quality Gates
+**Argument move:** momentum indicators (share trends, investment patterns, growth-rate gaps) → strategic moves with timelines (M&A, partnerships, pivots) → capability races → emerging versus declining threats. Contrast a static top line with dynamic segment trajectories; name the shift in competitive logic.
 
-### Arc Completeness
+**Techniques:** [Forcing Functions](../../narrative-techniques/techniques-overview.md#5-forcing-functions), [Contrast Structure](../../narrative-techniques/techniques-overview.md#6-contrast-structure), [Number Plays](../../narrative-techniques/techniques-overview.md#4-number-plays-6-techniques).
 
-- [ ] All 4 elements present (Landscape, Shifts, Positioning, Implications)
-- [ ] Hook present (within hook proportion of target)
-- [ ] Word counts within computed proportional ranges (+/-10% tolerance)
-- [ ] Smooth transitions between elements
-- [ ] Each element serves distinct purpose
+**Hard rules:** momentum is quantified; every strategic move carries a timeline; threats are assessed as emerging or declining.
 
-### Competitive Intelligence Techniques Applied
+**Failure modes:** "the market is consolidating" with no numbers; a move with no date; a threat list with no direction.
 
-- [ ] **Landscape:** Market structure identified (fragmented/concentrated)
-- [ ] **Landscape:** Current positions quantified (market share, capabilities)
-- [ ] **Landscape:** Competitive bases mapped (cost/differentiation/focus)
-- [ ] **Shifts:** Momentum indicators quantified (share trends, investment rates)
-- [ ] **Shifts:** Strategic moves cataloged with timelines
-- [ ] **Shifts:** Threat assessment (emerging vs. declining)
-- [ ] **Positioning:** Uncontested spaces identified
-- [ ] **Positioning:** Capability gaps specified
-- [ ] **Positioning:** Timing advantages quantified
-- [ ] **Implications:** Time-bound actions (0-6mo, 6-18mo, 18-36mo)
-- [ ] **Implications:** Competitive response scenarios considered
+### 3. Positioning
 
-## Example Transformation
+**Purpose:** identify the strategic gaps, white spaces and positioning opportunities the landscape and the shifts open up.
 
-This section demonstrates the Landscape → Shifts transformation using the Cloud Infrastructure Provider test case.
+**Evidence sought:** strategic recommendations, opportunity intersections in cross-cutting patterns, positioning insights in the executive summary.
 
-### Source: Executive Summary (Landscape Signal)
+**Argument move:** uncontested spaces (where competitors are not playing) → capability gaps (what they lack) → timing advantages (windows before they move) → differentiation axes (how to compete differently). Frame the strongest option as a position with IS-DOES-MEANS.
 
-> Current market share shows AWS maintaining 32% leadership, Azure growing to 24% (+3pp YoY), Google Cloud at 11% (+2pp YoY), while other providers collectively hold 33%<sup>[1](12-synthesis/synthesis-market.md)</sup>. However, segment-level analysis reveals divergent trajectories: AWS dominates compute and storage (38% share), Azure leads in enterprise SaaS integration (41%), Google Cloud captures AI/ML workloads (47%)<sup>[2](12-synthesis/synthesis-segments.md)</sup>.
+**Techniques:** [IS-DOES-MEANS](../../narrative-techniques/techniques-overview.md#3-is-does-means-power-positions), [You-Phrasing](../../narrative-techniques/techniques-overview.md#7-you-phrasing), [Number Plays](../../narrative-techniques/techniques-overview.md#4-number-plays-6-techniques).
 
-### Landscape Transformation (~87-100% of element allocation)
+**Hard rules:** at least one uncontested space is named; capability gaps are specific; every timing advantage is quantified as a window.
 
-The hyperscale cloud market appears consolidated at first glance—three providers control 67% of overall demand<sup>[1](12-synthesis/synthesis-market.md)</sup>. But this top-line view masks fundamental competitive fragmentation at the segment level.
+**Failure modes:** "differentiate through innovation"; gaps stated as competitors' adjectives; a window with no date.
 
-AWS holds 32% overall market share yet dominates compute and storage workloads at 38%<sup>[1](12-synthesis/synthesis-market.md)</sup><sup>[2](12-synthesis/synthesis-segments.md)</sup>. This reflects AWS's first-mover positioning in infrastructure-as-a-service, where commodity pricing and operational scale create winner-take-most dynamics. Azure's 24% overall share disguises its 41% dominance in enterprise SaaS integration workloads<sup>[2](12-synthesis/synthesis-segments.md)</sup>—a strategic moat built on Microsoft 365 ecosystem lock-in rather than infrastructure economics. Google Cloud's modest 11% overall share obscures its 47% capture of AI/ML workloads<sup>[2](12-synthesis/synthesis-segments.md)</sup>, where TPU architecture and TensorFlow integration create technical differentiation.
+### 4. Implications
 
-This segmentation reveals three distinct competitive clusters: infrastructure generalists (AWS, commodity position), enterprise integrators (Azure, ecosystem lock-in), and workload specialists (Google Cloud, technical differentiation). Each cluster operates under different competitive logic.
+**Purpose:** specify time-bound actions to exploit the gaps before they close or competitors fill them.
 
-*Technique: Move from aggregate statistics to segment-level detail. Show divergence ("masks fundamental fragmentation"). Connect positioning to business model (AWS scale, Azure ecosystem, Google tech).*
+**Evidence sought:** action items in the recommendations, urgency indicators in trends, implementation timelines in the syntheses.
 
-### Shifts Transformation (~85-100% of element allocation)
+**Argument move:** immediate actions (0-6 months) → near-term moves (6-18 months) → capability building (18-36 months) → competitive response scenarios (what the competitors do when we move).
 
-While AWS maintains static overall share (32%), its segment-level momentum diverges. Compute/storage growth at 14% annually lags specialized workloads growing 35-47%—a velocity gap that compounds into strategic vulnerability.
+**Techniques:** [Compound Impact](../../narrative-techniques/techniques-overview.md#8-compound-impact-calculation) (cost of the window closing), [Forcing Functions](../../narrative-techniques/techniques-overview.md#5-forcing-functions).
 
-Azure's +3pp annual gain comes entirely from enterprise SaaS integration, where Microsoft 365 co-selling creates a flywheel effect<sup>[2](12-synthesis/synthesis-segments.md)</sup>. This isn't market share gain through competitive displacement; it's category creation through ecosystem leverage.
+**Hard rules:** every action sits in a time band; at least one competitive response scenario is considered; the element ends on the closing-window deadline.
 
-Google Cloud's +2pp growth masks 47% capture of the fastest-growing segment (AI/ML workloads)<sup>[2](12-synthesis/synthesis-segments.md)</sup>. The shift isn't visible in top-line share but becomes decisive as AI infrastructure spending accelerates from $89B (2026) to projected $210B by 2028.
+**Failure modes:** actions with no horizon; no anticipation of competitor response; a generic "act now".
 
-The momentum indicators point to positioning shift: infrastructure breadth → specialized capabilities. Winners in high-growth segments achieve 3x premium pricing by solving specific compliance, performance, or integration challenges<sup>[3](synthesis-positioning.md)</sup>.
+## Validation
 
-*Technique: Contrast static top-line (32% AWS) with dynamic segment trajectories (14% vs. 35-47%). Use "velocity gap" and "compounds into vulnerability" language. Reference future projections ($89B → $210B) to show momentum.*
+Arc-specific assertions, checked after the universal gates in `../../validation.md`:
 
-### Key Transformation Patterns
-
-**Landscape techniques:**
-- Segment-level decomposition (overall 32% → compute 38%, SaaS 41%, AI/ML 47%)
-- Competitive clustering (generalists, integrators, specialists)
-- Business model identification (scale, ecosystem, technical differentiation)
-
-**Shifts techniques:**
-- Velocity analysis (14% vs. 35-47% growth rates)
-- Momentum attribution (where is growth coming from?)
-- Future trajectory projection ($89B → $210B)
-- Competitive logic shift (breadth → specialized capabilities)
+- Landscape names the market structure, quantifies positions and maps competitive bases.
+- Shifts quantifies momentum, dates every strategic move and assesses threats as emerging or declining.
+- Positioning names at least one uncontested space, specific capability gaps and quantified timing advantages.
+- Implications places every action in a 0-6, 6-18 or 18-36 month band and considers at least one competitive response.
+- The chain holds: the shifts are shifts in the landscape described; the gaps are the ones the shifts open; the actions capture those gaps before the stated deadline.
 
 ## See Also
 
-- `../arc-registry.md` - Master index of all story arcs
-- `landscape-patterns.md` - Current state mapping patterns
-- `shifts-patterns.md` - Momentum change identification patterns
-- `positioning-patterns.md` - Strategic gap analysis patterns
-- `implications-patterns.md` - Time-bound action specification patterns
+- `../arc-registry.md` — arc selection: detection algorithm, per-arc declarative blocks, shortlist format
+- `../../narrative-techniques/techniques-overview.md` — the eight techniques and their application matrix
+- `../../validation.md` — the universal gates every narrative must clear

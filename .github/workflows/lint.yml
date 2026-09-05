@@ -255,6 +255,20 @@ jobs:
           set -euo pipefail
           python3 scripts/check-output-style-placement.py
 
+  skill-spec-guard:
+    name: Skill-spec guard (every SKILL.md meets the published Agent Skills standard)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        # Default shallow checkout is sufficient: the guard walks the working
+        # tree at this commit, not git history.
+
+      - name: Assert name, description, length and progressive-disclosure rules
+        run: |
+          set -euo pipefail
+          python3 scripts/check-skill-spec.py
+
   mcp-tool-grant-guard:
     name: MCP agent-grant guard (agent bodies call only servers their frontmatter grants)
     runs-on: ubuntu-latest

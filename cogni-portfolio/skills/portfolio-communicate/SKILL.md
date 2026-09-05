@@ -110,7 +110,7 @@ For `customer-narrative`, the arc is **an implementation detail of the scope** �
 | `persona` | `jtbd-portfolio` | Same shape as home, narrowed to one persona's jobs and friction |
 | `approach` | `engagement-model` | Principles → Process → Partnership → Outcomes answers "how does this land in my organization" |
 
-Load each scope's arc definition in Step 2 so the templates render with the correct element headers, word proportions, and phase-4b synthesis guidance. If the user tries to override with `--arc-id` for a customer-narrative scope, reject the override and explain the scope → arc mapping — these arcs are load-bearing for the website information architecture and the deduplication discipline that keeps pages from overlapping. (The `capability` scope is the one exception: `--arc-id corporate-visions` is the only valid override and is also the default, so effectively a no-op.)
+Load each scope's arc contract in Step 2 so the templates render with the correct headings, composition and per-element writing rules. If the user tries to override with `--arc-id` for a customer-narrative scope, reject the override and explain the scope → arc mapping — these arcs are load-bearing for the website information architecture and the deduplication discipline that keeps pages from overlapping. (The `capability` scope is the one exception: `--arc-id corporate-visions` is the only valid override and is also the default, so effectively a no-op.)
 
 #### Pitch: user picker
 
@@ -145,8 +145,7 @@ Read entity files from the project directory. Which entities to load depends on 
 - `markets/*.json` and `customers/*.json`
 - `competitors/*.json` (for differentiation, reverse-engineered into convictions on `about.md`)
 - `cogni-claims/claims.json` — verified facts for the `about.md` Credibility element
-- Read the arc definition for the target scope from `cogni-workspace/skills/narrative/references/story-arc/{arc-id}/arc-definition.md` (use the scope → arc mapping from Step 1b)
-- Read the matching phase-4b synthesis file from `cogni-workspace/skills/narrative/references/phase-workflows/phase-4b-synthesis-{arc-id}.md` for element-specific writing rules
+- Read the arc contract for the target scope from `cogni-workspace/skills/narrative/references/story-arc/{arc-id}/arc-definition.md` (use the scope → arc mapping from Step 1b). Its `## Headings`, `## Composition` and `## Elements` sections carry the headings, proportions and element-specific writing rules; its `## Validation` section is the arc's quality bar
 
 **Pitch:**
 - `markets/{market-slug}.json` (or all markets for overview/all scopes)
@@ -251,8 +250,7 @@ For each dispatch, prepare the agent payload:
 | `entity_refs` | Object with paths/globs filtered to just what this scope needs — use the scope-specific data source rules from Step 2. For `capability`: just the one feature, its parent product, propositions targeting it, its competitors. For `persona`: just the one market+persona, propositions filtered by persona buying criteria, parent features and products. For `home` and `about`: broader entity sets as Step 2 specifies. |
 | `messaging_modes` | Subset of the modes map computed in Step 2, filtered to the products and features relevant to this scope |
 | `template_ref` | Absolute path to `references/templates-customer-narrative.md` plus the scope heading (e.g. `"Scope 3: \`capability\`"`) |
-| `arc_definition_ref` | Absolute path to `cogni-workspace/skills/narrative/references/story-arc/{arc_id}/arc-definition.md` |
-| `phase_4b_synthesis_ref` | Absolute path to `cogni-workspace/skills/narrative/references/phase-workflows/phase-4b-synthesis-{arc_id}.md` |
+| `arc_definition_ref` | Absolute path to `cogni-workspace/skills/narrative/references/story-arc/{arc_id}/arc-definition.md` — the arc contract, carrying headings, composition, the four element sections and the arc's validation rules |
 | `feature_slug` | Required iff `scope == capability` |
 | `market_slug`, `persona_id` | Required iff `scope == persona` |
 

@@ -108,8 +108,8 @@ Each `candidate_ref` has the format `{dimension}/{horizon}/{sequence}`. Extract 
 
 If `NARRATIVE_ARC_PATH` is provided:
 
-1. Read the `arc-definition.md` file from the provided path
-2. Extract: element names, word proportions, transition patterns, quality gates, technique-to-element mapping
+1. Read the arc contract at the provided path (one file, `contract: 2`)
+2. Extract: element headings from `## Headings`, proportions and the theme-anchoring rule from `## Composition`, per-element Argument move and Hard rules from the four `### N.` sections under `## Elements`, and the arc's assertions from `## Validation`
 3. If `NARRATIVE_TECHNIQUES_PATH` is also provided, read the techniques overview for the technique application matrix
 
 If `NARRATIVE_ARC_PATH` is missing or unreadable: proceed with the slim-mode template defined below. Log a note in the return JSON: `"arc_loaded": false`.

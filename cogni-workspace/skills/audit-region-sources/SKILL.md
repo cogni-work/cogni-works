@@ -19,7 +19,7 @@ allowed-tools: Read, Glob, Grep, Bash
 ## Core Concept
 
 There is one canonical market taxonomy:
-`cogni-workspace/references/supported-markets-registry.json` — codes,
+`${CLAUDE_PLUGIN_ROOT}/references/supported-markets-registry.json` — codes,
 names, locales, currencies, languages, regional qualifiers, regulatory
 bodies, and the authority-domain set per market.
 
@@ -95,4 +95,4 @@ domains the canonical registry doesn't carry. Run `/cogni-workspace:manage-marke
 
 ## Output
 
-Render the report to stdout. Do not write files. The skill is read-only.
+Render the report to stdout. Apart from the `/tmp/audit-*.json` scratch files Step 1 captures, write nothing — the skill never touches the registry or an overlay; changes go through `manage-markets`.

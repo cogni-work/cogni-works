@@ -39,7 +39,7 @@ You are a delegation wrapper for the `cogni-workspace:narrative` skill in its `-
 You will receive:
 - `source_path` (required) -- path to the narrative `.md` file to adapt
 - `format` (required) -- target format: `executive-brief`, `talking-points`, or `one-pager`
-- `output` (optional) -- output file path; defaults to `{source-dir}/{format}.md`
+- `output_path` (optional) -- output file path, relayed as `--output-path`; defaults to `{source-dir}/{format}.md`
 - `language` (optional) -- override language (uses source frontmatter by default)
 
 ## Execution
@@ -81,7 +81,8 @@ On failure, the skill returns:
 ```json
 {
   "success": false,
-  "error": "Description of what went wrong"
+  "error": "Description of what went wrong",
+  "phase": "Derivative"
 }
 ```
 

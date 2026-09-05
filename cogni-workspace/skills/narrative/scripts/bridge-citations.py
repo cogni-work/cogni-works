@@ -9,7 +9,10 @@ Category: core
 Usage:
     bridge-citations.py --source-path <file-or-dir> [--output-dir <dir>] [--json]
 
-Reads markdown files and extracts all [Source: Publisher](URL) citations.
+Reads markdown files and extracts all [Source: Publisher](URL) citations, scanning
+the whole text (detection is not limited to a leading window). Leave --output-dir
+unset in normal use: the default places narrative-input/ inside a directory source
+or beside a single file (in its parent directory), which is correct for both shapes.
 Creates an output directory with:
   - report-for-narrative.md — content with [source-NN-slug.md] markers
   - sources/source-NN-publisher-slug.md — per-source files with YAML frontmatter
@@ -18,7 +21,8 @@ the `narrative` skill then cites these source files as <sup>[N](source-NN-slug.m
 preserving the full audit trail back to original URLs.
 
 Output:
-    {"success": true, "data": {"sources_extracted": N, "unique_publishers": N, ...}}
+    {"success": true, "data": {"sources_extracted": N, "unique_publishers": N, ...}, "error": null}
+    and on failure {"success": false, "data": {}, "error": "..."} on stderr — all three keys, always.
 """
 
 import argparse
@@ -58,12 +62,6 @@ def extract_citations(report_text: str) -> List[Dict[str, str]]:
             })
 
     return citations
-
-
-def has_bridgeable_citations(text: str) -> bool:
-    """Check whether text contains [Source: Publisher](URL) citations."""
-    pattern = r'\[Source:\s*[^\]]+\]\([^)]+\)'
-    return bool(re.search(pattern, text))
 
 
 def create_source_file(index: int, publisher: str, url: str) -> Tuple[str, str]:
@@ -130,7 +128,7 @@ def main() -> None:
             if not md_files:
                 msg = f"No .md files found in: {source_path}"
                 if args.json:
-                    print(json.dumps({"success": False, "error": msg}), file=sys.stderr)
+                    print(json.dumps({"success": False, "data": {}, "error": msg}), file=sys.stderr)
                 else:
                     print(f"ERROR: {msg}", file=sys.stderr)
                 sys.exit(1)
@@ -139,7 +137,7 @@ def main() -> None:
     else:
         msg = f"Source not found: {source_path}"
         if args.json:
-            print(json.dumps({"success": False, "error": msg}), file=sys.stderr)
+            print(json.dumps({"success": False, "data": {}, "error": msg}), file=sys.stderr)
         else:
             print(f"ERROR: {msg}", file=sys.stderr)
         sys.exit(1)
@@ -164,7 +162,8 @@ def main() -> None:
                     "narrative_input_dir": str(output_dir),
                     "source_files": [],
                     "warning": "No citations found — narrative will have limited source references"
-                }
+                },
+                "error": None
             }))
         else:
             print(f"WARNING: {msg}")
@@ -198,7 +197,8 @@ def main() -> None:
             "unique_publishers": len(publishers_seen),
             "narrative_input_dir": str(output_dir),
             "source_files": source_files_created,
-        }
+        },
+        "error": None
     }
 
     if args.json:

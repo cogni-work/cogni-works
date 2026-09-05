@@ -1,409 +1,135 @@
-# JTBD Portfolio Story Arc
-
-## Arc Metadata
-
-**Arc ID:** `jtbd-portfolio`
-**Display Name:** JTBD Portfolio
-**Display Name (German):** JTBD-Portfolio
-
-**Elements (Ordered):**
-1. Job Landscape: Functional Jobs
-2. Friction Map: Obstacles and Cost of Inaction
-3. Portfolio Map: Solutions by Job
-4. Invitation: Next Step
-
-**Elements (German):**
-1. Job-Landschaft: Funktionale Aufgaben
-2. Reibungskarte: Hindernisse und Handlungsdruck
-3. Portfolio-Zuordnung: Lösungen je Aufgabe
-4. Einladung: Nächster Schritt
-
-## Word Proportions
-
-Section lengths are expressed as proportions of the total target length. This keeps the arc's rhetorical balance intact regardless of narrative length. To compute word ranges for a given `--target-length T`: apply +/-15% band to get `[T*0.85, T*1.15]`, then multiply each proportion.
-
-| Element | English Header | German Header | Proportion | Default Range (T=1675) |
-|---------|----------------|---------------|-----------|------------------------|
-| Hook | *(Context Setter)* | *(Kontextrahmen)* | 10% | 143-193 |
-| Job Landscape | Job Landscape: Functional Jobs | Job-Landschaft: Funktionale Aufgaben | 24% | 342-462 |
-| Friction Map | Friction Map: Obstacles and Cost of Inaction | Reibungskarte: Hindernisse und Handlungsdruck | 21% | 299-404 |
-| Portfolio Map | Portfolio Map: Solutions by Job | Portfolio-Zuordnung: Lösungen je Aufgabe | 27% | 384-519 |
-| Invitation | Invitation: Next Step | Einladung: Nächster Schritt | 18% | 256-347 |
-
-**Proportions sum to 100%.** Default total: 1,675 words (customizable via `--target-length`). Tolerance: +/-10% of computed section midpoint.
-
-## Detection Configuration
-
-### Content Type Mapping
-
-This arc is selected when:
-- `content_type: "jtbd"`
-
-### Content Analysis Keywords
-
-Keywords: "jobs-to-be-done", "functional job", "jtbd", "job landscape", "hire", "portfolio map", "capability overview", "pre-sales positioning"
-
-### Detection Threshold
-
-Keyword density >= 12%
-
-## Use Cases
-
-**Best For:**
-- Portfolio introductions (presenting a solution portfolio to new prospects)
-- Capability overviews (executive briefings on what the company solves)
-- Pre-sales positioning (framing the portfolio before deal-specific tailoring)
-- B2B portfolio narratives where the buyer thinks in outcomes, not features
-
-**Typical Input Sources:**
-- cogni-portfolio entity files (propositions, customers, markets, solutions, competitors)
-- Portfolio-communicate pitch use case with `--arc-id jtbd-portfolio`
-
-**Not Suitable For:**
-- Deal-specific sales pitches (use cogni-sales /why-change instead)
-- Feature-centric product documentation (use portfolio-communicate customer-narrative)
-- Research-driven narratives without portfolio data (use corporate-visions or other research arcs)
-
-## Element Definitions
-
-### Element 1: Job Landscape (Functional Jobs)
-
-**Purpose:**
-Map the buyer's world into 3-4 functional jobs they hire solutions for. Jobs are phrased as verb phrases in the buyer's language -- never as product category names or internal feature labels.
-
-**Source Content:**
-- `customers/{market}.json` pain_points (primary -- each pain point implies a job the buyer needs done)
-- `propositions/{feature}--{market}.json` DOES statements (secondary -- each DOES describes what a solution does for the buyer, which reveals the underlying job)
-- `markets/{market}.json` description (context -- industry vocabulary)
-
-**Transformation Approach:**
-1. Extract 3-4 distinct functional jobs from customer pain points
-2. Phrase each as a verb phrase: "Monitor network health in real-time", "Reduce unplanned downtime below 2%", "Ensure regulatory compliance across 12 jurisdictions"
-3. Frame jobs from the buyer's perspective, not the seller's
-4. Use Contrast Structure to reframe from product categories to jobs
-
-**Key Techniques:**
-- Contrast Structure: "Your portfolio has 6 products. Your buyer has 4 jobs."
-- Verb-phrase framing (mandatory -- this is the JTBD core discipline)
-- Buyer-language validation: each job must use words the buyer would use, not internal product names
-
-**Constraints:**
-- Jobs MUST be verb phrases (e.g., "Reduce unplanned downtime"), NEVER product category names (e.g., "Predictive Maintenance")
-- Each job must appear in at least one proposition's DOES domain
-- 3-4 jobs total (fewer than 3 is too thin; more than 4 loses focus)
-
-**Pattern Reference:** `job-landscape-patterns.md`
-
+---
+arc_id: jtbd-portfolio
+display_name: JTBD Portfolio
+display_name_de: JTBD-Portfolio
+contract: 2
 ---
 
-### Element 2: Friction Map (Obstacles and Cost of Inaction)
+# JTBD Portfolio
 
-**Purpose:**
-For each job from Element 1, identify the current obstacle and quantify the cost of not solving it. This is a compressed Why Change -- per-job, not global.
+## Intent
 
-**Source Content:**
-- `customers/{market}.json` pain_points (detail layer -- obstacle descriptions)
-- `competitors/{feature}--{market}.json` (current approach weaknesses -- what existing solutions fail to deliver)
-- `propositions/{feature}--{market}.json` evidence arrays (cost quantification)
+**Governing question:** What jobs does the buyer hire for, what stands in the way of each, which solution does each job, and where does the buyer start?
 
-**Transformation Approach:**
-Per job from Element 1:
-1. Identify the primary obstacle (why the job is hard or unsolved today)
-2. Quantify the cost of the obstacle persisting (revenue loss, time waste, risk exposure)
-3. Stack obstacles to show compound friction across the job landscape
+**Rhetorical job:** Introduce a solution portfolio to buyers who think in outcomes, not features. The arc maps the buyer's world into functional jobs, quantifies the friction on each, maps solutions one-to-one to jobs, and closes on a single low-commitment entry point with a handoff to deal-specific selling.
 
-**Key Techniques:**
-- Forcing Functions: external pressures that make each friction urgent
-- Compound Impact: stack per-job costs to show total friction cost
-- Before/after contrast per job
+**Not for:** deal-specific sales pitches for a named customer (cogni-sales `/why-change`), feature-centric product documentation, research-driven narratives with no portfolio data (`corporate-visions` or a research arc), or proving a customer's observed transformation (`customer-transformation`).
 
-**Constraints:**
-- Every job from Element 1 must have a corresponding friction entry
-- Each friction must include quantified cost of inaction (not just qualitative description)
-- Frictions must reference the job by its verb phrase (maintaining the JTBD frame)
+## Selection
 
-**Pattern Reference:** `friction-map-patterns.md`
+**Best for:** portfolio introductions, capability overviews, pre-sales positioning, B2B portfolio narratives, the `home` and `persona` scopes of cogni-portfolio's customer narrative.
 
----
+**Signals:** portfolio entities are the source (propositions with IS/DOES/MEANS, customers with pain points, markets, solutions, competitors); the reader is a buyer evaluating what a company solves; content type `jtbd`; keywords such as "jobs-to-be-done", "functional job", "portfolio map", "capability overview", "pre-sales positioning".
 
-### Element 3: Portfolio Map (Solutions by Job)
+**Anti-signals:** a single named prospect with deal-specific research; research syntheses with no propositions; a company self-description with no solution set.
 
-**Purpose:**
-Map solutions 1:1 to jobs from Element 1 using IS/DOES/MEANS structure per entry. This is the portfolio showcase -- each solution is positioned as the thing the buyer hires for a specific job.
+**Fallback priority:** never a fallback. Selected only when portfolio entities or an explicit `jtbd` content type are present.
 
-**Source Content:**
-- `propositions/{feature}--{market}.json` IS/DOES/MEANS statements (primary)
-- `solutions/{feature}--{market}.json` implementation details (supporting)
-- `features/{feature}.json` descriptions (IS layer source)
+## Headings
 
-**Transformation Approach:**
-For each job from Element 1:
-1. Identify the matching solution (1:1 mapping, strict)
-2. Present using IS/DOES/MEANS:
-   - **IS:** What the solution concretely is (from proposition IS + feature description)
-   - **DOES:** What it does for the buyer in the context of this job (You-Phrasing, quantified)
-   - **MEANS:** Why competitors struggle to deliver the same job outcome (moat/differentiation)
+Byte-exact section headers by output language. Renderers, the copywriter and the validation script all match these strings; never paraphrase, re-case or re-punctuate them.
 
-**Key Techniques:**
-- IS-DOES-MEANS structure (mandatory per solution)
-- You-Phrasing in DOES layer ("You reduce...", "Your teams gain...")
-- Number Plays in DOES (quantified outcomes)
+| # | EN | DE | FR | IT | PL | NL | ES |
+|---|----|----|----|----|----|----|----|
+| 1 | Job Landscape: Functional Jobs | Job-Landschaft: Funktionale Aufgaben | Panorama des tâches : tâches fonctionnelles | Panorama dei job: job funzionali | Krajobraz zadań: zadania funkcjonalne | Takenlandschap: functionele taken | Panorama de tareas: tareas funcionales |
+| 2 | Friction Map: Obstacles and Cost of Inaction | Reibungskarte: Hindernisse und Handlungsdruck | Carte des frictions : obstacles et coût de l'inaction | Mappa degli attriti: ostacoli e costo dell'inazione | Mapa tarć: przeszkody i koszt bezczynności | Frictiekaart: obstakels en kosten van nietsdoen | Mapa de fricciones: obstáculos y coste de la inacción |
+| 3 | Portfolio Map: Solutions by Job | Portfolio-Zuordnung: Lösungen je Aufgabe | Cartographie du portefeuille : solutions par tâche | Mappa del portfolio: soluzioni per job | Mapa portfolio: rozwiązania według zadań | Portfoliokaart: oplossingen per taak | Mapa de portfolio: soluciones por tarea |
+| 4 | Invitation: Next Step | Einladung: Nächster Schritt | Invitation : prochaine étape | Invito: prossimo passo | Zaproszenie: następny krok | Uitnodiging: volgende stap | Invitación: siguiente paso |
 
-**Constraints:**
-- STRICT 1:1 mapping: each job gets exactly one solution, each solution maps to exactly one job
-- If a solution has no matching job, flag it as orphaned in a warning note
-- If a job has no matching solution, note the gap explicitly
-- NO feature lists -- IS/DOES/MEANS only. If you find yourself listing features, stop and reframe as a single IS statement
-- Count(jobs) == Count(solutions mapped). Verify this before writing.
+The narrative skill generates EN and DE. The five further columns are the substitution set the copywriter uses in arc-mode translation; they are carried here because this contract is the one authority for the arc's headings.
 
-**Pattern Reference:** `portfolio-map-patterns.md`
+## Composition
 
----
+Section lengths are proportions of `--target-length` (default 1,675 words). Word ranges for a target `T` are `[T × 0.85, T × 1.15]` multiplied by each proportion. Proportions sum to 100%.
 
-### Element 4: Invitation (Next Step)
+| Segment | Proportion |
+|---------|-----------:|
+| Job Landscape | 27% |
+| Friction Map | 23% |
+| Portfolio Map | 30% |
+| Invitation | 20% |
 
-**Purpose:**
-Provide one clear, low-commitment entry point and explicitly signal handoff to cogni-sales for deal-specific tailoring.
+**Executive TL;DR emphasis:** jobs → friction → portfolio → invitation. The narrative opens with the TL;DR defined in `../../validation.md`; the industry observation that reframes buyers from products to jobs belongs in its first sentence as the conclusion, not as a context setter.
 
-**Source Content:**
-- `solutions/{feature}--{market}.json` entry tiers (proof-of-value, pilot options)
-- `packages/{product}--{market}.json` starter tier (if packages exist)
+**Transitions:**
 
-**Transformation Approach:**
-1. Identify the lowest-commitment entry point from solutions or packages
-2. Frame it as a single next step (not a menu of options)
-3. Include explicit cogni-sales handoff signal
+1. Job Landscape → Friction Map: "Each job carries friction that compounds into measurable cost."
+2. Friction Map → Portfolio Map: "Your portfolio maps 1:1 to these jobs."
+3. Portfolio Map → Invitation: "Start with [lowest-commitment option]."
 
-**Key Techniques:**
-- You-Phrasing: direct address for the call to action
-- Single-option framing: one clear step, not a catalog
+**Closing pattern:** an explicit cogni-sales handoff — "When you have a named prospect, `/why-change` builds the deal-specific case."
 
-**Constraints:**
-- ONE entry point only -- not a list of options or a pricing menu
-- Must explicitly signal cogni-sales handoff: reference `/why-change` for deal-specific tailoring when a named customer is involved
-- Invitation is about starting a conversation, not closing a deal
+## Elements
 
-**Pattern Reference:** `invitation-patterns.md`
+### 1. Job Landscape
 
-## Narrative Flow
+**Purpose:** map the buyer's world into three or four functional jobs they hire solutions for, phrased as verb phrases in the buyer's language.
 
-### Hook Construction (Context Setter)
+**Evidence sought:** customer pain points (each implies a job), proposition DOES statements (each reveals the job a solution does), the market description for industry vocabulary. Read them from the loaded portfolio entities or the `--content-map`.
 
-**Approach:**
-Open with one sharp industry observation that creates a sense of inevitability -- the buyer's world is changing in a way that makes the jobs in this portfolio urgent.
+**Argument move:** open with a contrast that reframes from products to jobs ("Your portfolio has 6 products. Your buyer has 4 jobs."), then present each job as a named verb-phrase entry with one or two sentences of context and a quantified scope where the evidence allows, and close by handing over to friction.
 
-**Pattern:**
-```markdown
-[Quantified industry observation] + [Implication that reframes buyer's priorities]
+**Techniques:** [Contrast Structure](../../narrative-techniques/techniques-overview.md#6-contrast-structure), [Number Plays](../../narrative-techniques/techniques-overview.md#4-number-plays-6-techniques).
 
-Example:
-"European utilities manage 4,200 discrete operational processes. They buy solutions for 12 of them. The gap between operational complexity and solution coverage defines the next wave of B2B procurement -- buyers are hiring for jobs, not evaluating features."
-```
+**Hard rules:** every job is a verb phrase ("Reduce unplanned downtime below 2%"), never a product category ("Predictive Maintenance"); three or four jobs, no more; each job appears in at least one proposition's DOES domain; job wording passes a buyer-language test — words the buyer would use, not internal product names.
 
-**Source:** Most compelling data point from market description or customer pain points
+**Failure modes:** product categories as jobs; seven jobs covering every product; abstract jobs with no measurable outcome; seller perspective ("leverage our platform").
 
-**Word Target:** 10% of target length
+### 2. Friction Map
 
----
+**Purpose:** for each job, name the current obstacle and quantify the cost of leaving it unsolved — a compressed Why Change, per job rather than global.
 
-### Element Transitions
+**Evidence sought:** pain-point detail, competitor weaknesses (what current approaches fail to deliver), proposition evidence arrays for cost figures.
 
-**Hook -> Job Landscape:**
-- Hook establishes the industry context
-- Job Landscape maps the buyer's functional priorities
-- **Transition pattern:** "Your buyers organize their world around [N] functional jobs."
+**Argument move:** per job — the primary obstacle, the quantified cost of its persistence, and any external pressure that makes it urgent; then stack the per-job costs into a compound figure across the landscape.
 
-**Job Landscape -> Friction Map:**
-- Job Landscape names what buyers need done
-- Friction Map shows what stands in the way
-- **Transition pattern:** "Each job carries friction that compounds into measurable cost."
+**Techniques:** [Forcing Functions](../../narrative-techniques/techniques-overview.md#5-forcing-functions), [Compound Impact](../../narrative-techniques/techniques-overview.md#8-compound-impact-calculation), [Number Plays](../../narrative-techniques/techniques-overview.md#4-number-plays-6-techniques) (before/after).
 
-**Friction Map -> Portfolio Map:**
-- Friction Map quantifies the problem per job
-- Portfolio Map presents the solution per job
-- **Transition pattern:** "Your portfolio maps 1:1 to these jobs."
+**Hard rules:** every job from element 1 has a friction entry that names the job by its verb phrase; every friction carries a quantified cost of inaction with a citation; no friction blames the buyer.
 
-**Portfolio Map -> Invitation:**
-- Portfolio Map shows the full solution landscape
-- Invitation provides one clear entry point
-- **Transition pattern:** "Start with [lowest-commitment option]."
+**Failure modes:** global friction with no per-job linkage ("organizations face transformation challenges"); qualitative cost ("significant disruption"); an obstacle stack with no numbers.
 
----
+### 3. Portfolio Map
 
-### Closing Pattern
+**Purpose:** map solutions one-to-one to the jobs, each positioned as the thing the buyer hires for that job.
 
-**Final Sentence:**
-Explicit cogni-sales handoff signal.
+**Evidence sought:** proposition IS/DOES/MEANS statements, solution implementation detail, feature descriptions for the IS layer.
 
-**Examples:**
-- "For deal-specific tailoring with a named customer, engage cogni-sales /why-change to build the full pitch."
-- "This portfolio overview sets the stage. The next step: a tailored Why Change narrative for your specific buyer."
-- "Start with [entry point]. When you have a named prospect, /why-change builds the deal-specific case."
+**Argument move:** open with the 1:1 mapping statement, then for each job — introduced as "For the job of [verb phrase]…" — the matching solution in IS-DOES-MEANS order: IS a coherent definition, DOES the outcome for the buyer in You-Phrasing with numbers, MEANS the barrier competitors cannot cross.
 
-## Citation Requirements
+**Techniques:** [IS-DOES-MEANS](../../narrative-techniques/techniques-overview.md#3-is-does-means-power-positions), [You-Phrasing](../../narrative-techniques/techniques-overview.md#7-you-phrasing), [Number Plays](../../narrative-techniques/techniques-overview.md#4-number-plays-6-techniques).
 
-### Citation Density
+**Hard rules:** strict 1:1 — count(jobs) equals count(solutions mapped), verified before writing; a solution with no job is flagged as orphaned in a note, a job with no solution is named as a gap; no feature lists — a list of capabilities collapses into one IS sentence; every DOES layer is second person and quantified.
 
-**Target:** 15-25 total citations across the narrative (scale proportionally for longer targets)
-**Ratio:** Approximately 1 citation per 60-100 words
+**Failure modes:** bullet-point feature dumps; a solution with no job anchor; six solutions for four jobs; third-person DOES.
 
-### Citation Distribution
+### 4. Invitation
 
-**Job Landscape:** 3-5 citations (customer pain points, market data)
-**Friction Map:** 5-8 citations (highest density -- every cost claim needs evidence)
-**Portfolio Map:** 4-7 citations (proposition evidence arrays, feature data)
-**Invitation:** 1-2 citations (solution/package entry tier data)
+**Purpose:** one clear, low-commitment entry point, and an explicit handoff to cogni-sales for deal-specific tailoring.
 
-### Citation Format
+**Evidence sought:** solution entry tiers (proof of value, pilot, assessment), package starter tiers where packages exist.
 
-```markdown
-Claim text<sup>[N](propositions/feature--market.json)</sup>
-```
+**Argument move:** connect to the map (the portfolio is mapped, now act), present the single entry point with its investment and deliverable — preferring the highest-friction job first, or proof before portfolio — and close on the handoff.
 
-**Required Citations:**
-- Every quantitative claim (MUST)
-- Cost of inaction figures (MUST)
-- IS/DOES/MEANS outcomes in Portfolio Map (MUST)
-- Job definitions (Should have supporting evidence)
+**Techniques:** [You-Phrasing](../../narrative-techniques/techniques-overview.md#7-you-phrasing).
 
-## Quality Gates
+**Hard rules:** exactly one entry point, never a menu or a pricing ladder; investment and deliverable stated; the handoff names `/why-change` for a named customer; the invitation starts a conversation, it does not close a deal.
 
-### Arc Completeness
+**Failure modes:** "choose from Basic, Professional or Enterprise"; "contact sales for more information"; a feature dump in the invitation.
 
-- [ ] All 4 elements present (Job Landscape, Friction Map, Portfolio Map, Invitation)
-- [ ] Hook present (within hook proportion of target)
-- [ ] Word counts within computed proportional ranges (+/-10% tolerance)
-- [ ] Smooth transitions between elements
-- [ ] Each element serves distinct purpose (no overlap)
+## Validation
 
-### JTBD-Specific Constraints
+Arc-specific assertions, checked after the universal gates in `../../validation.md`:
 
-- [ ] **Verb-phrase jobs:** Every job in Job Landscape is a verb phrase, not a product category name
-- [ ] **1:1 mapping:** Count(jobs) == Count(solutions in Portfolio Map). No orphans, no gaps.
-- [ ] **No feature lists:** Portfolio Map uses IS/DOES/MEANS per solution, not bullet-point feature lists
-- [ ] **Cogni-sales handoff:** Invitation explicitly signals `/why-change` for deal-specific tailoring
-- [ ] **Buyer language:** Job descriptions use buyer vocabulary, not internal product terminology
-
-### JTBD Techniques Applied
-
-- [ ] **Job Landscape:** Contrast Structure used (products vs. jobs reframe)
-- [ ] **Job Landscape:** 3-4 jobs as verb phrases
-- [ ] **Friction Map:** Per-job obstacles with quantified cost of inaction
-- [ ] **Friction Map:** Forcing Functions or Compound Impact applied
-- [ ] **Portfolio Map:** IS-DOES-MEANS structure for each solution
-- [ ] **Portfolio Map:** You-Phrasing in DOES layer
-- [ ] **Portfolio Map:** Number Plays in DOES layer
-- [ ] **Invitation:** Single low-commitment entry point (not a menu)
-- [ ] **Invitation:** Explicit cogni-sales handoff
-
-### Evidence Quality
-
-- [ ] Every cost-of-inaction claim has citation
-- [ ] Citations point to portfolio entity files
-- [ ] Quantitative data used throughout
-- [ ] Number Plays applied (ratios, before/after, compound calculations)
-- [ ] Citation density: 15-25 total citations
-
-### Narrative Coherence
-
-- [ ] Hook creates industry inevitability that leads to Job Landscape
-- [ ] Job Landscape names jobs that Friction Map addresses
-- [ ] Friction Map creates urgency that Portfolio Map resolves
-- [ ] Portfolio Map solutions map 1:1 to Job Landscape jobs
-- [ ] Invitation provides clear next step after Portfolio Map
-
-## Common Pitfalls
-
-### Job Landscape Pitfalls
-
-**Product categories instead of jobs:**
-
-:x: **Bad:** "Predictive Maintenance, Network Monitoring, Compliance Management"
-
-These are product category labels. Buyers don't wake up thinking "I need Predictive Maintenance."
-
-:white_check_mark: **Good:** "Reduce unplanned downtime below 2%", "Monitor network health across 340 endpoints in real-time", "Ensure regulatory compliance across 12 jurisdictions before Q1 audit"
-
-These are verb phrases describing what the buyer needs done. They start with a verb and describe a measurable outcome.
-
----
-
-**Too many jobs:**
-
-:x: **Bad:** 7 jobs covering every product in the portfolio
-
-:white_check_mark: **Good:** 3-4 jobs that represent the buyer's core priorities. Fewer jobs = sharper focus.
-
----
-
-**Seller language instead of buyer language:**
-
-:x: **Bad:** "Leverage our AI-powered analytics platform to optimize operational workflows"
-
-:white_check_mark: **Good:** "Know which assets will fail before they fail -- and schedule maintenance in the next shift window"
-
-### Friction Map Pitfalls
-
-**Generic friction without per-job linkage:**
-
-:x: **Bad:** "Organizations face digital transformation challenges."
-
-:white_check_mark: **Good:** "Reducing unplanned downtime below 2% is blocked by three obstacles: sensor data arrives in 47 incompatible formats, maintenance teams lack real-time dashboards, and current CMMS systems flag 340 false positives per week."
-
----
-
-**Missing cost quantification:**
-
-:x: **Bad:** "This causes significant operational disruption."
-
-:white_check_mark: **Good:** "Each hour of unplanned downtime costs EUR 180K in lost production. At current failure rates, that's EUR 4.3M annually."
-
-### Portfolio Map Pitfalls
-
-**Feature lists instead of IS/DOES/MEANS:**
-
-:x: **Bad:**
-> Our solution includes: real-time monitoring, predictive analytics, automated alerting, customizable dashboards, API integrations, and 24/7 support.
-
-:white_check_mark: **Good:**
-> **IS:** A sensor-fusion platform that ingests 47 data formats into a unified asset health model.
->
-> **DOES:** You detect failure patterns 72 hours before breakdown, reducing unplanned downtime by 63%. Your maintenance teams schedule interventions in the next available shift window, not the next emergency.
->
-> **MEANS:** The 47-format ingestion layer took 18 months of industrial protocol engineering. Competitors offering monitoring can read 8-12 formats. The remaining 35 formats represent the long tail where 60% of failure signals originate.
-
----
-
-**Broken 1:1 mapping:**
-
-:x: **Bad:** 4 jobs in Job Landscape but 6 solutions in Portfolio Map (two solutions don't map to any job)
-
-:white_check_mark: **Good:** 4 jobs, 4 solutions, each solution explicitly introduced as "For the job of [verb phrase]..."
-
-### Invitation Pitfalls
-
-**Menu of options:**
-
-:x: **Bad:** "Choose from: Basic (EUR 50K), Professional (EUR 150K), or Enterprise (EUR 500K)."
-
-:white_check_mark: **Good:** "Start with a 4-week Proof of Value on your highest-friction job. Investment: EUR 35K. Deliverable: measured friction reduction on one job before committing to the portfolio."
-
----
-
-**Missing cogni-sales handoff:**
-
-:x: **Bad:** "Contact sales for more information."
-
-:white_check_mark: **Good:** "For deal-specific tailoring with a named customer, engage /why-change to build the full Why Change pitch with customer-specific research and competitive intelligence."
-
-## Version History
-
-- **v1.0.0:** Initial JTBD Portfolio arc definition
+- Every job in Job Landscape is a verb phrase in buyer language; there are three or four of them.
+- Count of jobs equals count of solutions in Portfolio Map; orphans and gaps are named explicitly.
+- Portfolio Map uses IS-DOES-MEANS per solution and carries no feature list.
+- Every friction entry names its job and carries a cited cost of inaction.
+- Invitation presents one entry point and names `/why-change` for deal-specific tailoring.
+- The chain holds: the TL;DR's conclusion is the one the four elements earn; the jobs are the ones the frictions block; the frictions are the ones the portfolio resolves; the invitation follows the map.
 
 ## See Also
 
-- `../arc-registry.md` - Master index of all story arcs
-- `job-landscape-patterns.md` - Functional job extraction and verb-phrase patterns
-- `friction-map-patterns.md` - Per-job obstacle and cost of inaction patterns
-- `portfolio-map-patterns.md` - 1:1 job-to-solution IS/DOES/MEANS patterns
-- `invitation-patterns.md` - Low-commitment entry point and cogni-sales handoff patterns
+- `../arc-registry.md` — arc selection: detection algorithm, per-arc declarative blocks, shortlist format
+- `../../narrative-techniques/techniques-overview.md` — the eight techniques and their application matrix
+- `../../validation.md` — the universal gates every narrative must clear

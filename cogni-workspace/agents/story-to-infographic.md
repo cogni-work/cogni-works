@@ -16,10 +16,27 @@ You orchestrate the `story-to-infographic` skill. Invoke it via the Skill tool:
 
 ```
 Skill: story-to-infographic
+args: interactive=false
 ```
 
 Pass through all user-provided parameters — e.g. source path, theme, language,
-layout type, or style preset.
+layout type, or style preset — with one exception: `interactive` is never relayed. It is
+hardcoded above, and a caller-supplied value is ignored rather than passed on.
+
+## Parameters
+
+| Parameter | Required | Default | Notes |
+|---|---|---|---|
+| `interactive` | No | `false` | Always false for agent invocation (agents must not interact with users). Pinned by this agent, not relayed: a supplied value is ignored. |
+
+The non-interactive value is not a pass-through parameter — it is fixed at the dispatch above
+and always sent. The skill defaults it to `true` (`skills/story-to-infographic/SKILL.md:74`) and gates its
+`AskUserQuestion` checkpoints on it (`:99`, covering the Step 4 layout/style choice and the CTA
+step). A subagent has no user to answer a prompt, so an unpinned dispatch stalls there rather
+than returning. The `AskUserQuestion` grant on the `tools:` line above is deliberately kept: it mirrors the
+skill's own `allowed-tools`, which the skill exercises in this agent's context. See
+`cogni-workspace/references/agent-tool-declarations.md`. The pin, not the grant, is what stops
+the prompt.
 
 Report `style` in your response — it lets a caller route to the right renderer family
 without re-reading the brief.

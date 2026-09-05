@@ -27,24 +27,24 @@ The hops do **not** share an argument style. `narrative` is flag-style; every
 | `copywriter` | flag + skill args | `--scope`; `review_mode` |
 | `pick-theme` | — | returns `theme_path`, `theme_name`, `theme_slug` |
 
-### Two interim overrides, pending a callee fix
+### Two explicit hop overrides
 
-Both are cases where a downstream default silently overrides this skill's own contract, so this
-skill passes the value explicitly. **Each is an interim workaround, not settled design** — the
-root-cause fix belongs in the callee, which defaults the value in a way that silently degrades
-*every* headless caller, not just this pipeline. Tracked separately; do not read the rule below as
-a reason to stop fixing the callee.
+Both are cases where this skill passes a value explicitly rather than leaning on the callee's
+default. **They no longer share a status, and must not be read as a matched pair** — rule 1's
+callee fix has landed, so its pass is now belt-and-braces; rule 2 was never a workaround at all,
+but the settled consequence of a callee that renders by design.
 
-1. **`stakeholder_review=true` on every `story-to-*` hop.** All three skills
-   default `stakeholder_review` to the *value of `interactive`*. Because
-   `--interactive front` passes `interactive=false` downstream, an omitted
-   `stakeholder_review` silently disables brief review on every target — a quiet
-   capability loss, not a visible failure. Spell it out at each hop.
+1. **`stakeholder_review=true` on every `story-to-*` hop.** All three skills now
+   default `stakeholder_review` to a literal `true`, independent of
+   `interactive`, so brief review survives `--interactive front` without this
+   pass. It is kept deliberately as belt-and-braces: it keeps the contract
+   legible at the call site and holds if that callee default ever moves again.
 2. **`render=false` on the `story-to-infographic` hop whenever `--render` was not
    given.** That skill's `render` parameter defaults to `true` and auto-dispatches
-   the infographic render after validation. Left unset, an opt-in-render pipeline
-   renders anyway. This is the exact mirror of rule 1: same failure shape,
-   opposite direction.
+   the infographic render after validation — advertised behaviour the skill's own
+   description states, not a defect awaiting a fix. Left unset, an opt-in-render
+   pipeline renders anyway, so unlike rule 1 this pass is load-bearing and must
+   not be dropped.
 
 ### Theme fan-out
 
@@ -108,7 +108,7 @@ bare form.
 
 | Value | Prompts presented |
 |---|---|
-| `front` (default) | Exactly two — the narrative arc confirmation and one `pick-theme` prompt. Every `story-to-*` hop receives `interactive=false`. |
+| `front` (default) | At most three, all up front — the narrative Phase 0 clarification (only when a brief field is unresolved and material), the narrative arc-shortlist confirmation, and one `pick-theme` prompt. Every `story-to-*` hop receives `interactive=false`. |
 | `full` | Each hop stays interactive. |
 | `false` | None. `--theme` is required, and the narrative hop receives `--interactive false`. |
 
@@ -120,8 +120,10 @@ One envelope per run.
 {
   "narrative": {
     "output_path": "...", "arc_id": "...", "arc_display_name": "...",
-    "target_length": 1675, "word_count": 1502, "citation_count": 14,
-    "elements": [], "language": "en",
+    "detection_reason": "keyword density analysis",
+    "target_length": 1675, "word_count": 1502, "citation_count": 22,
+    "elements": 4, "language": "en",
+    "readability_score": 48.2, "qa_verdict": "pass",
     "generated": true
   },
   "polish": null,
@@ -134,9 +136,12 @@ One envelope per run.
 }
 ```
 
-- The `narrative` block carries only fields the narrative hop actually returns.
-  **There is no `readability` field** — that skill does not compute one, so this
-  envelope must not claim it.
+- The `narrative` block carries only fields the narrative hop actually returns,
+  copied through unchanged: `readability_score` is the Pass 4 measurement (or
+  `null` when it was not computed) and `qa_verdict` is the release review's
+  rollup, one of `pass` / `needs_revision` / `fail`. Read `qa_verdict` as a
+  verdict, never as a number — the same insulation this contract applies to the
+  brief review's `overall` field.
 - `generated` is `false` when `<source>` was an existing narrative `.md`, and
   `output_path` is then the path that was passed in, unchanged.
 - `polish` is `null` unless `--polish` ran.

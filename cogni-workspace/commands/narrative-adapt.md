@@ -31,9 +31,11 @@ If `--format` is missing, present the available formats to the user for selectio
 
 | Format | Output | Purpose |
 |--------|--------|---------|
-| `executive-brief` | 300-500 word condensed narrative | Email, Slack sharing |
+| `executive-brief` | Condensed narrative, four arc elements kept | Email, Slack sharing |
 | `talking-points` | Bullet list by arc element | Presentations, verbal briefings |
 | `one-pager` | Structured reference with key stats | Print, quick reference |
+
+Word budgets, exact-count structures and gates per format live in the skill's `references/derivative-formats.md`; they are not restated here.
 
 ## Execution
 

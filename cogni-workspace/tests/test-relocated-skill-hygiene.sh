@@ -101,7 +101,6 @@ $WS_ROOT/agents/copywriter.md|cogni-copywriting:
 $WS_ROOT/agents/reader.md|cogni-copywriting:
 $WS_ROOT/skills/enrich-report|cogni-visual:
 $WS_ROOT/skills/render-html-slides|cogni-visual:
-$WS_ROOT/skills/review-brief|cogni-visual:
 $WS_ROOT/skills/story-to-infographic|cogni-visual:
 $WS_ROOT/skills/story-to-slides|cogni-visual:
 $WS_ROOT/skills/story-to-web|cogni-visual:

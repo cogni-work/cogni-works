@@ -160,7 +160,6 @@ State lives in two layers that other plugins consume. Configuration (env vars, t
 | `commands/render-infographic-editorial.md` | command | Registers `/render-infographic-editorial` for direct Pencil-backed editorial dispatch |
 | `commands/render-html-slides.md` | command | Registers `/render-html-slides` — presentation brief to self-contained HTML slides |
 | `commands/enrich-report.md` | command | Registers `/enrich-report` — markdown report to themed HTML with charts and diagrams |
-| `commands/review-brief.md` | command | Registers `/review-brief` — stakeholder scoring of a visual brief before rendering |
 | `commands/troubleshoot.md` | command | Registers `/troubleshoot` as the diagnostic entry point |
 | `claims-store.sh` | script | JSON state manager for the claim store, shipped with the `claims` skill (`skills/claims/scripts/`) |
 | `on-session-start.sh` | hook (SessionStart) | Sources workspace environment and validates plugin availability at session start |
@@ -181,7 +180,6 @@ State lives in two layers that other plugins consume. Configuration (env vars, t
 | `story-to-infographic` | skill | Distil a narrative into a single-page infographic brief |
 | `render-html-slides` | skill | Render a presentation brief into self-contained HTML slides with speaker notes |
 | `enrich-report` | skill | Turn a markdown report into a themed HTML deliverable with charts and inline SVG diagrams |
-| `review-brief` | skill | Score a visual brief from three stakeholder perspectives before rendering |
 | `narrative-publish` | skill | Sequence narrative, optional polish, theme and brief generation in one invocation; render is opt-in |
 | `story-to-slides` | agent | Drive the story-to-slides skill as an autonomous subprocess |
 | `story-to-web` | agent | Drive the story-to-web skill as an autonomous subprocess |
@@ -211,7 +209,7 @@ State lives in two layers that other plugins consume. Configuration (env vars, t
 ```
 cogni-workspace/
 ├── .claude-plugin/plugin.json    Plugin manifest
-├── skills/                       22 workspace and visual-rendering skills
+├── skills/                       21 workspace and visual-rendering skills
 │   ├── audit-region-sources/     Audit per-plugin region-source overlays against the registry
 │   ├── claim-entity/             Cross-plugin ClaimEntity data contract and store layout
 │   ├── claims/                   Claim-verification lifecycle (+ scripts/claims-store.sh)
@@ -224,7 +222,6 @@ cogni-workspace/
 │   ├── narrative-publish/        One invocation: narrative -> brief(s) -> optional render
 │   ├── pick-theme/
 │   ├── render-html-slides/       Presentation brief -> self-contained HTML slides
-│   ├── review-brief/             Score a visual brief from three stakeholder perspectives
 │   ├── story-to-infographic/     Narrative -> single-page infographic brief
 │   ├── story-to-slides/          Narrative -> presentation brief
 │   ├── story-to-web/             Narrative -> scrollable web-narrative or printed-poster brief
@@ -239,14 +236,13 @@ cogni-workspace/
 │   ├── render-infographic-*.md   Three infographic renderers (pencil, sketchnote, whiteboard)
 │   └── concept-diagram*.md       Diagram workers (Excalidraw and inline-SVG variants)
 ├── libraries/                    18 layout, taxonomy and worked-example files read at render time
-├── commands/                     13 slash commands
+├── commands/                     12 slash commands
 │   ├── claims.md                 Registers /claims
 │   ├── narrative*.md             Registers /narrative, /narrative-adapt, /narrative-publish
 │   ├── copywrite.md              Registers /copywrite and /review-doc
 │   ├── render-infographic*.md    Registers /render-infographic and its two direct-dispatch variants
 │   ├── render-html-slides.md     Registers /render-html-slides
 │   ├── enrich-report.md          Registers /enrich-report
-│   ├── review-brief.md           Registers /review-brief
 │   └── troubleshoot.md           Registers /troubleshoot
 ├── wiki/                         Bundled vendor-curated insight-wave reference wiki (read directly; start at wiki/index.md)
 │   ├── .cogni-wiki/              Wiki config + lockfile

@@ -311,7 +311,7 @@ footer:
 
 Four layers — stop on first failure, fix, re-check:
 
-1. **Schema** — required fields present, valid YAML, correct section types
+1. **Schema** — run `python3 "$CLAUDE_PLUGIN_ROOT/scripts/check-brief.py" --type web "{output_path}"` (`--type storyboard` in `mode=storyboard`) and fix every `fail`, then the section-type checks the checklist keeps by eye
 2. **Message quality** — assertion headlines, number plays, parallel bullets
 3. **Visual coherence** — section theme alternation, feature position alternation, image consistency
 4. **Content integrity** — all narrative sections represented, language consistency

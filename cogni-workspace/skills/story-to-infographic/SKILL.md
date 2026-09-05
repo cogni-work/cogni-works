@@ -253,7 +253,7 @@ If interactive: present CTA proposal via AskUserQuestion (Approve/Adjust). On em
 
 Four layers — stop on first failure, fix, re-check:
 
-1. **Schema** — block types valid, required fields present, valid YAML, no color fields
+1. **Schema** — run `python3 "$CLAUDE_PLUGIN_ROOT/scripts/check-brief.py" --type infographic "{output_path}"` and fix every `fail`, then the block-type checks the checklist keeps by eye
 2. **Content density** — content-block count and total word count within the active `style_preset`'s ceilings (Content Density table, `03-style-presets.md`), word counts within limits per block type
 3. **Data integrity** — numbers match source narrative, chart data valid, no fabricated statistics
 4. **Distillation quality** — title is assertion (not topic label), hero numbers isolated, icon prompts specific, 10-second scan test passes
@@ -273,10 +273,10 @@ Read `$CLAUDE_PLUGIN_ROOT/libraries/brief-pipeline.md` § Stakeholder review loo
 Generate the final brief with YAML frontmatter and block specifications following
 `EXAMPLE_INFOGRAPHIC_BRIEF.md` format. Write using Write tool.
 
-**Frontmatter fields:**
+**Frontmatter fields.** `version` follows the rendering family of the resolved `style_preset`: `"1.2"` for the editorial family (`economist`, `editorial`, `data-viz`, `corporate`), whose renderer reads the v1.2 `editorial-sketch` mode, and `"1.1"` for the hand-drawn family (`sketchnote`, `whiteboard`), whose agents accept `"1.0"` and `"1.1"` only — `libraries/infographic-layouts.md` states the rule and `check-brief.py --type infographic` enforces the pairing.
 ```yaml
 type: infographic-brief
-version: "1.1"
+version: "{1.2 editorial family | 1.1 hand-drawn family}"
 theme: {theme_id}
 theme_path: "{absolute_theme_path}"
 customer: "{customer_name}"
@@ -392,7 +392,7 @@ skill creates `output/` when generating the enriched HTML.
 
 | Library | Purpose |
 |---------|---------|
-| **infographic-layouts.md** | Layout type schemas, block type catalog with field schemas and word limits (schema v1.1) |
+| **infographic-layouts.md** | Layout type schemas, block type catalog with field schemas and word limits; owns the per-family schema version (v1.2 editorial, v1.1 hand-drawn) |
 | **EXAMPLE_INFOGRAPHIC_BRIEF.md** | Reference output — stat-heavy layout, data-viz style |
 | **EXAMPLE_SKETCHNOTE_BRIEF.md** | Reference output — timeline-flow layout, sketchnote style (hand-drawn family anchor, Mike Rohde tradition) |
 | **EXAMPLE_ECONOMIST_BRIEF.md** | Reference output — stat-heavy layout, economist style (editorial family anchor, The Economist data page tradition, dense 10-14 blocks) |

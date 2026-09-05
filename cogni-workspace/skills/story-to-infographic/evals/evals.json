@@ -13,7 +13,7 @@
       "id": 1,
       "eval_name": "economist-de",
       "prompt": "Create an infographic brief from /Users/stephandehaas/GitHub/dev/business-model/cogni-portfolio/cogni-works/output/communicate/customer-narrative/home.md with style_preset=economist, language=de, orientation=portrait. Non-interactive (stakeholder_review=false, interactive=false).",
-      "expected_output": "Valid infographic-brief.md v1.1 with economist style preset, German language, 10-14 content blocks (dense editorial), 3-5 text-block prose fragments alongside stats, assertion headlines, source lines on every data block.",
+      "expected_output": "Valid infographic-brief.md v1.2 with economist style preset, German language, 10-14 content blocks (dense editorial), 3-5 text-block prose fragments alongside stats, assertion headlines, source lines on every data block.",
       "assertions": []
     },
     {

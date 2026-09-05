@@ -44,20 +44,18 @@ Section lengths are proportions of `--target-length` (default 1,675 words). Word
 
 | Segment | Proportion |
 |---------|-----------:|
-| Hook | 10% |
-| Why Change | 27% |
-| Why Now | 21% |
-| Why You | 27% |
-| Why Pay | 15% |
+| Why Change | 30% |
+| Why Now | 23% |
+| Why You | 30% |
+| Why Pay | 17% |
 
-**Hook construction:** open with the most surprising quantified finding — a counterintuitive data point, an unexpected pattern — cited, then the challenge to conventional wisdom it overturns, then a transition into Why Change. Pattern: *[Quantified surprise] + [Challenge to conventional wisdom]*.
+**Executive TL;DR emphasis:** unconsidered need → urgency → fit → business case. The narrative opens with the TL;DR defined in `../../validation.md`; the most surprising quantified finding belongs in its first sentence as the conclusion, not as a teaser.
 
 **Transitions:**
 
-1. Hook → Why Change: "This gap between X and Y defines the challenge."
-2. Why Change → Why Now: "Three converging forces make action urgent."
-3. Why Now → Why You: "Organizations that thrive don't just react — they build capabilities."
-4. Why You → Why Pay: "The cost of delay compounds."
+1. Why Change → Why Now: "Three converging forces make action urgent."
+2. Why Now → Why You: "Organizations that thrive don't just react — they build capabilities."
+3. Why You → Why Pay: "The cost of delay compounds."
 
 **Closing pattern:** one simple, undeniable comparison — "Action costs less than inaction by 2-3x", "The choice: invest €1.2M strategically, or lose €3.1M reactively." Never a percentage, never a paragraph.
 
@@ -127,7 +125,7 @@ Arc-specific assertions, checked after the universal gates in `../../validation.
 - Why Now stacks at least two forcing functions, each with a date and a quantified consequence, and closes on a window-closing statement.
 - Why You carries two or three named Power Positions in IS / DOES / MEANS order with second-person DOES layers.
 - Why Pay stacks at least three cost dimensions on one horizon and ends on a simple ratio.
-- The rhetorical chain holds: the hook's surprise sets up the need; the need makes the forcing functions feel inevitable; the urgency makes the reader want the positions; the positions make the cost comparison feel like a conclusion.
+- The rhetorical chain holds: the TL;DR's conclusion is the one the four elements earn; the need makes the forcing functions feel inevitable; the urgency makes the reader want the positions; the positions make the cost comparison feel like a conclusion.
 - The closing sentence is the ratio, and nothing follows it.
 
 ## See Also

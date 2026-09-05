@@ -61,7 +61,7 @@ source_file_count: {N}
 
 *{Subtitle}*
 
-{Opening paragraph with narrative hook -- proportion of target}
+{Executive TL;DR -- 2-4 sentences, 60-100 words, no heading of its own}
 
 ---
 
@@ -72,6 +72,8 @@ source_file_count: {N}
 ```
 
 Exactly four `##` headings, byte-equal to the contract's `## Headings` cells for the output language, in arc order. Each element's word range is its `## Composition` proportion times the ±15% band around the target.
+
+**Executive TL;DR.** The prose between the subtitle and the first `##` is an answer-first summary, not a hook: 2-4 sentences and 60-100 words regardless of `--target-length`, in this order — the conclusion the reader most needs, the strongest reason for it, the decision implication, and an optional qualification or urgency only when it changes the decision. It synthesizes all four elements rather than previewing them, introduces no fact, number or recommendation the body lacks, cites every material number by reusing the body's `[N]`, and reads as complete if the reader stops there. It carries no heading, so the four-header contract is unchanged. The full contract, including the rejection list, is in `references/validation.md`.
 
 **JSON summary returned on completion:**
 
@@ -174,7 +176,7 @@ Draft in four passes. Each pass has one job; doing two at once is how a narrativ
 
 **Pass 1 — evidence draft.** For each element in order: map the loaded content to the element using its `Evidence sought`; draft the body from that evidence, every quantitative claim carrying `<sup>[N](source-file.md)</sup>`; hold the element's word range. Write the four elements only — no title, no opening yet.
 
-**Pass 2 — argument edit.** Apply each element's `Argument move` and `Techniques`; enforce its `Hard rules`; build the four transitions from `## Composition`; write the closing per the closing pattern. Then write the title (arc-specific, never "Insight Summary") and the opening paragraph per the contract's hook construction — last, from the finished elements.
+**Pass 2 — argument edit.** Apply each element's `Argument move` and `Techniques`; enforce its `Hard rules`; build the transitions from `## Composition`; write the closing per the closing pattern. Then — last, from the finished elements — write the title (arc-specific, never "Insight Summary") and the Executive TL;DR, weighting it as the contract's TL;DR-emphasis line says. Writing the TL;DR after the elements is what makes "synthesizes all four" enforceable rather than aspirational.
 
 **Pass 3 — language edit.** Localize the four headings from `## Headings` for the output language and make the prose read as executive prose: one idea per sentence, concrete actors and verbs, specificity over intensifiers, no corporate fog. When `language: de`, proper umlauts and ß throughout.
 

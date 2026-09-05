@@ -29,25 +29,25 @@ date_created: "{ISO 8601}"
 
 *{Subtitle}*
 
-{Condensed hook -- 2-3 sentences distilling the opening tension}
+{Executive TL;DR lifted from the source narrative -- 2-4 sentences, 60-100 words, unchanged}
 
 ---
 
 ## {Element 1 Header}
 
-{75-125 words: core claim + 1-2 key evidence points with citations}
+{65-110 words: core claim + 1-2 key evidence points with citations}
 
 ## {Element 2 Header}
 
-{60-100 words: core claim + 1-2 key evidence points with citations}
+{55-95 words: core claim + 1-2 key evidence points with citations}
 
 ## {Element 3 Header}
 
-{75-125 words: core claim + 1-2 key evidence points with citations}
+{65-110 words: core claim + 1-2 key evidence points with citations}
 
 ## {Element 4 Header}
 
-{50-80 words: core claim + call to action with citations}
+{55-85 words: core claim + call to action with citations}
 ```
 
 **Rules:**
@@ -60,11 +60,11 @@ date_created: "{ISO 8601}"
 
 | Component | Words |
 |-----------|-------|
-| Hook (condensed) | 30-50 |
-| Element 1 | 75-125 |
-| Element 2 | 60-100 |
-| Element 3 | 75-125 |
-| Element 4 | 50-80 |
+| Executive TL;DR (lifted) | 60-100 |
+| Element 1 | 65-110 |
+| Element 2 | 55-95 |
+| Element 3 | 65-110 |
+| Element 4 | 55-85 |
 | **Total** | **300-500** |
 
 ### Condensation Strategy
@@ -89,7 +89,7 @@ For each arc element:
 - **All assertion, no evidence:** Cutting every number and leaving only generic claims. Readers skim for quantitative anchors -- a brief without numbers reads like opinion.
 - **Uneven distribution:** Spending 150 words on Element 1 and 30 on Element 4. Each element carries part of the arc's argument; starving one weakens the whole progression.
 - **Broken rhetorical flow:** Each element should still feel like it leads to the next. If you remove the transitions entirely, the brief reads as 4 disconnected paragraphs instead of a compressed argument.
-- **Missing hook:** The brief still needs an opening frame. Two sentences is enough -- but zero sentences leaves the reader without context.
+- **Rewriting the TL;DR:** The brief opens with the source narrative's Executive TL;DR lifted unchanged -- it is already the answer-first summary the brief needs. Condensing it, or replacing it with a new opening, breaks the chain back to the narrative.
 - **Citation drift:** Keeping a citation but rewording the claim it supports changes the meaning. If the source says "EUR 47B by 2028" and the brief says "nearly EUR 50B," the citation no longer supports the claim.
 
 ### Condensation Example
@@ -173,7 +173,7 @@ date_created: "{ISO 8601}"
 - **Lead bullet = core message** (answer-first, one complete sentence)
 - **Supporting bullets = evidence** (stat + context, not full sentences)
 - **No citations** -- bullets are for verbal delivery
-- **Key Numbers section** pulls 4 hero stats (one per element)
+- **Key Numbers section** pulls up to four *verified* hero stats, one per element when the element carries a quotable number; an element with none gets a one-line note instead — never a qualitative phrase presented as a number
 
 ### Bullet Writing Guidelines
 
@@ -197,7 +197,7 @@ date_created: "{ISO 8601}"
 
 ### Key Numbers Section
 
-Select the single most impactful statistic from each element. Criteria:
+Select the single most impactful statistic from each element that carries one — at most four entries, and only numbers that appear, cited, in the source narrative. An element with no quotable number is listed with a one-line note ("no hero number — this element argues by mechanism") rather than a manufactured or qualitative stand-in. Criteria for the numbers you do pick:
 1. **Surprising** -- challenges assumptions
 2. **Specific** -- exact number, not "many" or "significant"
 3. **Relevant** -- directly supports the element's core message

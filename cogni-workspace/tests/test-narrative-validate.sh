@@ -129,7 +129,7 @@ sed -E 's#<sup>\[[0-9]+\]\([^)]*\)</sup>##g' "$FIXTURE" > "$TMPROOT/nocites.md"
 expect_red NV6 E1 "$TMPROOT/nocites.md"
 
 # ---------------------------------------------------------------- NV7 numbering gap -> E2
-sed 's#<sup>\[3\](source-01-fraunhofer.md)</sup>#<sup>[30](source-01-fraunhofer.md)</sup>#' "$FIXTURE" > "$TMPROOT/gap.md"
+sed 's#<sup>\[3\](source-02-vdma.md)</sup>#<sup>[30](source-02-vdma.md)</sup>#' "$FIXTURE" > "$TMPROOT/gap.md"
 expect_red NV7 E2 "$TMPROOT/gap.md"
 
 # ---------------------------------------------------------------- NV8 DE ASCII fallback -> L1
@@ -137,6 +137,37 @@ expect_red NV7 E2 "$TMPROOT/gap.md"
 # English), which is why the assertion is on L1 by name rather than on the exit code alone.
 sed -e 's/^language: "en"$/language: "de"/' -e 's/The cost of delay compounds\./Die Kosten fuer Verzoegerung steigen./' "$FIXTURE" > "$TMPROOT/ascii.md"
 expect_red NV8 L1 "$TMPROOT/ascii.md"
+
+# ---------------------------------------------------------------- NV9 TL;DR over band -> T1
+python3 - "$FIXTURE" "$TMPROOT/longtldr.md" <<'PY'
+import sys
+src, dst = sys.argv[1], sys.argv[2]
+lines = open(src, encoding="utf-8").read().splitlines()
+out, seen_sub = [], False
+for line in lines:
+    out.append(line)
+    if line.startswith("*") and line.endswith("*") and not seen_sub:
+        seen_sub = True
+        out.append("")
+        out.append(" ".join(["Padding sentence number %d adds words to the opening." % i for i in range(1, 9)]))
+open(dst, "w", encoding="utf-8").write("\n".join(out) + "\n")
+PY
+expect_red NV9 T1 "$TMPROOT/longtldr.md"
+
+# ---------------------------------------------------------------- NV10 TL;DR cites a number the body lacks -> T2
+# The TL;DR's second citation is rewritten to a number no body sentence carries. Only the
+# first occurrence (which is in the TL;DR) is touched, so the body stays intact.
+python3 - "$FIXTURE" "$TMPROOT/orphan.md" <<'PY'
+import sys
+src, dst = sys.argv[1], sys.argv[2]
+t = open(src, encoding="utf-8").read()
+needle = "<sup>[2](source-01-fraunhofer.md)</sup>, so the constraint"
+if needle not in t:
+    sys.exit(1)
+t = t.replace(needle, "<sup>[99](source-09-nowhere.md)</sup>, so the constraint", 1)
+open(dst, "w", encoding="utf-8").write(t)
+PY
+expect_red NV10 T2 "$TMPROOT/orphan.md"
 
 # ---------------------------------------------------------------- summary
 echo ""

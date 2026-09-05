@@ -44,20 +44,18 @@ Section lengths are proportions of `--target-length` (default 1,675 words). Word
 
 | Segment | Proportion |
 |---------|-----------:|
-| Hook | 10% |
-| Job Landscape | 24% |
-| Friction Map | 21% |
-| Portfolio Map | 27% |
-| Invitation | 18% |
+| Job Landscape | 27% |
+| Friction Map | 23% |
+| Portfolio Map | 30% |
+| Invitation | 20% |
 
-**Hook construction (context setter):** one sharp, cited industry observation that creates inevitability — the buyer's world is changing in a way that makes these jobs urgent — followed by the implication that reframes priorities from products to jobs. Preview the job landscape without listing the jobs.
+**Executive TL;DR emphasis:** jobs → friction → portfolio → invitation. The narrative opens with the TL;DR defined in `../../validation.md`; the industry observation that reframes buyers from products to jobs belongs in its first sentence as the conclusion, not as a context setter.
 
 **Transitions:**
 
-1. Hook → Job Landscape: "Your buyers organize their world around [N] functional jobs."
-2. Job Landscape → Friction Map: "Each job carries friction that compounds into measurable cost."
-3. Friction Map → Portfolio Map: "Your portfolio maps 1:1 to these jobs."
-4. Portfolio Map → Invitation: "Start with [lowest-commitment option]."
+1. Job Landscape → Friction Map: "Each job carries friction that compounds into measurable cost."
+2. Friction Map → Portfolio Map: "Your portfolio maps 1:1 to these jobs."
+3. Portfolio Map → Invitation: "Start with [lowest-commitment option]."
 
 **Closing pattern:** an explicit cogni-sales handoff — "When you have a named prospect, `/why-change` builds the deal-specific case."
 
@@ -128,7 +126,7 @@ Arc-specific assertions, checked after the universal gates in `../../validation.
 - Portfolio Map uses IS / DOES / MEANS per solution and carries no feature list.
 - Every friction entry names its job and carries a cited cost of inaction.
 - Invitation presents one entry point and names `/why-change` for deal-specific tailoring.
-- The chain holds: the hook's inevitability leads into the jobs; the jobs are the ones the frictions block; the frictions are the ones the portfolio resolves; the invitation follows the map.
+- The chain holds: the TL;DR's conclusion is the one the four elements earn; the jobs are the ones the frictions block; the frictions are the ones the portfolio resolves; the invitation follows the map.
 
 ## See Also
 

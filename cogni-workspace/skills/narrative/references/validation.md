@@ -34,12 +34,35 @@ If S1 or S2 fails, rewrite against the arc's `## Composition` rather than renami
 
 - L1 — proper Unicode umlauts and ß throughout body text and headings. Zero ASCII fallbacks (`ae`, `oe`, `ue`, `ss` standing in for ä, ö, ü, ß). Common failures to scan for: "fuer", "ueber", "Aenderung", "groesste", "Fuehrung". File names, slugs and YAML keys stay ASCII.
 
+**Executive TL;DR (for every contract without a Hook segment — all migrated arcs):**
+
+- T1 — the prose between the subtitle and the first `##` is 2-4 sentences and 60-100 words. The band is absolute: it does not scale with `--target-length`, because a summary a reader skims does not get longer when the report does.
+- T2 — every `[N]` marker in the TL;DR also appears below the first `##`, with the same source and the same number.
+
+## Executive TL;DR contract
+
+The narrative opens with an answer, not a tension. Between the `*{Subtitle}*` line and the first `##` sits the Executive TL;DR — prose with no heading of its own, so the four-header contract renderers parse is unchanged. Its contract lives here and in SKILL.md Output only; an arc contract states in one line what its TL;DR should emphasize and never restates these rules.
+
+**Shape:** 2-4 sentences, 60-100 words, independent of `--target-length`.
+
+**Answer-first sequence:** the conclusion the reader most needs → the strongest reason for it (the most consequential evidence, shift or mechanism) → the decision implication (what to decide, prioritize or do) → optionally a qualification or urgency, only when uncertainty, timing or the cost of inaction changes the decision.
+
+**Rules:**
+
+- It synthesizes all four elements; it never forces one sentence per element and never previews them in order.
+- It introduces no fact, number or recommendation absent from the body.
+- Every material number it carries reuses the body's citation — same source, same `[N]`.
+- It reads as complete if the reader stops there.
+- It is written last, from the finished elements (SKILL.md Pass 2).
+
+**Rejected and rewritten when it:** reads as a teaser with no decision implication; summarizes only the first section; mechanically summarizes all four topics one after another; introduces evidence the body lacks; restates the title; or grows its own heading.
+
 ## Judged gates (the writer checks these after the script is green)
 
 **Content:**
 
 - J1 — the title is arc-specific and could not head a different narrative. "Insight Summary" and any generic label fail.
-- J2 — the opening is present and within its budget (see the arc's `## Composition` for what opens the narrative and how much space it gets).
+- J2 — the Executive TL;DR follows the answer-first sequence, emphasizes what the arc's `## Composition` TL;DR line says, and none of the rejection modes above applies.
 - J3 — the arc's own `## Validation` assertions hold, and the techniques the arc names for each element are visibly applied.
 - J4 — transitions between elements follow the arc's transition patterns and read as consequences, not topic labels.
 

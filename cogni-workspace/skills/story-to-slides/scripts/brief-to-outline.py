@@ -277,18 +277,48 @@ def _leaves(value, key=None):
     return [text] if text else []
 
 
+def _lanes(value, key=None):
+    """Split one on-slide field into round-robin lanes.
+
+    A field's scalar leaves share one lane, but a LIST-valued sub-key gets its
+    own. `Context-Box` is the motivating shape: its `Headline` is a label and its
+    `Bullets` are the slide's actual evidence lines — the only ones carrying
+    citations. Sharing one lane, the headline always wins depth 0 and the bullets
+    are never reached on a slide whose field count already equals the cap, so no
+    cited line ever reaches the outline.
+    """
+    if key is not None and key in NON_SLIDE_KEYS:
+        return []
+    if isinstance(value, list):
+        out = []
+        for item in value:
+            out.extend(_leaves(item))
+        return [out] if out else []
+    if isinstance(value, dict):
+        own, extra = [], []
+        for sub_key, sub_value in value.items():
+            if isinstance(sub_value, list):
+                extra.extend(_lanes(sub_value, sub_key))
+            else:
+                own.extend(_leaves(sub_value, sub_key))
+        return ([own] if own else []) + extra
+    leaves = _leaves(value, key)
+    return [leaves] if leaves else []
+
+
 def _field_lines(slide):
-    """Per top-level on-slide field, its leaves in document order, deduped."""
+    """The slide's on-slide lanes, in document order, deduped across the slide."""
     grouped, seen = [], set()
     for key, value in (slide.get("fields") or {}).items():
-        lines = []
-        for leaf in _leaves(value, key):
-            reduced = reduce_citations(leaf).strip()
-            if reduced and reduced not in seen:
-                seen.add(reduced)
-                lines.append(reduced)
-        if lines:
-            grouped.append(lines)
+        for lane in _lanes(value, key):
+            lines = []
+            for leaf in lane:
+                reduced = reduce_citations(leaf).strip()
+                if reduced and reduced not in seen:
+                    seen.add(reduced)
+                    lines.append(reduced)
+            if lines:
+                grouped.append(lines)
     return grouped
 
 

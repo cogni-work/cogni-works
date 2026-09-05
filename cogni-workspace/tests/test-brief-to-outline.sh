@@ -418,6 +418,29 @@ else
   failures=$((failures + 1))
 fi
 
+# --- bo17
+if python3 -c "
+import os, re, sys
+from outline_probe import slide_point_blocks, BRIEF
+out = open(os.environ['INC'], encoding='utf-8').read()
+# A slide whose evidence lines carry citations must land at least one of them in
+# slide_points, with the marker reduced to bare [N] and the URL dropped. Sharing
+# one lane between a box's Headline and its Bullets let the headline win every
+# time, so no cited line ever reached the outline on a slide whose field count
+# already equalled the cap.
+flat = [line for block in slide_point_blocks(out) for line in block]
+cited = [line for line in flat if re.search(r'\[\d+\]', line)]
+reduced_from_sup = [line for line in cited if 'sup>' not in line and 'http' not in line]
+ok = bool(reduced_from_sup)
+# and the reduction must be lossless in the other direction: no raw marker leaks
+ok = ok and not any('<sup>' in line for line in flat)
+sys.exit(0 if ok else 1)"; then
+  echo "ok: bo17-cited-evidence-line-reaches-slide-points"
+else
+  echo "FAIL: bo17-cited-evidence-line-reaches-slide-points no citation-bearing on-slide line survived the cap"
+  failures=$((failures + 1))
+fi
+
 if [ "$failures" -eq 0 ]; then
   echo "All brief-to-outline tests passed."
   exit 0

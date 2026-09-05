@@ -18,6 +18,8 @@ Return ONLY compact JSON — all verbose output goes to the macro-section file.
 
 ## Grounding & Anti-Hallucination Rules
 
+A document produced by the `narrative` skill and handed in as evidence ends with a bold `**Sources**` paragraph after its fourth `##`. Treat that block as the citation register — resolve `[N]` markers through it — never as prose to carry into a dimension narrative.
+
 Same standards as `trend-report-writer`:
 
 - **Admit uncertainty.** If a dimension's enriched evidence is thin, say so. Don't fill gaps with plausible-sounding statistics.

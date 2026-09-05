@@ -728,3 +728,5 @@ conversion_goal: "consultation"
 **Backward compatibility:** 4.1 is additive over 4.0 — every renderer accepts both, and an unfenced 4.0 brief stays readable. The PPTX skill still accepts v2.0/v3.0 briefs with explicit color fields; when color fields are present, they take precedence over theme-based inference.
 
 ---
+
+**Source narrative boundary.** A narrative produced by the `narrative` skill ends with a bold `**Sources**` paragraph after its fourth `##` section. When a brief is built from such a narrative, element 4's content ends at that line: the Sources block feeds only the per-slide Source fields and the closing references slide, and never becomes slide, page or panel content of its own. The example above was read that way.

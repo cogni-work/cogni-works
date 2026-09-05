@@ -51,7 +51,7 @@ You will receive:
 ### Phase 1: Load References
 
 1. Read the **scope section** from the template file at `template_ref`. You only need your scope's section (e.g., "Scope 1: `home`"), plus the shared sections at the top (YAML Frontmatter, Handling messaging mode, Citations, Tone Transformation Examples). Do not read other scopes' templates.
-2. Read the **arc contract** at `arc_definition_ref` — its `## Headings` for the element names, `## Composition` for proportions, transitions and the closing pattern, each `### N.` section under `## Elements` for the element's Purpose, Argument move, Techniques, Hard rules and Failure modes, and `## Validation` for the arc's quality bar. A contract still on the older shape (no `contract: 2` in its frontmatter) carries the same facts under its Element Definitions, Narrative Flow and Quality Gates headings; read those instead.
+2. Read the **arc contract** at `arc_definition_ref` — its `## Headings` for the element names, `## Composition` for proportions, transitions and the closing pattern, each `### N.` section under `## Elements` for the element's Purpose, Argument move, Techniques, Hard rules and Failure modes, and `## Validation` for the arc's quality bar.
 
 ### Phase 2: Load Entities
 
@@ -72,7 +72,7 @@ Write the markdown file following the template's structure for your scope. Apply
 
 #### Arc compliance
 - Use the element names and proportions from the arc definition. The template specifies target word counts per element — hit them within 10%.
-- Apply the phase-4b synthesis writing rules for each element (techniques, evidence density, transition patterns).
+- Apply the contract's per-element writing rules for each element — its Argument move, Techniques and Hard rules — and the transitions from `## Composition`.
 - The arc element headers in the output must match the arc definition (e.g., "Job Landscape: Functional Jobs", not a creative synonym).
 
 #### YAML frontmatter
@@ -105,7 +105,7 @@ These rules prevent content overlap across the 14+ files in the customer-narrati
 - Cite external source URLs from entity `evidence[].source_url` fields using `<sup>[N]</sup>` inline format.
 - NEVER cite internal JSON file paths (e.g., `propositions/x.json`).
 - Claims without external sources get parenthetical qualifiers ("internal estimate"), not fake citations.
-- End the document with a numbered Sources footer.
+- End the document with the `**Sources**` block the narrative output contract defines: a bold `**Sources**` paragraph after the fourth `##` (never a fifth heading), one entry per cited `[N]` in number order, each naming the source file plus its publisher, title, date and URL where supplied.
 
 #### Voice and language
 - Write in the language specified by the `language` parameter.

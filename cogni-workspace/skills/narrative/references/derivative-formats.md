@@ -83,6 +83,7 @@ For each arc element:
 - Renumber sequentially starting from 1
 - Only include citations that accompany evidence retained in the brief
 - Target: 8-12 citations (roughly half of full narrative)
+- **Keep the `**Sources**` block** after the fourth element, reduced to the entries that survive and renumbered to match the new `[N]` sequence from 1 — no gaps, no uncited entry
 
 ### Common Pitfalls
 
@@ -165,6 +166,7 @@ date_created: "{ISO 8601}"
 - Include the strongest quantitative evidence per element
 - End with "Key Numbers" section pulling the hero stats
 - No citations in bullets -- keep clean for verbal delivery
+- **No `**Sources**` block** -- talking points carry no register; the source narrative is the traceability record
 - End element 4 with an actionable call-to-action bullet
 
 ### Structure Rules
@@ -278,6 +280,7 @@ date_created: "{ISO 8601}"
 - "Next Steps" provides 3 actionable items
 - Citations are omitted for clean print layout
 - Footer references the source for traceability
+- The source narrative's `**Sources**` block is omitted; the footer's source reference is the only traceability the page carries
 
 ### Layout Constraints
 

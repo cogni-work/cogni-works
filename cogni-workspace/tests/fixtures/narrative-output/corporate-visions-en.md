@@ -49,3 +49,25 @@ Organizations that thrive do not just react to these forces — they build capab
 The cost of delay compounds. Over a three-year horizon a mid-sized operator with 40 critical assets faces four stacked costs of inaction, each on the same horizon so they can be added. Unplanned downtime at the sample average of 180,000 euros per lost production hour and 24 hours per year adds up to 13.0 million euros<sup>[15](source-01-fraunhofer.md)</sup>. The technician wage premium on a 60-person maintenance team adds 2.1 million euros<sup>[16](source-04-destatis.md)</sup>. Insurance surcharges on unmonitored critical assets from 2027 add 0.9 million euros<sup>[17](source-03-handelsblatt.md)</sup>. A compliance retrofit under deadline pressure adds 1.4 million euros against 0.6 million for a planned programme<sup>[18](source-02-vdma.md)</sup>. The compound cost of inaction is 17.4 million euros.
 
 A condition-based programme built on the three positions above costs 4.2 million euros over the same three years, including integration, documentation and the operating-model change<sup>[19](source-02-vdma.md)</sup>. Set against 17.4 million, the comparison needs no explanation. Action costs less than inaction by roughly 4x.
+
+**Sources**
+
+[1] source-01-fraunhofer.md — Fraunhofer IPA, "Instandhaltung 2025", 2025, https://www.ipa.fraunhofer.de/de/publikationen/instandhaltung-2025.html
+[2] source-01-fraunhofer.md — Fraunhofer IPA, "Instandhaltung 2025", 2025, https://www.ipa.fraunhofer.de/de/publikationen/instandhaltung-2025.html
+[3] source-02-vdma.md — VDMA, "Condition-Monitoring-Studie 2025", 2025, https://www.vdma.org/condition-monitoring-studie-2025
+[4] source-02-vdma.md — VDMA, "Condition-Monitoring-Studie 2025", 2025, https://www.vdma.org/condition-monitoring-studie-2025
+[5] source-01-fraunhofer.md — Fraunhofer IPA, "Instandhaltung 2025", 2025, https://www.ipa.fraunhofer.de/de/publikationen/instandhaltung-2025.html
+[6] source-03-handelsblatt.md — Handelsblatt, "Predictive Maintenance: der Datenvorsprung", 2026, https://www.handelsblatt.com/unternehmen/industrie/predictive-maintenance-datenvorsprung-2026
+[7] source-02-vdma.md — VDMA, "Maschinenverordnung: Umsetzung bis 2027", 2025, https://www.vdma.org/maschinenverordnung-umsetzung-2027
+[8] source-04-destatis.md — Destatis, "Instandhaltung 2030", 2025, https://www.destatis.de/DE/Themen/Arbeit/Arbeitsmarkt/Erwerbstaetigkeit/instandhaltung-2030.html
+[9] source-03-handelsblatt.md — Handelsblatt, "Instandhaltung: Fachkräfte 2025", 2025, https://www.handelsblatt.com/unternehmen/industrie/instandhaltung-fachkraefte-2025
+[10] source-03-handelsblatt.md — Handelsblatt, "Industrieversicherer und Condition Monitoring", 2025, https://www.handelsblatt.com/finanzen/versicherungen/industrieversicherer-condition-monitoring-2025
+[11] source-01-fraunhofer.md — Fraunhofer IPA, "Instandhaltung 2025", 2025, https://www.ipa.fraunhofer.de/de/publikationen/instandhaltung-2025.html
+[12] source-02-vdma.md — VDMA, "Condition-Monitoring-Studie 2025", 2025, https://www.vdma.org/condition-monitoring-studie-2025
+[13] source-02-vdma.md — VDMA, "Maschinenverordnung: Umsetzung bis 2027", 2025, https://www.vdma.org/maschinenverordnung-umsetzung-2027
+[14] source-01-fraunhofer.md — Fraunhofer IPA, "Instandhaltung 2025", 2025, https://www.ipa.fraunhofer.de/de/publikationen/instandhaltung-2025.html
+[15] source-01-fraunhofer.md — Fraunhofer IPA, "Instandhaltung 2025", 2025, https://www.ipa.fraunhofer.de/de/publikationen/instandhaltung-2025.html
+[16] source-04-destatis.md — Destatis, "Instandhaltung 2030", 2025, https://www.destatis.de/DE/Themen/Arbeit/Arbeitsmarkt/Erwerbstaetigkeit/instandhaltung-2030.html
+[17] source-03-handelsblatt.md — Handelsblatt, "Industrieversicherer und Condition Monitoring", 2025, https://www.handelsblatt.com/finanzen/versicherungen/industrieversicherer-condition-monitoring-2025
+[18] source-02-vdma.md — VDMA, "Condition-Monitoring-Studie 2025", 2025, https://www.vdma.org/condition-monitoring-studie-2025
+[19] source-02-vdma.md — VDMA, "Condition-Monitoring-Studie 2025", 2025, https://www.vdma.org/condition-monitoring-studie-2025

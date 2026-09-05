@@ -75,6 +75,7 @@ These elements are frozen. Any change to them constitutes a structural violation
 5. **Heading hierarchy** -- H1 and H2 levels stay as they are
 6. **Heading order and count** -- the sequence and number of headings never change (translation substitutes heading *text* only, never order or count)
 7. **Content placement** -- no content moves between elements; each element is self-contained
+8. **`**Sources**` block** -- a narrative generated on the current contract ends with a bold `**Sources**` paragraph after the fourth element; every entry, its number, its order and its metadata are byte-identical to the source (translation mode included: the entries are bibliographic data, not prose)
 
 ### What You Must Never Apply in Arc-Aware Mode
 
@@ -197,6 +198,7 @@ Run every check after polishing. Each is a binary pass/fail.
 [ ] Bridge heading -- exact match to "Further Reading" / localized equivalent (NATIVE polish); in arc-translation mode, the TARGET_LANG bridge form
 [ ] H2 count and heading order -- unchanged from the original (do NOT assert a fixed total: the count varies by arc and by whether the subtitle is rendered as an H2; e.g. an italic subtitle yields 5 H2s)
 [ ] No content moved between elements
+[ ] **Sources** block (when present) byte-identical: same entries, same numbers, same order
 ```
 
 ### Technique Checks (failure reverts the individual element)

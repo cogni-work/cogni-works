@@ -29,6 +29,7 @@ If S1 or S2 fails, rewrite against the arc's `## Composition` rather than renami
 
 - E1 — 15-25 citations at the default length, in the form `Claim text<sup>[N](source-file.md)</sup>`. The floor of 15 holds at every length; a longer narrative may carry more than 25.
 - E2 — citation numbers run sequentially from 1 in order of first appearance; a reused source reuses its number.
+- X1 — the `**Sources**` block is mutually complete with the body: every `[N]` in the body has exactly one entry, every entry is cited at least once, and no number appears twice.
 
 **Language (when `language: de`):**
 
@@ -56,6 +57,18 @@ The narrative opens with an answer, not a tension. Between the `*{Subtitle}*` li
 - It is written last, from the finished elements (SKILL.md Pass 2).
 
 **Rejected and rewritten when it:** reads as a teaser with no decision implication; summarizes only the first section; mechanically summarizes all four topics one after another; introduces evidence the body lacks; restates the title; or grows its own heading.
+
+## Sources block contract
+
+The narrative ends on its source register. After the fourth `##` section — never as a fifth `##`, so the four-header contract the story-to-* renderers parse is unchanged — a bold `**Sources**` paragraph lists the underlying sources actually cited:
+
+- One entry per distinct `[N]` in the body, in number order, in the form `[N] source-NN-slug.md — Publisher, "Title", date, URL`.
+- Each entry names the per-source file the inline marker points at (the citation bridge's `narrative-input/sources/` file) plus the publisher, title, date and URL preserved in that file's frontmatter. A field the source did not supply stays absent; nothing is invented.
+- Deduplicated by source identity: one URL, one entry, one number.
+- **Sources absorbs the bridge.** The older "Further Reading" heading (`language/shared.md` § Bridge heading) is not emitted by a generated narrative; Sources is the only trailing register, so no narrative carries both with no defined order. The bridge forms survive upstream only for the copywriter's handling of older arc documents.
+- Renderers stop element 4 at the `**Sources**` line; the block is never slide, page or panel content. Derivatives: the executive brief keeps the block and renumbers surviving entries from 1; talking points and the one-pager omit it (`derivative-formats.md`).
+
+Gate X1 above checks mutual completeness mechanically.
 
 ## Judged gates (the writer checks these after the script is green)
 

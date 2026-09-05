@@ -81,9 +81,16 @@ geography: "{market codes}"
 ## {Element 2 heading}
 ## {Element 3 heading}
 ## {Element 4 heading}
+
+**Sources**
+
+[1] source-01-slug.md — {Publisher}, "{Title}", {date}, {URL}
+[2] …
 ```
 
 Exactly four `##` headings, byte-equal to the contract's `## Headings` cells for the output language, in arc order. Each element's word range is its `## Composition` proportion times the ±15% band around the target.
+
+**Sources block.** After the fourth section, a bold `**Sources**` paragraph — never a fifth `##`, so the four-header contract renderers parse is unchanged — lists only the underlying sources actually cited, deduplicated and numbered to the body's `[N]`. Each entry names the per-source file the inline marker points at plus the publisher, title, date and URL the citation bridge preserved in that file's frontmatter; a field the source did not supply is absent, never invented. It is the artifact that makes the narrative self-verifying, and it absorbs the older "Further Reading" bridge: a generated narrative carries Sources and nothing else after the fourth `##`. Full rules in `references/validation.md`.
 
 **Executive TL;DR.** The prose between the subtitle and the first `##` is an answer-first summary, not a hook: 2-4 sentences and 60-100 words regardless of `--target-length`, in this order — the conclusion the reader most needs, the strongest reason for it, the decision implication, and an optional qualification or urgency only when it changes the decision. It synthesizes all four elements rather than previewing them, introduces no fact, number or recommendation the body lacks, cites every material number by reusing the body's `[N]`, and reads as complete if the reader stops there. It carries no heading, so the four-header contract is unchanged. The full contract, including the rejection list, is in `references/validation.md`.
 
@@ -195,7 +202,7 @@ Draft in four passes. Each pass has one job; doing two at once is how a narrativ
 
 **Pass 1 — evidence draft.** For each element in order: map the loaded content to the element using its `Evidence sought`; when the sources span markets, weight the evidence by the brief's `--geography`; draft the body from that evidence, every quantitative claim carrying `<sup>[N](source-file.md)</sup>`; hold the element's word range. Write the four elements only — no title, no opening yet.
 
-**Pass 2 — argument edit.** Apply each element's `Argument move` and `Techniques`; enforce its `Hard rules`; build the transitions from `## Composition`; write the closing per the closing pattern, so that emphasis, implications and close serve the brief's `--purpose` and pronouns and ownership follow its `--perspective`. Then — last, from the finished elements — write the title (arc-specific, never "Insight Summary") and the Executive TL;DR, weighting it as the contract's TL;DR-emphasis line says. Writing the TL;DR after the elements is what makes "synthesizes all four" enforceable rather than aspirational.
+**Pass 2 — argument edit.** Apply each element's `Argument move` and `Techniques`; enforce its `Hard rules`; build the transitions from `## Composition`; write the closing per the closing pattern, so that emphasis, implications and close serve the brief's `--purpose` and pronouns and ownership follow its `--perspective`. Then — last, from the finished elements — write the title (arc-specific, never "Insight Summary") and the Executive TL;DR, weighting it as the contract's TL;DR-emphasis line says. Writing the TL;DR after the elements is what makes "synthesizes all four" enforceable rather than aspirational. Finally assemble the `**Sources**` block from the provenance map: one entry per cited `[N]`, in number order, carrying the per-source file and its preserved metadata.
 
 **Pass 3 — language edit.** Now, and not earlier, read `references/language/shared.md` and `references/language/{language}.md` (`en.md` or `de.md`). Localize the four headings from `## Headings` for the output language and make the prose read as executive prose per those two files: one idea per sentence, concrete actors and verbs, specificity over intensifiers, no corporate fog; for `de`, the sentence craft in `de.md` — Satzklammer, Mittelfeld, Funktionsverbgefüge, Nominalstil, anglicisms — and proper umlauts and ß throughout. Tune vocabulary, acronym expansion and explanation depth to the brief's `--audience` and inferred knowledge level.
 

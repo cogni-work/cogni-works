@@ -169,6 +169,16 @@ open(dst, "w", encoding="utf-8").write(t)
 PY
 expect_red NV10 T2 "$TMPROOT/orphan.md"
 
+# ---------------------------------------------------------------- NV11 cited entry dropped from Sources -> X1
+# The replayable form of the Sources-block mutation recipe: drop one entry that the body
+# still cites, re-run the deterministic gates, expect X1 red.
+grep -v '^\[7\] ' "$FIXTURE" > "$TMPROOT/dropped.md"
+expect_red NV11 X1 "$TMPROOT/dropped.md"
+
+# ---------------------------------------------------------------- NV12 uncited entry added to Sources -> X1
+{ cat "$FIXTURE"; echo '[20] source-09-nowhere.md — Nobody, "Uncited", 2026, https://example.org/uncited'; } > "$TMPROOT/uncited.md"
+expect_red NV12 X1 "$TMPROOT/uncited.md"
+
 # ---------------------------------------------------------------- summary
 echo ""
 if [ "$failures" -gt 0 ]; then

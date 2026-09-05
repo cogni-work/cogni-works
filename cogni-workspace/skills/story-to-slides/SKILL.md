@@ -330,9 +330,9 @@ Frontmatter — omit `arc_id` when unresolved, and `climax` when no slide carrie
 Run the checker first — `python3 "$CLAUDE_PLUGIN_ROOT/scripts/check-brief.py" --type slides "{output_path}"` — and fix every `fail` it reports; it owns Layer 1 and the mechanizable items of Layers 3–5 (density, citations, notes structure, deck shape). Then reason through the remaining layers — stop on first failure, fix, re-check:
 1. **Schema** — the checker's verdict; nothing here is verified by eye
 2. **Message quality** — assertion headlines, MECE sequence, isolated hero numbers
-3. **Copywriting** — number plays applied, bullets consolidated, no hedging
-4. **Presentation logic** — bookend slides enforced, within max_slides, layout variety
-5. **Content integrity** — all sections represented, citations preserved, German characters correct
+3. **Copywriting** — number plays applied, phrase-shaped bullets, no hedging, speaker-notes coaching with [Energy] and Q&A prep
+4. **Presentation logic** — story arc flow, prep-slide content, solution overview before the first Power Position (why-change)
+5. **Content integrity** — all sections and statistics represented, IS/DOES/MEANS semantics, the right claims carry the citations
 
 ---
 

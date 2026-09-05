@@ -58,8 +58,8 @@ Produce a `.pptx` at `OUTPUT_PATH` that says exactly what the brief says — cop
 
 Two skill names may provide the Anthropic pptx skill. Try them in this order and stop at the first that resolves:
 
-1. `anthropic-skills:pptx` — bundled with Claude Desktop and Claude Code
-2. `document-skills:pptx` — the marketplace plugin
+1. `anthropic-skills:pptx` — when the host provides it under that name
+2. `document-skills:pptx` — the `anthropic-agent-skills` marketplace plugin; on hosts where the first name does not resolve, this one carries the render
 
 Resolution means the Skill tool accepted the name. On an unknown-skill error from the first, invoke the second. When neither resolves, return `{"success": false, "error": "pptx_skill_unavailable"}` immediately — the Render checkpoint treats that error as "print the claude.ai instructions instead", so it must be returned verbatim rather than as a hard failure.
 

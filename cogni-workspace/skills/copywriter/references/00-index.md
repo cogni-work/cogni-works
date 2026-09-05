@@ -28,7 +28,7 @@ LOAD: 01-core-principles/translation-{source_lang}-to-{TARGET_LANG}.md
 
 Construct the direction filename deterministically from the resolved `source_lang` and `TARGET_LANG` (e.g. `en`→`fr` → `translation-en-to-fr.md`; `pl`→`de` → `translation-pl-to-de.md`). The Step 1 pre-checks (accept-set + pivot guard) guarantee a valid pair, so the file always exists. The 22 supported directions are the 7×7 validity matrix in `translation-principles.md` (any pair with EN or DE on one end; diagonal is a no-op; direct non-EN/DE pairs are rejected upstream).
 
-When `TARGET_LANG` is set **and** the document has `arc_id` **and** the pair pivots on EN/DE (one end ∈ {en,de}) **and** `arc_id` is in scope (`corporate-visions`, `jtbd-portfolio`), CHECK 1 (Arc) **does** trigger: load **both** the translation references above **and** the Arc Loading Block references (`09-preservation-modes/arc-preservation.md` + `arc-technique-map.md`). `arc-preservation.md` supplies the canonical target-language headings (de/en/fr/it/pl/nl/es) the skill substitutes in Step 2.5. Out-of-scope arcs (any language) and direct non-EN/DE-pivot arc pairs are aborted upstream in SKILL.md Step 1 pre-check #3, so they never reach mode detection. When `TARGET_LANG` is unset, the arc references load exactly as before.
+When `TARGET_LANG` is set **and** the document has `arc_id` **and** the pair pivots on EN/DE (one end ∈ {en,de}) **and** `arc_id` is in scope (`corporate-visions`, `jtbd-portfolio`), CHECK 1 (Arc) **does** trigger: load **both** the translation references above **and** the Arc Loading Block references (`09-preservation-modes/arc-preservation.md` plus the upstream narrative files it names). The arc contract's `## Headings` table supplies the canonical target-language headings the skill substitutes in Step 2.5; an arc whose contract has no column for `TARGET_LANG` is aborted upstream in SKILL.md Step 1 pre-check #3. Out-of-scope arcs (any language) and direct non-EN/DE-pivot arc pairs are aborted upstream in SKILL.md Step 1 pre-check #3, so they never reach mode detection. When `TARGET_LANG` is unset, the arc references load exactly as before.
 
 After loading the translation references, continue with normal mode detection below.
 
@@ -70,7 +70,8 @@ When `mode = arc`, the arc IS the document structure. Do NOT load messaging fram
 
 ```
 LOAD: 09-preservation-modes/arc-preservation.md
-LOAD: 09-preservation-modes/arc-technique-map.md
+LOAD: ${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/story-arc/{arc_id}/arc-definition.md
+LOAD: ${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/narrative-techniques/techniques-overview.md
 LOAD: 01-core-principles/clarity-principles.md
 LOAD: 01-core-principles/conciseness-principles.md
 LOAD: 01-core-principles/active-voice-principles.md
@@ -364,8 +365,7 @@ All reference files in this system, organized by directory. Use this as the sour
 - `power-positions.md` -- IS-DOES-MEANS structure, enhancement by layer, Value Wedge
 
 ### 09-preservation-modes/
-- `arc-preservation.md` -- Arc detection, structure preservation, forbidden vs allowed modifications
-- `arc-technique-map.md` -- Per-arc per-element technique rules, Number Play variants, validation checklist
+- `arc-preservation.md` -- Arc detection, structure preservation, forbidden vs allowed modifications, translation-mode word band, validation checklist. Per-arc per-element technique rules are read at runtime from the `narrative` skill's arc contract (`story-arc/{arc_id}/arc-definition.md` `## Elements`) and `techniques-overview.md`
 
 ### 10-stakeholder-review/
 - `00-index.md` -- Stakeholder review system overview

@@ -94,7 +94,8 @@ Before loading any framework, check whether the input document is an arc narrati
 
 ```text
 READ: references/09-preservation-modes/arc-preservation.md
-READ: references/09-preservation-modes/arc-technique-map.md
+READ: ${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/story-arc/{arc_id}/arc-definition.md
+READ: ${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/narrative-techniques/techniques-overview.md
 ```
 
 Set `arc_mode: true` and `arc_id: {detected_arc_id}`. Do NOT load a messaging framework or deliverable type -- the arc IS the structure.
@@ -316,10 +317,10 @@ Before proceeding, verify:
 
 **Skip this step if:** `impact_level: standard` AND no executive audience AND `MODE: standard`
 
-**If `arc_mode: true`:** Apply techniques PER ELEMENT using the arc-technique-map.
+**If `arc_mode: true`:** Apply techniques PER ELEMENT using the arc contract's `## Elements` (each `### N.` section's Techniques and Hard rules) and narrative's `techniques-overview.md` application matrix.
 
 For each arc element:
-1. Look up the element's row in the technique map for the active `arc_id`
+1. Look up the element's `### N.` section in the active arc's contract
 2. Apply the element's specific Number Play variant (e.g., compound impact for "Why Pay", ratio framing for "Why Change")
 3. Strengthen the element's primary technique (e.g., forcing functions in "Why Now", PSB in "Why Change")
 4. Apply Power Words sparingly (3-5 per element) in body text only
@@ -632,7 +633,7 @@ User mentions executive audience -> READ: executive-impact.md
 User mentions persuasion/impact -> READ: power-words.md, rhetorical-devices.md
 Document contains German text -> READ: german-style-principles.md
 Document contains citations -> READ: citation-formatting.md (at Step 8)
-Document has arc_id -> READ: arc-preservation.md, arc-technique-map.md
+Document has arc_id -> READ: arc-preservation.md, the arc's arc-definition.md, narrative's techniques-overview.md
 MODE is sales -> READ: power-positions.md, number-plays.md, power-words.md
 ```
 

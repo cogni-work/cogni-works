@@ -1,287 +1,132 @@
-# Industry Transformation Story Arc
-
-## Arc Metadata
-
-**Arc ID:** `industry-transformation`
-**Display Name:** Industry Transformation
-**Display Name (German):** Branchen-Transformation
-
-**Elements (Ordered):**
-1. Forces: Macro Forces Driving Change
-2. Friction: Barriers and Resistance Points
-3. Evolution: Structural Changes and New Equilibrium
-4. Leadership: Positioning for Transformed Industry
-
-**Elements (German):**
-1. Kräfte: Makro-Kräfte als Treiber
-2. Reibung: Barrieren und Widerstandspunkte
-3. Evolution: Strukturelle Veränderungen und neues Gleichgewicht
-4. Führung: Positionierung für transformierte Branche
-
-## Word Proportions
-
-Section lengths are expressed as proportions of the total target length. This keeps the arc's rhetorical balance intact regardless of narrative length. To compute word ranges for a given `--target-length T`: apply +/-15% band to get `[T*0.85, T*1.15]`, then multiply each proportion.
-
-| Element | English Header | German Header | Proportion | Default Range (T=1675) |
-|---------|----------------|---------------|-----------|------------------------|
-| Hook | *(Dynamic based on finding)* | *(Dynamic)* | 10% | 143-193 |
-| Forces | Forces: Macro Drivers | Kräfte: Makro-Treiber | 24% | 342-462 |
-| Friction | Friction: Resistance Points | Reibung: Widerstandspunkte | 21% | 299-404 |
-| Evolution | Evolution: Structural Changes | Evolution: Strukturelle Veränderungen | 27% | 384-519 |
-| Leadership | Leadership: Positioning Strategies | Führung: Positionierungsstrategien | 18% | 256-347 |
-
-**Proportions sum to 100%.** Default total: 1,675 words (customizable via `--target-length`). Tolerance: +/-10% of computed section midpoint.
-
-## Detection Configuration
-
-### Research Type Mapping
-
-This arc is selected when:
-- `research_type: "industry"`
-
-### Content Analysis Keywords
-
-When `research_type` doesn't match, analyze Executive Summary for keyword density:
-- **Keywords:** "regulatory", "sector", "structural", "industry", "transformation", "policy", "institutional", "systemic"
-- **Threshold:** ≥12% keyword density
-
-### Use Cases
-
-**Best For:**
-- Industry analysis projects
-- Sector transformation studies
-- Regulatory impact assessment
-- Structural change analysis
-- Industry evolution forecasting
-- Policy implication analysis
-
-## Element Definitions
-
-### Element 1: Forces (Macro Drivers)
-
-**Purpose:**
-Identify macro forces (regulatory, technological, social, economic) driving industry transformation.
-
-**Source Content:**
-- Executive Summary (macro trends) - Baseline context
-- **Megatrends (primary)** - Loaded from `content_map.megatrend_entities` (06-megatrends/data/)
-- **Trends (industry-level developments)** - Loaded from `content_map.trend_entities` (11-trends/data/)
-- Dimension syntheses (systemic factors) - NOT loaded (redundant with Executive Summary)
-
-**Source Content Mapping Example:**
-
-```javascript
-// Loaded from 06-megatrends/data/megatrend-008.md
-{
-  "megatrend_id": "mt-008",
-  "title": "AI Regulatory Fragmentation",
-  "scope": "Global regulatory divergence",
-  "horizon": "3-5 years",
-  "dimensions": "regulatory, technology, policy",
-  "body_preview": "Nations implementing incompatible AI governance frameworks..."
-}
-
-// Maps to macro force:
-"Regulatory fragmentation emerges as the dominant force reshaping AI markets.
-While the EU's AI Act imposes risk-based classification and mandatory audits,
-the U.S. pursues sectoral self-regulation, and China enforces algorithmic
-registration. This divergence (mt-008) creates compliance complexity that
-favors large incumbents over nimble entrants—inadvertently centralizing
-an industry nominally committed to democratization."
-```
-
-**Transformation Approach:**
-- Force identification from megatrends_data.dimensions (regulatory, technology, social, economic categories)
-- Force magnitude using megatrends_data.scope (Global/Regional/National) and megatrend.horizon (how powerful)
-- Force interaction by analyzing overlapping megatrends_data.dimensions (how forces reinforce or counteract)
-- Force timing from megatrend.horizon field (when forces peak: "3-5 years" = peak in 2028-2030)
-
-**Pattern Reference:** `forces-patterns.md`
-
+---
+arc_id: industry-transformation
+display_name: Industry Transformation
+display_name_de: Branchen-Transformation
+contract: 2
 ---
 
-### Element 2: Friction (Barriers and Resistance)
+# Industry Transformation
 
-**Purpose:**
-Identify friction points—barriers, resistance, and forces slowing or distorting transformation.
+## Intent
 
-**Source Content:**
-- Cross-Dimensional Patterns (tensions, contradictions)
-- Trends (adoption barriers)
-- Dimension syntheses (implementation challenges)
-- Executive Summary (resistance factors)
+**Governing question:** Which macro forces are restructuring the industry, what resists them, what does the industry become, and how does one lead in that new structure?
 
-**Transformation Approach:**
-- Friction source (incumbents, regulations, infrastructure, culture)
-- Friction magnitude (how much does it slow change)
-- Friction duration (temporary vs. structural)
-- Friction workarounds (how to navigate or overcome)
+**Rhetorical job:** Explain a structural change and position the reader to lead in it. The arc moves from forces through friction to the new equilibrium and closes on leadership positioning — a tension-and-release pattern about an industry, not about one buyer's need.
 
-**Pattern Reference:** `friction-patterns.md`
+**Not for:** competitive positioning within a stable category (`competitive-intelligence`), reframing the buyer's category (`category-creation`), persuading one reader to change (`corporate-visions`), or multi-scenario uncertainty (`strategic-foresight`).
 
----
+## Selection
 
-### Element 3: Evolution (Structural Changes)
+**Best for:** industry analysis, regulatory-impact studies, sector-transformation research, thought leadership on structural change.
 
-**Purpose:**
-Describe the industry's future structure—new equilibrium, new business models, new competitive dynamics.
+**Signals:** the source names regulatory, technological, social or economic forces acting on a whole sector; it identifies barriers, incumbents or infrastructure slowing the change; it describes a future industry structure or business-model shift; it asks who leads.
 
-**Source Content:**
-- Strategic Recommendations (future state vision)
-- Executive Summary (transformation direction)
-- Dimension syntheses (structural implications)
-- Cross-Dimensional Patterns (emergent structures)
+**Anti-signals:** the forces are competitors' moves rather than macro forces (`competitive-intelligence`); the source argues for a new category rather than describing a transition (`category-creation`); it is one company's investment case (`corporate-visions`).
 
-**Transformation Approach:**
-- Structure description (how industry will organize)
-- Power shift (who gains/loses power)
-- Business model evolution (how value creation changes)
-- Timeline to new equilibrium
+**Fallback priority:** never a fallback. Selected on content type `industry` or on keyword density.
 
-**Pattern Reference:** `evolution-patterns.md`
+## Headings
 
----
+Byte-exact section headers by output language. Renderers, the copywriter and the validation script all match these strings; never paraphrase, re-case or re-punctuate them.
 
-### Element 4: Leadership (Positioning for Transformed Industry)
+| # | EN | DE |
+|---|----|----|
+| 1 | Forces: Transformation Drivers | Kräfte: Makro-Treiber |
+| 2 | Friction: Barriers to Change | Reibung: Widerstandspunkte |
+| 3 | Evolution: Pathway Forward | Evolution: Strukturelle Veränderungen |
+| 4 | Leadership: Strategic Imperatives | Führung: Positionierungsstrategien |
 
-**Purpose:**
-Specify how to position for leadership in the transformed industry—not just surviving change, but thriving in new structure.
+## Composition
 
-**Source Content:**
-- Strategic Recommendations (primary)
-- Dimension syntheses (leadership opportunities)
-- Executive Summary (positioning insights)
+Section lengths are proportions of `--target-length` (default 1,675 words). Word ranges for a target `T` are `[T × 0.85, T × 1.15]` multiplied by each proportion. Proportions sum to 100%.
 
-**Transformation Approach:**
-- Leadership positioning (where to play in new structure)
-- Differentiation sources (what creates advantage in new equilibrium)
-- Timing strategy (when to commit resources)
-- Transition management (how to navigate from current to future)
+| Segment | Proportion |
+|---------|-----------:|
+| Forces | 27% |
+| Friction | 23% |
+| Evolution | 30% |
+| Leadership | 20% |
 
-**Pattern Reference:** `leadership-patterns.md`
+**Executive TL;DR emphasis:** forces → friction → evolution → leadership move. The narrative opens with the TL;DR defined in `../../validation.md`; the quantified transformation indicator belongs in its first sentence as the conclusion.
 
-## Narrative Flow
+**Transitions:**
 
-### Hook Construction
+1. Forces → Friction: "These forces encounter friction at [points]."
+2. Friction → Evolution: "Despite friction, the industry evolves toward [new structure]."
+3. Evolution → Leadership: "Leading in the transformed industry requires [positioning]."
 
-**Approach:**
-Open with surprising transformation indicator—quantified evidence that industry structure is fundamentally changing.
+**Closing pattern:** positioning for the new structure, not defending the old — "Industry transformation is inevitable. Leadership positioning is a strategic choice." or "The question isn't whether the industry transforms — it's who leads the transformed industry."
 
-**Pattern:**
-```markdown
-[Established metric] shifted [magnitude] in [timeframe], signaling [structural change]<sup>[1]</sup>. [Traditional business model] that dominated for [duration] faces [transformation pressure].
-```
+## Elements
 
----
+### 1. Forces
 
-### Element Transitions
+**Purpose:** identify the macro forces — regulatory, technological, social, economic — driving the transformation.
 
-**Hook → Forces:**
-- Hook introduces transformation evidence
-- Forces explains what's driving the change
-- **Transition pattern:** "Three macro forces drive this transformation."
+**Evidence sought:** macro drivers (`megatrends_summary`, `megatrend_entities`), industry-level developments in trends, macro context in the executive summary.
 
-**Forces → Friction:**
-- Forces identifies transformation drivers
-- Friction shows what slows or distorts change
-- **Transition pattern:** "These forces encounter friction at [points]."
+**Argument move:** identify forces by category → size each by scope and horizon → show how forces reinforce or counteract each other → time their peak. Frame the forces as irreversible and unavoidable where the evidence supports it; quantify market coverage; show capital thresholds and timing mismatches as structural forces, not preferences.
 
-**Friction → Evolution:**
-- Friction describes resistance
-- Evolution shows end state despite resistance
-- **Transition pattern:** "Despite friction, industry evolves toward [new structure]."
+**Techniques:** [Forcing Functions](../../narrative-techniques/techniques-overview.md#5-forcing-functions), [Number Plays](../../narrative-techniques/techniques-overview.md#4-number-plays-6-techniques), [Contrast Structure](../../narrative-techniques/techniques-overview.md#6-contrast-structure).
 
-**Evolution → Leadership:**
-- Evolution describes transformed industry
-- Leadership specifies how to position for new structure
-- **Transition pattern:** "Leading in transformed industry requires [positioning]."
+**Hard rules:** forces come from more than one category; each is quantified and timed; interactions between forces are explained.
 
----
+**Failure modes:** "important trends"; one force; forces listed without magnitude or date.
 
-### Closing Pattern
+### 2. Friction
 
-**Final Sentence:**
-Emphasis on positioning for new structure, not defending old structure.
+**Purpose:** identify the barriers, resistance and distortions slowing the transformation.
 
-**Examples:**
-- "Industry transformation is inevitable. Leadership positioning is strategic choice."
-- "Organizations optimizing for current structure lose. Organizations positioning for future structure lead."
-- "The question isn't whether industry transforms—it's who leads the transformed industry."
+**Evidence sought:** tensions and contradictions in cross-cutting patterns, adoption barriers in trends, implementation challenges in the syntheses, resistance factors in the executive summary.
 
-## Quality Gates
+**Argument move:** name each friction's source (incumbents, regulation, infrastructure, culture) → its magnitude → whether it is temporary or structural → the workaround. Show friction as timing mismatches, capital traps and geographic incompatibilities, and use forces language: friction forces specific responses.
 
-### Arc Completeness
+**Techniques:** [Contrast Structure](../../narrative-techniques/techniques-overview.md#6-contrast-structure), [Number Plays](../../narrative-techniques/techniques-overview.md#4-number-plays-6-techniques), [Compound Impact](../../narrative-techniques/techniques-overview.md#8-compound-impact-calculation).
 
-- [ ] All 4 elements present (Forces, Friction, Evolution, Leadership)
-- [ ] Hook present (within hook proportion of target)
-- [ ] Word counts within computed proportional ranges (+/-10% tolerance)
-- [ ] Smooth transitions between elements
-- [ ] Each element serves distinct purpose
+**Hard rules:** friction sources are identified; magnitude is assessed; a workaround or response is described for each.
 
-### Industry Transformation Techniques Applied
+**Failure modes:** friction as a complaint list; no magnitude; no way through.
 
-- [ ] **Forces:** Multiple force categories (regulatory, tech, social, economic)
-- [ ] **Forces:** Force magnitude quantified
-- [ ] **Forces:** Force interactions explained
-- [ ] **Forces:** Force timing specified
-- [ ] **Friction:** Friction sources identified
-- [ ] **Friction:** Friction magnitude assessed
-- [ ] **Friction:** Workarounds described
-- [ ] **Evolution:** New structure described (not just current + change)
-- [ ] **Evolution:** Power shifts identified
-- [ ] **Evolution:** Timeline to new equilibrium
-- [ ] **Leadership:** Positioning for new structure (not defending old)
-- [ ] **Leadership:** Differentiation sources in new equilibrium
-- [ ] **Leadership:** Transition strategy specified
+### 3. Evolution
 
-## Example Transformation
+**Purpose:** describe the industry's future structure — the new equilibrium, business models and competitive dynamics.
 
-This section demonstrates the Forces → Friction transformation using the Electric Vehicle Industry test case.
+**Evidence sought:** future-state vision in the recommendations, transformation direction in the executive summary, structural implications in the syntheses, emergent structures in cross-cutting patterns.
 
-### Source: Executive Summary (Forces)
+**Argument move:** describe how the industry organizes → who gains and loses power → how value creation changes → the timeline to the new equilibrium. Describe the new structure, not the current one plus a delta.
 
-> Regulatory forces are converging globally: EU mandates 100% zero-emission vehicle sales by 2035, California Advanced Clean Cars II requires 68% ZEV by 2030, China's dual-credit system effectively mandates 40% NEV production by 2026<sup>[1](12-synthesis/synthesis-regulatory.md)</sup>. Combined, these policies govern 73% of global automotive demand, creating irreversible industry restructuring pressure<sup>[2](12-synthesis/synthesis-market.md)</sup>.
+**Techniques:** [Contrast Structure](../../narrative-techniques/techniques-overview.md#6-contrast-structure) (old structure versus new), [Number Plays](../../narrative-techniques/techniques-overview.md#4-number-plays-6-techniques).
 
-### Forces Transformation (~75-100% of element allocation)
+**Hard rules:** the new structure is described as a structure; power shifts are identified; a timeline to equilibrium is stated.
 
-Three regulatory mandates are reshaping global automotive demand architecture. The EU's 2035 zero-emission requirement, California's 68% ZEV mandate by 2030, and China's 40% NEV requirement by 2026 create overlapping compliance windows<sup>[1](12-synthesis/synthesis-regulatory.md)</sup>. These aren't isolated regional policies—they govern 73% of global automotive demand, making compliance unavoidable for any manufacturer with global ambitions<sup>[2](12-synthesis/synthesis-market.md)</sup>.
+**Failure modes:** "the industry will continue to evolve"; a trend extrapolation with no structure; no winners and losers.
 
-The force isn't regulatory preference; it's demand restructuring. When 73% of addressable market comes with electrification requirements, traditional product portfolios become commercially unviable regardless of technical feasibility or consumer preference. Manufacturers can't "wait and see" because two-thirds of their market will be legally closed to ICE vehicles within a decade.
+### 4. Leadership
 
-Capital intensity creates the second structural force. EV platforms require $8-12B investment vs. $2-3B for ICE platforms<sup>[6](01-findings/finding-061.md)</sup>—a 4x capital requirement that changes industry economics from product development to platform economics. This capital threshold eliminates incremental transition strategies. Organizations either commit platform-scale resources or exit the segment.
+**Purpose:** specify how to position for leadership in the transformed industry — thriving in the new structure, not surviving the change.
 
-The third force is supply chain lead time mismatch. Battery gigafactory construction takes 6-8 years, but regulatory demand spikes occur in 3-5 year windows<sup>[4](12-synthesis/synthesis-supply.md)</sup>. This temporal mismatch makes reactive supply strategies impossible—battery capacity must be secured years before demand materializes.
+**Evidence sought:** strategic recommendations, leadership opportunities in the syntheses, positioning insights in the executive summary.
 
-*Technique: Frame as "irreversible" and "unavoidable" (not "important trends"). Quantify market coverage (73% global demand). Show capital threshold creating binary choice (commit or exit). Identify timing mismatches as structural forces.*
+**Argument move:** where to play in the new structure → the sources of differentiation in the new equilibrium → when to commit resources → how to manage the transition from current to future. Frame the strongest position with IS-DOES-MEANS.
 
-### Friction Transformation (~71-100% of element allocation)
+**Techniques:** [IS-DOES-MEANS](../../narrative-techniques/techniques-overview.md#3-is-does-means-power-positions), [You-Phrasing](../../narrative-techniques/techniques-overview.md#7-you-phrasing), [Compound Impact](../../narrative-techniques/techniques-overview.md#8-compound-impact-calculation).
 
-The 6-8 year battery production lead time creates immediate friction against 3-5 year regulatory compliance windows<sup>[4](12-synthesis/synthesis-supply.md)</sup>. Automakers facing California's 2030 mandate (4 years away) need battery capacity that won't be production-ready until 2032 if they start construction today. This timing mismatch forces either upstream vertical integration—78% of major OEMs now invest directly in battery production vs. 12% in 2020<sup>[5](12-synthesis/synthesis-integration.md)</sup>—or acceptance of supply constraints that limit market access.
+**Hard rules:** positioning is for the new structure, never a defence of the old; differentiation sources are named in new-equilibrium terms; a transition strategy is specified.
 
-Capital requirements create compounding friction. The $8-12B platform investment must be committed before demand validation<sup>[6](01-findings/finding-061.md)</sup>. Traditional automotive economics relied on incremental model launches with fast failure recovery. Platform economics eliminate this optionality: the capital commitment happens upfront, and the payback window extends across a decade.
+**Failure modes:** "protect market share"; differentiation borrowed from the old structure; no transition path.
 
-Geographic regulatory asymmetry introduces strategic friction: EU's cliff-edge 2035 mandate vs. China's gradual dual-credit approach creates incompatible transition timelines<sup>[3](01-findings/finding-052.md)</sup>. Manufacturers can't optimize for both—platforms designed for EU compliance are overengineered for China's gradual transition, while China-optimized approaches risk EU market exit.
+## Validation
 
-*Technique: Show friction as timing mismatches (6-8 years vs. 3-5 years), capital traps ($8-12B upfront), and geographic incompatibility (cliff-edge vs. gradual). Use "forces" language (forces vertical integration, forces acceptance of constraints).*
+Arc-specific assertions, checked after the universal gates in `../../validation.md`:
 
-### Key Transformation Patterns
-
-**Forces techniques:**
-- Quantify market coverage (73% global demand)
-- Frame as "irreversible," "unavoidable" (structural, not optional)
-- Identify capital thresholds creating binary choices
-- Show timing mismatches as structural forces
-
-**Friction techniques:**
-- Highlight timing conflicts (6-8 years vs. 3-5 years)
-- Show capital traps (upfront commitment, long payback)
-- Identify geographic incompatibilities (cliff-edge vs. gradual)
-- Use "forces" language (friction forces specific responses)
+- Forces spans more than one category, with each force quantified, timed and related to the others.
+- Friction identifies sources, assesses magnitude and describes a response for each.
+- Evolution describes a new structure with power shifts and a timeline to equilibrium.
+- Leadership positions for the new structure with named differentiation and a transition strategy.
+- The chain holds: the friction resists the forces named; the evolution is the outcome of forces against friction; the leadership move is positioned for that evolution.
 
 ## See Also
 
-- `../arc-registry.md` - Master index of all story arcs
-- `forces-patterns.md` - Macro force identification and analysis patterns
-- `friction-patterns.md` - Barrier and resistance point analysis patterns
-- `evolution-patterns.md` - Structural change description patterns
-- `leadership-patterns.md` - Leadership positioning strategy patterns
+- `../arc-registry.md` — arc selection: detection algorithm, per-arc declarative blocks, shortlist format
+- `../../narrative-techniques/techniques-overview.md` — the eight techniques and their application matrix
+- `../../validation.md` — the universal gates every narrative must clear

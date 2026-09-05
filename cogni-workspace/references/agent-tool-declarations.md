@@ -27,3 +27,18 @@ the skill's own word-count and validation steps.
 This was raised as a least-privilege finding on PR #1672 and declined on that basis. The `tools:` line is
 byte-identical at base and HEAD, so it is pre-existing rather than introduced — but the reason it should
 stay is the one above, not its age.
+
+## narrative-writer
+
+`tools:` is `Read, Write, Glob, Grep, Bash, Skill` — deliberately **without** `AskUserQuestion`, even though
+`skills/narrative/SKILL.md`, the skill this agent dispatches through the Skill tool, grants it in its
+`allowed-tools`. The omission is not an oversight to be "aligned": this agent is the headless caller, and
+it always invokes the skill with `--interactive false`, so the skill never reaches a prompt site (the
+Phase 2 arc shortlist, or the Phase 0 materiality gate) while running in this agent's context. A prompt
+that did reach a subagent would stall it — there is no user on the other side — which is the defect the
+flag was added to close. `cogni-workspace/tests/test-narrative-interactive-flag.sh` case P5 pins the
+absence of the grant in the agent body and case P4 pins the flag on the invocation.
+
+An editor who reads the file's own rule ("`tools:` mirrors the skill's `allowed-tools`") and adds the grant
+here re-opens the stall while making the agent look more complete. The rule applies to tools the skill
+*uses* in this agent's context; a prompt tool the skill is told not to use is not one of them.

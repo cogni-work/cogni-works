@@ -14,13 +14,13 @@ allowed-tools:
 
 # /narrative Command
 
-Transform a set of input markdown files into a compelling executive narrative using one of 11 story arc frameworks.
+Transform a set of input markdown files into a compelling executive narrative using one of the story arcs registered in the `narrative` skill.
 
 ## Argument Parsing
 
 Parse the user's arguments to extract:
 - `source_path` (required) -- directory with .md files or single .md file
-- `--arc` or `--arc-id` (optional) -- explicit arc: `corporate-visions`, `technology-futures`, `competitive-intelligence`, `strategic-foresight`, `industry-transformation`, `trend-panorama`, `theme-thesis`, `jtbd-portfolio`, `company-credo`, `engagement-model`, `smarter-service`
+- `--arc` or `--arc-id` (optional) -- explicit arc id; the registered arcs and their governing questions are listed in the skill's `references/story-arc/arc-registry.md` Quick Reference (not duplicated here, so the list cannot drift)
 - `--lang` or `--language` (optional) -- `en` (default) or `de`
 - `--output` or `-o` (optional) -- output file path
 

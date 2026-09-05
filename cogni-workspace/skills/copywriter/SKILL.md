@@ -105,12 +105,12 @@ These apply even in `--scope=tone` because they are readability essentials, not 
 
 1. Resolve `source_lang` via the existing detector in Step 3 (`--lang` → workspace config → content analysis).
 2. If `source_lang == TARGET_LANG`, log "source language already matches target — skipping translation pass" and fall through to standard polish. **Also unset the translation scope override below** so the user's explicit `--scope` is honoured (a user invoking `--scope=full` on a same-language doc expects Step 2 to run normally).
-3. **Arc-mode gate.** Determine the document's arc: use frontmatter `arc_id` if present; otherwise, if the H2 headings match a known in-scope arc pattern (per `arc-preservation.md` detection), use that `arc_id`. If neither yields an arc, skip this gate (proceed as a non-arc translation). When an arc is identified:
-   - If the arc is **not** one of `corporate-visions`, `jtbd-portfolio` → abort (coverage), **regardless of language**, with: "Arc-mode translation currently covers corporate-visions and jtbd-portfolio; arc `{arc_id}` is not yet supported." Do not modify the file.
-   - Else (the arc is in scope) **and** at least one of `source_lang`/`TARGET_LANG` is in `{en, de}` → **allow**: set `arc_mode = true` and proceed. The arc-element and bridge headings will be **substituted** (not freely translated) in Step 2.5. This covers en↔de, en/de→fr/it/pl/nl/es, and the fr/it/pl/nl/es→en/de reverse.
-   - Else (the arc is in scope but **neither** end is in `{en, de}` — e.g. a French source with `TARGET_LANG=it`) → do **not** abort here; fall through to pre-check #4 (accept-set) and #5 (pivot guard), which emits the correct direct-non-EN/DE message.
+3. **Arc-mode gate.** Determine the document's arc: use frontmatter `arc_id` if present; otherwise match the H2 headings against the arc contracts (per `arc-preservation.md` detection, which reads the `narrative` skill's registry and contracts at runtime, so every registered arc is detectable). If neither yields an arc, skip this gate (proceed as a non-arc translation). When an arc is identified, open its contract, `${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/story-arc/{arc_id}/arc-definition.md`, and read the column set of its `## Headings` table:
+   - If that table carries **no column for `TARGET_LANG`** → abort (coverage), **regardless of language pair**, with: "Arc-mode translation into `{TARGET_LANG}` is not supported for arc `{arc_id}`: its contract carries headings for {columns} only." Do not modify the file — an arc without upstream headings for the target language fails closed rather than inventing them. Today the contracts carrying all seven languages are `corporate-visions` and `jtbd-portfolio`; every other arc carries EN and DE.
+   - Else (the contract carries the target column) **and** at least one of `source_lang`/`TARGET_LANG` is in `{en, de}` → **allow**: set `arc_mode = true` and proceed. The arc-element and bridge headings will be **substituted** (not freely translated) in Step 2.5.
+   - Else (the column exists but **neither** end is in `{en, de}` — e.g. a French source with `TARGET_LANG=it`) → do **not** abort here; fall through to pre-check #4 (accept-set) and #5 (pivot guard), which emits the correct direct-non-EN/DE message.
    - If `TARGET_LANG` is not in the accept-set at all → do **not** abort here; fall through to pre-check #4, which emits the correct "not a supported language" message.
-   (Arc-mode translation pivots on EN/DE for these two arcs across `{de,en,fr,it,pl,nl,es}`. The remaining 9 arcs — any language — and direct non-EN/DE pairs stay blocking here.)
+   (Arc-mode translation pivots on EN/DE. Which arcs support which target languages is a fact of the contract, never of this skill.)
 4. **Accept-set check.** Accept only `de`, `en`, `fr`, `it`, `pl`, `nl`, `es`. Any other value: abort with "TARGET_LANG=`{value}` is not a supported language. Supported: de, en, fr, it, pl, nl, es."
 5. **Pivot guard.** Translation pivots on EN or DE. If **neither** `source_lang` **nor** `TARGET_LANG` is in `{en, de}` (e.g. a French source with `TARGET_LANG=it`), abort with: "Direct {source_lang}→{TARGET_LANG} translation is not supported — every direction must include English or German on one end. Pivot via EN or DE: translate to en/de first, then to the final language." Do not modify the file.
 
@@ -128,7 +128,7 @@ Follow the index's decision tree to detect the operating mode (arc, sales, or st
 
 **Key mode behaviors:**
 
-- **Arc mode** (triggered by `arc_id` in frontmatter or arc heading patterns): The arc IS the structure — skip framework and deliverable loading. Load arc-preservation and arc-technique-map references instead.
+- **Arc mode** (triggered by `arc_id` in frontmatter or arc heading patterns): The arc IS the structure — skip framework and deliverable loading. Load the arc-preservation rules plus the detected arc's `arc-definition.md` and narrative's `techniques-overview.md` (see the cross-skill dependencies table under Step 2.5).
 - **Sales mode** (triggered by `MODE: sales` or Power Position markers): Load power-positions plus impact techniques, then continue with standard deliverable/framework loading.
 - **Standard mode**: Load deliverable type, messaging framework (user-specified or deliverable's default), and core principles.
 
@@ -165,7 +165,16 @@ READ: references/01-core-principles/translation-{source_lang}-to-{TARGET_LANG}.m
 
 For example: `en`→`fr` loads `translation-en-to-fr.md`; `pl`→`de` loads `translation-pl-to-de.md`. The validity matrix in `translation-principles.md` lists all 22 supported directions. DE-pivot composition files (e.g. `translation-de-to-fr.md`) cross-reference the matching EN-pivot file for the full target-language production rules; X→de files cross-reference `translation-en-to-de.md` for German production.
 
-When `arc_mode` is active, the arc references (`references/09-preservation-modes/arc-preservation.md`, `arc-technique-map.md`) are loaded **in addition** to the translation references (per `00-index.md` CHECK 0). `arc-preservation.md` supplies the canonical target-language headings for the substitution below.
+When `arc_mode` is active, `references/09-preservation-modes/arc-preservation.md` and the upstream files in the cross-skill dependencies table below are loaded **in addition** to the translation references (per `00-index.md` CHECK 0). The arc contract's `## Headings` table supplies the canonical target-language headings for the substitution below.
+
+**Cross-skill dependencies (read at runtime, never mirrored):**
+
+| Upstream file | Read at | What it supplies |
+|---|---|---|
+| `${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/story-arc/arc-registry.md` | Step 1 pre-check 3, Step 1 mode detection | The registered arcs (one `### {arc-id}` block each) for heading-pattern detection |
+| `${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/story-arc/{arc_id}/arc-definition.md` | Step 2.5, Step 5 | `## Headings` — the canonical element headings per language, substituted positionally and validated byte-for-byte; `## Elements` — per-element Techniques and Hard rules the polish must keep intact; `## Validation` — the arc's own assertions |
+| `${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/narrative-techniques/techniques-overview.md` | Step 3 | The technique definitions and the application matrix (which technique each element carries) |
+| `${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/language/shared.md` | Step 2.5 | The bridge heading ("Further Reading") in all seven languages |
 
 **Perform the translation (Pass A):**
 
@@ -181,11 +190,11 @@ Translate the entire document to `TARGET_LANG`, holding to these invariants:
 
 **Arc-heading substitution (runs only when `arc_mode` is active):**
 
-Arc-element and bridge headings are NOT freely translated — they are **substituted** from the canonical table in `references/09-preservation-modes/arc-preservation.md` (the downstream mirror; do **not** read the `narrative` skill's files at runtime):
+Arc-element and bridge headings are NOT freely translated — they are **substituted** from the upstream authority read at runtime: the arc contract's `## Headings` table for the four element headings, and `${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/language/shared.md` § Bridge heading for the bridge:
 
-1. Read `arc_id` from frontmatter and load that arc's canonical headings from `arc-preservation.md`: the 4 element headings (index 1–4) from the canonical heading table, **and** the bridge heading from the bridge list immediately below that table (the bridge is a prose list, not a table row).
+1. Read `arc_id` from frontmatter and load that arc's contract; take the four element headings (rows 1–4) from the `TARGET_LANG` column of `## Headings`, and the bridge heading from the bridge table in `language/shared.md` (a separate file, because a generated narrative carries a `**Sources**` block rather than a bridge; the bridge survives for older arc documents).
 2. Identify the document's headings **positionally**:
-   - The **bridge** is the trailing H2 whose text matches **any language's** bridge form in the bridge list in `arc-preservation.md` — `Further Reading` (en), `Weiterführende Lektüre` (de; also accept the ASCII form `Weiterfuehrende Lektuere` on input), `Pour aller plus loin` (fr), `Approfondimenti` (it), `Dalsza lektura` (pl), `Verder lezen` (nl), `Lecturas adicionales` (es). Match against every form, not just the source/target pair — a reverse-direction doc (e.g. a French source) carries its bridge in the source language. A document may have no bridge — that is fine; substitute only what is present.
+   - The **bridge** is the trailing H2 whose text matches **any language's** bridge form in `language/shared.md` — `Further Reading` (en), `Weiterführende Lektüre` (de; also accept the ASCII form `Weiterfuehrende Lektuere` on input), `Pour aller plus loin` (fr), `Approfondimenti` (it), `Dalsza lektura` (pl), `Verder lezen` (nl), `Lecturas adicionales` (es). Match against every form, not just the source/target pair — a reverse-direction doc (e.g. a French source) carries its bridge in the source language. A document may have no bridge — that is fine; substitute only what is present.
    - A **subtitle** rendered as an H2 (the single H2 that is neither an arc element nor the bridge — match it against the document's H2 subtitle text / frontmatter `subtitle:`) is preserved byte-identical, never substituted. Both in-scope arcs emit the subtitle as italic text, not an H2.
    - The remaining H2s, in document order, are arc elements 1..4. **If the remaining count is not exactly 4, do not substitute** — log `fallback_reason="arc_elements_not_resolved"`, leave all headings as-is, and continue with body translation only. This guards against mis-indexed substitution (e.g. an unexpected extra H2).
    - Prefix-match each element heading against the source-language column as a **sanity guard** — if positional index and prefix-match disagree, trust the position and note the discrepancy. (A real narrative's source headings may legitimately differ from any cached form.)
@@ -240,7 +249,7 @@ Load techniques from the reference index. The reference files contain detailed d
 - **Rhetorical devices** — Structural persuasion (Rule of Three, anaphora, antithesis, cadence — 2-3 per document)
 - **Executive impact** — C-suite optimization (lead with ask, quantify everything, one-page max)
 
-**Arc-aware technique application**: When `arc_mode` is active, apply techniques per-element using the arc-technique-map rather than generically across the document. Each arc element has its own technique profile.
+**Arc-aware technique application**: When `arc_mode` is active, apply techniques per-element using the arc contract's `## Elements` — each `### N.` section names the element's Techniques and Hard rules — and the application matrix in narrative's `techniques-overview.md`, rather than generically across the document. Each arc element has its own technique profile.
 
 **Sales mode enhancement**: When `MODE: sales`, enhance Power Positions (IS-DOES-MEANS structure) while preserving structure markers. Apply number plays primarily to DOES layer, power words primarily to MEANS layer. Never merge layers or modify structure markers.
 
@@ -336,11 +345,11 @@ Review enhances quality but never blocks delivery — if review fails, continue 
 
 **Arc-aware validation** (when `arc_mode` is active):
 
-Run the technique validation checklist from `arc-technique-map.md`:
-- Heading text unchanged — **except in translation mode** (`TARGET_LANG` set), where arc-element + bridge headings must instead **match the `TARGET_LANG` canonical set** in `arc-preservation.md` byte-for-byte, carrying the target language's required diacritics per `translation-principles.md` § "Per-Language Charset Rules" (e.g. ä/ö/ü/ß for `de`, é/è/ê/ç for `fr`, à/è/é/ì/ò/ù for `it`, ą/ć/ę/ł/ń/ó/ś/ź/ż for `pl`, á/é/í/ó/ú/ñ for `es`; `nl` is ASCII) — never ASCII substitutes
-- Primary technique intact per element
-- Number Play variant applied per element
-- Word count within +-50 words of arc targets — **in translation mode** use the relative band instead (see `arc-technique-map.md` Post-Polish Validation: `source_element_words × factor × (1 ± 0.20)`, factor per the per-target table there — ≈ 1.20 →de, ≈ 0.83 →en, ≈ 1.15 →fr, ≈ 1.10 →it, ≈ 1.20 →es, ≈ 1.05 →nl, ≈ 1.10 →pl)
+Run the technique validation checklist in `arc-preservation.md` § Validation Checklist, sourced from the detected arc's contract — the Techniques and Hard rules of each `### N.` section under `## Elements`, and the assertions under `## Validation`:
+- Heading text unchanged — **except in translation mode** (`TARGET_LANG` set), where arc-element headings must instead **match the `TARGET_LANG` column of the contract's `## Headings`** byte-for-byte and the bridge the `TARGET_LANG` form in `language/shared.md`, carrying the target language's required diacritics per `translation-principles.md` § "Per-Language Charset Rules" (e.g. ä/ö/ü/ß for `de`, é/è/ê/ç for `fr`, à/è/é/ì/ò/ù for `it`, ą/ć/ę/ł/ń/ó/ś/ź/ż for `pl`, á/é/í/ó/ú/ñ for `es`; `nl` is ASCII) — never ASCII substitutes
+- Primary technique intact per element (the contract's Techniques subfield)
+- Hard rules of each element still hold
+- Word count within +-50 words of the element's share of the source — **in translation mode** use the relative band instead (see `arc-preservation.md` § Translation-mode word band: `source_element_words × factor × (1 ± 0.20)`, factor per the per-target table there — ≈ 1.20 →de, ≈ 0.83 →en, ≈ 1.15 →fr, ≈ 1.10 →it, ≈ 1.20 →es, ≈ 1.05 →nl, ≈ 1.10 →pl)
 - Citations preserved per element
 - H2 count + element order unchanged from the source (the absolute "exactly 6" expectation does not apply — a document may legitimately carry an italic subtitle and 5 H2s)
 - No content moved between elements

@@ -409,17 +409,22 @@
     {
       "skill": "narrative",
       "arm": "reference-depth",
+      "file": "cogni-workspace/skills/narrative/references/language"
+    },
+    {
+      "skill": "narrative",
+      "arm": "reference-depth",
       "file": "cogni-workspace/skills/narrative/references/narrative-techniques"
     },
     {
       "skill": "narrative",
       "arm": "reference-depth",
-      "file": "cogni-workspace/skills/narrative/references/phase-workflows"
+      "file": "cogni-workspace/skills/narrative/references/story-arc"
     },
     {
       "skill": "narrative",
       "arm": "reference-depth",
-      "file": "cogni-workspace/skills/narrative/references/story-arc"
+      "file": "cogni-workspace/skills/narrative/references/story-arc/category-creation"
     },
     {
       "skill": "narrative",
@@ -434,7 +439,17 @@
     {
       "skill": "narrative",
       "arm": "reference-depth",
+      "file": "cogni-workspace/skills/narrative/references/story-arc/consulting-problem-solving"
+    },
+    {
+      "skill": "narrative",
+      "arm": "reference-depth",
       "file": "cogni-workspace/skills/narrative/references/story-arc/corporate-visions"
+    },
+    {
+      "skill": "narrative",
+      "arm": "reference-depth",
+      "file": "cogni-workspace/skills/narrative/references/story-arc/customer-transformation"
     },
     {
       "skill": "narrative",
@@ -459,6 +474,11 @@
     {
       "skill": "narrative",
       "arm": "reference-depth",
+      "file": "cogni-workspace/skills/narrative/references/story-arc/strategic-choice"
+    },
+    {
+      "skill": "narrative",
+      "arm": "reference-depth",
       "file": "cogni-workspace/skills/narrative/references/story-arc/strategic-foresight"
     },
     {
@@ -475,281 +495,6 @@
       "skill": "narrative",
       "arm": "reference-depth",
       "file": "cogni-workspace/skills/narrative/references/story-arc/trend-panorama"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/phase-workflows/phase-4b-synthesis-company-credo.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/phase-workflows/phase-4b-synthesis-competitive-intelligence.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/phase-workflows/phase-4b-synthesis-corporate-visions.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/phase-workflows/phase-4b-synthesis-engagement-model.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/phase-workflows/phase-4b-synthesis-industry-transformation.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/phase-workflows/phase-4b-synthesis-jtbd-portfolio.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/phase-workflows/phase-4b-synthesis-smarter-service.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/phase-workflows/phase-4b-synthesis-strategic-foresight.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/phase-workflows/phase-4b-synthesis-technology-futures.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/phase-workflows/phase-4b-synthesis-theme-thesis.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/phase-workflows/phase-4b-synthesis-trend-panorama.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/company-credo/conviction-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/company-credo/credibility-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/company-credo/mission-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/company-credo/promise-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/competitive-intelligence/implications-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/competitive-intelligence/landscape-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/competitive-intelligence/positioning-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/competitive-intelligence/shifts-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/corporate-visions/why-change-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/corporate-visions/why-now-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/corporate-visions/why-pay-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/corporate-visions/why-you-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/engagement-model/outcomes-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/engagement-model/partnership-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/engagement-model/principles-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/engagement-model/process-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/industry-transformation/evolution-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/industry-transformation/forces-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/industry-transformation/friction-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/industry-transformation/leadership-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/jtbd-portfolio/friction-map-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/jtbd-portfolio/invitation-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/jtbd-portfolio/job-landscape-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/jtbd-portfolio/portfolio-map-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/smarter-service/forces-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/smarter-service/foundations-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/smarter-service/horizons-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/smarter-service/impact-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/strategic-foresight/decisions-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/strategic-foresight/scenarios-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/strategic-foresight/signals-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/strategic-foresight/strategies-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/technology-futures/whats-converging-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/technology-futures/whats-emerging-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/technology-futures/whats-possible-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/technology-futures/whats-required-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/theme-thesis/why-change-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/theme-thesis/why-now-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/theme-thesis/why-pay-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/theme-thesis/why-you-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/trend-panorama/forces-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/trend-panorama/foundations-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/trend-panorama/horizons-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/trend-panorama/impact-patterns.md"
     },
     {
       "skill": "portfolio-scan",

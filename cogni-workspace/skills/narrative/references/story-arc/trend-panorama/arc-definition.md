@@ -1,459 +1,136 @@
-# Trend Panorama Story Arc
-
-## Arc Metadata
-
-**Arc ID:** `trend-panorama`
-**Display Name:** Trend Panorama
-**Display Name (German):** Trend-Panorama
-
-**Elements (Ordered):**
-1. Forces: External Pressures & Market Signals
-2. Impact: Value Chain Disruption
-3. Horizons: Strategic Possibilities
-4. Foundations: Capability Requirements
-
-**Elements (German):**
-1. Kräfte: Externe Einflüsse & Marktsignale
-2. Wirkung: Wertschöpfungsdynamik
-3. Horizonte: Strategische Möglichkeiten
-4. Fundamente: Kompetenzanforderungen
-
-## TIPS Dimension Mapping
-
-This arc is purpose-built for cogni-trends trend-scout output. Each element maps to one TIPS dimension:
-
-| Element | TIPS Letter | Dimension Slug | Dimension Name (EN) | Dimension Name (DE) |
-|---------|-------------|----------------|---------------------|---------------------|
-| Forces | **T** | `externe-effekte` | External Effects | Externe Effekte |
-| Impact | **I** | `digitale-wertetreiber` | Digital Value Drivers | Digitale Wertetreiber |
-| Horizons | **P** | `neue-horizonte` | New Horizons | Neue Horizonte |
-| Foundations | **S** | `digitales-fundament` | Digital Foundation | Digitales Fundament |
-
-### Horizon Cascade (Within Each Element)
-
-Each element synthesizes trends across three planning horizons, creating an urgency gradient:
-
-| Horizon | Timeframe | Signal Intensity | Narrative Role |
-|---------|-----------|-----------------|----------------|
-| **Act** | 0-2 years | Levels 4-5 | Lead with urgency -- what demands immediate response |
-| **Plan** | 2-5 years | Levels 2-4 | Bridge to preparation -- what to build capability for |
-| **Observe** | 5+ years | Levels 1-2 | Close with foresight -- what weak signals to monitor |
-
-**Distribution per element:** ~13 trends (5 Act + 5 Plan + 3 Observe), but the narrative SYNTHESIZES clusters, not lists individual trends.
-
-## Word Proportions
-
-Section lengths are expressed as proportions of the total target length. This keeps the arc's rhetorical balance intact regardless of narrative length. To compute word ranges for a given `--target-length T`: apply +/-15% band to get `[T*0.85, T*1.15]`, then multiply each proportion.
-
-| Element | English Header | German Header | Proportion | Default Range (T=1675) |
-|---------|----------------|---------------|-----------|------------------------|
-| Hook | *(Dynamic based on cross-dimensional insight)* | *(Dynamic)* | 10% | 143-193 |
-| Forces | Forces: External Pressures & Market Signals | Kräfte: Externe Einflüsse & Marktsignale | 24% | 342-462 |
-| Impact | Impact: Value Chain Disruption | Wirkung: Wertschöpfungsdynamik | 24% | 342-462 |
-| Horizons | Horizons: Strategic Possibilities | Horizonte: Strategische Möglichkeiten | 24% | 342-462 |
-| Foundations | Foundations: Capability Requirements | Fundamente: Kompetenzanforderungen | 18% | 256-347 |
-
-**Proportions sum to 100%.** Default total: 1,675 words (customizable via `--target-length`). Tolerance: +/-10% of computed section midpoint.
-
-## Detection Configuration
-
-### Research Type Mapping
-
-This arc is selected when:
-- `research_type: "smarter-service"` (trend-scout output)
-- `content_type: "trend"` or `"trends"` or `"tips"`
-- `synthesis_format: "TIPS"` in source metadata
-
-### Content Analysis Keywords
-
-When `research_type` or `content_type` doesn't match, analyze input content for keyword density:
-- **Keywords:** "trend", "horizon", "act", "plan", "observe", "TIPS", "signal intensity", "trend-scout", "dimension", "subcategory"
-- **Threshold:** >=12% keyword density
-
-### Structural Detection
-
-Strongest auto-detection signals (check before keyword density):
-- Presence of `trend-scout-output.json` in source directory or `.metadata/`
-- Presence of `tips-trend-report.md` in source directory
-- Source files containing YAML frontmatter with `planning_horizon` and `dimension` fields
-- Files tagged with `entity-type/trend` in frontmatter tags
-
-### Use Cases
-
-**Best For:**
-- Trend-scout output summarization (52 trend candidates)
-- TIPS trend report narratives
-- Multi-horizon trend landscape overviews
-- Industry-specific trend panoramas
-- Strategic planning input from trend research
-
-**Typical Research Types:**
-- Smarter Service trend scouting
-- TIPS-formatted trend analysis
-- Multi-dimensional trend landscape mapping
-- Horizon-based strategic foresight from trend data
-
-## Element Definitions
-
-### Element 1: Forces (External Pressures & Market Signals)
-
-**Purpose:**
-Synthesize the T-dimension (Externe Effekte) trends into a narrative of external forces reshaping the landscape. Cover economy, regulation, and society subcategories across Act/Plan/Observe horizons.
-
-**TIPS Dimension:** T -- Trends (Externe Effekte)
-**Subcategories:** wirtschaft (Economy), regulierung (Regulation), gesellschaft (Society)
-
-**Source Content:**
-- **Trend entities with `dimension: "externe-effekte"`** (primary) -- filtered from `trend-scout-output.json` or `11-trends/data/`
-- **Trend report T-section** -- from `tips-trend-report.md` if available
-- **Dimension synthesis** -- from `12-synthesis/data/synthesis-externe-effekte.md` if available
-- **Executive Summary** -- cross-dimensional context
-
-**Source Content Mapping Example:**
-
-```javascript
-// From trend-scout-output.json, dimension: "externe-effekte"
-{
-  "dimension": "externe-effekte",
-  "horizon": "act",
-  "trend_name": "EU AI Act Compliance",
-  "trend_statement": "EU AI Act August 2026 deadline for high-risk AI systems...",
-  "score": 0.84,
-  "confidence_tier": "high",
-  "signal_intensity": 5,
-  "keywords": ["regulation", "compliance", "ai-act"]
-}
-
-// Synthesized narrative:
-"Regulatory pressure crystallizes around the EU AI Act's August 2026 deadline
-for high-risk AI systems<sup>[1]</sup>. With signal intensity at level 5 and
-high confidence, this demands immediate organizational response..."
-```
-
-**Transformation Approach:**
-1. **Group by subcategory:** Cluster externe-effekte trends into economy, regulation, society
-2. **Cascade by horizon:** Within each cluster, lead with Act trends (immediate pressure), bridge to Plan trends (emerging forces), close with Observe trends (weak signals)
-3. **Identify force interactions:** Show how economic, regulatory, and societal forces reinforce or counteract each other
-4. **Quantify magnitude:** Use trend scores and confidence tiers to signal force strength
-
-**Key Techniques:**
-- PSB for reframing the dominant force as an unconsidered need
-- Forcing Functions for Act-horizon trends with regulatory or market deadlines
-- Contrast Structure for tensions between subcategory forces
-- Number Plays for trend scores, signal intensities, and quantitative evidence
-
-**Pattern Reference:** `forces-patterns.md`
-
+---
+arc_id: trend-panorama
+display_name: Trend Panorama
+display_name_de: Trend-Panorama
+contract: 2
 ---
 
-### Element 2: Impact (Value Chain Disruption)
+# Trend Panorama
 
-**Purpose:**
-Synthesize the I-dimension (Digitale Wertetreiber) trends into a narrative of how external forces reshape value creation. Cover customer experience, products/services, and business processes across horizons.
+## Intent
 
-**TIPS Dimension:** I -- Implications (Digitale Wertetreiber)
-**Subcategories:** customer-experience, produkte-services, geschaeftsprozesse (Business Processes)
+**Governing question:** Which external forces are reshaping the landscape, how do they disrupt value creation, what strategic possibilities open, and what capabilities are required?
 
-**Source Content:**
-- **Trend entities with `dimension: "digitale-wertetreiber"`** (primary)
-- **Trend report I-section** -- from `tips-trend-report.md` if available
-- **Dimension synthesis** -- from `12-synthesis/data/synthesis-digitale-wertetreiber.md`
-- **Executive Summary** -- value chain transformation patterns
+**Rhetorical job:** Summarize a trend landscape into one flowing narrative along the four Smarter Service dimensions — Trends (T), Implications (I), Possibilities (P), Solutions (S) — with an Act → Plan → Observe urgency cascade inside each element. It is the theme-less TIPS arc: a panorama of the whole landscape, not a set of investment bets.
 
-**Transformation Approach:**
-1. **Map force-to-impact chain:** Connect Forces element insights to value chain disruption
-2. **Cascade by horizon:** Act impacts (disruption happening now), Plan impacts (emerging value shifts), Observe impacts (potential future disruptions)
-3. **Show cascading effects:** How customer experience changes drive product/service evolution, which forces process transformation
-4. **Quantify disruption:** Revenue impact, cost structure changes, market share shifts from trend evidence
+**Not for:** a TIPS report built on an investment-theme value model (`smarter-service`), a single theme's investment thesis (`theme-thesis`), or a non-TIPS technology roadmap (`technology-futures`).
 
-**Key Techniques:**
-- Contrast Structure for before/after value chain comparisons
-- Compound Impact for stacking disruption across customer, product, process
-- Number Plays for quantified value chain metrics
-- Forcing Functions for Act-horizon disruptions demanding immediate response
+## Selection
 
-**Pattern Reference:** `impact-patterns.md`
+**Best for:** trend-scout output summaries, TIPS trend-report narratives without themes, multi-horizon trend landscape overviews, industry trend panoramas.
 
----
+**Signals:** structural — `trend-scout-output.json` in the source or its `.metadata/`, or trend entities carrying `planning_horizon` and `dimension` frontmatter, with **no** `tips-value-model.json`; content type `trend`, `trends` or `tips`; keywords such as "trend", "horizon", "act", "plan", "observe", "TIPS", "signal intensity", "dimension".
 
-### Element 3: Horizons (Strategic Possibilities)
+**Anti-signals:** `tips-value-model.json` present (`smarter-service`); a single theme with value chains (`theme-thesis`); no horizon or dimension structure in the source.
 
-**Purpose:**
-Synthesize the P-dimension (Neue Horizonte) trends into a narrative of strategic opportunities. Cover strategy, leadership, and governance approaches across horizons.
+**Fallback priority:** never a fallback. The structural signal decides between this arc and `smarter-service` before any keyword analysis runs.
 
-**TIPS Dimension:** P -- Possibilities (Neue Horizonte)
-**Subcategories:** strategie (Strategy), fuehrung (Leadership), steuerung (Governance)
+## Headings
 
-**Source Content:**
-- **Trend entities with `dimension: "neue-horizonte"`** (primary)
-- **Trend report P-section** -- from `tips-trend-report.md` if available
-- **Dimension synthesis** -- from `12-synthesis/data/synthesis-neue-horizonte.md`
-- **Executive Summary** -- strategic opportunity statements
+Byte-exact section headers by output language. Renderers, the copywriter and the validation script all match these strings; never paraphrase, re-case or re-punctuate them.
 
-**Transformation Approach:**
-1. **Connect impact-to-opportunity:** Show how value chain disruptions (Element 2) create strategic openings
-2. **Cascade by horizon:** Act opportunities (seize now), Plan opportunities (build toward), Observe opportunities (position for)
-3. **Differentiate by subcategory:** Strategy opportunities vs. leadership model shifts vs. governance innovations
-4. **Quantify opportunity windows:** Use horizon timelines and confidence scores to size windows
+| # | EN | DE |
+|---|----|----|
+| 1 | Forces: External Pressures & Market Signals | Kräfte: Externe Einflüsse & Marktsignale |
+| 2 | Impact: Value Chain Disruption | Wirkung: Wertschöpfungsdynamik |
+| 3 | Horizons: Strategic Possibilities | Horizonte: Strategische Möglichkeiten |
+| 4 | Foundations: Capability Requirements | Fundamente: Kompetenzanforderungen |
 
-**Key Techniques:**
-- You-Phrasing for direct reader engagement with opportunities
-- IS-DOES-MEANS for articulating strategic positions
-- Number Plays for opportunity sizing and timing
-- Contrast Structure for conventional vs. emerging strategic approaches
+Each element maps to one TIPS dimension: Forces = T (`externe-effekte`, Externe Effekte), Impact = I (`digitale-wertetreiber`, Digitale Wertetreiber), Horizons = P (`neue-horizonte`, Neue Horizonte), Foundations = S (`digitales-fundament`, Digitales Fundament).
 
-**Pattern Reference:** `horizons-patterns.md`
+## Composition
 
----
+Section lengths are proportions of `--target-length` (default 1,675 words). Word ranges for a target `T` are `[T × 0.85, T × 1.15]` multiplied by each proportion. Proportions sum to 100%.
 
-### Element 4: Foundations (Capability Requirements)
+| Segment | Proportion |
+|---------|-----------:|
+| Forces | 27% |
+| Impact | 27% |
+| Horizons | 27% |
+| Foundations | 19% |
 
-**Purpose:**
-Synthesize the S-dimension (Digitales Fundament) trends into a narrative of required capabilities. Cover culture, workforce, and technology infrastructure across horizons.
+**Executive TL;DR emphasis:** forces → impact → horizons → foundations. The narrative opens with the TL;DR defined in `../../validation.md`; the strategic question and the quantified cross-dimensional surprise — how many converging trends, how many demand action within 24 months — belong in its first sentence as the conclusion.
 
-**TIPS Dimension:** S -- Solutions (Digitales Fundament)
-**Subcategories:** kultur (Culture), mitarbeitende (Workforce), technologie (Technology)
+**Horizon cascade inside every element:** lead with Act-horizon evidence (0-2 years, signal levels 4-5 — what demands immediate response, roughly half the element), bridge with Plan-horizon evidence (2-5 years, levels 2-4 — what to build capability for, roughly a third), close with Observe-horizon evidence (5+ years, levels 1-2 — weak signals to monitor, the remainder). Synthesize clusters; never list individual trends.
 
-**Source Content:**
-- **Trend entities with `dimension: "digitales-fundament"`** (primary)
-- **Trend report S-section** -- from `tips-trend-report.md` if available
-- **Dimension synthesis** -- from `12-synthesis/data/synthesis-digitales-fundament.md`
-- **Executive Summary** -- capability building recommendations
+**Transitions:**
 
-**Transformation Approach:**
-1. **Connect opportunities-to-requirements:** Show which capabilities enable the possibilities from Element 3
-2. **Cascade by horizon:** Act requirements (build now), Plan requirements (start developing), Observe requirements (begin experimenting)
-3. **Sequence dependencies:** Culture enables workforce, workforce enables technology -- show build order
-4. **Quantify readiness gaps:** Use trend evidence to assess current vs. required capability levels
+1. Forces → Impact: "These external forces translate into measurable disruption across the value chain."
+2. Impact → Horizons: "Disruption creates openings. The strategic question shifts from 'how to defend' to 'where to position.'"
+3. Horizons → Foundations: "Capturing these opportunities requires specific capabilities across culture, workforce, and technology."
 
-**Key Techniques:**
-- IS-DOES-MEANS for defining each capability requirement
-- Compound Impact for cost of capability gaps (stacked across culture, workforce, tech)
-- Forcing Functions for capability deadlines driven by Act-horizon requirements
-- You-Phrasing for actionable capability building recommendations
+**Closing pattern:** the capability imperative, inside Foundations — "The trend panorama shows what's changing; the foundations show what to build first. Trends without foundations are strategic theatre."
 
-**Pattern Reference:** `foundations-patterns.md`
+## Elements
 
-## Narrative Flow
+### 1. Forces
 
-### Hook Construction
+**Purpose:** synthesize the T-dimension into a narrative of external forces reshaping the landscape — economy, regulation and society, cascaded by horizon.
 
-**Approach:**
-Open with a cross-dimensional insight that reveals the SCALE and URGENCY of the trend landscape. The hook should synthesize across all 4 TIPS dimensions to show the panoramic view.
+**Evidence sought:** trend entities with `dimension: externe-effekte` (`trend_entities`, `trends_summary`), the T-section of an existing trend report, cross-dimensional context from the executive summary.
 
-**Pattern:**
-```markdown
-[Industry/sector] faces [number] converging trends across [N] dimensions—from [T-dimension insight] through [I-dimension insight] to [P-dimension insight], demanding [S-dimension implication]<sup>[1]</sup>. [Quantified urgency from Act-horizon trends]. [Surprising cross-dimensional finding].
-```
+**Argument move:** group the T-trends into economy, regulation and society → within each, cascade Act → Plan → Observe → show how the forces reinforce or counteract each other → size each force by trend score and confidence tier.
 
-**Example:**
-```markdown
-Aviation faces 52 converging digital transformation trends that reshape everything from regulatory compliance to passenger experience<sup>[1]</sup>. Thirteen trends demand immediate action within 24 months—biometric processing alone reaches 70% airline adoption while drone delivery moves from pilot to production at 40% of major cargo hubs<sup>[2]</sup>. Yet the most disruptive patterns emerge not from individual trends but from their interaction: regulatory pressure on AI systems accelerates the very automation it seeks to govern<sup>[3]</sup>.
-```
+**Techniques:** [PSB](../../narrative-techniques/techniques-overview.md#2-psb-problem-solution-benefit) (the dominant force as an unconsidered need), [Forcing Functions](../../narrative-techniques/techniques-overview.md#5-forcing-functions), [Contrast Structure](../../narrative-techniques/techniques-overview.md#6-contrast-structure), [Number Plays](../../narrative-techniques/techniques-overview.md#4-number-plays-6-techniques).
 
----
+**Hard rules:** all three subcategories appear; the Act → Plan → Observe cascade is visible; force interactions are stated; magnitudes carry scores or confidence tiers.
 
-### Element Transitions
+**Failure modes:** a trend list; horizons mixed or missing; forces named with no interaction.
 
-**Hook -> Forces:**
-- Hook reveals the panoramic landscape
-- Forces drills into the first dimension: external pressures
-- **Transition pattern:** "The trend landscape begins with external forces reshaping [industry/sector]."
+### 2. Impact
 
-**Forces -> Impact:**
-- Forces establishes macro pressures
-- Impact shows how those forces disrupt value creation
-- **Transition pattern:** "These external forces translate into measurable disruption across the value chain."
+**Purpose:** synthesize the I-dimension into a narrative of how the forces reshape value creation — customer experience, products and services, business processes.
 
-**Impact -> Horizons:**
-- Impact describes current and emerging disruption
-- Horizons reframes disruption as strategic opportunity
-- **Transition pattern:** "Disruption creates openings. The strategic question shifts from 'how to defend' to 'where to position.'"
+**Evidence sought:** trend entities with `dimension: digitale-wertetreiber`, the I-section of an existing report, value-chain transformation patterns in the executive summary.
 
-**Horizons -> Foundations:**
-- Horizons describes strategic possibilities
-- Foundations specifies what's needed to capture them
-- **Transition pattern:** "Capturing these opportunities requires specific capabilities across culture, workforce, and technology."
+**Argument move:** make the Forces → Impact causal chain explicit → cascade Act (disruption under way), Plan (emerging value shifts), Observe (potential disruptions) → show how customer-experience change drives product evolution which forces process transformation → quantify disruption in revenue, cost structure and share.
 
----
+**Techniques:** [Contrast Structure](../../narrative-techniques/techniques-overview.md#6-contrast-structure) (before/after value chain), [Compound Impact](../../narrative-techniques/techniques-overview.md#8-compound-impact-calculation), [Number Plays](../../narrative-techniques/techniques-overview.md#4-number-plays-6-techniques), [Forcing Functions](../../narrative-techniques/techniques-overview.md#5-forcing-functions).
 
-### Closing Pattern
+**Hard rules:** the force-to-impact chain is explicit for every impact; the cascade across the three subcategories is shown; disruption is quantified.
 
-**Final Sentence:**
-Urgency-to-action close that references the Act/Plan/Observe framework.
+**Failure modes:** impacts asserted without the force that causes them; "significant disruption"; one subcategory only.
 
-**Examples:**
-- "Thirteen trends demand action now. Thirteen more require active preparation. The remaining signals will define the competitive landscape beyond 2028. Organizations reading this panorama have the map -- the question is speed of navigation."
-- "The trend panorama reveals not just what's changing, but how fast. Act-horizon trends set the pace. Plan-horizon trends set the direction. Observe-horizon trends set the destination."
-- "[Number] converging trends across [N] dimensions compress the decision window. Those who act on today's signals build tomorrow's advantages."
+### 3. Horizons
 
-## Citation Requirements
+**Purpose:** synthesize the P-dimension into a narrative of strategic possibilities — strategy, leadership and governance openings the disruption creates.
 
-### Citation Density
+**Evidence sought:** trend entities with `dimension: neue-horizonte`, the P-section of an existing report, strategic-opportunity statements in the executive summary.
 
-**Target:** 15-25 total citations across the narrative (scale proportionally for longer targets)
-**Ratio:** Approximately 1 citation per 60-100 words
+**Argument move:** connect impact to opportunity → cascade Act (seize now), Plan (build toward), Observe (position for) → differentiate strategy openings from leadership-model shifts from governance innovations → size each window by horizon timeline and confidence.
 
-### Citation Distribution
+**Techniques:** [You-Phrasing](../../narrative-techniques/techniques-overview.md#7-you-phrasing), [IS-DOES-MEANS](../../narrative-techniques/techniques-overview.md#3-is-does-means-power-positions), [Number Plays](../../narrative-techniques/techniques-overview.md#4-number-plays-6-techniques), [Contrast Structure](../../narrative-techniques/techniques-overview.md#6-contrast-structure).
 
-**Forces (T -- evidence-heavy, external data):** 5-8 citations
-**Impact (I -- value chain evidence):** 4-7 citations
-**Horizons (P -- opportunity sizing):** 4-6 citations
-**Foundations (S -- capability evidence):** 3-5 citations
+**Hard rules:** every opportunity traces to an impact; windows are sized and timed; the three subcategories are distinguished.
 
-### Citation Format
+**Failure modes:** opportunities with no window; "position for the future"; strategy and governance conflated.
 
-```markdown
-Claim text<sup>[N](source-file.md)</sup>
-```
+### 4. Foundations
 
-**When citing trend entities:**
-```markdown
-Claim text<sup>[N](11-trends/data/trend-{id}.md)</sup>
-```
+**Purpose:** synthesize the S-dimension into a narrative of required capabilities — culture, workforce and technology — in build order.
 
-**When citing trend-report sections:**
-```markdown
-Claim text<sup>[N](tips-trend-report.md)</sup>
-```
+**Evidence sought:** trend entities with `dimension: digitales-fundament`, the S-section of an existing report, capability-building recommendations in the executive summary.
 
-**Required Citations:**
-- Every Act-horizon trend claim (MUST)
-- Trend scores and confidence tiers (MUST)
-- Quantitative evidence from trend statements (MUST)
-- Cross-dimensional pattern claims (Should have)
-- Observe-horizon weak signals (Should have)
+**Argument move:** connect the opportunities to the capabilities that enable them → cascade Act (build now), Plan (start developing), Observe (begin experimenting) → sequence dependencies (culture enables workforce, workforce enables technology) → quantify the readiness gap; close on the capability imperative.
 
-## Quality Gates
+**Techniques:** [IS-DOES-MEANS](../../narrative-techniques/techniques-overview.md#3-is-does-means-power-positions), [Compound Impact](../../narrative-techniques/techniques-overview.md#8-compound-impact-calculation), [Forcing Functions](../../narrative-techniques/techniques-overview.md#5-forcing-functions), [You-Phrasing](../../narrative-techniques/techniques-overview.md#7-you-phrasing).
 
-### Arc Completeness
+**Hard rules:** capabilities are sequenced, never a flat menu; each names the horizon it must be built for; the readiness gap is quantified.
 
-- [ ] All 4 elements present (Forces, Impact, Horizons, Foundations)
-- [ ] Hook present (within hook proportion of target)
-- [ ] Word counts within computed proportional ranges (+/-10% tolerance)
-- [ ] Smooth transitions between elements
-- [ ] Each element maps to exactly one TIPS dimension
+**Failure modes:** a capability menu; no build order; the close restates the panorama instead of the imperative.
 
-### TIPS Framework Adherence
+## Validation
 
-- [ ] **Forces** covers Externe Effekte dimension (economy, regulation, society)
-- [ ] **Impact** covers Digitale Wertetreiber dimension (CX, products, processes)
-- [ ] **Horizons** covers Neue Horizonte dimension (strategy, leadership, governance)
-- [ ] **Foundations** covers Digitales Fundament dimension (culture, workforce, technology)
-- [ ] Each element references trends from its mapped dimension
+Arc-specific assertions, checked after the universal gates in `../../validation.md`:
 
-### Horizon Cascade Applied
-
-- [ ] **Each element** contains Act -> Plan -> Observe progression
-- [ ] Act-horizon trends lead with urgency (immediate actions)
-- [ ] Plan-horizon trends bridge to preparation (capability building)
-- [ ] Observe-horizon trends close with foresight (weak signals to monitor)
-- [ ] Horizon distribution roughly matches 5:5:3 ratio (Act:Plan:Observe)
-
-### Trend Synthesis Quality
-
-- [ ] Trends are SYNTHESIZED into patterns (not listed individually)
-- [ ] Cross-trend interactions identified within each dimension
-- [ ] Subcategory coverage balanced (not dominated by one subcategory)
-- [ ] Trend confidence and score data used to weight narrative emphasis
-- [ ] High-confidence Act trends receive deepest treatment
-
-### Evidence Quality
-
-- [ ] Every quantitative claim has citation to trend entity or source
-- [ ] Trend scores and horizons accurately represented
-- [ ] No fabricated trends or evidence beyond loaded source
-- [ ] Citation density: 15-25 total citations
-- [ ] Signal intensity and confidence correctly characterized
-
-### Narrative Coherence
-
-- [ ] Hook showcases the panoramic cross-dimensional landscape
-- [ ] Forces establishes external pressures that drive the remaining elements
-- [ ] Impact shows how forces translate to value chain disruption
-- [ ] Horizons reframes disruption as strategic opportunity
-- [ ] Foundations specifies capabilities needed to capture opportunities
-- [ ] Closing creates action urgency referencing Act/Plan/Observe framework
-
-### Executive Appeal
-
-- [ ] Opening hook demonstrates strategic urgency (not trend listing)
-- [ ] Each element delivers actionable insight (not observation)
-- [ ] Horizon cascade creates natural urgency gradient
-- [ ] Specific timelines and deadlines from Act-horizon trends
-- [ ] Quantified opportunity and risk from trend evidence
-- [ ] Foundations element provides clear capability roadmap
-
-## Common Pitfalls
-
-### Forces Pitfalls
-
-X **Trend listing:** "Trend 1: EU AI Act. Trend 2: Biometric processing. Trend 3: ..."
-V **Synthesized forces:** "Regulatory pressure crystallizes around three converging mandates: AI compliance deadlines, data sovereignty requirements, and environmental reporting standards--each reinforcing the others<sup>[1]</sup>."
-
-X **Missing horizon cascade:** Jumping between Act and Observe without logical progression
-V **Clear cascade:** Start with Act urgency, bridge through Plan preparation, close with Observe signals
-
-### Impact Pitfalls
-
-X **Disconnected from Forces:** "Customer experience is changing because of technology"
-V **Force-linked impact:** "The regulatory pressure identified in Forces translates directly to customer-facing compliance: biometric systems must now serve dual purposes--seamless experience AND privacy documentation<sup>[1]</sup>."
-
-X **Abstract disruption:** "Value chains are being disrupted"
-V **Specific disruption:** "Passenger processing time drops from 45 to 12 seconds with biometric gates, but each transaction generates 3x the compliance data<sup>[1]</sup>."
-
-### Horizons Pitfalls
-
-X **Generic opportunities:** "Organizations should leverage digital transformation"
-V **Specific possibilities:** "The 18-month window before autonomous baggage handling reaches mainstream creates first-mover advantage worth 40% operational cost reduction for early adopters<sup>[1]</sup>."
-
-X **Missing opportunity windows:** "There are opportunities in AI"
-V **Timed opportunities:** "Act-horizon opportunities (0-2 years) in biometric processing yield 3.2x ROI. Plan-horizon opportunities (2-5 years) in autonomous operations require 18-month preparation<sup>[1]</sup>."
-
-### Foundations Pitfalls
-
-X **Vague capability recommendations:** "Build digital capabilities"
-V **Specific requirements:** "Workforce reskilling for AI oversight requires 2,400 training hours across 3 competency levels--Act-horizon foundation that enables Plan-horizon autonomous operations<sup>[1]</sup>."
-
-X **Missing sequencing:** "Invest in culture, workforce, and technology"
-V **Dependency-aware sequencing:** "Culture transformation (psychological safety for AI adoption) enables workforce upskilling, which enables technology deployment. Reverse order fails--technology without trained operators produces 60% lower utilization<sup>[1]</sup>."
-
-## Language Variations
-
-### German Adjustments
-
-**TIPS terminology:**
-- Keep "TIPS" as English framework name (per localization rules)
-- Translate dimension names: "Externe Effekte", "Digitale Wertetreiber", "Neue Horizonte", "Digitales Fundament"
-- Keep horizon labels in English: "Act", "Plan", "Observe" (framework terms)
-
-**Horizon cascade language:**
-- "Act-Horizont: Sofortiger Handlungsbedarf (0-2 Jahre)"
-- "Plan-Horizont: Mittelfristige Vorbereitung (2-5 Jahre)"
-- "Observe-Horizont: Schwache Signale im Blick (5+ Jahre)"
-
-**German precision requirements:**
-- Use proper umlauts throughout: Kräfte, Möglichkeiten, Fähigkeiten
-- Precise metric formatting: "3,2x" (German decimal comma), "2.400 Stunden" (German thousand separator)
-- Quarter/year format: "Q2 2026", "2026-2027" (same as English)
-
-**Example (German style):**
-```markdown
-## Kräfte: Externe Einflüsse & Marktsignale
-
-Der regulatorische Druck kristallisiert sich um drei konvergierende Mandate: Die EU AI Act-Frist im August 2026 für Hochrisiko-KI-Systeme<sup>[1]</sup>, verschärfte Datensouveränitätsanforderungen unter NIS2<sup>[2]</sup>, und neue ESG-Berichtspflichten ab 2025<sup>[3]</sup>. Mit Signal-Intensitäten auf Level 4-5 und hoher Konfidenz erfordern diese Act-Horizont-Trends sofortige organisatorische Reaktion.
-
-Die wirtschaftlichen Kräfte verstärken den regulatorischen Druck: Investitionszyklen verkürzen sich von 36 auf 18 Monate<sup>[4]</sup>, während gleichzeitig ROI-Anforderungen steigen...
-```
-
-## Version History
-
-- **v1.0.0:** Initial Trend Panorama arc definition (TIPS-native story arc for trend-scout output)
+- Each element carries the Act → Plan → Observe cascade and covers its dimension's three subcategories.
+- Horizon classifications match the source data.
+- Forces states force interactions; Impact makes every force-to-impact chain explicit; Horizons times every window; Foundations sequences the capabilities.
+- The chain holds across dimensions: the impacts follow from the forces, the horizons open from the impacts, the foundations enable the horizons.
 
 ## See Also
 
-- `../arc-registry.md` - Master index of all story arcs
-- `forces-patterns.md` - External pressure synthesis patterns (T-dimension)
-- `impact-patterns.md` - Value chain disruption patterns (I-dimension)
-- `horizons-patterns.md` - Strategic possibility patterns (P-dimension)
-- `foundations-patterns.md` - Capability requirement patterns (S-dimension)
+- `../arc-registry.md` — arc selection: detection algorithm, per-arc declarative blocks, shortlist format
+- `../smarter-service/arc-definition.md` — the theme-aware sibling with the same four elements
+- `../../narrative-techniques/techniques-overview.md` — the eight techniques and their application matrix
+- `../../validation.md` — the universal gates every narrative must clear

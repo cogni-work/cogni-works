@@ -5,7 +5,7 @@ category: preservation-modes
 tags: [arc-preservation, story-arc, narrative-structure, polish, narrative]
 audience: [copywriter-skill]
 related:
-  - arc-technique-map
+  - narrative arc contracts (skills/narrative/references/story-arc/{arc}/arc-definition.md)
 version: 2.2
 last_updated: 2026-05-27
 ---
@@ -32,10 +32,12 @@ Does the document YAML frontmatter contain an `arc_id` field?
                       Fewer than 3 match --> Do NOT activate. Polish normally.
 ```
 
-When arc-aware mode is active, load the technique map before doing any work:
+When arc-aware mode is active, load the upstream files before doing any work — the `narrative` skill's own contract is the authority, read at runtime and never mirrored here:
 
 ```
-READ: references/09-preservation-modes/arc-technique-map.md
+READ: ${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/story-arc/{arc_id}/arc-definition.md
+READ: ${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/narrative-techniques/techniques-overview.md
+READ: ${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/language/shared.md   (bridge heading forms only)
 ```
 
 ## Arc Detection Reference
@@ -50,44 +52,15 @@ subtitle: "..."
 ---
 ```
 
-**Step 2: If no frontmatter arc_id, match H2 headings against known arc patterns.**
+**Step 2: If no frontmatter arc_id, match H2 headings against the registered arcs.**
 
-| Arc ID | Element 1 | Element 2 | Element 3 | Element 4 |
-|--------|-----------|-----------|-----------|-----------|
-| corporate-visions | Why Change | Why Now | Why You | Why Pay |
-| technology-futures | What's Emerging | What's Converging | What's Possible | What's Required |
-| competitive-intelligence | Landscape | Shifts | Positioning | Implications |
-| strategic-foresight | Signals | Scenarios | Strategies | Decisions |
-| industry-transformation | Forces | Friction | Evolution | Leadership |
-| jtbd-portfolio | Job Landscape | Friction Map | Portfolio Map | Invitation |
+Read the arc registry at `${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/story-arc/arc-registry.md`: every `### {arc-id}` block under Arc Blocks is a registered arc, and its contract at `story-arc/{arc-id}/arc-definition.md` carries the arc's headings in `## Headings` (one row per element, one column per language). Compare the document's H2 headings against each contract's heading rows for the document's language. A partial match on the segment before the colon is sufficient ("Why Change" matches "Why Change: Unconsidered Needs"; "Job Landscape" matches "Job Landscape: Functional Jobs"). If 3 or more of the 4 elements match a single arc, activate arc-aware mode with that arc_id. Because detection reads the registry, every arc the narrative skill registers is detectable here with no copywriter-side edit.
 
-Match rule: Compare the document's H2 headings against the element columns above. A partial match on the first word is sufficient (e.g., "Why" matches "Why Change", "Job" matches "Job Landscape"). If 3 or more of the 4 elements match a single arc row, activate arc-aware mode with that arc_id.
+**Canonical headings live upstream.** The contract's `## Headings` table is the one authority for an arc's full element headings in every language it supports — EN and DE for every arc, plus FR, IT, PL, NL and ES where the arc carries them (`corporate-visions` and `jtbd-portfolio` today). Read the row for element *i* and the column for the language; never keep a copy here. `cogni-workspace/tests/test-arc-reference-sync.sh` pins that every upstream path this file and SKILL.md cite resolves.
 
-**Localized headings are also valid.** Arc element headings may appear in a non-English language. This table holds the **canonical full headings** for the arcs supported by EN/DE-pivot arc-mode translation (any of de/en/fr/it/pl/nl/es, with EN or DE on one end of the pair), mirrored byte-for-byte from the `narrative` skill's `language-templates.md` (the "Insight Summary (Arc Element Headers)" EN/DE tables plus the "Arc-mode translation headings (FR/IT/PL/NL/ES)" subsection). `cogni-workspace/tests/test-arc-reference-sync.sh` cases A4/A5 keep this mirror in sync with the `narrative` skill's definitions.
+The bridge heading ("Further Reading" and its six localized forms) lives in `${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/language/shared.md` § Bridge heading. A narrative generated on the current contract carries a `**Sources**` block instead of a bridge; older arc documents may still carry one, and it is preserved or substituted exactly like an element heading.
 
-| Arc | # | EN (canonical) | DE (canonical) | FR | IT | PL | NL | ES |
-|-----|---|----------------|----------------|----|----|----|----|----|
-| corporate-visions | 1 | Why Change: Unconsidered Needs | Warum Wandel: Unerkannte Handlungsbedarfe | Pourquoi changer : besoins insoupçonnés | Perché cambiare: bisogni latenti | Dlaczego zmiana: nieuświadomione potrzeby | Waarom veranderen: onopgemerkte behoeften | Por qué cambiar: necesidades no consideradas |
-| corporate-visions | 2 | Why Now: Forcing Functions | Warum Jetzt: Handlungsdruck | Pourquoi maintenant : facteurs déclencheurs | Perché ora: fattori scatenanti | Dlaczego teraz: czynniki wymuszające | Waarom nu: dwingende factoren | Por qué ahora: factores determinantes |
-| corporate-visions | 3 | Why You: Unique Positioning | Warum Sie: Einzigartige Positionierung | Pourquoi vous : positionnement unique | Perché Lei: posizionamento unico | Dlaczego Państwo: wyjątkowe pozycjonowanie | Waarom u: unieke positionering | Por qué usted: posicionamiento único |
-| corporate-visions | 4 | Why Pay: ROI Justification | Warum Investieren: ROI-Begründung | Pourquoi investir : justification du ROI | Perché investire: giustificazione del ROI | Dlaczego inwestować: uzasadnienie ROI | Waarom investeren: ROI-onderbouwing | Por qué invertir: justificación del ROI |
-| jtbd-portfolio | 1 | Job Landscape: Functional Jobs | Job-Landschaft: Funktionale Aufgaben | Panorama des tâches : tâches fonctionnelles | Panorama dei job: job funzionali | Krajobraz zadań: zadania funkcjonalne | Takenlandschap: functionele taken | Panorama de tareas: tareas funcionales |
-| jtbd-portfolio | 2 | Friction Map: Obstacles and Cost of Inaction | Reibungskarte: Hindernisse und Handlungsdruck | Carte des frictions : obstacles et coût de l'inaction | Mappa degli attriti: ostacoli e costo dell'inazione | Mapa tarć: przeszkody i koszt bezczynności | Frictiekaart: obstakels en kosten van nietsdoen | Mapa de fricciones: obstáculos y coste de la inacción |
-| jtbd-portfolio | 3 | Portfolio Map: Solutions by Job | Portfolio-Zuordnung: Lösungen je Aufgabe | Cartographie du portefeuille : solutions par tâche | Mappa del portfolio: soluzioni per job | Mapa portfolio: rozwiązania według zadań | Portfoliokaart: oplossingen per taak | Mapa de portfolio: soluciones por tarea |
-| jtbd-portfolio | 4 | Invitation: Next Step | Einladung: Nächster Schritt | Invitation : prochaine étape | Invito: prossimo passo | Zaproszenie: następny krok | Uitnodiging: volgende stap | Invitación: siguiente paso |
-
-The H2-detection match rule (first-word partial match) still applies — a document heading like `## Why Change` or `## Warum Wandel: …` matches its row regardless of whether the source used the short or full form.
-
-Bridge section heading by language:
-- EN: "Further Reading"
-- DE: "Weiterführende Lektüre"
-- FR: "Pour aller plus loin"
-- IT: "Approfondimenti"
-- PL: "Dalsza lektura"
-- NL: "Verder lezen"
-- ES: "Lecturas adicionales"
-
-**Native vs. translation mode.** In native arc polish (no `TARGET_LANG`), all of these headings are **preserved exactly** as they appear in the source — never substituted. In **arc-translation mode** (`TARGET_LANG` set, EN/DE-pivot — one end of the pair is EN or DE), the copywriter **substitutes** each arc-element heading positionally (the Nth arc-element H2 maps to element index N) and the bridge heading with the **target-language canonical full form** from this table. See SKILL.md Step 2.5.
+**Native vs. translation mode.** In native arc polish (no `TARGET_LANG`), every heading is **preserved exactly** as it appears in the source — never substituted. In **arc-translation mode** (`TARGET_LANG` set, EN/DE-pivot — one end of the pair is EN or DE), the copywriter **substitutes** each arc-element heading positionally (the Nth arc-element H2 maps to row N of the contract's `## Headings`, `TARGET_LANG` column) and the bridge heading with the `TARGET_LANG` form from `language/shared.md`. If the contract carries no `TARGET_LANG` column, SKILL.md Step 1 pre-check #3 has already aborted the run — an arc without upstream headings for a language fails closed. See SKILL.md Step 2.5.
 
 ## Structure Preservation Rules
 
@@ -102,6 +75,7 @@ These elements are frozen. Any change to them constitutes a structural violation
 5. **Heading hierarchy** -- H1 and H2 levels stay as they are
 6. **Heading order and count** -- the sequence and number of headings never change (translation substitutes heading *text* only, never order or count)
 7. **Content placement** -- no content moves between elements; each element is self-contained
+8. **`**Sources**` block** -- a narrative generated on the current contract ends with a bold `**Sources**` paragraph after the fourth element; every entry, its number, its order and its metadata are byte-identical to the source (translation mode included: the entries are bibliographic data, not prose)
 
 ### What You Must Never Apply in Arc-Aware Mode
 
@@ -118,7 +92,7 @@ The arc IS the document's organizing structure. Do not impose a competing one:
 Within each element, you may apply these six types of polish. Think through each one before making changes:
 
 **1. Strengthen the element's primary technique.**
-Consult arc-technique-map.md for which technique each element uses. Enhance that technique without replacing it.
+Consult the arc contract's `## Elements` — each `### N.` section names the element's Techniques and Hard rules — for which technique each element uses. Enhance that technique without replacing it.
 
 Before (Why Change element, PSB pattern weak):
 > Healthcare organizations face challenges with workflow efficiency. New approaches can help address these issues and improve outcomes.
@@ -129,12 +103,12 @@ After (PSB pattern sharpened):
 > Manual triage adds 23 minutes per patient encounter. AI-assisted routing eliminates the bottleneck. The result: 340 additional patients processed per month without added headcount.
 
 **2. Apply the element's Number Play variant.**
-Each element has a specific Number Play type assigned in the technique map. Use it.
+Each element has a specific Number Play type assigned in the arc contract. Use it.
 
 Before (Why Pay element, compound impact missing):
 > The costs of inaction are significant and compound over time across multiple dimensions.
 
-Think: The technique map assigns compound impact calculation to Why Pay, requiring 3-4 cost dimensions and a 3-year horizon. Replace the vague claim with stacked specifics.
+Think: The arc contract assigns compound impact calculation to Why Pay, requiring 3-4 cost dimensions and a 3-year horizon. Replace the vague claim with stacked specifics.
 
 After (compound impact with 4 dimensions):
 > Year one: $1.2M in excess staffing, $340K in error remediation, $180K in compliance penalties, $95K in overtime. By year three, the compounded cost of inaction exceeds $5.8M.
@@ -153,7 +127,7 @@ Before: "The implementation reduced processing time from four hours to forty-fiv
 After: "The implementation cut processing time from four hours to forty-five minutes. The three-month backlog cleared in two weeks."
 
 **5. Strengthen You-Phrasing.**
-Convert third-person references to direct address, but only where the technique map marks You-Phrasing for that element.
+Convert third-person references to direct address, but only where the arc contract marks You-Phrasing for that element.
 
 Before (Why You element, marked for You-Phrasing): "Organizations that adopt early gain a 14-month head start."
 After: "You gain a 14-month head start by adopting early."
@@ -164,7 +138,7 @@ Before (Why Change element, NOT marked for You-Phrasing): Leave third-person phr
 Sharpen paragraph transitions within a single element. Do NOT modify cross-element transitions (the bridging sentence between one H2 section and the next).
 
 **7. Restructure weak hook openings.**
-The hook is the exception to structural preservation. If the hook's first sentence fails ANY of these tests, you must restructure it:
+The opening — the hook of an older arc document, or the Executive TL;DR of a narrative generated on the current contract — is the exception to structural preservation. If the hook's first sentence fails ANY of these tests, you must restructure it:
 
 - **Küchenzuruf test:** Can the reader shout the gist to someone in the next room?
 - **Surprise test:** Does it contain a surprising truth or the main conclusion?
@@ -191,20 +165,21 @@ Follow this sequence for every arc-aware polish task:
 
 ```
 1. DETECT: Run the activation decision tree. Identify the arc_id.
-2. LOAD: Read arc-technique-map.md. Note each element's primary technique,
-   Number Play variant, and word target.
+2. LOAD: Read the arc contract (`## Composition`, `## Elements`, `## Validation`) and
+   narrative's techniques-overview.md. Note each element's primary technique, its
+   Number Play use, its Hard rules and its share of the target length.
 3. SNAPSHOT: Record the original document's heading texts, heading count,
    citation count, and per-element word counts.
 4. POLISH: For each element (in order), apply the seven allowed modifications:
-   a. Check the technique map for this element's assigned techniques.
+   a. Check the arc contract for this element's assigned techniques.
    b. Strengthen the primary technique (e.g., sharpen PSB in Why Change).
    c. Apply the correct Number Play variant.
    d. Enhance 3-5 Power Words.
    e. Improve sentence rhythm.
-   f. Apply You-Phrasing only if the technique map marks it for this element.
+   f. Apply You-Phrasing only if the arc contract marks it for this element.
    g. Sharpen within-element transitions.
    h. FOR HOOK ONLY: Run the 5 hook quality tests. If 3+ fail, restructure
-      the first 1-2 sentences per german-hook-principles.md / technique map.
+      the first 1-2 sentences per german-hook-principles.md / the arc contract.
 5. VALIDATE: Run the validation checklist (below) against the polished output.
 6. OUTPUT: If validation passes, return the polished document.
    If validation fails, revert the failing element(s) to original text.
@@ -219,10 +194,11 @@ Run every check after polishing. Each is a binary pass/fail.
 ```
 [ ] H1 title text -- exact character match to original
 [ ] H2 subtitle text -- exact character match to original
-[ ] 4 arc element headings -- exact character match to original arc pattern (NATIVE polish); in arc-translation mode, instead match the TARGET_LANG canonical set in the localized table above
+[ ] 4 arc element headings -- exact character match to original arc pattern (NATIVE polish); in arc-translation mode, instead match the TARGET_LANG column of the contract's `## Headings`
 [ ] Bridge heading -- exact match to "Further Reading" / localized equivalent (NATIVE polish); in arc-translation mode, the TARGET_LANG bridge form
 [ ] H2 count and heading order -- unchanged from the original (do NOT assert a fixed total: the count varies by arc and by whether the subtitle is rendered as an H2; e.g. an italic subtitle yields 5 H2s)
 [ ] No content moved between elements
+[ ] **Sources** block (when present) byte-identical: same entries, same numbers, same order
 ```
 
 ### Technique Checks (failure reverts the individual element)
@@ -231,7 +207,7 @@ Run every check after polishing. Each is a binary pass/fail.
 FOR EACH element:
   [ ] Primary technique still present and identifiable
       (e.g., PSB for Why Change, Forcing Functions for Why Now)
-  [ ] Number Play variant matches the technique map assignment
+  [ ] Number Play variant matches the arc contract assignment
   [ ] Word count within target range (original +/- 50 words)
 ```
 
@@ -250,6 +226,16 @@ FOR EACH element:
 - If a technique check fails for one element: revert only that element to its original text. Keep the rest of the polished output. Log `fallback_reason="arc_technique_violation"`.
 - If a content integrity check fails: reject the entire polished output. Return the original unpolished document. Log `fallback_reason="arc_content_violation"`.
 
+## Translation-Mode Word Band
+
+The `original +/- 50 words` tolerance in the Technique Checks is for **native** polish. When the document is being **translated** (`TARGET_LANG` set), the element's word count is expected to move, so Check 3 uses a **relative** band against the source element instead: `translated_words ∈ source_element_words × factor × (1 ± 0.20)`, with the per-target factor below.
+
+| Target | →de | →en | →fr | →it | →es | →nl | →pl |
+|--------|-----|-----|-----|-----|-----|-----|-----|
+| factor | 1.20 | 0.83 | 1.15 | 1.10 | 1.20 | 1.05 | 1.10 |
+
+The factors approximate prose expansion from an EN/DE source (German and Spanish run about 15-20% longer than English; English compresses German by about 17%). They are deliberately coarse — the ±20% band absorbs pivot-source variance (e.g. a DE→FR pivot whose source element is already German-length), so a single source×target matrix is not maintained. In translation mode a heading mismatch is a substitution error, not a free-translation error: re-apply the canonical heading rather than reverting to the source-language heading.
+
 ## Common Mistakes to Avoid
 
 These are the most frequent errors when polishing arc narratives. Check for each one:
@@ -267,11 +253,11 @@ Before: "Response times improved significantly <sup>[4](source.md)</sup>, leadin
 Wrong: "Response times improved significantly, leading to better outcomes." (citations deleted for flow)
 Right: "Response times dropped by 40% <sup>[4](source.md)</sup>. Patient outcomes improved within the first quarter <sup>[5](source.md)</sup>."
 
-**Mistake 4: Applying You-Phrasing where the technique map does not call for it.**
+**Mistake 4: Applying You-Phrasing where the arc contract does not call for it.**
 You-Phrasing is assigned to specific elements (e.g., Why You, Decisions, Leadership). In elements like Why Change or Landscape, the analytical framing requires third-person distance. Do not force direct address everywhere.
 
 **Mistake 5: Exceeding word targets.**
-Each element has a word target range in the technique map. Polishing should not inflate word counts. If you add specificity in one sentence, cut filler from another. Stay within the +/- 50 word tolerance.
+Each element has a word target range in the arc contract. Polishing should not inflate word counts. If you add specificity in one sentence, cut filler from another. Stay within the +/- 50 word tolerance.
 
 ## Integration Pattern
 
@@ -288,7 +274,7 @@ CRITICAL PRESERVATION REQUIREMENTS:
    - Element headings: Why Change, Why Now, Why You, Why Pay -- DO NOT MODIFY
    - Bridge: "Further Reading" -- DO NOT MODIFY
 
-ARC-AWARE POLISH: Strengthen techniques per arc-technique-map.md
+ARC-AWARE POLISH: Strengthen techniques per the arc contract's `## Elements`
 FORBIDDEN: Change headings, move content between elements, apply messaging frameworks
 ```
 
@@ -296,6 +282,7 @@ When you see this pattern, activate arc-aware mode immediately. Do not re-run th
 
 ## Related Documentation
 
-- Arc technique map: `references/09-preservation-modes/arc-technique-map.md`
+- Arc contracts (headings, elements, validation): `skills/narrative/references/story-arc/{arc}/arc-definition.md`
+- Narrative techniques: `skills/narrative/references/narrative-techniques/techniques-overview.md`
 - Story arc definitions: `skills/narrative/references/story-arc/` — the arcs this mode polishes, now a sibling skill in this same plugin
 - cogni-trends: May invoke copywriter with arc preservation constraints via trend-report

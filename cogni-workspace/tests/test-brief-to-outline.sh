@@ -506,8 +506,13 @@ def design_pairs(text):
 # Derived from the brief, so a sixth sub-key needs no edit here — the exporter
 # iterates design.items() generically and this comparison follows it.
 expected = design_pairs(BRIEF)
-ok = bool(expected)
-ok = ok and design_pairs(open(os.environ['OUT'], encoding='utf-8').read()) == expected
+out = open(os.environ['OUT'], encoding='utf-8').read()
+ok = len(expected) == 5
+ok = ok and design_pairs(out) == expected
+# The contract item is [fidelity: literal] and names its evidence as greping the
+# emitted outline for EACH of the five pairs, so that check is kept alongside the
+# stronger comparison above rather than being replaced by it.
+ok = ok and all(pair in out for pair in expected)
 sys.exit(0 if ok else 1)"; then
   echo "ok: bo19-design-block-emitted-verbatim"
 else

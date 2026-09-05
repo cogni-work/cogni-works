@@ -275,8 +275,10 @@ bracketed by user checkpoints).
 representative of the story-to-infographic / story-to-storyboard /
 story-to-web siblings, which integrate the same `brief-review-assessor` loop
 per the plugin's shared `stakeholder_review` convention.
-**Unattended?** No — interactive checkpoints at narrative and theme selection;
-`stakeholder_review` defaults to interactive.
+**Unattended?** No — interactive checkpoints at narrative and theme selection.
+`stakeholder_review` defaults to `true` independent of `interactive`, so brief
+review runs even headless, and its reject branch is headless-safe: the verdict is
+written to the `.review.json` sibling and the run continues without a prompt.
 
 The human-gated iterate here **does** count as a loop under the rubric: it is
 a generate→evaluate→revise gate (brief generated in Steps 0–8.2, graded in

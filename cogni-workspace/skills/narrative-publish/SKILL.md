@@ -26,8 +26,8 @@ those hops run in-context, not to license this skill to author artifacts itself.
 [`references/pipeline-contract.md`](references/pipeline-contract.md) for the
 argument matrix, the per-hop parameter translation, the reject rule, render
 ordering and the exact JSON shape. That reference is the contract — consult it
-before dispatching any hop, because two callee defaults must be overridden
-explicitly and getting either wrong silently changes behaviour.
+before dispatching any hop, because it fixes the two values this skill spells
+out at each hop and getting either wrong silently changes behaviour.
 
 ## Arguments
 
@@ -59,8 +59,9 @@ rather than inferring them from the procedure below.
      (plus `mode=storyboard` for the latter)
    - `infographic` → `story-to-infographic` with `stakeholder_review=true` and
      `render=false` unless `--render` was given
-   Both flags have callee defaults that otherwise override this skill's contract;
-   the reference explains each.
+   `render` still has a callee default that would otherwise override this skill's
+   contract; `stakeholder_review` now matches it and is spelled out as
+   belt-and-braces. The reference explains each.
 6. **Apply the reject rule** after each target — read the brief's `.review.json`
    sibling and branch on its verdict string, per the contract's reject rule, which
    fixes both the field to read and the continue-or-fail semantics.

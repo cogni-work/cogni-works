@@ -55,7 +55,7 @@ The brief describes WHAT each section says and which section type to use. The Pe
 | `arc_id` | from frontmatter | Narrative arc ID from the `narrative` skill. Mapped to visual `arc_type` in Step 1. |
 | `arc_definition_path` | none | Path to arc definition file — element names become `section_label` values. |
 | `interactive` | `true` | When `true`, present choices via AskUserQuestion. When `false`, auto-select. |
-| `stakeholder_review` | `interactive` | When `true`, run brief-review-assessor after validation. Defaults to value of `interactive`. |
+| `stakeholder_review` | `true` | When `true`, run brief-review-assessor after validation. |
 | `audience_context` | none | Structured audience/buyer data for targeted section ordering and CTA calibration. |
 
 ### Caller-supplied overrides
@@ -429,6 +429,8 @@ Launch the `brief-review-assessor` agent with:
 5. If round 2 still has issues: present remaining issues to user, proceed to Step 10
 
 **On reject:** Surface the verdict to the user via AskUserQuestion and let them decide whether to proceed, edit manually, or abandon.
+
+**Headless reject (`interactive=false`, which `stakeholder_review=true` no longer implies).** Since the flip decoupled this step from `interactive`, a headless run now reaches the reject branch with no user to ask. The `AskUserQuestion` above is skipped per the standing convention, and the run must instead keep the brief, do not render it, and surface the reject in the response — the verdict is still written to the review sibling below, so the signal is recorded rather than lost — then continue. Never abort or error: this matches the caller reject rule in `cogni-workspace/skills/narrative-publish/references/pipeline-contract.md`, under which a multi-target run fails only when every requested target failed.
 
 Write the review verdict alongside the brief, deriving its name from the resolved `output_path` — replace the trailing `.md` with `.review.json`. The defaults yield `web-brief.review.json` and `storyboard-brief.review.json`, and a caller-supplied `output_path` keeps its own stem, so the verdict always sits beside the brief it grades and is named after it.
 

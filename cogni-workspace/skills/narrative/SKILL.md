@@ -36,6 +36,12 @@ One responsibility per file. Read a file when its phase runs, not before.
 | `--target-length` | No | Target total word count (e.g., `2500`). The acceptable range is ±15%. Default: `1675` (1,424-1,926 words). Recommended: 800-4,000 — outside that range the arc's proportions stop scaling well |
 | `--format` | No | Derivative mode: `executive-brief`, `talking-points` or `one-pager`. When set, `--source-path` is a single finished narrative `.md`, Phases 0.5-6 are skipped, and the Derivative Formats section runs instead. Output defaults to `{source-dir}/{format}.md` |
 | `--content-map` | No | YAML map of content category keys to file/directory paths for additional context |
+| `--audience` | No | Who the narrative is for. Default: senior business decision-makers. Feeds Pass 3 (vocabulary, acronym expansion, explanation depth) together with the inferred knowledge level |
+| `--purpose` | No | The decision the narrative must serve. Default: understand the evidence and its strategic implications. Feeds Pass 2 (TL;DR, emphasis, close) |
+| `--perspective` | No | Whose voice the narrative speaks in. Default: neutral analyst. Feeds Pass 2 (pronouns, ownership) |
+| `--geography` | No | Market codes from `cogni-workspace/references/supported-markets-registry.json` (`code` values such as `dach`, `de`, `fr`, `eu`), comma-separated, never free text or a country name. Default: source-defined scope. Feeds Pass 1 (evidence priority when sources span markets) |
+
+Audience knowledge level (`expert` / `informed` / `general`, default `informed`) and tone (default: concise analytical executive prose) are **inferred fields**, never flags — see Phase 0.
 | `--interactive` | No | Whether the skill may pause for user input. `true` or `false`. Default: `true`. When `false`, skip all AskUserQuestion calls — today that is the Phase 2 arc confirmation, which keeps its ladder selection and its `detection_reason` and continues straight into Phase 3 with no prompt. Same semantics as the `interactive` parameter in `story-to-slides`, `story-to-web` and `story-to-infographic`, spelled `--interactive` here to match this skill's flag-style argument surface. Any value other than `false` is treated as `true`, so a malformed value fails safe toward the interactive default |
 
 **Content map keys:** `executive_summary`, `dimension_syntheses`, `trends_summary`, `trend_entities`, `megatrends_summary`, `megatrend_entities`, `domain_concepts`, `research_hub`, `initial_question`. Contracts name these keys in their `Evidence sought` subfields.
@@ -55,6 +61,11 @@ word_count: {actual word count}
 language: "{en|de}"
 date_created: "{ISO 8601}"
 source_file_count: {N}
+# optional — written only when the execution brief resolved the field from a real signal, never a default
+target_audience: "{audience}"
+purpose: "{decision purpose}"
+perspective: "{voice}"
+geography: "{market codes}"
 ---
 
 # {Title}
@@ -98,13 +109,17 @@ Exactly four `##` headings, byte-equal to the contract's `## Headings` cells for
 ## Core Workflow
 
 ```text
-Phase 0.5      Phase 1     Phase 2      Phase 3      Phase 4         Phase 5      Phase 6
-Citation  -->  Setup  -->  Arc     -->  Load    -->  Four      -->  Validate --> Write
-bridge         & load      selection    contract     passes
-(conditional)
+Phase 0      Phase 0.5      Phase 1     Phase 2      Phase 3      Phase 4         Phase 5      Phase 6
+Execution -> Citation  -->  Setup  -->  Arc     -->  Load    -->  Four      -->  Validate --> Write
+brief        bridge         & load      selection    contract     passes
+             (conditional)
 ```
 
 When `--format` is set this pipeline does not run; jump to Derivative Formats. Phases 3 and 4 read the contract and the techniques before any drafting — those two files are what separate a persuasive narrative from a summary under headings.
+
+### Phase 0: Execution brief
+
+**Read first:** `references/execution-brief.md`. Derive the per-run brief — audience, purpose, perspective, geography, plus the inferred knowledge level and tone — before any evidence is mapped. Resolve each field down one ladder: explicit instruction → project metadata → unambiguous conversation context → source cues → default. Ask one compact clarification, via AskUserQuestion, only when a missing field would change framing, terminology, emphasis, recommendations or evidence selection; never ask for what is explicit or safely inferable, and under `--interactive false` never ask — default. Never infer sensitive personal attributes about the audience. The brief steers Pass 1 (geography), Pass 2 (purpose, perspective) and Pass 3 (audience, knowledge level).
 
 ### Phase 0.5: Citation bridge (conditional)
 
@@ -174,11 +189,11 @@ Read two files, in full, before writing anything:
 
 Draft in four passes. Each pass has one job; doing two at once is how a narrative ends up structurally right and rhetorically flat.
 
-**Pass 1 — evidence draft.** For each element in order: map the loaded content to the element using its `Evidence sought`; draft the body from that evidence, every quantitative claim carrying `<sup>[N](source-file.md)</sup>`; hold the element's word range. Write the four elements only — no title, no opening yet.
+**Pass 1 — evidence draft.** For each element in order: map the loaded content to the element using its `Evidence sought`; when the sources span markets, weight the evidence by the brief's `--geography`; draft the body from that evidence, every quantitative claim carrying `<sup>[N](source-file.md)</sup>`; hold the element's word range. Write the four elements only — no title, no opening yet.
 
-**Pass 2 — argument edit.** Apply each element's `Argument move` and `Techniques`; enforce its `Hard rules`; build the transitions from `## Composition`; write the closing per the closing pattern. Then — last, from the finished elements — write the title (arc-specific, never "Insight Summary") and the Executive TL;DR, weighting it as the contract's TL;DR-emphasis line says. Writing the TL;DR after the elements is what makes "synthesizes all four" enforceable rather than aspirational.
+**Pass 2 — argument edit.** Apply each element's `Argument move` and `Techniques`; enforce its `Hard rules`; build the transitions from `## Composition`; write the closing per the closing pattern, so that emphasis, implications and close serve the brief's `--purpose` and pronouns and ownership follow its `--perspective`. Then — last, from the finished elements — write the title (arc-specific, never "Insight Summary") and the Executive TL;DR, weighting it as the contract's TL;DR-emphasis line says. Writing the TL;DR after the elements is what makes "synthesizes all four" enforceable rather than aspirational.
 
-**Pass 3 — language edit.** Localize the four headings from `## Headings` for the output language and make the prose read as executive prose: one idea per sentence, concrete actors and verbs, specificity over intensifiers, no corporate fog. When `language: de`, proper umlauts and ß throughout.
+**Pass 3 — language edit.** Localize the four headings from `## Headings` for the output language and make the prose read as executive prose: one idea per sentence, concrete actors and verbs, specificity over intensifiers, no corporate fog. Tune vocabulary, acronym expansion and explanation depth to the brief's `--audience` and inferred knowledge level. When `language: de`, proper umlauts and ß throughout.
 
 **Pass 4 — rhythm and readability.** Vary sentence length; make transitions consequential rather than topical; read each paragraph for cadence and land it on its consequential idea. Count words per element against `## Composition` and adjust by adding evidence to a thin element or trimming redundant transitions, never evidence.
 

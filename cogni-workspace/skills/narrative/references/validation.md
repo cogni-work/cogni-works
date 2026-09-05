@@ -66,6 +66,16 @@ The narrative opens with an answer, not a tension. Between the `*{Subtitle}*` li
 - J3 — the arc's own `## Validation` assertions hold, and the techniques the arc names for each element are visibly applied.
 - J4 — transitions between elements follow the arc's transition patterns and read as consequences, not topic labels.
 
+**Execution Fit** (against the Phase 0 brief in `execution-brief.md`, which resolves each field down the same ladder — explicit instruction → project metadata → conversation context → source cues → default):
+
+- F1 — the narrative is recognizably written for the target audience.
+- F2 — terminology and explanation depth match the inferred knowledge level.
+- F3 — the Executive TL;DR, the emphasis across elements, the implications and the close serve the decision purpose.
+- F4 — perspective and pronouns are consistent with the stated voice throughout.
+- F5 — geographic emphasis matches the scope: evidence from the named markets leads.
+- F6 — where the brief asked for evidence and interpretation to be kept apart, the separation is visible in the prose.
+- The brief never infers sensitive personal attributes about the audience; a narrative that reads as if it had fails F1.
+
 **Evidence:**
 
 - J5 — every quantitative claim carries a citation. An uncited number reads as invented.

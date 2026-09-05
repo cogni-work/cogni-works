@@ -406,9 +406,9 @@ structure and paraphrases approved copy. The outline gives it what it does read:
 | Element | Source |
 |---------|--------|
 | `design:` block | the brief's frontmatter, verbatim |
-| `key_figures` | every `Hero-Stat-Box.Number` and stat-mode `Quadrant-N.Number`, each marked `(src: [N])` when its slide cites a source |
+| `key_figures` | every `Hero-Stat-Box.Number` and stat-mode `Quadrant-N.Number`, each marked `(src: [N])` when its slide carries a numbered `<sup>[N](url)</sup>` citation — a bare `Source:` line alone produces no marker |
 | `climax` | the slide whose `intent.emphasis` is `climax`, rendered with its headline |
-| one `## ` section per slide | `title`, a `type` tag, `slide_points` (on-slide copy, max four lines), `talk_track` (`>> WHAT YOU SAY`), `notes` (`>> WHAT YOU NEED TO KNOW` plus `Source`) |
+| one `## ` section per slide | `title`, a `type` tag, `slide_points` (on-slide copy, max four lines), `talk_track` (the first `>>`-headed section — `>> WHAT YOU SAY` / `>> WAS SIE SAGEN`), `notes` (the second — `>> WHAT YOU NEED TO KNOW` / `>> WAS SIE WISSEN MUESSEN` — plus `Source`). The split is ordinal on the `>>` prefix, so it holds no marker literal and works in either language |
 | trailing `note:` lines | the three meta-instructions the renderer must honour |
 
 Slides marked `Slide-Kind: internal-prep` (Methodology, Buying Center) are

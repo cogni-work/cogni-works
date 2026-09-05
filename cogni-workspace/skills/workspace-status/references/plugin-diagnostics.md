@@ -107,4 +107,4 @@ remedy. Each has a `references/known-issues.md` entry that carries the fix.
 - **PPTX rendering skill unavailable** — `document-skills:pptx` renders the
   story-to-slides brief and does not ship from this marketplace. Confirm the
   session provides it before dispatching the `pptx` agent; otherwise take
-  story-to-slides Step 11, "Guide User to PPTX Rendering".
+  story-to-slides Step 11, "Generate Render Handoffs".

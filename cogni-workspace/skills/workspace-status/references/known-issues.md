@@ -72,7 +72,7 @@ but no `.pptx` file is produced.
 
 **Cause**: story-to-slides produces a presentation brief, not a deck — rendering that
 brief is a separate step, and the skill that performs it does not ship from this
-marketplace. The workflow's last step, "Guide User to PPTX Rendering" (Step 11),
+marketplace. The workflow's last step, "Generate Render Handoffs" (Step 11),
 recommends a claude.ai chat with the Anthropic PPTX skill and notes that Claude Code
 can render via the `document-skills:pptx` skill instead; this plugin's `pptx` agent is
 the Claude Code-side wrapper that delegates to that skill.

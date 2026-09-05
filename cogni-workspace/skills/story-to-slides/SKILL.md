@@ -525,7 +525,7 @@ Run the validation checklist (reference `09-validation-checklist.md`) one final 
 
 ---
 
-### Step 11: Generate Render Handoffs
+### Step 11: Guide User to PPTX Rendering
 
 > The presentation brief is ready. Produce both render handoffs — **PPTX** via claude.ai chat with the Anthropic PPTX skill, and an **outline** for Claude Design. Neither handoff asks the user anything, so `interactive=false` changes nothing in this step; the `narrative-publish` pipeline runs it non-interactively.
 

@@ -66,10 +66,10 @@ Each arc has 4 ordered elements that represent the phases of the narrative struc
 
 | # | Element (EN) | Element (DE) | Narrative Function |
 |---|-------------|-------------|-------------------|
-| 1 | Emerging | Aufkommend | Technologies that are emerging |
-| 2 | Converging | Konvergierend | Technologies that are converging |
-| 3 | Possible | Möglich | What becomes possible |
-| 4 | Required | Erforderlich | What actions are required |
+| 1 | What's Emerging | Was Entsteht | Technologies that are emerging |
+| 2 | What's Converging | Was Konvergiert | Technologies that are converging |
+| 3 | What's Possible | Was Möglich Ist | What becomes possible |
+| 4 | What's Required | Was Erforderlich Ist | What actions are required |
 
 ### strategic-foresight
 
@@ -84,7 +84,7 @@ Each arc has 4 ordered elements that represent the phases of the narrative struc
 
 | # | Element (EN) | Element (DE) | Narrative Function |
 |---|-------------|-------------|-------------------|
-| 1 | Landscape | Wettbewerbslandschaft | Current competitive landscape |
+| 1 | Landscape | Landschaft | Current competitive landscape |
 | 2 | Shifts | Verschiebungen | Market and competitive shifts |
 | 3 | Positioning | Positionierung | Strategic positioning options |
 | 4 | Implications | Implikationen | Business implications and actions |

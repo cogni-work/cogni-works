@@ -1,311 +1,132 @@
-# Strategic Foresight Story Arc
-
-## Arc Metadata
-
-**Arc ID:** `strategic-foresight`
-**Display Name:** Strategic Foresight
-**Display Name (German):** Strategische Vorausschau
-
-**Elements (Ordered):**
-1. Signals: Weak Signals and Early Indicators
-2. Scenarios: Alternative Future States
-3. Strategies: Robust Actions Across Scenarios
-4. Decisions: Near-Term Choices Under Uncertainty
-
-**Elements (German):**
-1. Signale: Schwache Signale und Frühindikatoren
-2. Szenarien: Alternative Zukunftszustände
-3. Strategien: Robuste Handlungen über Szenarien
-4. Entscheidungen: Kurzfristige Entscheidungen unter Unsicherheit
-
-## Word Proportions
-
-Section lengths are expressed as proportions of the total target length. This keeps the arc's rhetorical balance intact regardless of narrative length. To compute word ranges for a given `--target-length T`: apply +/-15% band to get `[T*0.85, T*1.15]`, then multiply each proportion.
-
-| Element | English Header | German Header | Proportion | Default Range (T=1675) |
-|---------|----------------|---------------|-----------|------------------------|
-| Hook | *(Dynamic based on finding)* | *(Dynamic)* | 10% | 143-193 |
-| Signals | Signals: Early Indicators | Signale: Frühindikatoren | 21% | 299-404 |
-| Scenarios | Scenarios: Alternative Futures | Szenarien: Alternative Zukünfte | 27% | 384-519 |
-| Strategies | Strategies: Robust Actions | Strategien: Robuste Handlungen | 24% | 342-462 |
-| Decisions | Decisions: Near-Term Choices | Entscheidungen: Kurzfristige Entscheidungen | 18% | 256-347 |
-
-**Proportions sum to 100%.** Default total: 1,675 words (customizable via `--target-length`). Tolerance: +/-10% of computed section midpoint.
-
-## Detection Configuration
-
-### Research Type Mapping
-
-This arc is selected when:
-- `research_type: "foresight"`
-- `research_type: "scenarios"`
-
-### Content Analysis Keywords
-
-When `research_type` doesn't match, analyze Executive Summary for keyword density:
-- **Keywords:** "scenario", "future", "signal", "uncertainty", "planning", "foresight", "alternative", "possibility"
-- **Threshold:** ≥10% keyword density
-
-### Use Cases
-
-**Best For:**
-- Long-range planning (5-10+ years)
-- Scenario analysis projects
-- Uncertainty navigation
-- Strategic options generation
-- Futures exploration
-- Decision-making under uncertainty
-
-## Element Definitions
-
-### Element 1: Signals (Weak Signals and Early Indicators)
-
-**Purpose:**
-Identify weak signals and early indicators of potential futures—developments that are emerging but not yet mainstream.
-
-**Source Content:**
-- Executive Summary (emerging patterns, counterintuitive findings) - Baseline context
-- **Trends "Watch" column (primary)** - Loaded from `content_map.trend_entities` (11-trends/data/), filtered to urgency="Watch"
-- Dimension syntheses (early-stage developments) - NOT loaded (redundant with Executive Summary)
-- Cross-Dimensional Patterns (non-obvious connections) - Preview only (first 200 words)
-
-**Source Content Mapping Example:**
-
-```javascript
-// Loaded from 11-trends/data/trend-018.md
-{
-  "trend_id": "trend-018",
-  "title": "Decentralized Identity Federation Experiments",
-  "urgency": "Watch",
-  "timeline": "2028-2030",
-  "dimension": "technology",
-  "confidence": "Medium",
-  "body_preview": "Pilot programs in Nordic countries testing blockchain-based identity..."
-}
-
-// Maps to weak signal:
-"Nordic governments are piloting blockchain-based decentralized identity systems
-that could disrupt centralized authentication paradigms. While still experimental
-(2028-2030 horizon), these trials signal potential shifts in how organizations
-manage user identity and privacy compliance."
-```
-
-**Transformation Approach:**
-- Signal identification from trends_data where urgency="Watch" (what's changing at the edges)
-- Signal interpretation using trend.body_preview and trend.confidence (what could this indicate)
-- Multiple signal patterns by grouping trends_data by dimension (convergent, contradictory, reinforcing)
-- Uncertainty dimensions from trend.timeline variance and confidence scores (what's genuinely unknown)
-
-**Pattern Reference:** `signals-patterns.md`
-
+---
+arc_id: strategic-foresight
+display_name: Strategic Foresight
+display_name_de: Strategische Vorausschau
+contract: 2
 ---
 
-### Element 2: Scenarios (Alternative Future States)
+# Strategic Foresight
 
-**Purpose:**
-Construct 2-3 plausible alternative future scenarios based on how identified signals and uncertainties could play out.
+## Intent
 
-**Source Content:**
-- Trends (potential trajectories) - Already loaded in Step 3b (all columns)
-- **Megatrends (macro drivers)** - Loaded from `content_map.megatrend_entities` (06-megatrends/data/)
-- Cross-Dimensional Patterns (scenario drivers) - Preview only (first 200 words)
-- Executive Summary (future implications) - Baseline context
+**Governing question:** What weak signals point to divergent futures, what plausible scenarios follow, which strategies hold across them, and what must be decided now?
 
-**Source Content Mapping Example:**
+**Rhetorical job:** Turn genuine uncertainty into strategic options. The arc moves from early indicators through alternative futures to robust strategies and closes on near-term decisions — it argues for preparedness across futures, not for a prediction.
 
-```javascript
-// Loaded from 06-megatrends/data/megatrend-005.md
-{
-  "megatrend_id": "mt-005",
-  "title": "Cross-Border Data Sovereignty",
-  "scope": "Global regulatory shift",
-  "horizon": "3-5 years",
-  "dimensions": "regulatory, technology",
-  "body_preview": "Nations asserting control over citizen data storage and processing..."
-}
+**Not for:** a single-future capability roadmap (`technology-futures`), choosing among already-credible options against fixed criteria (`strategic-choice`), describing one industry's structural transition (`industry-transformation`), or persuading a reader to change now (`corporate-visions`).
 
-// Maps to scenario driver:
-"Scenario Axis 1: Data Sovereignty Stringency
-- Low: Industry self-regulation with voluntary frameworks
-- High: Mandatory data localization and cross-border transfer restrictions
+## Selection
 
-This uncertainty stems from the megatrend 'Cross-Border Data Sovereignty' (mt-005),
-which shows divergent national approaches (EU GDPR vs. China's PIPL vs. US sectoral laws)."
-```
+**Best for:** long-range planning, scenario analysis, foresight studies, strategy under regulatory or technological uncertainty.
 
-**Transformation Approach:**
-- Scenario construction using megatrends_data as axes (2-3 distinct futures from 2-3 megatrends)
-- Scenario differentiation by combining megatrend extremes (low/high on each axis)
-- Plausibility grounding using megatrend.horizon and megatrend.scope (why each is credible)
-- Implication exploration by mapping trends_data to each scenario quadrant (what each means for organization)
+**Signals:** the source carries weak signals and early indicators; it treats the future as uncertain or contradictory; it sketches or invites alternative scenarios; it distinguishes robust moves from bets.
 
-**Pattern Reference:** `scenarios-patterns.md`
+**Anti-signals:** the evidence converges on one future (`technology-futures`); the options are already named and the job is to choose (`strategic-choice`); the pressure is to act now on a known need (`corporate-visions`).
 
----
+**Fallback priority:** never a fallback. Selected on content type `foresight` or `scenarios`, or on keyword density.
 
-### Element 3: Strategies (Robust Actions)
+## Headings
 
-**Purpose:**
-Identify robust strategies that create value across multiple scenarios—actions that work regardless of which future unfolds.
+Byte-exact section headers by output language. Renderers, the copywriter and the validation script all match these strings; never paraphrase, re-case or re-punctuate them.
 
-**Source Content:**
-- Strategic Recommendations (primary)
-- Cross-Dimensional Patterns (common threads)
-- Executive Summary (scenario-independent insights)
+| # | EN | DE |
+|---|----|----|
+| 1 | Signals: Early Indicators | Signale: Frühindikatoren |
+| 2 | Scenarios: Future States | Szenarien: Zukunftsbilder |
+| 3 | Strategies: Adaptive Approaches | Strategien: Adaptive Ansätze |
+| 4 | Decisions: Action Framework | Entscheidungen: Handlungsrahmen |
 
-**Transformation Approach:**
-- Robustness analysis (what works in all scenarios)
-- Flexibility building (what creates options)
-- Scenario-specific hedges (insurance for specific futures)
-- No-regret moves (valuable regardless of outcome)
+## Composition
 
-**Pattern Reference:** `strategies-patterns.md`
+Section lengths are proportions of `--target-length` (default 1,675 words). Word ranges for a target `T` are `[T × 0.85, T × 1.15]` multiplied by each proportion. Proportions sum to 100%.
 
----
+| Segment | Proportion |
+|---------|-----------:|
+| Signals | 23% |
+| Scenarios | 30% |
+| Strategies | 27% |
+| Decisions | 20% |
 
-### Element 4: Decisions (Near-Term Choices)
+**Executive TL;DR emphasis:** signal → uncertainty and scenario logic → robust strategy → near-term decision. The narrative opens with the TL;DR defined in `../../validation.md`; the fact that the signals point in different directions belongs in its first sentence as the conclusion.
 
-**Purpose:**
-Specify near-term decisions that position organization to respond effectively as uncertainty resolves.
+**Transitions:**
 
-**Source Content:**
-- Strategic Recommendations (action items)
-- Trends (decision points)
-- Dimension syntheses (timing considerations)
+1. Signals → Scenarios: "These signals combine into [N] plausible scenarios."
+2. Scenarios → Strategies: "Robust strategies create value regardless of which scenario unfolds."
+3. Strategies → Decisions: "Executing robust strategies requires near-term decisions about [areas]."
 
-**Transformation Approach:**
-- Decision cataloging (what choices are available now)
-- Information triggers (what signals indicate which decision)
-- Reversibility assessment (which decisions are reversible vs. irreversible)
-- Timing optimization (when to decide vs. when to wait)
+**Closing pattern:** decision-making under uncertainty, not prediction — "The goal isn't predicting which future arrives — it's building the capability to thrive in any of them."
 
-**Pattern Reference:** `decisions-patterns.md`
+## Elements
 
-## Narrative Flow
+### 1. Signals
 
-### Hook Construction
+**Purpose:** identify weak signals and early indicators of potential futures — developments that are emerging but not yet mainstream.
 
-**Approach:**
-Open with converging weak signals that suggest multiple plausible futures—showing that uncertainty is genuine and strategic.
+**Evidence sought:** Watch-horizon trends (`trend_entities`), emerging or counterintuitive patterns in the executive summary, non-obvious connections in cross-cutting patterns.
 
-**Pattern:**
-```markdown
-[Signal 1] suggests [future A]. [Signal 2] suggests [future B]. [Signal 3] makes both plausible<sup>[1]</sup>. The future is [uncertainty dimension]—and that creates strategic opportunity.
-```
+**Argument move:** identify each signal at the edge → interpret what it could indicate, with its confidence → group signals into patterns (convergent, contradictory, reinforcing) → make the uncertainty dimensions explicit (what is genuinely unknown). Quantify directional change with timeframes; name bifurcations as divergence signals.
 
----
+**Techniques:** [Contrast Structure](../../narrative-techniques/techniques-overview.md#6-contrast-structure), [Number Plays](../../narrative-techniques/techniques-overview.md#4-number-plays-6-techniques), [Forcing Functions](../../narrative-techniques/techniques-overview.md#5-forcing-functions).
 
-### Element Transitions
+**Hard rules:** several weak signals, not one strong trend; contradictory signals are acknowledged; the uncertainty dimensions are named explicitly.
 
-**Hook → Signals:**
-- Hook introduces uncertainty
-- Signals catalogs indicators pointing in different directions
-- **Transition pattern:** "Four weak signals suggest divergent futures."
+**Failure modes:** strong trends restated as signals; a single direction; uncertainty asserted but never located.
 
-**Signals → Scenarios:**
-- Signals identifies what's emerging
-- Scenarios shows how signals could combine into coherent futures
-- **Transition pattern:** "These signals combine into three plausible scenarios."
+### 2. Scenarios
 
-**Scenarios → Strategies:**
-- Scenarios describes alternative futures
-- Strategies identifies actions that work across futures
-- **Transition pattern:** "Robust strategies create value regardless of which scenario unfolds."
+**Purpose:** construct two or three plausible, distinct futures from how the signals and uncertainties could play out.
 
-**Strategies → Decisions:**
-- Strategies outlines robust approaches
-- Decisions specifies what to decide now vs. later
-- **Transition pattern:** "Executing robust strategies requires near-term decisions about [areas]."
+**Evidence sought:** trends across horizons, macro drivers (`megatrend_entities`), scenario drivers in cross-cutting patterns, future implications in the executive summary.
 
----
+**Argument move:** choose two or three macro drivers as axes → combine their extremes into distinct futures → ground each future's plausibility in the drivers' horizon and scope → explore what each future means for the organization by mapping the signals into it. Each scenario is internally consistent and incompatible with the others.
 
-### Closing Pattern
+**Techniques:** [Contrast Structure](../../narrative-techniques/techniques-overview.md#6-contrast-structure), [Number Plays](../../narrative-techniques/techniques-overview.md#4-number-plays-6-techniques).
 
-**Final Sentence:**
-Emphasis on decision-making under uncertainty, not prediction.
+**Hard rules:** two or three scenarios, no more; each is plausible, not extreme; scenarios are differentiated futures, not variations of one; implications are explored per scenario.
 
-**Examples:**
-- "The goal isn't predicting which future arrives—it's building capability to thrive in any of them."
-- "Strategic foresight doesn't eliminate uncertainty. It transforms uncertainty into strategic options."
-- "Organizations that prepare for multiple futures outperform those betting on single predictions."
+**Failure modes:** best/base/worst variations of one future; a fourth scenario for symmetry; a scenario with no implication.
 
-## Quality Gates
+### 3. Strategies
 
-### Arc Completeness
+**Purpose:** identify strategies that create value across the scenarios — actions that work whichever future unfolds.
 
-- [ ] All 4 elements present (Signals, Scenarios, Strategies, Decisions)
-- [ ] Hook present (within hook proportion of target)
-- [ ] Word counts within computed proportional ranges (+/-10% tolerance)
-- [ ] Smooth transitions between elements
-- [ ] Each element serves distinct purpose
+**Evidence sought:** strategic recommendations, common threads in cross-cutting patterns, scenario-independent insights in the executive summary.
 
-### Strategic Foresight Techniques Applied
+**Argument move:** robustness analysis (what works in every scenario) → flexibility building (what creates options) → scenario-specific hedges (insurance for one future) → no-regret moves. Frame the strongest robust strategy as a position with IS-DOES-MEANS.
 
-- [ ] **Signals:** Multiple weak signals identified (not just strong trends)
-- [ ] **Signals:** Contradictory signals acknowledged (divergent futures)
-- [ ] **Signals:** Uncertainty dimensions explicit
-- [ ] **Scenarios:** 2-3 distinct scenarios constructed
-- [ ] **Scenarios:** Each scenario plausible (not extreme)
-- [ ] **Scenarios:** Scenarios differentiated (not variations)
-- [ ] **Scenarios:** Implications explored per scenario
-- [ ] **Strategies:** Robust across scenarios (not scenario-specific)
-- [ ] **Strategies:** No-regret moves identified
-- [ ] **Strategies:** Flexibility/optionality built
-- [ ] **Decisions:** Near-term choices specified
-- [ ] **Decisions:** Decision triggers identified
-- [ ] **Decisions:** Reversibility assessed
+**Techniques:** [IS-DOES-MEANS](../../narrative-techniques/techniques-overview.md#3-is-does-means-power-positions), [You-Phrasing](../../narrative-techniques/techniques-overview.md#7-you-phrasing), [Contrast Structure](../../narrative-techniques/techniques-overview.md#6-contrast-structure).
 
-## Example Transformation
+**Hard rules:** each strategy is tested against every scenario; no-regret moves are named; hedges are labelled as hedges, not as strategies.
 
-This section demonstrates the Signals → Scenarios transformation using the Future of Work 2030 test case.
+**Failure modes:** strategies that only work in one future; "stay flexible" with no option named; a bet presented as robust.
 
-### Source: Executive Summary (Weak Signals)
+### 4. Decisions
 
-> Weak signals suggest fundamental assumptions about employment relationships are under stress. Only 42% of knowledge workers expect traditional employment to be their primary income source by 2030 (down from 78% in 2020)<sup>[1](12-synthesis/synthesis-employment.md)</sup>. Simultaneously, 67% of organizations report difficulty defining "employee" vs. "contractor" status under current regulatory frameworks, creating legal uncertainty<sup>[2](12-synthesis/synthesis-regulatory.md)</sup>.
+**Purpose:** specify the near-term decisions that position the organization to respond as uncertainty resolves.
 
-### Signals Transformation (~71-85% of element allocation)
+**Evidence sought:** action items in the recommendations, decision points in trends, timing considerations in the syntheses.
 
-Traditional employment assumptions are showing stress fractures in longitudinal data. The proportion of knowledge workers expecting traditional employment as their primary income source collapsed from 78% (2020) to 42% (2026)—a 36-percentage-point shift in six years<sup>[1](12-synthesis/synthesis-employment.md)</sup>. This isn't gradual evolution; it's a preference cascade where each year's shift accelerates the next.
+**Argument move:** catalogue the choices available now → name the information triggers (which signal would indicate which decision) → assess reversibility → optimize timing (decide now versus wait, and until when).
 
-The regulatory framework shows parallel stress: 67% of organizations report they can no longer clearly distinguish "employee" from "contractor" under current law<sup>[2](12-synthesis/synthesis-regulatory.md)</sup>. When two-thirds of employers face definitional uncertainty, the legal foundation for employment relationships has eroded beyond repair-through-clarification. This requires reconstruction, not refinement.
+**Techniques:** [Forcing Functions](../../narrative-techniques/techniques-overview.md#5-forcing-functions), [Compound Impact](../../narrative-techniques/techniques-overview.md#8-compound-impact-calculation) (cost of a late irreversible decision).
 
-Technology adoption reveals bifurcation rather than democratization: AI-augmented tools reach 89% adoption in high-skill roles but only 23% in mid-skill positions<sup>[3](synthesis-technology.md)</sup>. This 66-percentage-point gap suggests technology isn't creating universal capability uplift—it's widening the performance distribution between roles that benefit from AI and those that don't.
+**Hard rules:** near-term choices are specified; every decision has a trigger; reversibility is assessed for each.
 
-*Technique: Quantify directional change (78% → 42%, 6-year timeframe). Frame as "stress fractures" and "preference cascade" rather than "trends." Show bifurcation (89% vs. 23%) as divergence signal.*
+**Failure modes:** recommendations with no decision point; triggers absent; irreversible and reversible decisions treated alike.
 
-### Scenarios Transformation (~66-88% of element allocation)
+## Validation
 
-These weak signals point to three internally consistent futures:
+Arc-specific assertions, checked after the universal gates in `../../validation.md`:
 
-**Scenario 1: Platform Capitalism**
-Employment relationships dissolve into project-based transactions. The 42% who don't expect traditional employment join global talent marketplaces where AI matching reduces transaction costs to near-zero. Regulatory frameworks adapt by treating all work as independent contracting, resolving the 67% definitional uncertainty through elimination rather than clarification. The 89% high-skill AI adoption enables global competition; the 23% mid-skill adoption creates a permanent contractor class competing on price.
-
-**Scenario 2: Neo-Corporate**
-Organizations rebuild employment models with AI-human collaboration at the core. The regulatory uncertainty forces legal innovation: new employment categories that assume AI augmentation. High-skill roles (89% AI adoption) become "AI-amplified employees" with higher compensation and different liability frameworks. Mid-skill roles (23% adoption) either get upskilled or automated away. The 42% skeptical of traditional employment are proven wrong as neo-corporate models offer better benefits than gig platforms.
-
-**Scenario 3: Fragmented Autonomy**
-Regulatory divergence creates regional employment ecosystems. California mandates employment classification for algorithm-managed work, solving the 67% definitional problem locally but incompatibly with Texas's pure contracting framework. The 42% employment skeptics concentrate in contracting-friendly regions. AI adoption bifurcation (89% vs. 23%) maps to geography. Cross-state employment becomes legally impractical, fragmenting the talent market.
-
-*Technique: Build scenarios from signal combinations. Show internal consistency (each signal reinforces others within scenario). Demonstrate divergence (three incompatible futures, not variations). Use specific signals as scenario building blocks.*
-
-### Key Transformation Patterns
-
-**Signals techniques:**
-- Quantify directional change with timeframes (78% → 42% over 6 years)
-- Frame as structural stress ("fractures," "erosion"), not trends
-- Identify bifurcation (89% vs. 23% gap)
-- Use "weak signal" language (early indicators, not established patterns)
-
-**Scenarios techniques:**
-- Build from signal combinations (each scenario uses 3-4 weak signals)
-- Ensure internal consistency (signals reinforce each other)
-- Create divergence (incompatible futures, not variations)
-- Name scenarios distinctively (Platform Capitalism, Neo-Corporate, Fragmented Autonomy)
+- Signals carries several weak signals, acknowledges contradiction and names the uncertainty dimensions.
+- Scenarios carries two or three plausible, differentiated futures, each with its implications.
+- Strategies distinguishes robust moves, no-regret moves and hedges, tested across every scenario.
+- Decisions specifies near-term choices with triggers and reversibility.
+- The chain holds: the scenarios are built from the signals named; the strategies are robust across those scenarios; the decisions execute those strategies.
 
 ## See Also
 
-- `../arc-registry.md` - Master index of all story arcs
-- `signals-patterns.md` - Weak signal identification and interpretation patterns
-- `scenarios-patterns.md` - Scenario construction and differentiation patterns
-- `strategies-patterns.md` - Robust strategy identification patterns
-- `decisions-patterns.md` - Decision specification under uncertainty patterns
+- `../arc-registry.md` — arc selection: detection algorithm, per-arc declarative blocks, shortlist format
+- `../../narrative-techniques/techniques-overview.md` — the eight techniques and their application matrix
+- `../../validation.md` — the universal gates every narrative must clear

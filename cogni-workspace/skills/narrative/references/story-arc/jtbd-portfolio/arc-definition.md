@@ -95,7 +95,7 @@ Section lengths are proportions of `--target-length` (default 1,675 words). Word
 
 **Evidence sought:** proposition IS/DOES/MEANS statements, solution implementation detail, feature descriptions for the IS layer.
 
-**Argument move:** open with the 1:1 mapping statement, then for each job — introduced as "For the job of [verb phrase]…" — the matching solution in IS / DOES / MEANS order: IS a coherent definition, DOES the outcome for the buyer in You-Phrasing with numbers, MEANS the barrier competitors cannot cross.
+**Argument move:** open with the 1:1 mapping statement, then for each job — introduced as "For the job of [verb phrase]…" — the matching solution in IS-DOES-MEANS order: IS a coherent definition, DOES the outcome for the buyer in You-Phrasing with numbers, MEANS the barrier competitors cannot cross.
 
 **Techniques:** [IS-DOES-MEANS](../../narrative-techniques/techniques-overview.md#3-is-does-means-power-positions), [You-Phrasing](../../narrative-techniques/techniques-overview.md#7-you-phrasing), [Number Plays](../../narrative-techniques/techniques-overview.md#4-number-plays-6-techniques).
 
@@ -123,7 +123,7 @@ Arc-specific assertions, checked after the universal gates in `../../validation.
 
 - Every job in Job Landscape is a verb phrase in buyer language; there are three or four of them.
 - Count of jobs equals count of solutions in Portfolio Map; orphans and gaps are named explicitly.
-- Portfolio Map uses IS / DOES / MEANS per solution and carries no feature list.
+- Portfolio Map uses IS-DOES-MEANS per solution and carries no feature list.
 - Every friction entry names its job and carries a cited cost of inaction.
 - Invitation presents one entry point and names `/why-change` for deal-specific tailoring.
 - The chain holds: the TL;DR's conclusion is the one the four elements earn; the jobs are the ones the frictions block; the frictions are the ones the portfolio resolves; the invitation follows the map.

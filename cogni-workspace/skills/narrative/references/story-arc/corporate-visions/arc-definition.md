@@ -95,7 +95,7 @@ Section lengths are proportions of `--target-length` (default 1,675 words). Word
 
 **Evidence sought:** strategic recommendations, strategic implications in the dimension syntheses, positioning opportunities in the executive summary, portfolio propositions when a `--content-map` supplies them.
 
-**Argument move:** two or three Power Positions, each in IS / DOES / MEANS order: IS names the capability concretely in one or two sentences; DOES states what it does for the reader in You-Phrasing with quantified outcomes; MEANS explains why competitors struggle to copy it — time, tacit knowledge, integration complexity. Positions may be process, governance, capability-building, partnership or culture positions; pick the mix the evidence supports.
+**Argument move:** two or three Power Positions, each in IS-DOES-MEANS order: IS names the capability concretely in one or two sentences; DOES states what it does for the reader in You-Phrasing with quantified outcomes; MEANS explains why competitors struggle to copy it — time, tacit knowledge, integration complexity. Positions may be process, governance, capability-building, partnership or culture positions; pick the mix the evidence supports.
 
 **Techniques:** [IS-DOES-MEANS](../../narrative-techniques/techniques-overview.md#3-is-does-means-power-positions), [You-Phrasing](../../narrative-techniques/techniques-overview.md#7-you-phrasing), [Number Plays](../../narrative-techniques/techniques-overview.md#4-number-plays-6-techniques).
 
@@ -123,7 +123,7 @@ Arc-specific assertions, checked after the universal gates in `../../validation.
 
 - Why Change carries all three PSB legs and opens with a contrast.
 - Why Now stacks at least two forcing functions, each with a date and a quantified consequence, and closes on a window-closing statement.
-- Why You carries two or three named Power Positions in IS / DOES / MEANS order with second-person DOES layers.
+- Why You carries two or three named Power Positions in IS-DOES-MEANS order with second-person DOES layers.
 - Why Pay stacks at least three cost dimensions on one horizon and ends on a simple ratio.
 - The rhetorical chain holds: the TL;DR's conclusion is the one the four elements earn; the need makes the forcing functions feel inevitable; the urgency makes the reader want the positions; the positions make the cost comparison feel like a conclusion.
 - The closing sentence is the ratio, and nothing follows it.

@@ -9,7 +9,10 @@ Category: core
 Usage:
     bridge-citations.py --source-path <file-or-dir> [--output-dir <dir>] [--json]
 
-Reads markdown files and extracts all [Source: Publisher](URL) citations.
+Reads markdown files and extracts all [Source: Publisher](URL) citations, scanning
+the whole text (detection is not limited to a leading window). Leave --output-dir
+unset in normal use: the default places narrative-input/ beside a directory source
+or beside a single file's parent, which is correct for both input shapes.
 Creates an output directory with:
   - report-for-narrative.md — content with [source-NN-slug.md] markers
   - sources/source-NN-publisher-slug.md — per-source files with YAML frontmatter
@@ -58,12 +61,6 @@ def extract_citations(report_text: str) -> List[Dict[str, str]]:
             })
 
     return citations
-
-
-def has_bridgeable_citations(text: str) -> bool:
-    """Check whether text contains [Source: Publisher](URL) citations."""
-    pattern = r'\[Source:\s*[^\]]+\]\([^)]+\)'
-    return bool(re.search(pattern, text))
 
 
 def create_source_file(index: int, publisher: str, url: str) -> Tuple[str, str]:

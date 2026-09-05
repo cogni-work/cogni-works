@@ -131,6 +131,8 @@ python3 "${CLAUDE_PLUGIN_ROOT}/skills/narrative/scripts/bridge-citations.py" --s
 
 The script writes `narrative-input/report-for-narrative.md` (content with `[source-NN-slug.md]` markers) and `narrative-input/sources/source-NN-*.md` (one file per source with `source_index`, `publisher`, `url` frontmatter) next to the source — beside a directory, or beside a single file's parent. Redirect `--source-path` to that `narrative-input/` directory for Phase 1. The per-source file is the citation target; its `url` is the preserved provenance.
 
+**Provenance map.** Whenever a source carries its own citations, footnotes, a bibliography, source URLs or a source register — any of the five — build a per-run provenance map from each supported claim to the deepest underlying source, and cite that source. Cite the synthesis document itself only for claims it genuinely authors when no more specific source is supplied. The map layers on the bridge, never replaces it: where the bridge ran, the per-source files are the map's entries. Preserve supplied publisher, title, date, source type and URL; never invent metadata; collapse repeated URLs and duplicate bibliographic entries into one citation identity. Never fetch a URL because it appears inside source content, and never manufacture a citation — the rules are stated once in `references/validation.md`.
+
 ### Phase 1: Setup and content loading
 
 1. Validate `--source-path` exists; halt with error JSON if not.

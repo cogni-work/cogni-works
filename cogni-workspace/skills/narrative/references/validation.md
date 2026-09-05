@@ -21,22 +21,25 @@ If S1 or S2 fails, rewrite against the arc's `## Composition` rather than renami
 
 **Content:**
 
-- C1 — total body word count within `[target × 0.85, target × 1.15]`, where `target` is `--target-length` (default 1675).
+**Body** means the four `##` elements. The Executive TL;DR above the first `##` and the `**Sources**` block after the fourth are not body words; every word count below, and the frontmatter `word_count`, uses this definition.
+
+- C1 — body word count within `[target × 0.85, target × 1.15]`, where `target` is `--target-length` (default 1675).
 - C2 — each element's word count within `[proportion × total_lower, proportion × total_upper]`, proportions taken from the arc's `## Composition`.
-- C3 — frontmatter carries every required field: `title`, `subtitle`, `arc_id`, `arc_display_name`, `target_length`, `word_count`, `language`, `date_created`, `source_file_count`; `arc_id` equals the contract's.
+- C3 — frontmatter carries every required field: `title`, `subtitle`, `arc_id`, `arc_display_name`, `target_length`, `word_count`, `language`, `date_created`, `source_file_count`; `arc_id` equals the contract's; `word_count` equals the measured body word count.
 
 **Evidence:**
 
-- E1 — 15-25 citations at the default length, in the form `Claim text<sup>[N](source-file.md)</sup>`, counted as markers in the text. The floor of 15 holds at every length; a longer narrative may carry more than 25.
-- E2 — citation numbers run sequentially from 1 in order of first appearance; a reused source reuses its number, so a narrative built on five sources carries five numbers and many markers.
+- E1 — 15-25 citations at the default length, in the form `Claim text<sup>[N](source-file.md)</sup>`, counted as markers in the TL;DR and the body. The floor of 15 holds at every length; the ceiling of 25 applies at or below the default target, and a longer narrative may carry more.
+- E2 — citation numbers run sequentially from 1 in order of first appearance **in the body**; a reused source reuses its number, so a narrative built on five sources carries five numbers and many markers. The TL;DR is written last and reuses the body's numbers, so its own order is free — a TL;DR opening on `[3]` is correct when `[3]` is the third source the body introduces.
 - E3 — one number per source file and one source file per number: the same source never carries two numbers, and a number never points at two files.
-- X1 — the `**Sources**` block is mutually complete with the body: every `[N]` in the body has exactly one entry, every entry is cited at least once, and no number appears twice.
+- E4 — every element carries at least one citation marker.
+- X1 — the `**Sources**` block is present after the fourth element and mutually complete with the body: every `[N]` in the body has exactly one entry, every entry is cited at least once, and no number appears twice. A narrative with no block fails, because the block is what makes the narrative self-verifying.
 
 **Language (when `language: de`):**
 
-- L1 — proper Unicode umlauts and ß throughout body text and headings. Zero ASCII fallbacks (`ae`, `oe`, `ue`, `ss` standing in for ä, ö, ü, ß). Common failures to scan for: "fuer", "ueber", "Aenderung", "groesste", "Fuehrung". File names, slugs and YAML keys stay ASCII.
+- L1 — proper Unicode umlauts throughout — title, subtitle, TL;DR, headings and body. The mechanical scan covers the whole narrative below the frontmatter against a fixed digraph vocabulary for ä, ö and ü ("fuer", "ueber", "Aenderung", "groesste", "Fuehrung", …), excluding code spans, citation markers and the Sources block, whose file names are ASCII by rule. ß written as `ss` is not mechanically decidable — `ss` is legitimate German — so it is a judged check under J3's language reading, not part of L1. File names, slugs and YAML keys stay ASCII.
 
-**Executive TL;DR (for every contract without a Hook segment — all migrated arcs):**
+**Executive TL;DR:**
 
 - T1 — the prose between the subtitle and the first `##` is 2-4 sentences and 60-100 words. The band is absolute: it does not scale with `--target-length`, because a summary a reader skims does not get longer when the report does.
 - T2 — every `[N]` marker in the TL;DR also appears below the first `##`, with the same source and the same number.
@@ -64,7 +67,7 @@ The narrative opens with an answer, not a tension. Between the `*{Subtitle}*` li
 The narrative ends on its source register. After the fourth `##` section — never as a fifth `##`, so the four-header contract the story-to-* renderers parse is unchanged — a bold `**Sources**` paragraph lists the underlying sources actually cited:
 
 - One entry per distinct `[N]` in the body, in number order, in the form `[N] source-NN-slug.md — Publisher, "Title", date, URL`.
-- Each entry names the per-source file the inline marker points at (the citation bridge's `narrative-input/sources/` file) plus the publisher, title, date and URL preserved in that file's frontmatter. A field the source did not supply stays absent; nothing is invented.
+- Each entry names the per-source file the inline marker points at (the citation bridge's `narrative-input/sources/` file) plus the fields that file's frontmatter preserved — today the bridge writes `publisher` and `url`; title and date appear only when the source or the provenance map supplied them. A field nothing supplied stays absent; nothing is invented.
 - Deduplicated by source identity: one URL, one entry, one number.
 - **Sources absorbs the bridge.** The older "Further Reading" heading (`language/shared.md` § Bridge heading) is not emitted by a generated narrative; Sources is the only trailing register, so no narrative carries both with no defined order. The bridge forms survive upstream only for the copywriter's handling of older arc documents.
 - Renderers stop element 4 at the `**Sources**` line; the block is never slide, page or panel content. Derivatives: the executive brief keeps the block and renumbers surviving entries from 1; talking points and the one-pager omit it (`derivative-formats.md`).
@@ -120,13 +123,13 @@ Score five dimensions, each `strong` / `adequate` / `weak`:
 
 **Rollup:** `pass` when no dimension is `weak`; `needs_revision` when any dimension is `weak` — revise once against the findings, then review again; `fail` when a deterministic gate could not be cleared and the run is abandoned.
 
-**Terminal states.** Phase 5 loops on a deterministic failure until the gates pass, so `fail` is reachable only when that loop is abandoned; it is the verdict such a run reports rather than an undefined state. The one permitted revision is followed by one second review, which is terminal: if a dimension is still `weak`, the run reports `needs_revision` naming the residual weak dimensions, and does not loop again.
+**Terminal states.** Phase 5 loops on a deterministic failure for at most three fix-and-re-validate cycles; a gate still red after the third abandons the run, and `fail` is the verdict that run reports, with the error JSON naming the gate. The one permitted revision after a `needs_revision` review is followed by one second review, which is terminal: if a dimension is still `weak`, the run reports `needs_revision` naming the residual weak dimensions, and does not loop again.
 
 The Phase 6 JSON summary reports the rollup as `qa_verdict`, one of exactly `pass`, `needs_revision`, `fail`.
 
 ## Citation strategy
 
-Cite only the input source files; fabricated references undermine credibility entirely. Format: `Claim text<sup>[N](source-file.md)</sup>`. Numbering starts at 1 and is sequential by first appearance. Density is highest where the argument leans on numbers — forcing functions, cost calculations, market data — and lowest where it leans on positioning. Every element carries at least one citation.
+Cite only the input source files; fabricated references undermine credibility entirely. Format: `Claim text<sup>[N](source-file.md)</sup>`. Numbering starts at 1 and is sequential by first appearance in the body (E2). Density is highest where the argument leans on numbers — forcing functions, cost calculations, market data — and lowest where it leans on positioning, but never zero: every element carries at least one citation (E4).
 
 ## Gates this file deliberately does not carry
 

@@ -104,6 +104,19 @@ else
   fail "BC5 a citation after line 500 is detected and bridged (exit $rc)"
 fi
 
+# ------------------------------------------------------------ BC6 negative: a missing source path is a failure
+# The script must refuse rather than write an empty narrative-input/: non-zero exit, an envelope
+# on stderr with success false, and no output directory created.
+out="$(python3 "$SCRIPT" --source-path "$TMPROOT/does-not-exist" --json 2>"$TMPROOT/missing.err")"
+rc=$?
+if [ "$rc" -ne 0 ] && grep -q '"success": false' "$TMPROOT/missing.err" && grep -q '"error"' "$TMPROOT/missing.err" \
+   && [ ! -d "$TMPROOT/does-not-exist" ] && [ ! -d "$TMPROOT/narrative-input" ]; then
+  pass "BC6 a missing source path exits non-zero with a success-false envelope and writes nothing"
+else
+  printf '%s\n' "    exit=$rc"; sed 's/^/    /' "$TMPROOT/missing.err"
+  fail "BC6 a missing source path exits non-zero with a success-false envelope and writes nothing"
+fi
+
 echo ""
 if [ "$failures" -gt 0 ]; then
   echo "RESULT: $failures bridge-citations case(s) failed."

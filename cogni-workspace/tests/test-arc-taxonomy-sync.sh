@@ -117,8 +117,8 @@ TMPROOT="$(mktemp -d)"
 trap 'rm -rf "$TMPROOT"' EXIT
 
 failures=0
-pass() { echo "ok: $1"; }
-fail() { echo "FAIL: $1"; failures=$((failures + 1)); }
+pass() { printf '%s\n' "ok: $1"; }
+fail() { printf '%s\n' "FAIL: $1"; failures=$((failures + 1)); }
 
 # THE CASE REGISTRY — the one declaration every other case list in this file derives from.
 # A guard whose whole purpose is pinning one list against another has no business carrying an
@@ -427,10 +427,16 @@ for arc in sorted(os.listdir(arc_dir)):
 print("%d %s" % (checked, " ".join(bad)))
 PY
 )
+h1_rc=$?
 h1_checked="${h1_report%% *}"
 h1_bad="${h1_report#* }"
 [ "$h1_bad" = "$h1_report" ] && h1_bad=""
-if [ "$h1_checked" -eq 0 ] 2>/dev/null; then
+# A helper that crashes prints nothing, so the count is empty — reject anything that is not a
+# plain number before comparing it, or the fail branch is skipped and control falls to pass.
+case "$h1_checked" in ''|*[!0-9]*) h1_checked="" ;; esac
+if [ "$h1_rc" -ne 0 ] || [ -z "$h1_checked" ]; then
+  fail "H1 derivation helper failed (exit $h1_rc) — no comparison was made"
+elif [ "$h1_checked" -eq 0 ]; then
   fail "H1 no contract carrying contract: 2 was found — the derivation check ran over nothing"
 elif [ -n "$h1_bad" ]; then
   fail "H1 taxonomy short name(s) do not equal the contract heading's pre-colon segment: $h1_bad"

@@ -195,6 +195,46 @@ open(dst, "w", encoding="utf-8").write(body + sep + rest)
 PY2
 expect_red NV13 E3 "$TMPROOT/twonums.md"
 
+# ---------------------------------------------------------------- NV16 Sources block removed entirely -> X1
+# The block is mandatory, so its absence is a finding rather than a skipped gate.
+python3 - "$FIXTURE" "$TMPROOT/nosources.md" <<'PY3'
+import sys
+src, dst = sys.argv[1], sys.argv[2]
+t = open(src, encoding="utf-8").read()
+body, sep, rest = t.partition("\n**Sources**")
+if not sep:
+    sys.exit(1)
+open(dst, "w", encoding="utf-8").write(body.rstrip("\n") + "\n")
+PY3
+expect_red NV16 X1 "$TMPROOT/nosources.md"
+
+# ---------------------------------------------------------------- NV17 one element stripped of every citation -> E4
+python3 - "$FIXTURE" "$TMPROOT/uncitedelement.md" <<'PY4'
+import sys, re
+src, dst = sys.argv[1], sys.argv[2]
+t = open(src, encoding="utf-8").read()
+head, sep, tail = t.partition("\n## Why Pay")
+if not sep:
+    sys.exit(1)
+section, ssep, sources = tail.partition("\n**Sources**")
+section = re.sub(r"<sup>\[\d+\]\([^)]*\)</sup>", "", section)
+open(dst, "w", encoding="utf-8").write(head + sep + section + ssep + sources)
+PY4
+expect_red NV17 E4 "$TMPROOT/uncitedelement.md"
+
+# ---------------------------------------------------------------- NV18 one element pushed over its proportional band -> C2
+# ~160 filler words land in Why Pay (17% of a 1000-word target: band 144-195 words), which
+# leaves the total inside C1's band so C2 is the gate that carries the finding.
+python3 - "$FIXTURE" "$TMPROOT/fatelement.md" <<'PY5'
+import sys
+src, dst = sys.argv[1], sys.argv[2]
+t = open(src, encoding="utf-8").read()
+head, sep, tail = t.partition("\n**Sources**")
+filler = " ".join("Filler word number %d keeps the element growing." % i for i in range(1, 21))
+open(dst, "w", encoding="utf-8").write(head.rstrip("\n") + "\n\n" + filler + "\n" + sep + tail)
+PY5
+expect_red NV18 C2 "$TMPROOT/fatelement.md"
+
 # ---------------------------------------------------------------- NV14 / NV15 the two end-to-end fixtures pass
 for pair in "strategic-choice-en.md:strategic-choice:NV14" "consulting-problem-solving-de.md:consulting-problem-solving:NV15"; do
   f="${pair%%:*}"; rest="${pair#*:}"; arc="${rest%%:*}"; cid="${rest#*:}"

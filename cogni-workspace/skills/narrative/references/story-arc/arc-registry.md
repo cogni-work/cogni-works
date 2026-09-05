@@ -43,7 +43,7 @@ One block per arc directory. Every block carries the same six fields; a block wh
 - **best_for:** market research syntheses, competitive positioning, sales enablement, B2B value propositions, executive decision support.
 - **signals:** `content_type: generic` or `market`; a problem executives underestimate; deadlines, regulatory dates, tipping points; recommended capabilities; quantified costs, risks or penalties.
 - **anti_signals:** a documented customer journey with verified outcomes; named alternatives weighed against criteria; a solution portfolio for buyers who already want it; a company self-description; TIPS value chains.
-- **distinguish_from:** `consulting-problem-solving` (diagnose an open problem and derive the answer — a diagnostic memo on Corporate Visions ends up with a Why Pay section); `strategic-choice` (choose among already-credible alternatives); `customer-transformation` (prove observed value through one customer's journey rather than persuade prospectively); `theme-thesis` (the same persuasion for one investment theme inside a TIPS report); `jtbd-portfolio` (buyers who already accept the need and want the portfolio explained); `industry-transformation` (structural change of a sector rather than one reader's decision); `competitive-intelligence` (positioning within a category rather than a case for change). Corporate Visions persuades a reader to change, act now, prefer a position and justify investment — it is not the arc for diagnosing, choosing or proving.
+- **distinguish_from:** `consulting-problem-solving` (diagnose an open problem and derive the answer — a diagnostic memo on Corporate Visions ends up with a Why Pay section); `strategic-choice` (choose among already-credible alternatives); `customer-transformation` (prove observed value through one customer's journey rather than persuade prospectively); `theme-thesis` (the same persuasion for one investment theme inside a TIPS report); `jtbd-portfolio` (buyers who already accept the need and want the portfolio explained); `industry-transformation` (structural change of a sector rather than one reader's decision); `competitive-intelligence` (positioning within a category rather than a case for change); `technology-futures` (a capability roadmap rather than persuasion); `strategic-foresight` (divergent futures rather than a present decision); `company-credo` (the company's identity rather than the reader's change); `category-creation` (reframes what the market buys rather than persuading one buyer inside the existing frame). Corporate Visions persuades a reader to change, act now, prefer a position and justify investment — it is not the arc for diagnosing, choosing or proving.
 - **fallback_priority:** the default *candidate* when no specialized content type is detected — always on the shortlist in that case, never the automatic winner; the execution-fit step and the alternatives' governing questions decide.
 
 ### technology-futures
@@ -70,7 +70,7 @@ One block per arc directory. Every block carries the same six fields; a block wh
 - **best_for:** long-range planning, scenario analysis, foresight studies, strategy under regulatory or technological uncertainty.
 - **signals:** `content_type: foresight` or `scenarios`; keywords "scenario", "future", "signal", "uncertainty", "planning", "foresight"; contradictory indicators; robust versus bet.
 - **anti_signals:** evidence converging on one future; options already named and awaiting a choice; pressure to act now on a known need.
-- **distinguish_from:** `technology-futures` (one capability path); `corporate-visions` (a known need and a present decision); `trend-panorama` (a landscape summary rather than divergent futures).
+- **distinguish_from:** `technology-futures` (one capability path); `corporate-visions` (a known need and a present decision); `trend-panorama` (a landscape summary rather than divergent futures); `strategic-choice` (a present choice among credible options rather than divergent futures).
 - **fallback_priority:** never a fallback.
 
 ### industry-transformation
@@ -88,7 +88,7 @@ One block per arc directory. Every block carries the same six fields; a block wh
 - **best_for:** trend-scout output summaries, TIPS trend-report narratives without themes, multi-horizon trend landscapes, industry trend panoramas.
 - **signals:** structural — `trend-scout-output.json` (in the source or `.metadata/`), trend entities with `planning_horizon` and `dimension` frontmatter, `tips-trend-report.md` — with **no** `tips-value-model.json`; `content_type: trend`, `trends` or `tips`; `research_type: smarter-service`; keywords "trend", "horizon", "act", "plan", "observe", "TIPS", "signal intensity", "dimension".
 - **anti_signals:** `tips-value-model.json` present; a single theme with value chains; no horizon or dimension structure.
-- **distinguish_from:** `smarter-service` (the same four elements with investment themes anchored — the value model decides); `theme-thesis` (one theme's thesis rather than the landscape); `strategic-foresight` (divergent futures rather than a horizon cascade).
+- **distinguish_from:** `smarter-service` (the same four elements with investment themes anchored — the value model decides); `theme-thesis` (one theme's thesis rather than the landscape); `strategic-foresight` (divergent futures rather than a horizon cascade); `industry-transformation` (one industry's structural change rather than a TIPS landscape).
 - **fallback_priority:** never a fallback; the structural signal decides between this arc and `smarter-service` before keyword analysis.
 
 ### smarter-service
@@ -124,7 +124,7 @@ One block per arc directory. Every block carries the same six fields; a block wh
 - **best_for:** About-Us pages, company introductions, brand-identity narratives, the `about` scope of cogni-portfolio's customer narrative.
 - **signals:** `content_type: company-credo` or `about-us`; a company description, positioning or mission, recurring MEANS themes; keywords "about us", "our mission", "why we exist", "what we believe", "our story", "company values", "our credo", "who we are", "why us".
 - **anti_signals:** a delivery process; solutions mapped to buyer jobs; market research about someone else.
-- **distinguish_from:** `engagement-model` (how the company works rather than why it exists); `jtbd-portfolio` (what it sells rather than what it believes); `corporate-visions` (a case for the reader's change rather than the company's identity).
+- **distinguish_from:** `engagement-model` (how the company works rather than why it exists); `jtbd-portfolio` (what it sells rather than what it believes); `corporate-visions` (a case for the reader's change rather than the company's identity); `customer-transformation` (a customer's observed outcome rather than the company's identity).
 - **fallback_priority:** never a fallback.
 
 ### engagement-model
@@ -169,10 +169,22 @@ One block per arc directory. Every block carries the same six fields; a block wh
 - **best_for:** market-reframe narratives, category-design papers, thought leadership that names a new category, positioning for a company the existing frame does not fit.
 - **signals:** `content_type: category-creation`, `category-design`, `market-reframe` or `new-category`; the source argues the existing category mis-describes the buyer's problem; an evidenced shift; a proposed new frame or name; keywords "category", "reframe", "the old model", "a new class of", "redefine".
 - **anti_signals:** competitors and shares within an accepted category; structural forces with no new frame proposed; a diagnostic memo.
-- **distinguish_from:** `competitive-intelligence` (position within a stable category rather than change the frame); `industry-transformation` (describe structural industry change rather than propose a new frame for what is bought); `corporate-visions` (persuade one buyer inside the existing frame).
+- **distinguish_from:** `competitive-intelligence` (position within a stable category rather than change the frame); `industry-transformation` (describe structural industry change rather than propose a new frame for what is bought); `corporate-visions` (persuade one buyer inside the existing frame); `consulting-problem-solving` (answer a stated problem rather than reframe a market).
 - **fallback_priority:** never a fallback.
 
 ## Arc Detection Algorithm
+
+SKILL.md Phase 2 fixes only the override order (explicit `--arc-id` → inherited `story_arc_id` → this algorithm); every detection step and every `detection_reason` string lives here, and downstream consumers read the string verbatim, so the vocabulary is closed:
+
+| Decided by | `detection_reason` |
+|---|---|
+| `--arc-id` | `explicit --arc-id parameter` |
+| Phase 1 inheritance | `inherited from source research/knowledge project: <PROJECT_ROOT>` |
+| Step 2 structural signal | `structural: <file> detected (<variant>)` — the three literal strings in Step 2 |
+| Step 3 `research_type` | `research_type="<value>"` (with the `(theme-less)` suffix where Step 3 shows it) |
+| Step 3 `content_type` | `content_type="<value>"` |
+| Step 5 keyword density | `keyword density analysis` |
+| Step 6 fallback | `default candidate (no specific signals detected)` |
 
 ### Step 1: Explicit selection
 

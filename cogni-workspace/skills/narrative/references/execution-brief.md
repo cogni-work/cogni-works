@@ -33,7 +33,7 @@ Record which rung resolved each field. A field resolved at rung 5 is a default a
 
 Ask one compact clarification only when a field is unresolved above rung 5 **and** its value would change framing, terminology, emphasis, recommendations or evidence selection. One question, naming the field and offering the two or three answers the sources make plausible.
 
-Never ask for what is explicit or safely inferable. Never ask more than once per run. Under `--interactive false` never ask — take the default and continue. This is the second AskUserQuestion site in the skill after the Phase 2 arc confirmation, and it is gated by the same parameter.
+Never ask for what is explicit or safely inferable. Never ask more than one brief question per run. Under `--interactive false` never ask — take the default and continue. This is the second AskUserQuestion site in the skill after the Phase 2 arc confirmation, and it is gated by the same parameter.
 
 ## What the brief steers
 

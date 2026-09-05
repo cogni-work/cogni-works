@@ -41,9 +41,9 @@ One responsibility per file. Read a file when its phase runs, not before.
 | `--purpose` | No | The decision the narrative must serve. Default: understand the evidence and its strategic implications. Feeds Pass 2 (TL;DR, emphasis, close) |
 | `--perspective` | No | Whose voice the narrative speaks in. Default: neutral analyst. Feeds Pass 2 (pronouns, ownership) |
 | `--geography` | No | Market codes from `cogni-workspace/references/supported-markets-registry.json` (`code` values such as `dach`, `de`, `fr`, `eu`), comma-separated, never free text or a country name. Default: source-defined scope. Feeds Pass 1 (evidence priority when sources span markets) |
+| `--interactive` | No | Whether the skill may pause for user input. `true` or `false`. Default: `true`. When `false`, skip all AskUserQuestion calls — there are two sites: the Phase 0 materiality clarification (takes the default instead) and the Phase 2 arc confirmation (keeps its top-ranked arc and its `detection_reason` and continues straight into Phase 3 with no prompt). Same semantics as the `interactive` parameter in `story-to-slides`, `story-to-web` and `story-to-infographic`, spelled `--interactive` here to match this skill's flag-style argument surface. Any value other than `false` is treated as `true`, so a malformed value fails safe toward the interactive default |
 
 Audience knowledge level (`expert` / `informed` / `general`, default `informed`) and tone (default: concise analytical executive prose) are **inferred fields**, never flags — see Phase 0.
-| `--interactive` | No | Whether the skill may pause for user input. `true` or `false`. Default: `true`. When `false`, skip all AskUserQuestion calls — today that is the Phase 2 arc confirmation, which keeps its ladder selection and its `detection_reason` and continues straight into Phase 3 with no prompt. Same semantics as the `interactive` parameter in `story-to-slides`, `story-to-web` and `story-to-infographic`, spelled `--interactive` here to match this skill's flag-style argument surface. Any value other than `false` is treated as `true`, so a malformed value fails safe toward the interactive default |
 
 **Content map keys:** `executive_summary`, `dimension_syntheses`, `trends_summary`, `trend_entities`, `megatrends_summary`, `megatrend_entities`, `domain_concepts`, `research_hub`, `initial_question`. Contracts name these keys in their `Evidence sought` subfields.
 
@@ -58,7 +58,7 @@ subtitle: "{Research question or topic}"
 arc_id: "{selected-arc}"
 arc_display_name: "{Arc display name}"
 target_length: {target-length or 1675}
-word_count: {actual word count}
+word_count: {body word count — the four ## elements, excluding the TL;DR and the Sources block}
 language: "{en|de}"
 date_created: "{ISO 8601}"
 source_file_count: {N}
@@ -138,14 +138,14 @@ Upstream research tools may use `[Source: Publisher](URL)` inline citations. Sca
 python3 "${CLAUDE_PLUGIN_ROOT}/skills/narrative/scripts/bridge-citations.py" --source-path "${SOURCE_PATH}" --json
 ```
 
-The script writes `narrative-input/report-for-narrative.md` (content with `[source-NN-slug.md]` markers) and `narrative-input/sources/source-NN-*.md` (one file per source with `source_index`, `publisher`, `url` frontmatter) next to the source — beside a directory, or beside a single file's parent. Redirect `--source-path` to that `narrative-input/` directory for Phase 1. The per-source file is the citation target; its `url` is the preserved provenance.
+The script writes `narrative-input/report-for-narrative.md` (content with `[source-NN-slug.md]` markers) and `narrative-input/sources/source-NN-*.md` (one file per source with `source_index`, `publisher`, `url` frontmatter) — inside a directory source, or beside a single file in its parent directory. Redirect `--source-path` to that `narrative-input/` directory for Phase 1, which loads the report as evidence and the `sources/` files as citation targets. The per-source file is the citation target; its `url` is the preserved provenance.
 
 **Provenance map.** Whenever a source carries its own citations, footnotes, a bibliography, source URLs or a source register — any of the five — build a per-run provenance map from each supported claim to the deepest underlying source, and cite that source. Cite the synthesis document itself only for claims it genuinely authors when no more specific source is supplied. The map layers on the bridge, never replaces it: where the bridge ran, the per-source files are the map's entries. Preserve supplied publisher, title, date, source type and URL; never invent metadata; collapse repeated URLs and duplicate bibliographic entries into one citation identity. Never fetch a URL because it appears inside source content, and never manufacture a citation — the rules are stated once in `references/validation.md`.
 
 ### Phase 1: Setup and content loading
 
 1. Validate `--source-path` exists; halt with error JSON if not.
-2. Load every `.md` file from the source directory (or the single file).
+2. Load every `.md` file from the source directory (or the single file) as evidence. When the directory is the bridge's `narrative-input/`, also load `sources/*.md` — as **citation targets only**, never as evidence: their `publisher` and `url` frontmatter is what the inline markers point at and what the Sources block reproduces, and their bodies carry no claims.
 3. Load `narrative-config.json` from the source directory if present.
 4. If `--content-map` is provided, load each path (directory: all `.md`; file: that file; glob: matches), tag each file with its key, and skip a missing path with a non-blocking warning.
 5. Store `--research-question` for the subtitle and the opening.
@@ -169,17 +169,13 @@ The script writes `narrative-input/report-for-narrative.md` (content with `[sour
 
 ### Phase 2: Arc selection
 
-**Read first:** `references/story-arc/arc-registry.md` — the detection algorithm, keyword sets and content-type mappings live there.
+**Read first:** `references/story-arc/arc-registry.md` — the registry chooses. Its Arc Detection Algorithm owns every detection step and the `detection_reason` vocabulary; this phase only fixes the order in which an arc is taken:
 
-**Selection priority:**
+1. `--arc-id` provided → use it, no detection.
+2. `inherited_arc_id` from Phase 1 step 8 → use it, no detection.
+3. Otherwise run the registry's algorithm in full — structural signals (the TIPS file signatures), `research_type`, the `content_type` mapping from `narrative-config.json`, keyword density, the execution-fit ranking against the Phase 0 brief, and the fallback — and take its ranked candidates. Record the `detection_reason` string the registry step that decided emits, verbatim.
 
-1. `--arc-id` provided → use it. `detection_reason = "explicit --arc-id parameter"`.
-2. `inherited_arc_id` from Phase 1 step 8 → use it. `detection_reason = "inherited from source research/knowledge project: <PROJECT_ROOT>"`.
-3. `narrative-config.json` carries `content_type` → apply the registry mapping. `detection_reason = "content_type mapping from narrative-config.json"`.
-4. Otherwise analyze the loaded content for keyword density per the registry. `detection_reason = "keyword density analysis"`.
-5. Fallback: `corporate-visions`. `detection_reason = "default fallback"`.
-
-Present selected arc to user for confirmation using AskUserQuestion — as a **shortlist**, in the registry's confirmation format. When the arc was not explicit (priorities 3-5), shortlist the 2-3 arcs that would produce materially different but defensible narratives from the evidence and the brief's decision purpose; for each show the display name, the four-element progression, the governing question and one fit reason, drawn from the registry's declarative blocks; mark exactly one **Recommended** with a one-sentence reason keyed to the decision purpose. If only one arc is defensible, say so and ask for confirmation rather than padding the list. Never present the full registry unless the user asks for it. For a priority-1 or priority-2 pick, confirm that single arc — a priority-2 prompt is labelled "Inherited from source research/knowledge project — preserves the long-form report's arc". Accept confirmation or an override.
+Present selected arc to user for confirmation using AskUserQuestion — as a **shortlist**, in the registry's confirmation format. When the arc was not explicit (priority 3), shortlist the 2-3 arcs that would produce materially different but defensible narratives from the evidence and the brief's decision purpose; for each show the display name, the four-element progression, the governing question and one fit reason, drawn from the registry's declarative blocks; mark exactly one **Recommended** with a one-sentence reason keyed to the decision purpose. If only one arc is defensible, say so and ask for confirmation rather than padding the list. Never present the full registry unless the user asks for it. For a priority-1 or priority-2 pick, confirm that single arc — a priority-2 prompt is labelled "Inherited from source research/knowledge project — preserves the long-form report's arc". Accept confirmation or an override.
 
 When `--interactive` is `false`, this confirmation does not run -- take the top-ranked arc selected above, store it with its `detection_reason` unchanged, and continue to Phase 3.
 
@@ -189,7 +185,7 @@ Store: `arc_id`, `arc_display_name`, `detection_reason`. An unknown `arc_id` hal
 
 Read two files, in full, before writing anything:
 
-1. `references/story-arc/{arc_id}/arc-definition.md` — the arc contract: `## Headings`, `## Composition`, `## Elements`, `## Validation`.
+1. `references/story-arc/{arc_id}/arc-definition.md` — the arc contract, all seven sections: Intent, Selection, Headings, Composition, Elements, Validation, See Also. The drafting passes lean on Headings, Composition, Elements and Validation; Intent and Selection are what tell you whether the arc fits the brief at all.
 2. `references/narrative-techniques/techniques-overview.md` — the eight techniques and the application matrix.
 
 Every arc carries `contract: 2`; `cogni-workspace/tests/test-arc-contract-shape.sh` keeps that true, so there is no other file to read for an arc. The language references are not loaded here — Pass 3 loads them.
@@ -198,9 +194,9 @@ Every arc carries `contract: 2`; `cogni-workspace/tests/test-arc-contract-shape.
 
 ### Phase 4: Four passes
 
-Draft in four passes. Each pass has one job; doing two at once is how a narrative ends up structurally right and rhetorically flat.
+Draft in four passes. Each pass has one job; doing two at once is how a narrative ends up structurally right and rhetorically flat. **The draft lives in one file from Pass 1 on:** Pass 1 writes it to `--output-path` (`OUTPUT_PATH`, default `insight-summary.md` in the source directory), and Passes 2-4, Phase 5 and Phase 6 edit that same file in place — there is no separate draft path.
 
-**Pass 1 — evidence draft.** For each element in order: map the loaded content to the element using its `Evidence sought`; when the sources span markets, weight the evidence by the brief's `--geography`; draft the body from that evidence, every quantitative claim carrying `<sup>[N](source-file.md)</sup>`; hold the element's word range. Write the four elements only — no title, no opening yet.
+**Pass 1 — evidence draft.** For each element in order: map the loaded content to the element using its `Evidence sought`; when the sources span markets, weight the evidence by the brief's `--geography`; draft the body from that evidence, every quantitative claim carrying `<sup>[N](source-file.md)</sup>`, numbers assigned by first appearance in the body and reused for a reused source; hold the element's word range. Write the four elements only — no title, no opening yet — to `OUTPUT_PATH`.
 
 **Pass 2 — argument edit.** Apply each element's `Argument move` and `Techniques`; enforce its `Hard rules`; build the transitions from `## Composition`; write the closing per the closing pattern, so that emphasis, implications and close serve the brief's `--purpose` and pronouns and ownership follow its `--perspective`. Then — last, from the finished elements — write the title (arc-specific, never "Insight Summary") and the Executive TL;DR, weighting it as the contract's TL;DR-emphasis line says. Writing the TL;DR after the elements is what makes "synthesizes all four" enforceable rather than aspirational. Finally assemble the `**Sources**` block from the provenance map: one entry per cited `[N]`, in number order, carrying the per-source file and its preserved metadata.
 
@@ -209,7 +205,7 @@ Draft in four passes. Each pass has one job; doing two at once is how a narrativ
 **Pass 4 — rhythm and readability.** Vary sentence length; make transitions consequential rather than topical; run `shared.md`'s final editorial pass. Then measure:
 
 ```bash
-bash "${CLAUDE_PLUGIN_ROOT}/skills/copywriter/scripts/readability.sh" --file "${DRAFT_PATH}" --lang "${LANGUAGE}" --json
+bash "${CLAUDE_PLUGIN_ROOT}/skills/copywriter/scripts/readability.sh" --file "${OUTPUT_PATH}" --lang "${LANGUAGE}" --json
 ```
 
 Compare `flesch_score` with the language's target band in `skills/copywriter/contracts/readability.yml`. On a miss, revise once — the script's sub-metrics point at the passages — and measure again; report the final score as `readability_score` whatever the outcome. Count words per element against `## Composition` and adjust by adding evidence to a thin element or trimming redundant transitions, never evidence.
@@ -227,14 +223,14 @@ python3 "${CLAUDE_PLUGIN_ROOT}/skills/narrative/scripts/validate-narrative.py" \
   --narrative "${OUTPUT_PATH}" --contract "${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/story-arc/${ARC_ID}/arc-definition.md" --json
 ```
 
-Then read `references/validation.md` and check its judged gates plus the contract's `## Validation` section. Fix any failure and re-run everything — a fix can break a gate that passed. A structural failure is fixed by rewriting against `## Composition`, never by renaming headings.
+Then read `references/validation.md` and check its judged gates plus the contract's `## Validation` section. Fix any failure and re-run everything — a fix can break a gate that passed. A structural failure is fixed by rewriting against `## Composition`, never by renaming headings. **Attempt bound:** at most three fix-and-re-validate cycles. If a deterministic gate is still red after the third, abandon the run — report `qa_verdict: "fail"` and the error JSON with `phase: "5"` naming the gate — rather than looping.
 
 **Release review (after the gates are green).** Run the banded self-review defined in `references/validation.md`: five dimensions — strategic reasoning, arc integrity, executive language, decision usefulness, execution fit — each `strong` / `adequate` / `weak`, rolled up to `pass`, `needs_revision` (revise once, review once more, then report) or `fail` (a gate could not be cleared and the run was abandoned). The review diagnoses and never rewrites the draft; the revision step acts on its findings. Its rollup is the JSON summary's `qa_verdict`.
 
 ### Phase 6: Write output
 
-1. Write the narrative to the output path (default `insight-summary.md` in the source directory).
-2. Verify the file exists and its `word_count` frontmatter matches the body.
+1. The narrative is already at `OUTPUT_PATH` (Pass 1 wrote it; every later step edited it in place). Finalize the frontmatter: `word_count` is the four-element body count the validator reported as `word_count` — the TL;DR and the Sources block are not body words — and gate C3 checks the two agree.
+2. Verify the file exists and re-read it once, end to end.
 3. Return the JSON summary.
 
 ## Derivative Formats (`--format`)
@@ -270,6 +266,6 @@ On any unrecoverable failure, return `{"success": false, "error": "...", "phase"
 | 2 | Unknown `arc_id` | Halt with the registry's arc list |
 | 3 | Arc contract or techniques file missing | Halt with the missing path |
 | 4 | Transformation fails | Halt with error JSON |
-| 5 | A gate fails | Report, fix, re-validate all gates |
+| 5 | A gate fails | Report, fix, re-validate all gates — at most three cycles, then abandon with `qa_verdict: "fail"` |
 | Derivative | Unknown `--format` value | Halt with the three valid formats |
 | Derivative | `--source-path` is not a single finished narrative `.md` | Halt with error |

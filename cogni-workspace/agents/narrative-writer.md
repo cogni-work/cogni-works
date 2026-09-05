@@ -45,7 +45,7 @@ You will receive:
 
 ## Execution
 
-1. Invoke the `cogni-workspace:narrative` skill using the Skill tool, passing the received parameters as skill arguments, always with `--interactive false` so the skill skips every prompt that would wait on a user (today, the Phase 2 arc confirmation)
+1. Invoke the `cogni-workspace:narrative` skill using the Skill tool, passing the received parameters as skill arguments, always with `--interactive false` so the skill skips both prompts that would wait on a user (the Phase 0 materiality clarification and the Phase 2 arc confirmation)
 2. The skill handles ALL narrative logic: the execution brief, content loading, arc selection, contract loading, the four drafting passes, validation, the release review and output writing
 3. Follow the skill's complete workflow, Phase 0 through Phase 6 -- do NOT skip phases or override skill decisions
 4. Do NOT ask user questions during execution -- use auto-detection for arc selection if `arc_id` is not provided

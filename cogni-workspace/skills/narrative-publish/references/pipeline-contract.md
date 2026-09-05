@@ -121,7 +121,7 @@ One envelope per run.
   "narrative": {
     "output_path": "...", "arc_id": "...", "arc_display_name": "...",
     "detection_reason": "keyword density analysis",
-    "target_length": 1675, "word_count": 1502, "citation_count": 14,
+    "target_length": 1675, "word_count": 1502, "citation_count": 22,
     "elements": 4, "language": "en",
     "readability_score": 48.2, "qa_verdict": "pass",
     "generated": true

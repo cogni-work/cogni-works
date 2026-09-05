@@ -55,7 +55,7 @@ UNMIGRATED=""
 HEADINGS="Intent Selection Headings Composition Elements Validation See_Also"
 SUBFIELDS="Purpose|Evidence sought|Argument move|Techniques|Hard rules|Failure modes"
 
-ALL_CASES="V1 C1 C2 C3 C4 C5 U1 M1"
+ALL_CASES="V1 C1 C2 C3 C4 C5 U1 M1 M2"
 
 TMPROOT="$(mktemp -d)"
 trap 'rm -rf "$TMPROOT"' EXIT
@@ -146,9 +146,12 @@ en, de = header.index("EN"), header.index("DE")
 for r in data:
     if not r[en] or not r[de]:
         sys.exit(1)
-    # A DE cell spelling a real umlaut word with a digraph is the substitution A5 downstream
-    # exists to catch; the same words with real umlauts are what every contract carries today.
-    if re.search(r"\b(?:fuer|ueber|Aenderung|Veraenderung|Kraefte|Fuehrung|Moeglich|Loesung|Ueberzeugung|Glaubwuerdigkeit|Einfluesse|Begruendung|Hindernisse und Handlungsdruck ss)\b", r[de]):
+    # A DE cell spelling a real umlaut word with a digraph is the ASCII substitution the
+    # copywriter's runtime read would then propagate; the same words with real umlauts are
+    # what every contract carries today. Stems are matched as PREFIXES (word start, no end
+    # anchor, case-insensitive) so inflected forms — Möglichkeiten, Lösungen, nächste,
+    # verläuft, Geschäftliche — are caught, not only the uninflected stem.
+    if re.search(r"(?i)\b(?:fuer|ueber|aenderung|veraenderung|kraefte|fuehrung|moeglich|loesung|ueberzeugung|glaubwuerdig|einfluesse|begruendung|naechste|verlaeuft|schliess|geschaeft|fruehindikator|ansaetze|wettbewerbsuebersicht|prioritaet|staerke|zurueck|gegenueber|waehrend|koennen|muessen|groesst|hoehe|voellig|schluessel|verfuegbar|gefuehrt|bewaehrt|gruende|wuerde|dafuer|veraendert|entscheidungstraeger|einfuehrung)", r[de]):
         sys.exit(1)
 sys.exit(0)
 PY
@@ -233,7 +236,7 @@ mutant_out="$(ARC_CONTRACT_SHAPE_MUTANT=1 ARC_CONTRACT_STORY_ARC_DIR="$TMPROOT/s
 mutant_rc=$?
 
 printf '%s\n' "$mutant_out" | grep -E '^(PASS|FAIL): ' | awk '{print $2}' | sort -u > "$TMPROOT/emitted.txt"
-for c in $ALL_CASES; do [ "$c" = "M1" ] || echo "$c"; done | sort -u > "$TMPROOT/expected.txt"
+for c in $ALL_CASES; do case "$c" in M1|M2) ;; *) echo "$c" ;; esac; done | sort -u > "$TMPROOT/expected.txt"
 unregistered="$(comm -13 "$TMPROOT/expected.txt" "$TMPROOT/emitted.txt" | tr '\n' ' ')"
 unemitted="$(comm -23 "$TMPROOT/expected.txt" "$TMPROOT/emitted.txt" | tr '\n' ' ')"
 c1_line="$(printf '%s\n' "$mutant_out" | grep '^FAIL: C1 ' || true)"
@@ -248,6 +251,50 @@ elif printf '%s\n' "$c1_line" | grep -q "$victim"; then
   pass "M1 renaming ## Headings in '$victim' turns C1 red naming it (child exit $mutant_rc); registry matches"
 else
   fail "M1 mutant exited $mutant_rc but not via C1 naming '$victim' — got: $(printf '%s' "$mutant_out" | grep '^FAIL:' | tr '\n' ';')"
+fi
+
+# ---------------------------------------------------------------------------- M2
+# Second negative: transliterate the WHOLE DE column of the last migrated contract to ASCII
+# digraphs (ä→ae, ö→oe, ü→ue, ß→ss) in a copy and require C3 to go red naming that arc. This
+# is the exact corruption a prefix-anchored vocabulary has to catch on inflected headings.
+m2_victim="$(printf '%s' "$migrated" | tr ' ' '\n' | tail -n 1)"
+rm -rf "$TMPROOT/story-arc-m2"
+cp -R "$ARC_DIR" "$TMPROOT/story-arc-m2"
+python3 - "$ARC_DIR/$m2_victim/arc-definition.md" "$TMPROOT/story-arc-m2/$m2_victim/arc-definition.md" <<'PYM2'
+import re, sys
+src, dst = sys.argv[1], sys.argv[2]
+text = open(src, encoding="utf-8").read()
+m = re.search(r"^## Headings\n(.*?)(?=^## )", text, flags=re.S | re.M)
+if not m:
+    sys.exit(1)
+rows = m.group(1).splitlines()
+header = [c.strip() for c in next(l for l in rows if l.strip().startswith("|")).strip().strip("|").split("|")]
+de = header.index("DE")
+table = {"ä": "ae", "ö": "oe", "ü": "ue", "Ä": "Ae", "Ö": "Oe", "Ü": "Ue", "ß": "ss"}
+out = []
+for l in rows:
+    if l.strip().startswith("|") and not set(l.strip().strip("|").replace("|", "")) <= set("-: "):
+        cells = l.strip().strip("|").split("|")
+        if cells[0].strip() != header[0]:
+            cells[de] = "".join(table.get(ch, ch) for ch in cells[de])
+        l = "|" + "|".join(cells) + "|"
+    out.append(l)
+new = text[: m.start(1)] + "\n".join(out) + "\n" + text[m.end(1):]
+if new == text:
+    sys.exit(2)
+open(dst, "w", encoding="utf-8").write(new)
+PYM2
+m2_prep=$?
+if [ "$m2_prep" -ne 0 ]; then
+  fail "M2 could not transliterate the DE headings of '$m2_victim' (prep exit $m2_prep)"
+else
+  m2_out="$(ARC_CONTRACT_SHAPE_MUTANT=1 ARC_CONTRACT_STORY_ARC_DIR="$TMPROOT/story-arc-m2" bash "$HERE/$(basename "$0")" 2>&1)"
+  m2_rc=$?
+  if [ "$m2_rc" -ne 0 ] && printf '%s\n' "$m2_out" | grep '^FAIL: C3 ' | grep -q "$m2_victim"; then
+    pass "M2 transliterating the DE headings of '$m2_victim' to ASCII digraphs turns C3 red naming it (child exit $m2_rc)"
+  else
+    fail "M2 mutant exited $m2_rc but C3 did not go red naming '$m2_victim' — got: $(printf '%s' "$m2_out" | grep '^FAIL:' | tr '\n' ';')"
+  fi
 fi
 
 finish

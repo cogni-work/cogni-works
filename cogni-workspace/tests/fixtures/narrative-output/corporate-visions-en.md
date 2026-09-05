@@ -4,7 +4,7 @@ subtitle: "How should European industrial operators respond to the shift from sc
 arc_id: "corporate-visions"
 arc_display_name: "Corporate Visions"
 target_length: 1000
-word_count: 960
+word_count: 906
 language: "en"
 date_created: "2026-09-05T12:00:00Z"
 source_file_count: 3

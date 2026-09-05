@@ -45,6 +45,8 @@ CW_PRESERVATION="$WS_ROOT/skills/copywriter/references/09-preservation-modes/arc
 TMPROOT="$(mktemp -d)"
 trap 'rm -rf "$TMPROOT"' EXIT
 
+ALL_CASES="X0 X1 X2 X3 M1"
+
 failures=0
 pass() { printf '%s\n' "PASS: $1"; }
 fail() { printf '%s\n' "FAIL: $1"; failures=$((failures + 1)); }
@@ -136,9 +138,13 @@ if [ "${ARC_SYNC_MUTANT:-}" = "1" ]; then
   finish
 fi
 
-victim="$(printf '%s\n' "$cited" | grep -v '{' | head -n 1)"
+# The victim is drawn from SKILL.md alone, because SKILL.md is the only surface the copy
+# rewrites: a path cited only by 00-index.md or arc-preservation.md would still resolve in
+# the child run and the mutant would be green for the wrong reason.
+victim="$(grep -oE '(\$\{CLAUDE_PLUGIN_ROOT\}/)?skills/narrative/references/[A-Za-z0-9_./{}-]+\.md' "$CW_SKILL" \
+  | sed 's#^\${CLAUDE_PLUGIN_ROOT}/##' | grep -v '{' | sort -u | head -n 1)"
 if [ -z "$victim" ]; then
-  fail "M1 no concrete cited path available to mutate"
+  fail "M1 no concrete cited path available to mutate in SKILL.md"
   finish
 fi
 sed "s#$victim#skills/narrative/references/does-not-exist.md#g" "$CW_SKILL" > "$TMPROOT/SKILL.md"
@@ -148,8 +154,18 @@ if ! grep -q 'does-not-exist.md' "$TMPROOT/SKILL.md"; then
 fi
 mutant_out="$(ARC_SYNC_MUTANT=1 ARC_SYNC_CW_SKILL="$TMPROOT/SKILL.md" bash "$HERE/$(basename "$0")" 2>&1)"
 mutant_rc=$?
-if [ "$mutant_rc" -ne 0 ] && printf '%s\n' "$mutant_out" | grep -q '^FAIL: X1 '; then
-  pass "M1 rewriting a cited upstream path to a missing file turns X1 red (child exit $mutant_rc)"
+# Pin ALL_CASES against the ids the child actually emitted, in both directions, so a case
+# deleted from the file (or added without registration) turns this suite red.
+printf '%s\n' "$mutant_out" | grep -E '^(PASS|FAIL): ' | awk '{print $2}' | sort -u > "$TMPROOT/emitted.txt"
+for c in $ALL_CASES; do [ "$c" = "M1" ] || echo "$c"; done | sort -u > "$TMPROOT/expected.txt"
+unregistered="$(comm -13 "$TMPROOT/expected.txt" "$TMPROOT/emitted.txt" | tr '\n' ' ')"
+unemitted="$(comm -23 "$TMPROOT/expected.txt" "$TMPROOT/emitted.txt" | tr '\n' ' ')"
+if [ -n "${unregistered// /}" ]; then
+  fail "M1 case(s) emitted but missing from ALL_CASES: $unregistered"
+elif [ -n "${unemitted// /}" ]; then
+  fail "M1 case id(s) in ALL_CASES never emitted: $unemitted"
+elif [ "$mutant_rc" -ne 0 ] && printf '%s\n' "$mutant_out" | grep -q '^FAIL: X1 '; then
+  pass "M1 rewriting a cited upstream path to a missing file turns X1 red (child exit $mutant_rc); registry matches"
 else
   fail "M1 mutant exited $mutant_rc but X1 did not go red — got: $(printf '%s' "$mutant_out" | grep '^FAIL:' | tr '\n' ';')"
 fi

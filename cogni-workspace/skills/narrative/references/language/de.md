@@ -29,7 +29,7 @@ Apply only for German output, at Phase 4 Pass 3, after evidence and argument are
 
 ## Orthography
 
-Proper Unicode umlauts and ß throughout body text and headings — ä, ö, ü, Ä, Ö, Ü, ß — never the ASCII digraphs ae, oe, ue, ss standing in for them. Common failures to scan for: "fuer", "ueber", "Aenderung", "groesste", "Fuehrung". File names, slugs and YAML keys stay ASCII; the narrative body does not. Validation gate L1 in `../validation.md` checks this mechanically.
+Proper Unicode umlauts and ß throughout — title, subtitle, TL;DR, headings and body: ä, ö, ü, Ä, Ö, Ü, ß, never the ASCII digraphs ae, oe, ue, ss standing in for them. Common failures to scan for: "fuer", "ueber", "Aenderung", "groesste", "Fuehrung". File names, slugs and YAML keys stay ASCII; the narrative does not. Validation gate L1 in `../validation.md` checks the ä/ö/ü digraphs mechanically over the whole narrative; ß written as `ss` cannot be decided mechanically because `ss` is legitimate German, so read for it in the Pass 3 language edit.
 
 ## Thresholds, by reference
 

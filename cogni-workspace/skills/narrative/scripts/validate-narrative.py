@@ -6,22 +6,31 @@ every mechanical gate from references/validation.md as pass/fail. The judged
 gates (title specificity, technique application, transition quality) need a
 reader and are not here.
 
+"Body" throughout means the four `##` elements: the Executive TL;DR above the
+first `##` and the `**Sources**` block after the fourth are not body words.
+
 Gates:
-  S1  exactly four `##` headers in the body
+  S1  exactly four `##` headers below the frontmatter
   S2  headers byte-equal to the contract's `## Headings` cells for the language
   C1  body word count within [target*0.85, target*1.15]
-  C2  each segment within [proportion*lower, proportion*upper]
-  C3  required frontmatter fields present; arc_id matches the contract
-  E1  citation markers >= 15 (<= 25 at the default length); a reused source
-      reuses its number, so markers are counted, not distinct numbers
-  E2  citation numbers sequential from 1 by first appearance
+  C2  each element within [proportion*lower, proportion*upper]
+  C3  required frontmatter fields present; arc_id matches the contract;
+      frontmatter word_count equals the measured body word count
+  E1  citation markers (TL;DR and body) >= 15, and <= 25 when the target is
+      at or below the default; a reused source reuses its number, so markers
+      are counted, not distinct numbers
+  E2  citation numbers sequential from 1 by first appearance IN THE BODY; the
+      TL;DR is written last and reuses body numbers, so its own order is free
   E3  one number per source file and one file per number (dedup by identity)
-  L1  (de only) no ASCII umlaut fallbacks in body text
-  T1  (contracts without a Hook segment) opening TL;DR is 2-4 sentences and
-      60-100 words
+  E4  every element carries at least one citation marker
+  L1  (de only) no ASCII umlaut fallback anywhere below the frontmatter —
+      title, subtitle, TL;DR, headings and body; fenced code, code spans,
+      citation markers and the Sources block (ASCII file names) are excluded
+  T1  the opening TL;DR is 2-4 sentences and 60-100 words
   T2  every citation number in the TL;DR also appears below the first `##`
-  X1  when a `**Sources**` block is present: every body citation number has
-      exactly one entry and every entry is cited at least once
+  X1  a `**Sources**` block is present after the fourth element, every body
+      citation number has exactly one entry and every entry is cited at least
+      once
 
 Usage:
   validate-narrative.py --narrative FILE --contract ARC_DEFINITION.md
@@ -237,17 +246,15 @@ def main(argv):
         actual = [h for h, _ in elements]
         gate("S2", actual == expected, "headers %s expected %s" % (actual, expected))
 
-    # C2 / C1 need the composition
+    # C2 / C1 need the composition; body = the four elements only
     composition = contract_composition(sections)
-    has_hook = any(name.lower() == "hook" for name, _ in composition)
     element_words = [word_count(t) for _, t in elements]
     opening_words = word_count(opening)
-    band_total = sum(element_words) + (opening_words if has_hook else 0)
+    band_total = sum(element_words)
     gate("C1", lower <= band_total <= upper,
          "body %d words, band [%d, %d] for target %d" % (band_total, lower, upper, target))
 
-    seg_words = ([opening_words] if has_hook else []) + element_words
-    seg_names = [n for n, _ in composition]
+    seg_words = element_words
     c2_ok, c2_detail = True, []
     if len(composition) != len(seg_words):
         c2_ok = False
@@ -263,23 +270,34 @@ def main(argv):
     # C3
     missing = [k for k in REQUIRED_FRONTMATTER if not fm.get(k)]
     arc_ok = fm.get("arc_id") == cfm.get("arc_id")
-    gate("C3", not missing and arc_ok,
-         "missing %s; arc_id %s vs contract %s" % (missing, fm.get("arc_id"), cfm.get("arc_id")))
+    try:
+        declared_words = int(fm.get("word_count", ""))
+    except ValueError:
+        declared_words = None
+    words_ok = declared_words == band_total
+    gate("C3", not missing and arc_ok and words_ok,
+         "missing %s; arc_id %s vs contract %s; word_count %s vs measured body %d"
+         % (missing, fm.get("arc_id"), cfm.get("arc_id"), fm.get("word_count"), band_total))
 
-    # E1 / E2 over the elements (the band), citations in the opening count too
+    # E1 counts markers in the TL;DR and the body; E2 orders by first appearance in the
+    # body alone, because the TL;DR is written last and reuses whatever numbers the body
+    # already carries.
     body_for_cites = "\n".join(t for _, t in elements)
-    cites = CITATION_RE.findall(opening + "\n" + body_for_cites)
-    numbers = [int(n) for n, _ in cites]
+    body_cites = CITATION_RE.findall(body_for_cites)
+    cites = CITATION_RE.findall(opening) + body_cites
     distinct = []
-    for n in numbers:
-        if n not in distinct:
-            distinct.append(n)
-    marker_count = len(numbers)
-    ceiling_ok = True if target != DEFAULT_TARGET else marker_count <= CITATION_CEILING_AT_DEFAULT
+    for n, _ in body_cites:
+        if int(n) not in distinct:
+            distinct.append(int(n))
+    all_numbers = sorted({int(n) for n, _ in cites})
+    marker_count = len(cites)
+    ceiling_ok = marker_count <= CITATION_CEILING_AT_DEFAULT if target <= DEFAULT_TARGET else True
     gate("E1", marker_count >= CITATION_FLOOR and ceiling_ok,
-         "%d citation markers over %d source(s) (floor %d)" % (marker_count, len(distinct), CITATION_FLOOR))
+         "%d citation markers over %d source(s) (floor %d%s)"
+         % (marker_count, len(all_numbers), CITATION_FLOOR,
+            ", ceiling %d" % CITATION_CEILING_AT_DEFAULT if target <= DEFAULT_TARGET else ""))
     gate("E2", distinct == list(range(1, len(distinct) + 1)),
-         "first-appearance order %s" % distinct[:30])
+         "body first-appearance order %s" % distinct[:30])
     num_to_files, file_to_nums = {}, {}
     for n, f in cites:
         num_to_files.setdefault(int(n), set()).add(f)
@@ -289,27 +307,36 @@ def main(argv):
     gate("E3", not multi_file and not multi_num,
          "numbers pointing at several files %s; files carrying several numbers %s" % (multi_file, multi_num))
 
-    # L1
+    # E4 — every element carries at least one marker
+    uncited_elements = [h for h, t in elements if not CITATION_RE.search(t)]
+    gate("E4", not uncited_elements, "elements without a citation: %s" % uncited_elements)
+
+    # L1 — the whole narrative below the frontmatter, headings included; the Sources block
+    # (ASCII file names by rule), code spans and citation markers are excluded
     if language == "de":
-        text_lower = re.sub(r"`[^`]*`", "", body_for_cites + "\n" + opening).lower()
-        hits = sorted({w for w in DE_ASCII_FALLBACKS if re.search(r"\b%s" % w, text_lower)})
+        scan = body
+        if sources_block is not None:
+            scan = scan[: scan.rfind("**Sources**")]
+        scan = CITATION_RE.sub("", re.sub(r"`[^`]*`", "", scan)).lower()
+        hits = sorted({w for w in DE_ASCII_FALLBACKS if re.search(r"\b%s" % w, scan)})
         gate("L1", not hits, "ASCII fallbacks found: %s" % hits)
 
-    # T1 / T2 — only for contracts without a Hook segment (the TL;DR contract)
-    if not has_hook:
-        sentences = [s for s in re.split(r"(?<=[.!?])\s+", opening.strip()) if s.strip()]
-        t1_ok = TLDR_WORDS[0] <= opening_words <= TLDR_WORDS[1] and TLDR_SENTENCES[0] <= len(sentences) <= TLDR_SENTENCES[1]
-        gate("T1", t1_ok, "TL;DR %d words, %d sentences (want %d-%d words, %d-%d sentences)"
-             % (opening_words, len(sentences), TLDR_WORDS[0], TLDR_WORDS[1], TLDR_SENTENCES[0], TLDR_SENTENCES[1]))
-        tldr_nums = {int(n) for n, _ in CITATION_RE.findall(opening)}
-        body_nums = {int(n) for n, _ in CITATION_RE.findall(body_for_cites)}
-        gate("T2", tldr_nums <= body_nums, "TL;DR citations %s not in body: %s" % (sorted(tldr_nums), sorted(tldr_nums - body_nums)))
+    # T1 / T2 — the Executive TL;DR
+    sentences = [s for s in re.split(r"(?<=[.!?])\s+", opening.strip()) if s.strip()]
+    t1_ok = TLDR_WORDS[0] <= opening_words <= TLDR_WORDS[1] and TLDR_SENTENCES[0] <= len(sentences) <= TLDR_SENTENCES[1]
+    gate("T1", t1_ok, "TL;DR %d words, %d sentences (want %d-%d words, %d-%d sentences)"
+         % (opening_words, len(sentences), TLDR_WORDS[0], TLDR_WORDS[1], TLDR_SENTENCES[0], TLDR_SENTENCES[1]))
+    tldr_nums = {int(n) for n, _ in CITATION_RE.findall(opening)}
+    body_nums = {int(n) for n, _ in body_cites}
+    gate("T2", tldr_nums <= body_nums, "TL;DR citations %s not in body: %s" % (sorted(tldr_nums), sorted(tldr_nums - body_nums)))
 
-    # X1 — Sources block completeness when present
-    if sources_block is not None:
+    # X1 — the Sources block is mandatory and mutually complete with the body
+    if sources_block is None:
+        gate("X1", False, "no `**Sources**` block after the fourth element")
+    else:
         entries = [int(m.group(1)) for m in (SOURCES_ENTRY_RE.match(l) for l in sources_block.splitlines()) if m]
         dup = sorted({n for n in entries if entries.count(n) > 1})
-        cited = set(distinct)
+        cited = set(all_numbers)
         uncited = sorted(set(entries) - cited)
         dangling = sorted(cited - set(entries))
         gate("X1", not dup and not uncited and not dangling,
@@ -320,7 +347,7 @@ def main(argv):
         "gates": gates,
         "word_count": band_total,
         "citation_count": marker_count,
-        "source_count": len(distinct),
+        "source_count": len(all_numbers),
         "language": language,
         "target_length": target,
         "sources_block": sources_block is not None,

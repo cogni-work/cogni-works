@@ -126,7 +126,7 @@ Arc-specific assertions, checked after the universal gates in `../../validation.
 - Why You carries two or three named Power Positions in IS-DOES-MEANS order with second-person DOES layers.
 - Why Pay stacks at least three cost dimensions on one horizon and ends on a simple ratio.
 - The rhetorical chain holds: the TL;DR's conclusion is the one the four elements earn; the need makes the forcing functions feel inevitable; the urgency makes the reader want the positions; the positions make the cost comparison feel like a conclusion.
-- The closing sentence is the ratio, and nothing follows it.
+- The closing sentence of the fourth element is the ratio; nothing follows it inside the element — the `**Sources**` block that comes after is a register, not prose.
 
 ## See Also
 

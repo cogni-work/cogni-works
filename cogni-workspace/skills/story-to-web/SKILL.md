@@ -15,7 +15,7 @@ description: >
   Produces a web-brief.md, or a storyboard-brief.md in storyboard mode. Important: this skill
   CREATES briefs from a narrative source — not rendering (use the web or storyboard
   agent), not slides (story-to-slides), not prose polish (copywriter).
-allowed-tools: Read Write Edit Bash Grep Glob TodoWrite AskUserQuestion Agent Skill
+allowed-tools: Read, Write, Edit, Bash, Grep, Glob, TodoWrite, AskUserQuestion, Agent, Skill
 ---
 
 # Story-to-Web Skill

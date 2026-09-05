@@ -14,7 +14,7 @@ description: >-
   "visual standards", "author tokens", "build a tiered theme system", "deepen a
   theme", and "match the cogni-work pattern". Also triggers on a Claude Design
   bundle URL (api.anthropic.com/v1/design/h/...).
-allowed-tools: Read Write Edit Glob Grep Bash Skill AskUserQuestion
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Skill, AskUserQuestion
 ---
 
 # Manage Themes

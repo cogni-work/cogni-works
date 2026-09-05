@@ -11,7 +11,7 @@ description: |
   even if they don't say "dashboard". This is the visual sibling of
   `workspace-status` (which is a text-based health diagnostic): pick this skill
   when the user wants to *see* the configuration, not diagnose it.
-allowed-tools: Read Write Edit Glob Grep Bash Skill AskUserQuestion
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Skill, AskUserQuestion
 ---
 
 # Workspace Dashboard

@@ -12,7 +12,7 @@ description: >-
   needs to catch up. Even if the user just says "new project", "start fresh",
   "add a plugin", "wire up my workspace", or "my plugins can't find each other",
   this skill applies.
-allowed-tools: Read Write Edit Glob Grep Bash AskUserQuestion
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion
 ---
 
 # Manage Workspace

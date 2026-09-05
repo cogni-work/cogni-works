@@ -9,7 +9,7 @@ description: >-
   routes to `audit-region-sources`. Adding plugin-specific overlay metadata
   (research authority_metadata, trends site_searches) is plugin-side
   curation — edit the overlay file directly.
-allowed-tools: Read Write Edit Glob Grep Bash AskUserQuestion
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion
 ---
 
 # Manage Markets

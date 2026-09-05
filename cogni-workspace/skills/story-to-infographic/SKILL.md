@@ -14,7 +14,7 @@ description: >
   It does NOT render an existing brief (use /render-infographic), create slides
   (story-to-slides), a scrollable web page or printed-poster
   storyboard (story-to-web), or enrich a report with inline visuals (enrich-report).
-allowed-tools: Read Write Edit Bash Grep Glob AskUserQuestion Agent Skill
+allowed-tools: Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion, Agent, Skill
 ---
 
 # Story-to-Infographic Skill

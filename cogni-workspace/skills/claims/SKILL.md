@@ -12,7 +12,7 @@ description: |
   me check these links", "browse the unavailable sources".
   Verification here is live-source: it re-fetches each cited URL and compares. For zero-network
   scoring of citations against claims extracted at ingest time, that is cogni-knowledge:knowledge-verify.
-allowed-tools: Read Write Edit Glob Grep Bash Agent AskUserQuestion mcp__claude-in-chrome__navigate mcp__claude-in-chrome__get_page_text mcp__claude-in-chrome__read_page mcp__claude-in-chrome__find mcp__claude-in-chrome__tabs_create_mcp mcp__claude-in-chrome__tabs_context_mcp
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Agent, AskUserQuestion, mcp__claude-in-chrome__navigate, mcp__claude-in-chrome__get_page_text, mcp__claude-in-chrome__read_page, mcp__claude-in-chrome__find, mcp__claude-in-chrome__tabs_create_mcp, mcp__claude-in-chrome__tabs_context_mcp
 ---
 
 # Claims Verification Orchestrator

@@ -11,7 +11,7 @@ description: |
   any read-only question about market/region taxonomy. The read-write
   sibling is `manage-markets` — use it for adding markets or updating
   overlay metadata.
-allowed-tools: Read Glob Grep Bash
+allowed-tools: Read, Glob, Grep, Bash
 ---
 
 # Region Catalog Audit (Read-Only)

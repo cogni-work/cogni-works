@@ -11,7 +11,7 @@ description: |
   "das Plugin funktioniert nicht", "Fehler in {plugin}", "ich kann kein Issue
   erstellen", or any complaint about a specific plugin — even without the word
   "issue".
-allowed-tools: Read Write Edit Glob Grep Bash AskUserQuestion
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion
 ---
 
 # Cogni Issues

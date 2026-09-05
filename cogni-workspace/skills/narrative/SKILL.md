@@ -6,19 +6,22 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion
 
 # Narrative Transformation
 
-Transform input markdown files into a structured executive narrative using one of 11 story arc frameworks. The narrative length is controlled by `--target-length` (default ~1,675 words), with section lengths expressed as proportions of the total to preserve the arc's rhetorical balance at any scale. Each arc provides a distinct rhetorical progression -- mapping source evidence to arc elements, applying narrative techniques, and producing a citation-grounded insight summary.
+Transform input markdown into a structured executive narrative using one of the registered story arcs. Length is controlled by `--target-length` (default 1,675 words); section lengths are proportions of the total, so the arc's rhetorical balance survives at any scale. Each arc is one contract file that maps evidence to four elements, names the techniques that strengthen each, and states the arc's own validation rules.
 
-**Use this for:**
-- Transforming research syntheses, analyses, or structured findings into executive narratives
-- Applying a specific story arc framework (Corporate Visions, Technology Futures, etc.)
-- Generating an insight summary from a set of markdown files
+**Use this for:** research syntheses, analyses or structured findings that need to become an executive narrative; applying a specific arc; generating an insight summary from a set of markdown files.
 
-**Not for:**
-- Polishing or rewriting arbitrary business documents (use copywriter skill) -- `--format` here is narrower: it derives an executive-brief / talking-points / one-pager from a finished arc narrative, keeping its 4 arc element headings intact
-- Creating slides from narratives (use story-to-slides skill)
-- Raw research or data collection (use the cogni-knowledge research pipeline)
+**Not for:** polishing arbitrary business documents (use `copywriter` — `--format` here only derives a brief, talking points or one-pager from a finished arc narrative, keeping its four headings); creating slides (`story-to-slides`); raw research (the cogni-knowledge pipeline).
 
----
+## Architectural model
+
+One responsibility per file. Read a file when its phase runs, not before.
+
+- **SKILL.md orchestrates** — phases, parameters, output contract, JSON envelope.
+- **The registry chooses** — `references/story-arc/arc-registry.md`: detection algorithm, one declarative block per arc, confirmation format.
+- **The contract structures** — `references/story-arc/{arc_id}/arc-definition.md`: headings, composition, four elements, arc-specific validation.
+- **Techniques strengthen** — `references/narrative-techniques/techniques-overview.md`: the eight techniques and which element each serves.
+- **Validation checks** — `references/validation.md`: every universal gate, run by `scripts/validate-narrative.py` and then by the writer.
+- **Derivatives condense** — `references/derivative-formats.md`, only when `--format` is set.
 
 ## Parameters
 
@@ -27,30 +30,26 @@ Transform input markdown files into a structured executive narrative using one o
 | `--source-path` | Yes | Directory containing input `.md` files, or path to a single `.md` file |
 | `--arc-id` | No | Explicit arc selection; overrides auto-detection |
 | `--language` | No | Output language: `en` (default) or `de`. Fallback chain: explicit parameter > project metadata > workspace preference (`.workspace-config.json`) > content detection > `en` |
-| `--output-path` | No | Output file path; defaults to `insight-summary.md` in source directory. When `--format` is set, the default is `{format}.md` in the source directory instead — see the `--format` row |
-| `--project-path` | No | Research/knowledge project root; enables arc inheritance from the project's `.metadata/` (`plan.json` for a cogni-knowledge project, or `project-config.json` for an older project layout — Phase 1 step 8) and loading entity data beyond source path. When omitted, Phase 1 step 8 probes `<source-path>/..` and `<source-path>/../..` to auto-detect the project root |
-| `--research-question` | No | Original research question for narrative hook framing |
-| `--target-length` | No | Target total word count as a single number (e.g., `2500`). System applies +/-15% band to derive the acceptable range. Default: `1675` (yields ~1,424-1,926 words). Recommended: 800-4,000 — outside this range, arc rhetorical structure may not scale well |
-| `--format` | No | Derivative mode. One of `executive-brief`, `talking-points`, `one-pager`. When set, `--source-path` is a single finished narrative `.md` file, the generation pipeline (Phases 0.5-6) is skipped, and the Derivative Formats section below runs instead. Output defaults to `{source-dir}/{format}.md` |
+| `--output-path` | No | Output file path; defaults to `insight-summary.md` in the source directory. When `--format` is set, the default is `{format}.md` in the source directory instead |
+| `--project-path` | No | Research/knowledge project root; enables arc inheritance from the project's `.metadata/` (Phase 1 step 8) and loading entity data beyond the source path. When omitted, Phase 1 step 8 probes `<source-path>/..` and `<source-path>/../..` |
+| `--research-question` | No | Original research question, used for the subtitle and the opening |
+| `--target-length` | No | Target total word count (e.g., `2500`). The acceptable range is ±15%. Default: `1675` (1,424-1,926 words). Recommended: 800-4,000 — outside that range the arc's proportions stop scaling well |
+| `--format` | No | Derivative mode: `executive-brief`, `talking-points` or `one-pager`. When set, `--source-path` is a single finished narrative `.md`, Phases 0.5-6 are skipped, and the Derivative Formats section runs instead. Output defaults to `{source-dir}/{format}.md` |
 | `--content-map` | No | YAML map of content category keys to file/directory paths for additional context |
 | `--interactive` | No | Whether the skill may pause for user input. `true` or `false`. Default: `true`. When `false`, skip all AskUserQuestion calls — today that is the Phase 2 arc confirmation, which keeps its ladder selection and its `detection_reason` and continues straight into Phase 3 with no prompt. Same semantics as the `interactive` parameter in `story-to-slides`, `story-to-web` and `story-to-infographic`, spelled `--interactive` here to match this skill's flag-style argument surface. Any value other than `false` is treated as `true`, so a malformed value fails safe toward the interactive default |
 
-**Content map keys:** `executive_summary`, `dimension_syntheses`, `trends_summary`, `trend_entities`, `megatrends_summary`, `megatrend_entities`, `domain_concepts`, `research_hub`, `initial_question`
-
----
+**Content map keys:** `executive_summary`, `dimension_syntheses`, `trends_summary`, `trend_entities`, `megatrends_summary`, `megatrend_entities`, `domain_concepts`, `research_hub`, `initial_question`. Contracts name these keys in their `Evidence sought` subfields.
 
 ## Output
 
-This section describes generation mode. When `--format` is set, both the output file and the JSON summary take a different shape -- see Derivative Formats below.
-
-A single markdown file (`insight-summary.md` by default):
+Generation mode writes one markdown file (`insight-summary.md` by default). Derivative mode changes both the file and the JSON — see Derivative Formats.
 
 ```markdown
 ---
-title: "{Arc-Specific Compelling Title}"
-subtitle: "{Research Question or Topic}"
+title: "{Arc-specific compelling title}"
+subtitle: "{Research question or topic}"
 arc_id: "{selected-arc}"
-arc_display_name: "{Arc Display Name}"
+arc_display_name: "{Arc display name}"
 target_length: {target-length or 1675}
 word_count: {actual word count}
 language: "{en|de}"
@@ -66,24 +65,13 @@ source_file_count: {N}
 
 ---
 
-## {Element 1 Header}
-
-{proportion of target words with evidence grounding}
-
-## {Element 2 Header}
-
-{proportion of target words with evidence grounding}
-
-## {Element 3 Header}
-
-{proportion of target words with evidence grounding}
-
-## {Element 4 Header}
-
-{proportion of target words with evidence grounding}
+## {Element 1 heading}
+## {Element 2 heading}
+## {Element 3 heading}
+## {Element 4 heading}
 ```
 
-**Word count target:** determined by `--target-length` (default 1,675). Each section's word range = its arc proportion x the target's +/-15% band. See the arc definition loaded in Phase 3 for per-element proportions.
+Exactly four `##` headings, byte-equal to the contract's `## Headings` cells for the output language, in arc order. Each element's word range is its `## Composition` proportion times the ±15% band around the target.
 
 **JSON summary returned on completion:**
 
@@ -93,69 +81,49 @@ source_file_count: {N}
   "output_path": "insight-summary.md",
   "arc_id": "corporate-visions",
   "arc_display_name": "Corporate Visions",
+  "detection_reason": "keyword density analysis",
   "target_length": 1675,
   "word_count": 1650,
   "citation_count": 22,
   "elements": 4,
-  "language": "en"
+  "language": "en",
+  "readability_score": null
 }
 ```
 
----
+`readability_score` is reported when Pass 4 computes it and `null` otherwise.
 
 ## Core Workflow
 
 ```text
-Phase 0.5       Phase 1      Phase 2        Phase 3          Phase 4            Phase 5       Phase 6
-Citation  --->  Setup  --->  Arc      --->  Pattern   --->   Transformation --> Validation -> Write
-Bridge          & Load       Selection      Loading          (arc-specific)
+Phase 0.5      Phase 1     Phase 2      Phase 3      Phase 4         Phase 5      Phase 6
+Citation  -->  Setup  -->  Arc     -->  Load    -->  Four      -->  Validate --> Write
+bridge         & load      selection    contract     passes
 (conditional)
 ```
 
-When `--format` is set this pipeline does not run at all -- the skill adapts an existing narrative instead; jump to Derivative Formats below.
+When `--format` is set this pipeline does not run; jump to Derivative Formats. Phases 3 and 4 read the contract and the techniques before any drafting — those two files are what separate a persuasive narrative from a summary under headings.
 
-The quality of each phase depends on the previous one. In particular, Phases 3 and 4 require reading reference files before doing anything -- the arc patterns and narrative techniques are what differentiate a good narrative from a generic summary. Skipping those reads is the single biggest cause of poor output.
+### Phase 0.5: Citation bridge (conditional)
 
----
-
-### Phase 0.5: Citation Bridge (conditional)
-
-Source content from upstream research/knowledge tools (e.g., cogni-knowledge) may use `[Source: Publisher](URL)` inline citations. These need to be converted into per-source markdown files before Phase 1 can load them as citable references.
-
-**Detection:** Scan the first 500 lines of the source content for the pattern `[Source: ...](...)`. If present, run the bridge. If not, skip to Phase 1.
-
-**When source contains `[Source:]` citations:**
+Upstream research tools may use `[Source: Publisher](URL)` inline citations. Scan the source content for that pattern; if present, run the bridge, otherwise skip to Phase 1.
 
 ```bash
-python3 "${CLAUDE_PLUGIN_ROOT}/skills/narrative/scripts/bridge-citations.py" \
-  --source-path "${SOURCE_PATH}" --output-dir "${SOURCE_PATH}/narrative-input" --json
+python3 "${CLAUDE_PLUGIN_ROOT}/skills/narrative/scripts/bridge-citations.py" --source-path "${SOURCE_PATH}" --json
 ```
 
-This creates:
-- `narrative-input/report-for-narrative.md` — content with `[source-NN-slug.md]` markers
-- `narrative-input/sources/source-NN-*.md` — per-source reference files with YAML frontmatter (`source_index`, `publisher`, `url`)
+The script writes `narrative-input/report-for-narrative.md` (content with `[source-NN-slug.md]` markers) and `narrative-input/sources/source-NN-*.md` (one file per source with `source_index`, `publisher`, `url` frontmatter) next to the source — beside a directory, or beside a single file's parent. Redirect `--source-path` to that `narrative-input/` directory for Phase 1. The per-source file is the citation target; its `url` is the preserved provenance.
 
-After running the bridge, redirect `--source-path` to the `narrative-input/` directory for Phase 1 loading.
+### Phase 1: Setup and content loading
 
-**Skip this phase** when source files are already individual `.md` files without inline `[Source:]` citations (e.g., trend-scout output, manually curated content, TIPS entities).
-
----
-
-### Phase 1: Setup & Content Loading
-
-1. Validate `--source-path` exists. If not found, halt with error JSON.
-2. Load all `.md` files from source directory using Read tool.
-3. Load `narrative-config.json` from source directory if present.
-4. If `--content-map` provided, load additional files from each path:
-   - Directory paths: load all `.md` files
-   - File paths: load that specific file
-   - Glob patterns: expand and load matches
-   - Tag each file with its content-map key
-   - Skip non-existent paths with warning (non-blocking)
-5. If `--research-question` provided, store it for hook construction.
-6. Parse `--target-length` if provided (single integer). Compute the acceptable range: `total_lower = target * 0.85`, `total_upper = target * 1.15`. If omitted, default to `target = 1675` (range 1424-1926). Store `target_length`, `total_lower`, `total_upper`.
-7. Build a mental CONTENT_REGISTRY: list of loaded files with titles, word counts, key sections, category tags.
-8. **Resolve arc inheritance from a source research/knowledge project.** The upstream producer is a cogni-knowledge inverted-pipeline project (or an older `project-config.json` project layout). Probe up to three candidate roots in order — `--project-path` (when provided), then `<source-path>/..` (handles `--source-path <project>/output/`), then `<source-path>/../..` (handles `--source-path <project>/output/report.md`). For each candidate, read the story-arc id from either project-metadata file — `.metadata/plan.json` (cogni-knowledge inverted pipeline) or `.metadata/project-config.json` (an older project layout). The first candidate+file yielding a non-empty `story_arc_id` wins; jq returns empty on a missing file, so no separate existence check is needed and a project that carries no arc (e.g. a cogni-knowledge wiki deposit) simply falls through:
+1. Validate `--source-path` exists; halt with error JSON if not.
+2. Load every `.md` file from the source directory (or the single file).
+3. Load `narrative-config.json` from the source directory if present.
+4. If `--content-map` is provided, load each path (directory: all `.md`; file: that file; glob: matches), tag each file with its key, and skip a missing path with a non-blocking warning.
+5. Store `--research-question` for the subtitle and the opening.
+6. Parse `--target-length` (default 1675); compute `total_lower = target × 0.85` and `total_upper = target × 1.15`.
+7. Build a content registry: loaded files with titles, word counts, key sections and category tags.
+8. **Resolve arc inheritance.** Probe `--project-path` (when given), then `<source-path>/..`, then `<source-path>/../..`; in each, read `story_arc_id` from `.metadata/plan.json` (cogni-knowledge) or `.metadata/project-config.json` (older layout). The first non-empty value wins:
 
    ```bash
    for CANDIDATE in "${PROJECT_PATH:+$PROJECT_PATH}" "${SOURCE_PATH}/.." "${SOURCE_PATH}/../.."; do
@@ -167,130 +135,75 @@ After running the bridge, redirect `--source-path` to the `narrative-input/` dir
    done
    ```
 
-   If `INHERITED_ARC` is set AND not `standard-research`, store as `inherited_arc_id` for Phase 2 and log: `Inheriting story_arc_id="<INHERITED_ARC>" from <PROJECT_ROOT>`. Otherwise skip silently. The probe is layout-agnostic — it reads whichever `.metadata/` project-metadata file is present, so it works against a cogni-knowledge project, an older `project-config.json` project layout, or a bare source path with no project root. Mirrors `cogni-workspace:enrich-report` Phase 0's parent-of-source-path detection with a narrower scope (only the `.metadata/` project-metadata files are checked).
+   If `INHERITED_ARC` is set and not `standard-research`, store it as `inherited_arc_id` and log `Inheriting story_arc_id="<INHERITED_ARC>" from <PROJECT_ROOT>`. Otherwise continue silently.
 
-**Before moving on,** answer three questions: How many files loaded? What are the 2-3 dominant themes? What is the approximate total word count? An unanswerable question means the source material is not yet internalized.
+**Before moving on,** answer three questions: how many files loaded, what the two or three dominant themes are, and the approximate total word count. An unanswerable question means the material is not yet internalized.
 
----
+### Phase 2: Arc selection
 
-### Phase 2: Arc Selection
-
-**Read first:** [references/story-arc/arc-registry.md](references/story-arc/arc-registry.md)
-
-The arc registry contains the detection algorithm, keyword sets, and content-type mappings. Read it before selecting an arc -- the detection logic lives there, not here.
+**Read first:** `references/story-arc/arc-registry.md` — the detection algorithm, keyword sets and content-type mappings live there.
 
 **Selection priority:**
-1. If `--arc-id` provided, use it directly. `detection_reason = "explicit --arc-id parameter"`.
-2. If `inherited_arc_id` was resolved in Phase 1 step 8, use it. `detection_reason = "inherited from source research/knowledge project: <PROJECT_ROOT>"`.
-3. If `narrative-config.json` contains `content_type`, apply detection algorithm from arc-registry. `detection_reason = "content_type mapping from narrative-config.json"`.
-4. If none of the above, analyze loaded content for keyword density using detection algorithm. `detection_reason = "keyword density analysis"`.
+
+1. `--arc-id` provided → use it. `detection_reason = "explicit --arc-id parameter"`.
+2. `inherited_arc_id` from Phase 1 step 8 → use it. `detection_reason = "inherited from source research/knowledge project: <PROJECT_ROOT>"`.
+3. `narrative-config.json` carries `content_type` → apply the registry mapping. `detection_reason = "content_type mapping from narrative-config.json"`.
+4. Otherwise analyze the loaded content for keyword density per the registry. `detection_reason = "keyword density analysis"`.
 5. Fallback: `corporate-visions`. `detection_reason = "default fallback"`.
 
-Present selected arc to user for confirmation using AskUserQuestion. Show the detected arc with detection reason and offer alternatives. For priority-2 picks, label the prompt "Inherited from source research/knowledge project — preserves the long-form report's arc". Accept user confirmation or override.
+Present selected arc to user for confirmation using AskUserQuestion. Show the detected arc with its detection reason and offer alternatives in the registry's confirmation format; for a priority-2 pick label the prompt "Inherited from source research/knowledge project — preserves the long-form report's arc". Accept confirmation or an override.
 
-When `--interactive` is `false`, this confirmation does not run -- keep the arc selected above, store it with its `detection_reason` unchanged via the `Store:` line below, then continue to Phase 3.
+When `--interactive` is `false`, this confirmation does not run -- keep the arc selected above, store it with its `detection_reason` unchanged, and continue to Phase 3.
 
-Store: `arc_id`, `arc_display_name`, `detection_reason`
+Store: `arc_id`, `arc_display_name`, `detection_reason`. An unknown `arc_id` halts with the registry's arc list.
 
----
+### Phase 3: Load the contract
 
-### Phase 3: Load Arc Patterns
+Read two files, in full, before writing anything:
 
-This phase is about loading the rhetorical framework into context. The narrative techniques and arc-specific patterns are what make the difference between "information organized under headings" and "a persuasive executive narrative." Read both files before writing anything.
+1. `references/story-arc/{arc_id}/arc-definition.md` — the arc contract: `## Headings`, `## Composition`, `## Elements`, `## Validation`.
+2. `references/narrative-techniques/techniques-overview.md` — the eight techniques and the application matrix.
 
-**Read these two files:**
+**Transition rule for unmigrated arcs.** An arc whose contract does not carry `contract: 2` in its frontmatter is listed in `UNMIGRATED` in `cogni-workspace/tests/test-arc-contract-shape.sh` and still ships its `references/phase-workflows/phase-4b-synthesis-{arc_id}.md`. For such an arc, read that file (and the `shared-steps.md` it links) after the two above; Pass 1 follows its element-writing steps in place of the contract's `## Elements`, and its `## Arc-Specific Headers` block — mirrored in `references/language-templates.md` — is the heading authority. Everything else in this workflow applies unchanged.
 
-1. `references/story-arc/{arc_id}/arc-definition.md` -- element definitions, word targets, quality gates, transition patterns
-2. `references/narrative-techniques/techniques-overview.md` -- 8 narrative techniques with arc application matrix
+**After reading,** name the four elements in order with their proportions, and say which techniques the matrix assigns to each. Re-read until both come without looking.
 
-The 4 individual element pattern files (`{element}-patterns.md`) are NOT loaded here. Their guidance is already embedded in the arc-specific Phase 4b workflow file. Loading both would create ~1,500 lines of overlapping material that dilutes rather than reinforces.
+### Phase 4: Four passes
 
-**After reading,** name all 4 arc elements in order with their word targets, and state which narrative techniques apply to which elements from the technique-arc matrix. Re-read until both come without looking.
+Draft in four passes. Each pass has one job; doing two at once is how a narrative ends up structurally right and rhetorically flat.
 
----
+**Pass 1 — evidence draft.** For each element in order: map the loaded content to the element using its `Evidence sought`; draft the body from that evidence, every quantitative claim carrying `<sup>[N](source-file.md)</sup>`; hold the element's word range. Write the four elements only — no title, no opening yet.
 
-### Phase 4: Narrative Transformation
+**Pass 2 — argument edit.** Apply each element's `Argument move` and `Techniques`; enforce its `Hard rules`; build the four transitions from `## Composition`; write the closing per the closing pattern. Then write the title (arc-specific, never "Insight Summary") and the opening paragraph per the contract's hook construction — last, from the finished elements.
 
-**Read first:** `references/phase-workflows/phase-4b-synthesis-{arc_id}.md` (if it exists)
+**Pass 3 — language edit.** Localize the four headings from `## Headings` for the output language and make the prose read as executive prose: one idea per sentence, concrete actors and verbs, specificity over intensifiers, no corporate fog. When `language: de`, proper umlauts and ß throughout.
 
-This file contains detailed sub-steps, extended thinking prompts, and quality gates specific to the selected arc. If it exists, follow its workflow -- it's more detailed and arc-aware than the summary below.
+**Pass 4 — rhythm and readability.** Vary sentence length; make transitions consequential rather than topical; read each paragraph for cadence and land it on its consequential idea. Count words per element against `## Composition` and adjust by adding evidence to a thin element or trimming redundant transitions, never evidence.
 
 #### Why exactly 4 sections matters
 
-The output uses exactly 4 `##` section headers matching the selected arc's element names. This isn't arbitrary -- downstream visualization tools (story-to-slides, story-to-web in web or storyboard mode) parse these 4 elements to create matching visual segments. Creative renaming or adding extra sections breaks this pipeline. See `references/language-templates.md` section "Insight Summary (Arc Element Headers)" for the exact header text per arc and language.
-
-#### Summary workflow (when no arc-specific file exists)
-
-For each of the 4 arc elements:
-
-1. **Map source content** to element using arc-definition source content mapping
-2. **Apply transformation patterns** from loaded pattern files
-3. **Apply narrative techniques** (PSB, IS-DOES-MEANS, Number Plays, etc.) per the technique-arc matrix
-4. **Construct element:**
-   - Arc-specific header (localized if `de`)
-   - Evidence-grounded body text
-   - Inline citations: `<sup>[N](source-file.md)</sup>` format
-   - Word count within computed proportional range (+/-10% tolerance)
-5. **Build transitions** between elements using arc-definition transition patterns
-
-Assemble the full narrative:
-
-1. Generate an arc-specific compelling title -- not "Insight Summary" or anything generic
-2. Write hook paragraph (arc's hook proportion of target) using arc's hook construction pattern
-3. Assemble 4 elements with transitions
-4. Write closing using arc's closing pattern
-
----
+The output uses exactly four `##` headings matching the arc's element names. Downstream tools (story-to-slides, story-to-web in web or storyboard mode) parse these four elements to create matching visual segments; renaming, adding or merging sections breaks that pipeline.
 
 ### Phase 5: Validation
 
-Check these gates in priority order. If the structural gate fails, fix it before checking anything else -- the other gates are meaningless if the structure is wrong.
+Run the deterministic gates first:
 
-**Structural gate (check first):**
+```bash
+python3 "${CLAUDE_PLUGIN_ROOT}/skills/narrative/scripts/validate-narrative.py" \
+  --narrative "${OUTPUT_PATH}" --contract "${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/story-arc/${ARC_ID}/arc-definition.md" --json
+```
 
-- Exactly 4 `##` headers in narrative body (below frontmatter)
-- Headers match arc's exact element names (language-specific)
-- Headers in correct arc sequence
-- No extra `##` headers
+Then read `references/validation.md` and check its judged gates plus the contract's `## Validation` section. Fix any failure and re-run everything — a fix can break a gate that passed. A structural failure is fixed by rewriting against `## Composition`, never by renaming headings.
 
-If this fails, rewrite using the template rather than renaming sections. Content generated for the wrong structure reads wrong even with correct headers.
+### Phase 6: Write output
 
-**Content gates:**
-
-- Total word count within target range (`total_lower` to `total_upper`, computed from `--target-length`)
-- Title is arc-specific (not generic)
-- Hook present (within hook proportion of target)
-- Element word counts within computed proportional ranges (+/-10% of section midpoint). Compute each section's range: `[proportion * total_lower, proportion * total_upper]` using proportions from the arc definition loaded in Phase 3
-- Arc-specific techniques applied (check arc quality gates in arc-definition)
-- Smooth transitions between elements
-- Frontmatter contains all required fields (including `target_length`)
-
-**Evidence gates:**
-
-- Citations: minimum 15, format `<sup>[N](file.md)</sup>`
-- Every quantitative claim has a citation
-- No fabricated references -- all cite loaded source files
-
-**Language gates (if `de`):**
-
-- Proper umlauts throughout (ä, ö, ü, ß)
-- Zero ASCII fallbacks (ae, oe, ue, ss) in body text
-
-If any gate fails, fix the specific issue and re-validate all gates (fixes can break other things).
-
----
-
-### Phase 6: Write Output
-
-1. Write narrative to output path (default: `insight-summary.md` in source directory)
-2. Verify file created with correct word count
-3. Return JSON summary (see Output section above)
-
----
+1. Write the narrative to the output path (default `insight-summary.md` in the source directory).
+2. Verify the file exists and its `word_count` frontmatter matches the body.
+3. Return the JSON summary.
 
 ## Derivative Formats (`--format`)
 
-When `--format` is set, this skill adapts an **existing** narrative into a derivative rather than generating a new one: skip Phases 0.5-6, and **read `references/derivative-formats.md` in full** — it carries the per-format templates, word budgets, exact-count structures and condensation strategies this section only summarises.
+When `--format` is set, adapt an **existing** narrative rather than generating one: skip Phases 0.5-6 and read `references/derivative-formats.md` in full — it carries the per-format templates, word budgets, exact-count structures and condensation strategies.
 
 | Format | Word target | Channel | Key feature |
 |--------|-------------|---------|-------------|
@@ -298,131 +211,29 @@ When `--format` is set, this skill adapts an **existing** narrative into a deriv
 | Talking Points | N/A (bullets) | Presentations, calls | Answer-first bullets, no citations |
 | One-Pager | 400-600 | Print, handout | Metrics table + next steps |
 
-Workflow: load the source narrative → extract its 4 arc elements and key numbers → transform per the reference file's template for the requested format → validate against the gates below → write to the output path.
+Workflow: load the source narrative → extract its four elements and key numbers → transform per the format's template → validate against the format gates below → write.
 
-**Why arc structure is preserved in every format:** Downstream tools (story-to-slides, story-to-web in web or storyboard mode) parse the 4 arc elements to create matching visual segments. Renaming headers, reordering elements, or merging sections breaks this pipeline. Each format keeps all 4 `##` headers in their original order with the exact arc element names from the source. This is the derivative-side counterpart of the generation-side rule in Phase 4 ("Why exactly 4 sections matters").
+Every format keeps all four `##` headings in their original order with the exact element names from the source (the derivative-side counterpart of "Why exactly 4 sections matters"), and derivatives condense — they never add a fact, number or recommendation the source lacks.
 
-**Why fidelity matters:** Derivatives condense -- they never embellish. Adding information that wasn't in the source narrative would break the evidence chain back to the original research. Every claim in the derivative should be traceable to the source. This is especially important for quantitative claims: if a number appears in the derivative, it appeared in the source.
-
-**Format-specific gates:**
-
-- **Executive Brief** — citations preserved and renumbered sequentially, 8-12 total.
-- **Talking Points** — no inline citations, Key Numbers section present, no bullet over 25 words.
-- **One-Pager** — metrics table has exactly 4 rows, Next Steps has 3 items, word count is at or above 400.
-
-**JSON summary returned on completion (derivative mode):**
+**Format gates:** Executive Brief — citations preserved and renumbered sequentially, 8-12 total. Talking Points — no inline citations, Key Numbers section present, no bullet over 25 words. One-Pager — metrics table with exactly 4 rows, Next Steps with 3 items, at least 400 words.
 
 ```json
-{
-  "success": true,
-  "source_path": "insight-summary.md",
-  "output_path": "executive-brief.md",
-  "format": "executive-brief",
-  "arc_id": "corporate-visions",
-  "word_count": 420,
-  "language": "en"
-}
+{ "success": true, "source_path": "insight-summary.md", "output_path": "executive-brief.md",
+  "format": "executive-brief", "arc_id": "corporate-visions", "word_count": 420, "language": "en" }
 ```
 
-`source_path` and `format` echo the invocation; `arc_id` and `language` carry over from the source narrative's frontmatter. For `talking-points`, `word_count` reports the bullet bodies rather than a prose total. On failure the shape is the canonical error JSON with `phase` set to `"Derivative"`, which is how the Error Handling table labels this track's two failure rows.
-
----
-
-## Available Story Arcs
-
-| Arc ID | Elements | Best For |
-|--------|----------|----------|
-| `corporate-visions` | Why Change -> Why Now -> Why You -> Why Pay | Market research, B2B, sales enablement |
-| `technology-futures` | Emerging -> Converging -> Possible -> Required | Innovation, R&D, technology trends |
-| `competitive-intelligence` | Landscape -> Shifts -> Positioning -> Implications | Competitive analysis, threat assessment |
-| `strategic-foresight` | Signals -> Scenarios -> Strategies -> Decisions | Long-range planning, scenario analysis |
-| `industry-transformation` | Forces -> Friction -> Evolution -> Leadership | Industry analysis, regulatory impact |
-| `trend-panorama` | Forces -> Impact -> Horizons -> Foundations (TIPS) | Trend-scout output, TIPS trend reports |
-| `theme-thesis` | Why Change -> Why Now -> Why You -> Why Pay (Corporate Visions adapted for themes) | Theme sections within TIPS trend reports, investment thesis narratives, CxO-level theme justification |
-| `jtbd-portfolio` | Jobs -> Friction -> Portfolio -> Invitation | Portfolio introductions, capability overviews, pre-sales |
-| `company-credo` | Mission -> Conviction -> Credibility -> Promise | About-Us pages, company introductions, brand identity narratives |
-| `engagement-model` | Principles -> Process -> Partnership -> Outcomes | How-We-Work pages, engagement sections of proposals, partner onboarding |
-| `smarter-service` | Forces -> Impact -> Horizons -> Foundations (TIPS, theme-aware) | TIPS trend reports built on an investment-theme value model, theme-anchored CxO reports and foresight briefings |
-
-See [references/story-arc/arc-registry.md](references/story-arc/arc-registry.md) for detection signals, word targets, and extension guidelines.
-
----
-
-## German Language Rules
-
-When `language: de`, all generated text uses proper Unicode umlauts. ASCII transliterations in body text (fuer, ueber, Aenderung) are wrong because they look unprofessional and break German grammar conventions.
-
-| Context | Use | Example |
-|---------|-----|---------|
-| Body text, headings, titles | Proper umlauts (ä, ö, ü, ß) | "für", "Änderung", "größte" |
-| File names and slugs | ASCII transliterations | "ue", "ae", "oe", "ss" |
-| YAML keys | ASCII only | `arc_id`, `entity_type` |
-
-Common failures to scan for after generation: "fuer" (should be "für"), "ueber" ("über"), "Aenderung" ("Änderung"), "groesste" ("größte"), "Fuehrung" ("Führung").
-
-See [references/language-templates.md](references/language-templates.md) for localized headers per arc.
-
----
-
-## Citation Strategy
-
-- Cite input source files only -- fabricated references undermine credibility entirely
-- Format: `Claim text<sup>[N](source-file.md)</sup>`
-- Every quantitative claim needs a citation -- unsupported numbers feel made up
-- Target: 15-25 total citations, sequentially numbered from 1
-
----
-
-## Narrative Techniques
-
-See [references/narrative-techniques/techniques-overview.md](references/narrative-techniques/techniques-overview.md) for the full library:
-
-| Technique | Purpose |
-|-----------|---------|
-| Pyramid Principle | Answer First architecture |
-| PSB | Problem-Solution-Benefit for unconsidered needs |
-| IS-DOES-MEANS | Power Position structure |
-| Number Plays | 6 quantification techniques |
-| Forcing Functions | Urgency through external pressures |
-| Contrast Structure | Cognitive dissonance patterns |
-| You-Phrasing | Direct address to reader |
-| Compound Impact | Cost of inaction stacking |
-
----
+`source_path` and `format` echo the invocation; `arc_id` and `language` carry over from the source frontmatter. For `talking-points`, `word_count` counts bullet bodies. On failure the shape is the error JSON below with `phase` set to `"Derivative"`.
 
 ## Error Handling
 
-On any unrecoverable failure, return error JSON:
-
-```json
-{
-  "success": false,
-  "error": "Description of what went wrong",
-  "phase": "Phase where failure occurred"
-}
-```
+On any unrecoverable failure, return `{"success": false, "error": "...", "phase": "..."}`.
 
 | Phase | Failure | Action |
 |-------|---------|--------|
-| 1 | Source path not found | Halt with error |
-| 1 | No `.md` files in source | Halt with error |
-| 2 | Unknown `arc_id` | Halt with available arcs list |
-| 3 | Arc pattern files missing | Halt with missing file list |
+| 1 | Source path not found, or no `.md` files in it | Halt with error |
+| 2 | Unknown `arc_id` | Halt with the registry's arc list |
+| 3 | Arc contract or techniques file missing | Halt with the missing path |
 | 4 | Transformation fails | Halt with error JSON |
-| 5 | Validation fails | Report failures, fix, re-validate |
-| Derivative | Unknown `--format` value | Halt with the three valid formats listed |
-| Derivative | `--source-path` is not a single finished narrative `.md` file | Halt with error |
-
----
-
-## Bundled Resources
-
-| File | Purpose | Load When |
-|------|---------|-----------|
-| `references/story-arc/arc-registry.md` | Arc index, detection algorithm, extension guide | Phase 2 |
-| `references/story-arc/{arc_id}/arc-definition.md` | Element definitions, word targets, quality gates | Phase 3 |
-| `references/narrative-techniques/techniques-overview.md` | 8 narrative techniques with arc application matrix | Phase 3 |
-| `references/phase-workflows/phase-4b-synthesis-{arc_id}.md` | Arc-specific transformation workflow | Phase 4 |
-| `references/phase-workflows/shared-steps.md` | Entity counting, output template, validation, write steps | Phase 4 (via phase-4b) |
-| `references/language-templates.md` | Localized headers for en/de | Phase 4 (if `de`) |
-| `references/derivative-formats.md` | Per-format templates, word budgets, exact-count structures, condensation strategies | Derivative Formats (when `--format` is set) |
+| 5 | A gate fails | Report, fix, re-validate all gates |
+| Derivative | Unknown `--format` value | Halt with the three valid formats |
+| Derivative | `--source-path` is not a single finished narrative `.md` | Halt with error |

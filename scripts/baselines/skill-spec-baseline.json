@@ -489,22 +489,12 @@
     {
       "skill": "narrative",
       "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/phase-workflows/phase-4b-synthesis-corporate-visions.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
       "file": "cogni-workspace/skills/narrative/references/phase-workflows/phase-4b-synthesis-engagement-model.md"
     },
     {
       "skill": "narrative",
       "arm": "unreferenced-resource",
       "file": "cogni-workspace/skills/narrative/references/phase-workflows/phase-4b-synthesis-industry-transformation.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/phase-workflows/phase-4b-synthesis-jtbd-portfolio.md"
     },
     {
       "skill": "narrative",
@@ -574,26 +564,6 @@
     {
       "skill": "narrative",
       "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/corporate-visions/why-change-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/corporate-visions/why-now-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/corporate-visions/why-pay-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/corporate-visions/why-you-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
       "file": "cogni-workspace/skills/narrative/references/story-arc/engagement-model/outcomes-patterns.md"
     },
     {
@@ -630,26 +600,6 @@
       "skill": "narrative",
       "arm": "unreferenced-resource",
       "file": "cogni-workspace/skills/narrative/references/story-arc/industry-transformation/leadership-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/jtbd-portfolio/friction-map-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/jtbd-portfolio/invitation-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/jtbd-portfolio/job-landscape-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/jtbd-portfolio/portfolio-map-patterns.md"
     },
     {
       "skill": "narrative",

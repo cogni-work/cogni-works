@@ -54,7 +54,7 @@ This registry indexes all available story arcs for the `narrative` skill. Each a
 - Why Pay: 15%
 - **Default total:** 1,675 words (customizable via `--target-length`)
 
-**Definition File:** `story-arc/corporate-visions/arc-definition.md`
+**Contract:** `corporate-visions/arc-definition.md`
 
 ---
 
@@ -82,7 +82,7 @@ This registry indexes all available story arcs for the `narrative` skill. Each a
 - What's Required: 17%
 - **Default total:** 1,675 words (customizable via `--target-length`)
 
-**Definition File:** `story-arc/technology-futures/arc-definition.md`
+**Contract:** `technology-futures/arc-definition.md`
 
 ---
 
@@ -110,7 +110,7 @@ This registry indexes all available story arcs for the `narrative` skill. Each a
 - Implications: 18%
 - **Default total:** 1,675 words (customizable via `--target-length`)
 
-**Definition File:** `story-arc/competitive-intelligence/arc-definition.md`
+**Contract:** `competitive-intelligence/arc-definition.md`
 
 ---
 
@@ -138,7 +138,7 @@ This registry indexes all available story arcs for the `narrative` skill. Each a
 - Decisions: 18%
 - **Default total:** 1,675 words (customizable via `--target-length`)
 
-**Definition File:** `story-arc/strategic-foresight/arc-definition.md`
+**Contract:** `strategic-foresight/arc-definition.md`
 
 ---
 
@@ -166,7 +166,7 @@ This registry indexes all available story arcs for the `narrative` skill. Each a
 - Leadership: 18%
 - **Default total:** 1,675 words (customizable via `--target-length`)
 
-**Definition File:** `story-arc/industry-transformation/arc-definition.md`
+**Contract:** `industry-transformation/arc-definition.md`
 
 ---
 
@@ -205,7 +205,7 @@ This registry indexes all available story arcs for the `narrative` skill. Each a
 - Foundations: 18%
 - **Default total:** 1,675 words (customizable via `--target-length`)
 
-**Definition File:** `story-arc/trend-panorama/arc-definition.md`
+**Contract:** `trend-panorama/arc-definition.md`
 
 ---
 
@@ -240,7 +240,7 @@ This registry indexes all available story arcs for the `narrative` skill. Each a
 - Why Pay: 17%
 - **Target:** Variable (600-1200 words based on theme complexity)
 
-**Definition File:** `story-arc/theme-thesis/arc-definition.md`
+**Contract:** `theme-thesis/arc-definition.md`
 
 ---
 
@@ -277,7 +277,7 @@ A 5-stage B2B portfolio narrative structured around Jobs-to-be-Done. Organises a
 - Invitation: 18%
 - **Default total:** 1,675 words (customizable via `--target-length`)
 
-**Definition File:** `story-arc/jtbd-portfolio/arc-definition.md`
+**Contract:** `jtbd-portfolio/arc-definition.md`
 
 ---
 
@@ -318,7 +318,7 @@ A 4-element B2B narrative that answers the buyer's first unasked question: "Why 
 - Promise: 18%
 - **Default total:** 1,400 words (customizable via `--target-length`)
 
-**Definition File:** `story-arc/company-credo/arc-definition.md`
+**Contract:** `company-credo/arc-definition.md`
 
 ---
 
@@ -359,7 +359,7 @@ A 4-element B2B narrative that answers "how will this work land in my organizati
 - Outcomes: 22%
 - **Default total:** 1,400 words (customizable via `--target-length`)
 
-**Definition File:** `story-arc/engagement-model/arc-definition.md`
+**Contract:** `engagement-model/arc-definition.md`
 
 ---
 
@@ -411,7 +411,7 @@ A theme-aware sibling of `trend-panorama`. Same four elements and same TIPS dime
 - Hook: 10% / Forces: 24% / Impact: 24% / Horizons: 24% / Foundations: 18%
 - Default total: 1,675 words (degrades to trend-panorama-equivalent structure)
 
-**Definition File:** `story-arc/smarter-service/arc-definition.md`
+**Contract:** `smarter-service/arc-definition.md`
 
 ---
 
@@ -530,16 +530,14 @@ if (!detected_arc) {
 
 ## Arc Directory Structure
 
-Each arc follows this structure:
+Each arc is one contract file:
 
 ```
 story-arc/{arc-id}/
-├── arc-definition.md          # Metadata, elements, detection signals, translations
-├── {element1}-patterns.md     # Element 1 transformation patterns
-├── {element2}-patterns.md     # Element 2 transformation patterns
-├── {element3}-patterns.md     # Element 3 transformation patterns
-└── {element4}-patterns.md     # Element 4 transformation patterns
+└── arc-definition.md          # v2 contract: Intent, Selection, Headings, Composition, Elements, Validation, See Also
 ```
+
+A contract carries `contract: 2` in its frontmatter and the seven `##` sections in that order; `## Elements` holds exactly four `### N.` sections, each with Purpose, Evidence sought, Argument move, Techniques, Hard rules and Failure modes. `cogni-workspace/tests/test-arc-contract-shape.sh` enforces the shape. Arcs not yet migrated to it are listed in that suite's `UNMIGRATED` ratchet and still ship a `phase-workflows/phase-4b-synthesis-{arc-id}.md` workflow file, which SKILL.md Phase 3 follows for them.
 
 ## Interactive Selection Format
 
@@ -565,26 +563,13 @@ Option 2: {Alternative Arc 1}
 
 ### Adding New Arcs
 
-1. Choose unique `arc_id` (lowercase, hyphens, descriptive)
-2. Create directory: `story-arc/{arc-id}/`
-3. Create 5 files:
-   - `arc-definition.md` -- metadata, elements, detection, translations, quality gates
-   - `{element1}-patterns.md` -- transformation patterns for element 1
-   - `{element2}-patterns.md` -- transformation patterns for element 2
-   - `{element3}-patterns.md` -- transformation patterns for element 3
-   - `{element4}-patterns.md` -- transformation patterns for element 4
-4. Add entry to this registry (both summary table and detailed section)
-5. Update detection algorithm:
-   - Add `content_type` mapping in Step 3
-   - Add keyword set and threshold in Step 4
-   - Add structural detection in Step 2 (if arc has unique file signatures)
-6. Add arc-specific workflow: `phase-workflows/phase-4b-synthesis-{arc-id}.md`
-7. Update `language-templates.md` with localized `##` headers (en/de)
-8. Update `techniques-overview.md` application matrix with new arc column
-9. Update `SKILL.md`:
-   - Increment arc count in Purpose section
-   - Add arc to Available Story Arcs table
-   - Add `arc_id` to Phase 3 valid values list
+1. Choose a unique `arc_id` (lowercase, hyphens, descriptive)
+2. Create `story-arc/{arc-id}/arc-definition.md` on the v2 contract shape — copy a migrated contract such as `corporate-visions/arc-definition.md` and replace every section
+3. Add the arc to this registry (quick-reference table, detailed section, and detection algorithm: `content_type` mapping in Step 3, keyword set and threshold in Step 4, structural detection in Step 2 if the arc has a unique file signature)
+4. Add the arc's EN/DE `##` headers to `language-templates.md` byte-equal to the contract's `## Headings`
+5. Add a column to the application matrix in `narrative-techniques/techniques-overview.md`
+6. Add a mapping row and an element block to `cogni-workspace/libraries/arc-taxonomy.md` (short names are the pre-colon segments of the contract's headings)
+7. Run `bash cogni-workspace/tests/test-arc-contract-shape.sh` and `bash cogni-workspace/tests/test-arc-taxonomy-sync.sh` — both enumerate the arc directories at run time, so the new arc is checked with no test edit
 
 ### Quality Standards for New Arcs
 
@@ -595,18 +580,13 @@ Option 2: {Alternative Arc 1}
 - Clear detection signals (content_type + keywords + optional structural)
 
 **Content:**
-- arc-definition.md includes: metadata, TIPS mapping (if applicable), word targets, detection config, element definitions, narrative flow, citation requirements, quality gates, common pitfalls, language variations
-- Each pattern file includes: element purpose, source content mapping, transformation patterns (3-5), techniques checklist, quality checkpoints, common mistakes with good/bad examples, language variations
-- Phase-4b workflow includes: evidence loading, output template, extended thinking sub-steps, validation gates
+- The contract's `## Elements` carries, per element, Purpose, Evidence sought (content-map keys, never a fixed directory layout), Argument move, Techniques (names linked to `techniques-overview.md`, never re-taught), Hard rules and Failure modes
+- `## Validation` carries only assertions specific to the arc; every universal gate lives in `../validation.md`
 
 **Localization:**
-- German translations for all element headers
-- German header text added to `language-templates.md`
-- German examples in pattern files
-- Umlaut rules enforced (no ASCII fallbacks in body text)
+- German headings for all four elements, with real umlauts (no ASCII fallbacks anywhere in the contract)
 
 **Cross-references:**
 - Technique application matrix updated in `techniques-overview.md`
-- Arc registry quick reference table updated
-- SKILL.md arc table updated
-- Pattern files cross-reference related patterns in other elements
+- Arc registry quick reference table and detailed section updated
+- `cogni-workspace/libraries/arc-taxonomy.md` mapping row and element block added

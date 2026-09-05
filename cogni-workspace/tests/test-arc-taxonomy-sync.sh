@@ -125,7 +125,7 @@ fail() { echo "FAIL: $1"; failures=$((failures + 1)); }
 # un-pinned list of its own, so this one is verified rather than merely maintained: M1 compares
 # it against the ids a complete run actually emits, in both directions. A case added without
 # registering it here, or an id left here after its case was deleted, turns M1 red.
-ALL_CASES="V1 V2 V3 V4 S1 S2 T1 E1 D1 M1"
+ALL_CASES="V1 V2 V3 V4 S1 S2 T1 E1 D1 H1 M1 M2"
 
 # Every case downstream of the non-vacuity guards — derived from the registry, never re-typed.
 # Cases that cannot be evaluated must still emit their own id: a case id simply absent from the
@@ -349,6 +349,95 @@ else
   fail "D1 duplicate mapping-table arc_id(s): $duplicate_ids"
 fi
 
+# ------------------------------------------------------- short names derive from the contract (H1)
+# The settled heading rule: the arc contract's full heading ("Warum Wandel: Unerkannte
+# Handlungsbedarfe") is the authority, and the taxonomy's short element name is DERIVED from it —
+# the segment before the first colon, or the whole cell when there is none. H1 checks that
+# derivation for every arc whose contract carries `contract: 2`, enumerated at run time from the
+# contracts themselves, never listed. An unmigrated arc has no `## Headings` table and is skipped;
+# once every arc is migrated, H1 covers the whole set with no edit here.
+
+h1_report=$(python3 - "$TAXONOMY" "$ARC_DIR" "$TMPROOT" <<'PY'
+import os, re, sys
+
+taxonomy_path, arc_dir, outdir = sys.argv[1], sys.argv[2], sys.argv[3]
+lines = open(taxonomy_path, encoding="utf-8").read().splitlines()
+
+
+def taxonomy_block(arc):
+    start = None
+    for i, line in enumerate(lines):
+        if line.strip() == "### " + arc:
+            start = i + 1
+            break
+    if start is None:
+        return None
+    rows = []
+    for line in lines[start:]:
+        if line.startswith("## ") or line.startswith("### "):
+            break
+        s = line.strip()
+        if not s.startswith("|"):
+            continue
+        cells = [c.strip() for c in s.strip("|").split("|")]
+        if len(cells) < 3 or not cells[0].isdigit():
+            continue
+        rows.append((cells[1], cells[2]))
+    return rows
+
+
+def contract_headings(path):
+    text = open(path, encoding="utf-8").read()
+    fm = text.split("---")
+    if len(fm) < 3 or not re.search(r"^contract: *2 *$", fm[1], flags=re.M):
+        return None
+    m = re.search(r"^## Headings\n(.*?)(?=^## )", text, flags=re.S | re.M)
+    if not m:
+        return []
+    rows = [l for l in m.group(1).splitlines() if l.strip().startswith("|")]
+    header = [c.strip() for c in rows[0].strip().strip("|").split("|")]
+    en, de = header.index("EN"), header.index("DE")
+    out = []
+    for r in rows[2:]:
+        cells = [c.strip() for c in r.strip().strip("|").split("|")]
+        out.append((cells[en], cells[de]))
+    return out
+
+
+def short(cell):
+    return cell.split(":", 1)[0].strip() if ":" in cell else cell.strip()
+
+
+checked, bad = 0, []
+for arc in sorted(os.listdir(arc_dir)):
+    path = os.path.join(arc_dir, arc, "arc-definition.md")
+    if not os.path.isfile(path):
+        continue
+    contract = contract_headings(path)
+    if contract is None:
+        continue
+    block = taxonomy_block(arc)
+    if not contract or block is None or len(block) != len(contract):
+        bad.append("%s(shape)" % arc)
+        continue
+    checked += 1
+    for n, ((c_en, c_de), (t_en, t_de)) in enumerate(zip(contract, block), start=1):
+        if short(c_en) != t_en or short(c_de) != t_de:
+            bad.append("%s#%d(%s/%s vs %s/%s)" % (arc, n, t_en, t_de, short(c_en), short(c_de)))
+print("%d %s" % (checked, " ".join(bad)))
+PY
+)
+h1_checked="${h1_report%% *}"
+h1_bad="${h1_report#* }"
+[ "$h1_bad" = "$h1_report" ] && h1_bad=""
+if [ "$h1_checked" -eq 0 ] 2>/dev/null; then
+  fail "H1 no contract carrying contract: 2 was found — the derivation check ran over nothing"
+elif [ -n "$h1_bad" ]; then
+  fail "H1 taxonomy short name(s) do not equal the contract heading's pre-colon segment: $h1_bad"
+else
+  pass "H1 taxonomy EN/DE short names equal the contract headings' pre-colon segments ($h1_checked migrated arc(s))"
+fi
+
 # ------------------------------------------------------------------ executed negative case (M1)
 # Proves this guard can actually go red, in-repo and on every sweep, without ever writing to the
 # tracked taxonomy. Deletes one mapping row from a COPY, runs this same file against the mutant,
@@ -429,8 +518,9 @@ then
     | grep -E '^(ok|FAIL): ' \
     | awk '{print $2}' \
     | sort -u > "$TMPROOT/emitted_cases.txt"
+  # M1 and M2 both sit behind the recursion guard, so a child run emits neither.
   for case_id in $ALL_CASES; do
-    [ "$case_id" = "M1" ] || echo "$case_id"
+    case "$case_id" in M1|M2) ;; *) echo "$case_id" ;; esac
   done | sort -u > "$TMPROOT/expected_cases.txt"
 
   unregistered=$(comm -13 "$TMPROOT/expected_cases.txt" "$TMPROOT/emitted_cases.txt" | tr '\n' ' ' | sed 's/ *$//')
@@ -449,6 +539,50 @@ then
   fi
 else
   fail "M1 could not remove any '$victim' mapping row from the copy"
+fi
+
+# ------------------------------------------------------------------ executed negative case (M2)
+# H1's own negative case. Copies the taxonomy, rewrites one DE short name inside the element block
+# of a runtime-selected migrated arc to a value that cannot equal any pre-colon segment, re-invokes
+# this file against the mutant, and requires H1 red by name. Same recursion guard as M1.
+h1_victim=$(for d in "$ARC_DIR"/*/; do
+  a=$(basename "$d")
+  f="$d/arc-definition.md"
+  [ -f "$f" ] || continue
+  awk 'NR==1 && $0!="---" {exit 1} NR>1 && $0=="---" {exit 0} /^contract: *2 *$/ {found=1} END {exit found?0:1}' "$f" && { echo "$a"; break; }
+done)
+if [ -z "$h1_victim" ]; then
+  fail "M2 no migrated arc available to mutate for H1"
+elif python3 - "$TAXONOMY" "$TMPROOT/mutant-h1.md" "$h1_victim" <<'PY'
+import sys
+source_path, mutant_path, victim = sys.argv[1], sys.argv[2], sys.argv[3]
+lines = open(source_path, encoding="utf-8").read().splitlines(keepends=True)
+out, in_block, done = [], False, False
+for line in lines:
+    s = line.strip()
+    if s == "### " + victim:
+        in_block = True
+    elif in_block and (s.startswith("## ") or s.startswith("### ")):
+        in_block = False
+    if in_block and not done and s.startswith("| 1 |"):
+        cells = s.strip("|").split("|")
+        cells[2] = " MUTANT-SHORT-NAME "
+        line = "|" + "|".join(cells) + "|\n"
+        done = True
+    out.append(line)
+open(mutant_path, "w", encoding="utf-8").writelines(out)
+sys.exit(0 if done else 1)
+PY
+then
+  m2_out=$(ARC_TAXONOMY_SYNC_MUTANT=1 ARC_TAXONOMY_PATH="$TMPROOT/mutant-h1.md" bash "$HERE/$(basename "$0")" 2>&1)
+  m2_rc=$?
+  if [ "$m2_rc" -ne 0 ] && printf '%s\n' "$m2_out" | grep '^FAIL: H1 ' | grep -q "$h1_victim"; then
+    pass "M2 rewriting a '$h1_victim' DE short name turns H1 red naming it (child exit $m2_rc)"
+  else
+    fail "M2 mutant exited $m2_rc but H1 did not go red naming '$h1_victim' — got: $(printf '%s' "$m2_out" | grep '^FAIL:' | tr '\n' ';')"
+  fi
+else
+  fail "M2 could not rewrite a short name inside the '$h1_victim' element block"
 fi
 
 # ------------------------------------------------------------------------------------ summary

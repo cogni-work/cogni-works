@@ -1,386 +1,137 @@
-# Corporate Visions Story Arc
-
-## Arc Metadata
-
-**Arc ID:** `corporate-visions`
-**Display Name:** Corporate Visions
-**Display Name (German):** Corporate Visions
-
-**Elements (Ordered):**
-1. Why Change: The Unconsidered Need
-2. Why Now: The Closing Window
-3. Why You: Strategic Positioning
-4. Why Pay: The Business Case
-
-**Elements (German):**
-1. Warum Veränderung: Der unberücksichtigte Bedarf
-2. Warum jetzt: Das sich schließende Zeitfenster
-3. Warum Sie: Strategische Positionierung
-4. Geschäftliche Auswirkungen: Der Business Case
-
-## Word Proportions
-
-Section lengths are expressed as proportions of the total target length. This keeps the arc's rhetorical balance intact regardless of narrative length. To compute word ranges for a given `--target-length T`: apply +/-15% band to get `[T*0.85, T*1.15]`, then multiply each proportion.
-
-| Element | English Header | German Header | Proportion | Default Range (T=1675) |
-|---------|----------------|---------------|-----------|------------------------|
-| Hook | *(Dynamic based on finding)* | *(Dynamic)* | 10% | 143-193 |
-| Why Change | Why Change: The Unconsidered Need | Warum Veränderung: Der unberücksichtigte Bedarf | 27% | 384-519 |
-| Why Now | Why Now: The Closing Window | Warum jetzt: Das sich schließende Zeitfenster | 21% | 299-404 |
-| Why You | Why You: Strategic Positioning | Warum Sie: Strategische Positionierung | 27% | 384-519 |
-| Why Pay | Why Pay: The Business Case | Geschäftliche Auswirkungen: Der Business Case | 15% | 213-290 |
-
-**Proportions sum to 100%.** Default total: 1,675 words (customizable via `--target-length`). Tolerance: +/-10% of computed section midpoint.
-
-## Detection Configuration
-
-### Research Type Mapping
-
-This arc is selected when:
-- `research_type: "generic"`
-- `research_type: "market"`
-- **Default fallback** (when no other arc matches)
-
-### Content Analysis Keywords
-
-*(Not applicable - this is the default fallback arc)*
-
-### Detection Threshold
-
-N/A (default arc)
-
-## Use Cases
-
-**Best For:**
-- Market research projects
-- Competitive positioning analysis
-- Sales enablement content
-- B2B value proposition development
-- Strategic business recommendations
-- Executive decision-making support
-
-**Typical Research Types:**
-- Generic research (no specific domain focus)
-- Market analysis and trends
-- Business opportunity assessment
-- Strategic initiative planning
-
-## Element Definitions
-
-### Element 1: Why Change (The Unconsidered Need)
-
-**Purpose:**
-Reframe research findings as an unconsidered need—a problem executives didn't know they had, or didn't realize was solvable.
-
-**Source Content:**
-- Executive Summary (primary)
-- Cross-Dimensional Patterns (tensions, emergent implications)
-- Megatrends (paradigm shifts)
-- Dimension syntheses (counterintuitive findings)
-
-**Transformation Approach:**
-Use PSB (Problem-Solution-Benefit) structure:
-- **Problem (~33% of element):** Current assumption/status quo and why it's incomplete
-- **Solution (~33% of element):** Unconsidered reality revealed by research
-- **Benefit (~22-44% of element):** Competitive advantage for early recognizers
-
-**Key Techniques:**
-- Contrast structure: "Most organizations think X. But research shows Y."
-- Evidence-based reframing with citations
-- End with competitive implication
-
-**Pattern Reference:** `why-change-patterns.md`
-
+---
+arc_id: corporate-visions
+display_name: Corporate Visions
+display_name_de: Corporate Visions
+contract: 2
 ---
 
-### Element 2: Why Now (The Closing Window)
-
-**Purpose:**
-Establish urgency through forcing functions—external pressures, deadlines, tipping points that make action time-sensitive.
-
-**Source Content:**
-- **Trends in "Act" column (primary)** - Loaded from `content_map.trend_entities` (11-trends/data/), filtered to urgency="Act"
-- Megatrends (macro forces) - NOT loaded for Corporate Visions arc
-- Executive Summary (urgency indicators) - Fallback if trends not available
-- Dimension syntheses (time-bound developments) - NOT loaded (redundant with Executive Summary)
-
-**Source Content Mapping Example:**
-
-```javascript
-// Loaded from 11-trends/data/trend-001.md
-{
-  "trend_id": "trend-001",
-  "title": "EU AI Act Compliance Deadline",
-  "urgency": "Act",
-  "timeline": "Q1 2027",
-  "dimension": "regulatory",
-  "body_preview": "Mandatory compliance for AI systems in healthcare by January 2027..."
-}
+# Corporate Visions
 
-// Maps to forcing function:
-"The EU AI Act mandates compliance for all healthcare AI systems by Q1 2027,
-with non-compliance penalties reaching €20M or 4% of global revenue—whichever
-is higher. Organizations lacking certified AI governance frameworks face market
-exclusion and legal liability."
-```
+## Intent
 
-**Transformation Approach:**
-Stack 2-3 forcing functions from loaded Trends:
-- **Forcing function (~28% of element):** External pressure from trend + specific deadline from trend.timeline
-- **Quantified urgency (~28-43% of element):** Extract timeline from trend.timeline and cost implications from trend.body_preview
-- **Window of opportunity (~28-43% of element):** Compare trends with urgency="Act" vs urgency="Plan" to show window closing
+**Governing question:** Why should the reader change, why now, why with this capability, and why does it pay?
 
-**Key Techniques:**
-- Specific timelines from trend.timeline field ("Q2 2027" not "soon")
-- Quantified consequences from trend.body_preview ("€420K penalties" not "financial risk")
-- Before/after contrasts (early movers vs. late starters) by comparing trend confidence scores
+**Rhetorical job:** Persuade a decision-maker to leave a status quo that feels good enough. The arc moves from an unconsidered need through external urgency to a defensible position and closes on an undeniable business case. It is a sales-persuasion arc: it argues for a change and an investment.
 
-**Pattern Reference:** `why-now-patterns.md`
+**Not for:** diagnosing an open problem and deriving the answer (use `consulting-problem-solving`), choosing among already-credible alternatives (`strategic-choice`), proving observed customer value (`customer-transformation`), or an investment-theme thesis inside a TIPS report (`theme-thesis`). When the reader has not yet accepted that a change is needed, this is the arc; when they have, a diagnostic or choice arc serves them better.
 
----
+## Selection
 
-### Element 3: Why You (Strategic Positioning)
+**Best for:** market research syntheses, competitive positioning, sales enablement content, B2B value-proposition development, executive decision support.
 
-**Purpose:**
-Convert strategic recommendations into Power Positions—capabilities that create competitive advantage and are difficult to replicate.
+**Signals:** the source frames a problem executives underestimate; it carries deadlines, regulatory dates or tipping points; it recommends capabilities or positions; it quantifies costs, risks or penalties.
 
-**Source Content:**
-- Strategic Recommendations (primary)
-- Dimension syntheses (strategic implications)
-- Executive Summary (positioning opportunities)
+**Anti-signals:** the source is a documented customer journey with verified outcomes; it weighs named alternatives against criteria; it describes a solution portfolio for buyers who already want it (`jtbd-portfolio`); it is a company self-description (`company-credo`, `engagement-model`).
 
-**Transformation Approach:**
-Create 2-3 Power Positions using IS-DOES-MEANS structure:
-- **IS (What it is):** Specific, concrete definition (1-2 sentences)
-- **DOES (What it does for you):** Quantified outcomes with You-Phrasing
-- **MEANS (Why competitors struggle):** Explain the moat/differentiation
+**Fallback priority:** the default *candidate* when no specialized content type is detected — a candidate for the shortlist, never an automatic winner. The registry's `distinguish_from` block names the arcs it must be weighed against.
 
-**Key Techniques:**
-- You-Phrasing throughout ("You reduce...", "Your systems...")
-- Quantify DOES layer with Number Plays
-- Explain competitive moat in MEANS (time, tacit knowledge, experience)
+## Headings
 
-**Pattern Reference:** `why-you-patterns.md`
+Byte-exact section headers by output language. Renderers, the copywriter and the validation script all match these strings; never paraphrase, re-case or re-punctuate them.
 
----
+| # | EN | DE | FR | IT | PL | NL | ES |
+|---|----|----|----|----|----|----|----|
+| 1 | Why Change: Unconsidered Needs | Warum Wandel: Unerkannte Handlungsbedarfe | Pourquoi changer : besoins insoupçonnés | Perché cambiare: bisogni latenti | Dlaczego zmiana: nieuświadomione potrzeby | Waarom veranderen: onopgemerkte behoeften | Por qué cambiar: necesidades no consideradas |
+| 2 | Why Now: Forcing Functions | Warum Jetzt: Handlungsdruck | Pourquoi maintenant : facteurs déclencheurs | Perché ora: fattori scatenanti | Dlaczego teraz: czynniki wymuszające | Waarom nu: dwingende factoren | Por qué ahora: factores determinantes |
+| 3 | Why You: Unique Positioning | Warum Sie: Einzigartige Positionierung | Pourquoi vous : positionnement unique | Perché Lei: posizionamento unico | Dlaczego Państwo: wyjątkowe pozycjonowanie | Waarom u: unieke positionering | Por qué usted: posicionamiento único |
+| 4 | Why Pay: ROI Justification | Warum Investieren: ROI-Begründung | Pourquoi investir : justification du ROI | Perché investire: giustificazione del ROI | Dlaczego inwestować: uzasadnienie ROI | Waarom investeren: ROI-onderbouwing | Por qué invertir: justificación del ROI |
 
-### Element 4: Why Pay (The Business Case)
+The narrative skill generates EN and DE. The five further columns are the substitution set the copywriter uses in arc-mode translation; they are carried here because this contract is the one authority for the arc's headings.
 
-**Purpose:**
-Quantify the cost of inaction through compound impact calculation—stacking multiple cost dimensions to create undeniable financial case.
+## Composition
 
-**Source Content:**
-- Cross-Dimensional Patterns (risks, costs)
-- Trends (cost implications)
-- Strategic Recommendations (investment requirements)
-- Executive Summary (financial impacts)
+Section lengths are proportions of `--target-length` (default 1,675 words). Word ranges for a target `T` are `[T × 0.85, T × 1.15]` multiplied by each proportion. Proportions sum to 100%.
 
-**Transformation Approach:**
-Compound Impact Calculation:
-```
-Total Cost of Inaction =
-  Regulatory Penalties +
-  Talent Premium +
-  Market Position Loss +
-  Opportunity Cost
-```
+| Segment | Proportion |
+|---------|-----------:|
+| Hook | 10% |
+| Why Change | 27% |
+| Why Now | 21% |
+| Why You | 27% |
+| Why Pay | 15% |
 
-Each component: quantification + time horizon (3-year) + citation
+**Hook construction:** open with the most surprising quantified finding — a counterintuitive data point, an unexpected pattern — cited, then the challenge to conventional wisdom it overturns, then a transition into Why Change. Pattern: *[Quantified surprise] + [Challenge to conventional wisdom]*.
 
-**Key Techniques:**
-- Stack 3-4 cost dimensions
-- Use 3-year horizon (standard executive planning)
-- Before/after contrast: "Delay costs X vs. Action costs Y"
-- End with simple ratio: "Action costs less than inaction by 2-3x"
+**Transitions:**
 
-**Pattern Reference:** `why-pay-patterns.md`
+1. Hook → Why Change: "This gap between X and Y defines the challenge."
+2. Why Change → Why Now: "Three converging forces make action urgent."
+3. Why Now → Why You: "Organizations that thrive don't just react — they build capabilities."
+4. Why You → Why Pay: "The cost of delay compounds."
 
-## Narrative Flow
+**Closing pattern:** one simple, undeniable comparison — "Action costs less than inaction by 2-3x", "The choice: invest €1.2M strategically, or lose €3.1M reactively." Never a percentage, never a paragraph.
 
-### Hook Construction
+## Elements
 
-**Approach:**
-Open with the most surprising finding from the research—a counterintuitive data point, an unexpected pattern, or a paradigm-shifting insight.
+### 1. Why Change
 
-**Pattern:**
-```markdown
-[Quantified surprise] + [Challenge to conventional wisdom]
+**Purpose:** reframe the findings as an unconsidered need — a problem the reader did not know they had, or did not realize was solvable.
 
-Example:
-"Organizations investing 40% more in AI deployment achieve 60% lower adoption rates than minimal investors<sup>[1]</sup>. This inverse correlation reveals a counterintuitive truth: AI success depends less on technology spend and more on workflow redesign."
-```
+**Evidence sought:** the executive summary and cross-cutting patterns (`executive_summary`, `dimension_syntheses`), paradigm shifts (`megatrends_summary`), counterintuitive findings and tensions. Use whatever source material was loaded in Phase 1; no fixed directory layout is assumed.
 
-**Source:** Most surprising finding in Executive Summary
+**Argument move:** [PSB](../../narrative-techniques/techniques-overview.md#2-psb-problem-solution-benefit) — Problem (~33% of the element: the status quo assumption and why it is incomplete), Solution (~33%: the unconsidered reality the evidence reveals — a reframing of the problem space, not a product pitch), Benefit (the remainder: the advantage for early recognizers, ending on a forward implication that hands over to urgency). Choose one reframe shape and commit to it: inverse correlation, hidden variable, category error, optimization paradox or temporal reframe.
 
-**Word Target:** 10% of target length
+**Techniques:** [PSB](../../narrative-techniques/techniques-overview.md#2-psb-problem-solution-benefit), [Contrast Structure](../../narrative-techniques/techniques-overview.md#6-contrast-structure), [Number Plays](../../narrative-techniques/techniques-overview.md#4-number-plays-6-techniques).
 
----
+**Hard rules:** the Problem half opens with a contrast ("Most organizations think X. But the evidence shows Y."); two or three citations ground the reframe; the element ends with a competitive implication, not a summary.
 
-### Element Transitions
+**Failure modes:** stating an obvious problem ("organizations need to adopt AI"); academic framing ("our analysis reveals"); a reframe the reader already believes — if the section does not make the reader uncomfortable about a current assumption, the need is not unconsidered enough; PSB with a missing leg.
 
-**Hook → Why Change:**
-- Hook introduces surprising finding
-- Why Change reframes finding as unconsidered need
-- **Transition pattern:** "This gap between X and Y defines the challenge."
+### 2. Why Now
 
-**Why Change → Why Now:**
-- Why Change establishes the problem
-- Why Now introduces forcing functions
-- **Transition pattern:** "Three converging forces make action urgent."
+**Purpose:** establish urgency through forcing functions — external pressures, deadlines and tipping points that make action time-sensitive.
 
-**Why Now → Why You:**
-- Why Now creates urgency
-- Why You provides strategic response
-- **Transition pattern:** "Organizations that thrive don't just react—they build capabilities."
+**Evidence sought:** trend entities with an Act horizon (`trend_entities`, `trends_summary`), regulatory dates and timelines in the sources, urgency indicators in the executive summary. Megatrends are macro context here, not forcing functions.
 
-**Why You → Why Pay:**
-- Why You outlines positioning
-- Why Pay quantifies inaction cost
-- **Transition pattern:** "The cost of delay compounds."
+**Argument move:** stack two or three forcing functions, each an external pressure with a specific deadline and a quantified consequence, then a window-of-opportunity contrast between early movers and late starters. Draw the functions from distinct categories — regulatory, talent, market expectation, technology tipping point, competitive momentum — so the urgency reads as structural rather than incidental.
 
----
+**Techniques:** [Forcing Functions](../../narrative-techniques/techniques-overview.md#5-forcing-functions), [Number Plays](../../narrative-techniques/techniques-overview.md#4-number-plays-6-techniques) (timeline math, before/after), [Contrast Structure](../../narrative-techniques/techniques-overview.md#6-contrast-structure).
 
-### Closing Pattern
+**Hard rules:** every forcing function carries a specific date or quarter and a quantified consequence; at least two functions are stacked; the element closes with a window-closing statement. This element carries the densest citation load in the narrative.
 
-**Final Sentence:**
-Simple, undeniable business case comparison.
+**Failure modes:** vague urgency ("the market is changing rapidly", "soon"); a single forcing function; consequences without numbers ("there will be penalties"); no closing window.
 
-**Examples:**
-- "Action costs less than inaction by 2-3x."
-- "The choice: invest €1.2M strategically, or lose €3.1M reactively."
-- "Proactive positioning costs one-third the price of reactive catch-up."
+### 3. Why You
 
-## Citation Requirements
+**Purpose:** convert strategic recommendations into Power Positions — capabilities that create advantage and are hard to replicate.
 
-### Citation Density
+**Evidence sought:** strategic recommendations, strategic implications in the dimension syntheses, positioning opportunities in the executive summary, portfolio propositions when a `--content-map` supplies them.
 
-**Target:** 15-25 total citations across the narrative (scale proportionally for longer targets)
-**Ratio:** Approximately 1 citation per 60-100 words
+**Argument move:** two or three Power Positions, each in IS / DOES / MEANS order: IS names the capability concretely in one or two sentences; DOES states what it does for the reader in You-Phrasing with quantified outcomes; MEANS explains why competitors struggle to copy it — time, tacit knowledge, integration complexity. Positions may be process, governance, capability-building, partnership or culture positions; pick the mix the evidence supports.
 
-### Citation Distribution
+**Techniques:** [IS-DOES-MEANS](../../narrative-techniques/techniques-overview.md#3-is-does-means-power-positions), [You-Phrasing](../../narrative-techniques/techniques-overview.md#7-you-phrasing), [Number Plays](../../narrative-techniques/techniques-overview.md#4-number-plays-6-techniques).
 
-**Why Change (data-heavy):** 5-8 citations
-**Why Now (forcing functions):** 6-10 citations (highest density)
-**Why You (strategic recommendations):** 3-5 citations
-**Why Pay (cost calculations):** 4-7 citations
+**Hard rules:** each position is named; every DOES layer is second person and carries at least one quantified outcome; every MEANS layer names the moat. Feature lists are forbidden — if a position starts listing features, collapse it into one IS sentence.
 
-### Citation Format
+**Failure modes:** generic advice ("invest in training"); third-person DOES ("organizations reduce…"); an IS that is a buzzword ("a comprehensive approach to AI adoption"); weak differentiation ("be good at this").
 
-```markdown
-Claim text<sup>[N](12-synthesis/synthesis-{dimension}.md)</sup>
-```
+### 4. Why Pay
 
-**Required Citations:**
-- ✓ Quantitative data (MUST)
-- ✓ Strategic recommendations (MUST)
-- ✓ Forcing functions (MUST)
-- ✓ Cost calculations (MUST)
-- ~ Unconsidered needs (Should have supporting citation)
+**Purpose:** quantify the cost of inaction so the business case becomes undeniable.
 
-## Quality Gates
+**Evidence sought:** risk and cost figures in the cross-cutting patterns, cost implications in trend entities, investment requirements in the recommendations, financial impacts in the executive summary.
 
-### Arc Completeness
+**Argument move:** a compound impact calculation — stack three or four cost dimensions (regulatory penalties, talent premium, market-position loss, opportunity cost, or whichever the evidence supplies) on one three-year horizon, each with a number and a citation, then reduce the whole case to one ratio: "Action costs less than inaction by N-Mx."
 
-- [ ] All 4 elements present (Why Change, Why Now, Why You, Why Pay)
-- [ ] Hook present (within hook proportion of target)
-- [ ] Word counts within computed proportional ranges (+/-10% tolerance)
-- [ ] Smooth transitions between elements
-- [ ] Each element serves distinct purpose (no overlap)
+**Techniques:** [Compound Impact](../../narrative-techniques/techniques-overview.md#8-compound-impact-calculation), [Number Plays](../../narrative-techniques/techniques-overview.md#4-number-plays-6-techniques) (ratio framing, before/after).
 
-### Corporate Visions Techniques Applied
+**Hard rules:** at least three cost dimensions; one time horizon throughout; every component quantified and cited; the final sentence is a simple ratio, not a percentage.
 
-- [ ] **Why Change:** PSB structure used (Problem-Solution-Benefit)
-- [ ] **Why Change:** Contrast structure applied ("Most think X, research shows Y")
-- [ ] **Why Change:** Ends with competitive implication
-- [ ] **Why Now:** 2-3 forcing functions stacked
-- [ ] **Why Now:** Specific timelines (not vague "soon")
-- [ ] **Why Now:** Before/after contrasts (early vs. late movers)
-- [ ] **Why You:** 2-3 Power Positions created
-- [ ] **Why You:** IS-DOES-MEANS structure applied to each position
-- [ ] **Why You:** You-Phrasing used throughout DOES layer
-- [ ] **Why Pay:** 3-4 cost dimensions stacked
-- [ ] **Why Pay:** 3-year horizon used
-- [ ] **Why Pay:** Ends with simple ratio comparison
+**Failure modes:** a single cost factor; mixed horizons ("two years here, five years there"); "significant savings"; a closing comparison that needs explanation.
 
-### Evidence Quality
+## Validation
 
-- [ ] Every major claim has citation
-- [ ] Citations point to dimension syntheses (12-synthesis/)
-- [ ] Quantitative data used throughout
-- [ ] Number Plays applied (ratios, before/after, compound calculations)
-- [ ] Citation density: 15-25 total citations
+Arc-specific assertions, checked after the universal gates in `../../validation.md`:
 
-### Narrative Coherence
-
-- [ ] Hook transitions naturally to Why Change
-- [ ] Why Change establishes problem that Why Now makes urgent
-- [ ] Why You provides strategic response to Why Change/Why Now
-- [ ] Why Pay quantifies business case for Why You positioning
-- [ ] Closing sentence provides undeniable comparison
-
-### Executive Appeal
-
-- [ ] Opening hook grabs attention (surprising data)
-- [ ] Unconsidered need challenges assumptions
-- [ ] Forcing functions create credible urgency
-- [ ] Power Positions feel achievable yet differentiated
-- [ ] Cost of inaction calculation is undeniable
-
-## Common Pitfalls
-
-### Why Change Pitfalls
-
-❌ **Stating obvious problems:** "Organizations need to adopt AI"
-✓ **Reframing to unconsidered:** "Organizations need to redesign decision-making for human-AI collaboration"
-
-❌ **Academic tone:** "Our analysis reveals..."
-✓ **Executive framing:** "Most executives view X as Y. This framing misses..."
-
-❌ **Single perspective:** Only problem or only solution
-✓ **PSB structure:** Problem → Solution → Benefit
-
-### Why Now Pitfalls
-
-❌ **Vague urgency:** "The market is changing rapidly"
-✓ **Specific forcing function:** "EU AI Act provisions take effect January 2027"
-
-❌ **Single force:** Only one urgency driver
-✓ **Stacked forces:** 2-3 converging pressures
-
-❌ **No quantification:** "There will be penalties"
-✓ **Quantified consequence:** "€420K non-compliance penalties per violation"
-
-### Why You Pitfalls
-
-❌ **Generic recommendations:** "Invest in training"
-✓ **Power Position:** "Clinical-AI Integration Design: A systematic approach to workflow redesign..."
-
-❌ **Feature lists:** "The system has X, Y, Z"
-✓ **IS-DOES-MEANS:** "What it is, What it does for YOU, Why competitors struggle to copy"
-
-❌ **Weak differentiation:** "Be good at this"
-✓ **Competitive moat:** "This requires 6-12 months of ethnographic observation—purchases are fast, wisdom is slow"
-
-### Why Pay Pitfalls
-
-❌ **Single cost factor:** "This will be expensive"
-✓ **Compound calculation:** "Penalties €960K + Talent premium €1.2M + Lost revenue €60-90M"
-
-❌ **Vague horizon:** "Over time"
-✓ **Specific timeframe:** "Over 3 years"
-
-❌ **Complex comparison:** Multiple percentages
-✓ **Simple ratio:** "Action costs less than inaction by 2-3x"
-
-## Version History
-
-- **v1.0.0:** Original hard-coded implementation in story-arc-mapping.md
-- **v2.0.0:** Restructured into arc-definition.md with separate pattern files
+- Why Change carries all three PSB legs and opens with a contrast.
+- Why Now stacks at least two forcing functions, each with a date and a quantified consequence, and closes on a window-closing statement.
+- Why You carries two or three named Power Positions in IS / DOES / MEANS order with second-person DOES layers.
+- Why Pay stacks at least three cost dimensions on one horizon and ends on a simple ratio.
+- The rhetorical chain holds: the hook's surprise sets up the need; the need makes the forcing functions feel inevitable; the urgency makes the reader want the positions; the positions make the cost comparison feel like a conclusion.
+- The closing sentence is the ratio, and nothing follows it.
 
 ## See Also
 
-- `../arc-registry.md` - Master index of all story arcs
-- `why-change-patterns.md` - Unconsidered need transformation patterns
-- `why-now-patterns.md` - Forcing function construction patterns
-- `why-you-patterns.md` - Power Position (IS-DOES-MEANS) patterns
-- `why-pay-patterns.md` - Cost of inaction calculation patterns
+- `../arc-registry.md` — arc selection: detection algorithm, per-arc declarative blocks, shortlist format
+- `../../narrative-techniques/techniques-overview.md` — the eight techniques and their application matrix
+- `../../validation.md` — the universal gates every narrative must clear

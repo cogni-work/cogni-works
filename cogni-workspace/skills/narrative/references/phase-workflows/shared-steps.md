@@ -100,51 +100,9 @@ stats_claims: {count}
 
 ## Step: Validate Output
 
-Check these gates in priority order. If the structural gate fails, fix it before checking anything else.
+The universal gates live in one place: `../validation.md`. Run its deterministic gates with `scripts/validate-narrative.py`, then check its judged gates and the arc's own quality gates. Do not restate gates here.
 
-**Structural gate (check first):**
-
-- Exactly 4 `##` headers in narrative body (below frontmatter)
-- Headers match arc's exact element names (language-specific)
-- Headers in correct arc sequence
-- No extra `##` headers
-
-If this fails, rewrite using the template rather than renaming sections. Content generated for the wrong structure reads wrong even with correct headers -- the rhetorical flow doesn't match.
-
-**Content gates:**
-
-- Total word count within target range (`total_lower` to `total_upper`, computed from `--target-length`)
-- Title is arc-specific (not generic)
-- Hook present (within hook proportion of target)
-- Element word counts within computed proportional ranges (+/-10% of section midpoint). Compute: `[proportion * total_lower, proportion * total_upper]` using proportions from the arc definition
-- Arc-specific techniques applied (check arc quality gates in arc-definition)
-- Smooth transitions between elements
-- Frontmatter contains all required fields (including `target_length`)
-
-**Evidence gates:**
-
-- Citations: minimum 15, format `<sup>[N](file.md)</sup>`
-- Every quantitative claim has a citation
-- No fabricated references -- all cite loaded source files
-- Entity wikilinks: 40-50 total
-
-**Presentation gates:**
-
-- Frontmatter contains all 6 `stats_*` fields with integer values
-- Inline HTML stats grid present between opening paragraph and first `---`
-- Stats grid values match `stats_*` frontmatter fields exactly
-- Stats grid labels match project language (DE/EN)
-
-**Language gates (if `de`):**
-
-- Proper umlauts throughout body text (ä, ö, ü, ß)
-- Zero ASCII fallbacks -- scan for: fuer, ueber, Aenderung, groesste, Fuehrung
-
-**If any gate fails:** Fix the specific issue and re-validate all gates (fixes can break other things). Common failure patterns:
-- Word count below target range: add evidence-grounded depth to the thinnest element
-- Word count above target range: trim redundant transitions, not evidence
-- Wikilinks below 40: check which loaded entities have no wikilinks yet
-- Stats grid mismatch: copy exact integers from frontmatter into HTML grid
+Two gate families this layer used to carry — an entity-wikilink count and the `stats_*` / stats-grid presentation gates — are not in `validation.md` and are not gates any more; they bound the narrative to the retired numbered research-project layout. The stats grid in the template above is legacy output-template content for this layer only.
 
 ---
 

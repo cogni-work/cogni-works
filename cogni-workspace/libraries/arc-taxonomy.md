@@ -48,9 +48,9 @@ Each arc has 4 ordered elements that represent the phases of the narrative struc
 
 | # | Element (EN) | Element (DE) | Narrative Function |
 |---|-------------|-------------|-------------------|
-| 1 | Why Change | Warum Veränderung | What drives the need for change |
+| 1 | Why Change | Warum Wandel | What drives the need for change |
 | 2 | Why Now | Warum Jetzt | Why the change is urgent |
-| 3 | Why You | Warum Wir | How the solution addresses the need |
+| 3 | Why You | Warum Sie | How the solution addresses the need |
 | 4 | Why Pay | Warum Investieren | The business case and path forward |
 
 ### industry-transformation
@@ -246,7 +246,7 @@ IF `arc_definition_path` parameter provided AND file exists:
 
 ## Arc Definition File Format
 
-Arc definition files live in the `narrative` skill at:
+Arc contracts live in the `narrative` skill at:
 `cogni-workspace/skills/narrative/references/story-arc/{arc-id}/arc-definition.md`
 
-Each file defines the 4 arc elements with their English and German names, descriptions, and narrative function. The skill extracts the element name lists from these files.
+Each contract's `## Headings` table carries the four full section headings per language (EN, DE, and further columns where the arc supports them). The short element names in this file are derived from those headings — the segment before the first colon, or the whole heading when it carries none — and `cogni-workspace/tests/test-arc-taxonomy-sync.sh` case H1 checks that derivation for every migrated arc.

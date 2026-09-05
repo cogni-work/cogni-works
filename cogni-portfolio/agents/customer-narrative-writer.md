@@ -42,8 +42,7 @@ You will receive:
 - `entity_refs` — object with explicit paths or globs to read, pre-filtered by the parent for this scope. Only read what is listed here plus `portfolio.json`.
 - `messaging_modes` — object `{ "product-slug": "mode", "feature-slug": "mode" }` pre-computed by the parent. Consume as-is — never re-derive.
 - `template_ref` — absolute path to `references/templates-customer-narrative.md` and the scope heading to jump to (e.g. `"Scope 3: \`capability\`"`)
-- `arc_definition_ref` — absolute path to the arc definition .md file
-- `phase_4b_synthesis_ref` — absolute path to the phase-4b synthesis .md file
+- `arc_definition_ref` — absolute path to the arc contract .md file (headings, composition, four element sections, arc-specific validation)
 - `feature_slug` — required when `scope == capability`
 - `market_slug`, `persona_id` — required when `scope == persona`
 
@@ -52,8 +51,7 @@ You will receive:
 ### Phase 1: Load References
 
 1. Read the **scope section** from the template file at `template_ref`. You only need your scope's section (e.g., "Scope 1: `home`"), plus the shared sections at the top (YAML Frontmatter, Handling messaging mode, Citations, Tone Transformation Examples). Do not read other scopes' templates.
-2. Read the **arc definition** at `arc_definition_ref` — understand element names, flow, word proportions, and the arc's rhetorical purpose.
-3. Read the **phase-4b synthesis** at `phase_4b_synthesis_ref` — understand element-specific writing rules, technique applications, and quality expectations for this arc.
+2. Read the **arc contract** at `arc_definition_ref` — its `## Headings` for the element names, `## Composition` for proportions, transitions and the closing pattern, each `### N.` section under `## Elements` for the element's Purpose, Argument move, Techniques, Hard rules and Failure modes, and `## Validation` for the arc's quality bar. A contract still on the older shape (no `contract: 2` in its frontmatter) carries the same facts under its Element Definitions, Narrative Flow and Quality Gates headings; read those instead.
 
 ### Phase 2: Load Entities
 

@@ -441,6 +441,102 @@ else
   failures=$((failures + 1))
 fi
 
+# --- bo18
+# Re-export from a copy of the brief whose FRONTMATTER climax: integer names a
+# different slide. Asserting the shape of today's climax line cannot tell the
+# two derivations apart: an implementation that reads the frontmatter integer
+# and renders it in the same format passes any such assertion. Changing that
+# integer and requiring the line NOT to move is what discriminates.
+PROBE_BRIEF="$TMPROOT/climax-probe-brief.md"
+PROBE_OUT="$TMPROOT/climax-probe.md"
+export PROBE_BRIEF PROBE_OUT
+python3 -c "
+import os, re
+brief = open(os.environ['EXB'], encoding='utf-8').read()
+present = int(re.search(r'^climax: (\d+)\s*\$', brief, re.M).group(1))
+numbers = [int(n) for n in re.findall(r'^## Slide (\d+):', brief, re.M)]
+# another REAL slide, so the copy-through implementation still resolves a slide
+# and fails on the value rather than on a lookup miss
+other = next(n for n in numbers if n != present)
+open(os.environ['PROBE_BRIEF'], 'w', encoding='utf-8').write(
+    re.sub(r'^climax: \d+\s*\$', 'climax: {0}'.format(other), brief, count=1, flags=re.M))
+" && python3 "$BTO" --brief "$PROBE_BRIEF" --out "$PROBE_OUT" > "$TMPROOT/probe.json" 2>&1
+if python3 -c "
+import os, re, sys
+from outline_probe import BRIEF, slides_of
+out = open(os.environ['OUT'], encoding='utf-8').read()
+probe = open(os.environ['PROBE_OUT'], encoding='utf-8').read()
+def climax_of(text):
+    found = re.search(r'^climax: (.+)\$', text, re.M)
+    return found.group(1).strip() if found else None
+here, there = climax_of(out), climax_of(probe)
+# the line must exist at all (return None drops it)
+ok = here is not None
+# INDEPENDENCE: moving the frontmatter integer must not move the emitted line
+ok = ok and here == there
+# and it must name a real slide rather than echo the integer or a constant
+ok = ok and any(headline and headline in here for headline, _ in slides_of())
+sys.exit(0 if ok else 1)"; then
+  echo "ok: bo18-climax-derived-from-emphasis-not-frontmatter"
+else
+  echo "FAIL: bo18-climax-derived-from-emphasis-not-frontmatter the climax line is missing, tracks the frontmatter integer, or names no slide"
+  failures=$((failures + 1))
+fi
+
+# --- bo19
+if python3 -c "
+import os, sys
+from outline_probe import BRIEF
+# The design: sub-block of a document's OWN frontmatter, as raw lines.
+def design_pairs(text):
+    head = text.split('---', 2)
+    if len(head) < 3 or '\ndesign:\n' not in head[1]:
+        return []
+    pairs = []
+    for line in head[1].split('\ndesign:\n', 1)[1].splitlines():
+        if line.startswith('  ') and line.strip():
+            pairs.append(line.rstrip())
+        else:
+            break
+    return pairs
+# Compare the outline's OWN frontmatter design block against the brief's rather
+# than substring-scanning the whole file: a pair also appears in a slide_points
+# or talk_track line, and anchoring on the block coming FIRST would redden on any
+# reordering of design / key_figures / climax that preserves the property.
+# Derived from the brief, so a sixth sub-key needs no edit here — the exporter
+# iterates design.items() generically and this comparison follows it.
+expected = design_pairs(BRIEF)
+ok = bool(expected)
+ok = ok and design_pairs(open(os.environ['OUT'], encoding='utf-8').read()) == expected
+sys.exit(0 if ok else 1)"; then
+  echo "ok: bo19-design-block-emitted-verbatim"
+else
+  echo "FAIL: bo19-design-block-emitted-verbatim the outline frontmatter does not carry the brief's design block verbatim"
+  failures=$((failures + 1))
+fi
+
+# --- bo20
+if python3 -c "
+import json, os, sys
+default = json.load(open(os.environ['TMPROOT'] + '/default.json'))
+inc = json.load(open(os.environ['TMPROOT'] + '/inc.json'))
+# bo13 covers the two ERROR paths; the happy path was ungraded, so a run could
+# report success while leaking a Python None into a section body.
+ok = all(set(env) == {'success', 'data', 'error'} for env in (default, inc))
+ok = ok and default['success'] is True and inc['success'] is True
+ok = ok and not default['error'] and not inc['error']
+# The brief carries zero occurrences of the literal, so any hit is a leak. Note
+# imagery: none is lower-case and does not collide. Scanned per file rather than
+# concatenated, so a hit is attributable and cannot straddle the join.
+ok = ok and 'None' not in open(os.environ['OUT'], encoding='utf-8').read()
+ok = ok and 'None' not in open(os.environ['INC'], encoding='utf-8').read()
+sys.exit(0 if ok else 1)"; then
+  echo "ok: bo20-happy-path-envelope-and-no-none-leak"
+else
+  echo "FAIL: bo20-happy-path-envelope-and-no-none-leak envelope is not a clean success, or a literal None reached the outline"
+  failures=$((failures + 1))
+fi
+
 if [ "$failures" -eq 0 ]; then
   echo "All brief-to-outline tests passed."
   exit 0

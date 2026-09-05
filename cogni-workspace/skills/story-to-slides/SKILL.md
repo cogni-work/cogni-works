@@ -7,8 +7,8 @@ description: >
   "Folien aus Bericht", "pitch deck", "create slides from report", "presentation outline",
   or wants to convert prose into slide-level message architecture. Also trigger when the
   user needs pyramid communication, number plays, assertion headlines, or speaker notes.
-  Covers Why Change projects, research reports and trend panoramas, in English and
-  German. Produces a presentation-brief.md (v4.1) under a
+  Covers Why Change projects, research reports, competitive intelligence and trend
+  panoramas, in English and German. Produces a presentation-brief.md (v4.1) under a
   renderer-neutral Rendering Contract, plus a presentation-outline.md render handoff for
   claude.ai/design. Important: this skill CREATES the brief from a narrative source —
   it does NOT render an existing brief (use PPTX skill for that), does NOT create a web page
@@ -568,7 +568,7 @@ python3 "$CLAUDE_PLUGIN_ROOT/skills/story-to-slides/scripts/brief-to-outline.py"
   --brief "{absolute_path_to_presentation_brief}"
 ```
 
-It writes `presentation-outline.md` next to the brief and returns the absolute path as `data.outline_path`. Pass `--include-internal` only when the presenter-prep slides (Methodology, Buying Center) belong in the handoff; by default they are excluded, since they are internal preparation rather than client-facing copy.
+It writes `presentation-outline.md` next to the brief and returns the absolute path as `data.outline_path`. Pass `--include-internal` only when the presenter-prep slides (Methodology, Buying Center) belong in the handoff; by default they are excluded, since they are internal preparation rather than client-facing copy. The exporter derives each slide's `type` tag by parsing the `## Layout to type mapping` table out of `libraries/presentation-intent.md` at run time — it holds no layout name as a literal, so renaming or reshaping that table changes this step's output.
 
 The exporter prints one `{success, data, error}` envelope. On `success: false`, report the `error` to the user, skip the outline block below, and still deliver Handoff A — a failed outline export degrades the handoff, it does not invalidate the brief. Any `data.warnings` entries are advisory: report a `slide_points capped` warning, since it names slides whose on-slide copy did not fit the outline.
 
@@ -614,13 +614,13 @@ Replace `{absolute_path_to_presentation_outline}` with the exporter's `data.outl
 | **cta-taxonomy.md** | 1, 6.1 | CTA types, urgency, arc-to-CTA heuristics |
 | **pptx-layouts.md** | 7 | Slide layout schemas and field definitions (deferred from Step 1) |
 | **EXAMPLE_BRIEF.md** | 8 | Output format reference (deferred from Step 1) |
-| **presentation-intent.md** | 8.2 | `design` / `climax` / `key_figures` vocabulary and the design defaults the `design` override falls back to |
+| **presentation-intent.md** | 8.2 | `design` / `climax` / `key_figures` vocabulary and the design defaults the `design` override falls back to; also holds the `## Layout to type mapping` table (see `brief-to-outline.py` below) |
 
 ### Scripts (executed, never loaded into context)
 
 | Script | Step | Purpose |
 |--------|------|---------|
-| **brief-to-outline.py** | 11 | Export the Claude Design outline from a written brief; returns `data.outline_path` |
+| **brief-to-outline.py** | 11 | Export the Claude Design outline from a written brief; returns `data.outline_path`. Reads `## Layout to type mapping` from `libraries/presentation-intent.md` as the single run-time authority for a slide's `type` tag — reshaping that table breaks the export |
 
 ## Backward Compatibility
 

@@ -206,7 +206,17 @@ def main():
             raise QAError("cannot parse brief: {0}".format(exc))
         except OSError as exc:
             raise QAError("cannot read brief: {0}".format(exc))
+        # A brief that yields nothing to expect cannot be graded — a web or
+        # infographic brief handed in by mistake, or a presentation brief whose
+        # slide sections are missing, parses to zero slides without raising.
+        # Passing an empty expectation against any deck would be the "gate that
+        # passes when its input is absent" this script exists to close.
         expected_text, expected_notes, expected_links = expected_from_brief(model, args.skip_internal)
+        if not model["slides"] or (not expected_text and not expected_notes):
+            raise QAError(
+                "brief yields no `## Slide N:` sections — nothing to grade the deck against"
+                if not model["slides"] else
+                "brief yields no on-slide text and no notes to grade the deck against")
         actual = actual_from_pptx(args.pptx)
         report = compare(expected_text, expected_notes, expected_links, actual)
     except QAError as exc:

@@ -11,17 +11,20 @@
 # must list it in notes_missing[]. Foreign tools are never invoked here, so no
 # assertion depends on a localized message.
 #
-# Mutation recipe (the discriminator is rq03-mutant-text-run-removed):
+# Mutation recipes (harness: ~/GitHub/dev/managed-service/cogni-service/scripts/
+# mutation-check.sh, run with --root . --file cogni-workspace/scripts/brief-render-qa.py
+# --test 'bash cogni-workspace/tests/test-brief-render-qa.sh'):
 #
-#   bash "$HOME/GitHub/dev/managed-service/cogni-service/scripts/mutation-check.sh" \
-#     --root . \
-#     --file cogni-workspace/scripts/brief-render-qa.py \
-#     --expr 's{text_missing = \[e for e in expected_text if e\["text"\] not in actual\["text"\]\]}{text_missing = []}' \
-#     --test 'bash cogni-workspace/tests/test-brief-render-qa.sh' \
-#     --case rq03-mutant-text-run-removed
+#   --expr 's{text_missing = \[e for e in expected_text if e\["text"\] not in actual\["text"\]\]}{text_missing = []}'
+#       --case rq03-mutant-text-run-removed
+#   --expr 's{if not model\["slides"\] or \(not expected_text and not expected_notes\):}{if False:}'
+#       --case rq08-mutant-empty-brief-not-refused
 #
-# Verdict at authoring: guard_verified — the search text occurs exactly once and
-# the mutant makes the QA script blind to dropped text, so rq03 goes red.
+# Verdict at authoring: guard_verified for both — each search text occurs exactly
+# once. The first makes the QA blind to dropped text, so rq03 goes red; the
+# second removes the empty-expectation refusal in one line (both arms sit on it
+# on purpose, so no second guard can keep the case green), and rq08, rq09 and
+# rq10 all go red.
 
 set -u
 export PYTHONDONTWRITEBYTECODE=1
@@ -280,6 +283,56 @@ if [ "$RC" -eq 2 ]; then
   pass "rq06-non-zip-exits-2"
 else
   fail "rq06-non-zip-exits-2 a non-zip file did not exit 2"
+fi
+
+# --- rq08: a brief that yields no slides is refused, not passed ----------------
+# A web brief handed in as --brief parses to zero slides without raising; the QA
+# must refuse to grade rather than compare an empty expectation and report clean.
+python3 "$QA" --brief "$ROOT/cogni-workspace/libraries/EXAMPLE_WEB_BRIEF.md" --pptx "$TMPROOT/clean.pptx" > "$TMPROOT/web.json" 2>/dev/null
+rc=$?
+if [ "$rc" -eq 2 ] && python3 -c "
+import json,sys; d=json.load(open('$TMPROOT/web.json')); sys.exit(0 if d['success'] is False and d['error'] else 1)"; then
+  pass "rq08-mutant-empty-brief-not-refused"
+else
+  fail "rq08-mutant-empty-brief-not-refused a web brief as --brief was graded instead of refused (rc=$rc)"
+fi
+
+# --- rq09: a presentation brief with its slide sections deleted is refused too --
+python3 - "$TMPROOT/brief.md" "$TMPROOT/no-slides.md" <<'PY'
+import sys
+text = open(sys.argv[1], encoding="utf-8").read()
+head = text.split("\n## Slide 1: ", 1)[0]
+assert "## Slide" not in head
+open(sys.argv[2], "w", encoding="utf-8").write(head + "\n")
+PY
+python3 "$QA" --brief "$TMPROOT/no-slides.md" --pptx "$TMPROOT/clean.pptx" > "$TMPROOT/noslides.json" 2>/dev/null
+rc=$?
+if [ "$rc" -eq 2 ] && python3 -c "
+import json,sys; d=json.load(open('$TMPROOT/noslides.json')); sys.exit(0 if d['success'] is False and d['error'] else 1)"; then
+  pass "rq09-slideless-brief-refused"
+else
+  fail "rq09-slideless-brief-refused a presentation brief with no slide sections was graded instead of refused (rc=$rc)"
+fi
+
+# --- rq10: slides present but nothing gradeable (all internal-prep, skipped) ---
+# Exercises the second arm of the refusal on its own: the brief parses to one
+# slide, but --skip-internal leaves no text and no notes to expect.
+python3 - "$TMPROOT/brief.md" "$TMPROOT/all-internal.md" <<'PY'
+import sys
+text = open(sys.argv[1], encoding="utf-8").read()
+head, rest = text.split("\n## Slide 1: ", 1)
+slide1 = "\n## Slide 1: " + rest.split("\n## Slide 2: ", 1)[0]
+slide1 = slide1.replace("Slide-Kind: content", "Slide-Kind: internal-prep", 1)
+assert "internal-prep" in slide1
+open(sys.argv[2], "w", encoding="utf-8").write(head + slide1)
+PY
+python3 "$QA" --brief "$TMPROOT/all-internal.md" --pptx "$TMPROOT/clean.pptx" --skip-internal > "$TMPROOT/allint.json" 2>/dev/null
+rc=$?
+if [ "$rc" -eq 2 ] && python3 -c "
+import json,sys; d=json.load(open('$TMPROOT/allint.json')); sys.exit(0 if d['success'] is False and 'no on-slide text' in d['error'] else 1)"; then
+  pass "rq10-nothing-gradeable-refused"
+else
+  fail "rq10-nothing-gradeable-refused a brief whose every slide was skipped was graded instead of refused (rc=$rc)"
 fi
 
 # --- rq07: stdlib only ---------------------------------------------------------

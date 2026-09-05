@@ -1,7 +1,7 @@
 ---
 name: copy-json
 description: Adapter skill that polishes text fields inside JSON files by extracting them, delegating to the copywriter skill for polishing, and writing the polished text back. Use when the user wants to polish, improve, or copywrite text inside a JSON file — plugin descriptions, IS/DOES/MEANS propositions, category names, claim statements, or any string fields in structured JSON data. Triggers include "polish JSON", "copywrite marketplace.json", "improve descriptions in plugin.json", "polish fields in JSON", or any /copywrite invocation targeting a .json file with --fields.
-allowed-tools: Read, Write, Edit, Bash, Skill
+allowed-tools: Read Write Edit Bash Skill
 ---
 
 # Copy-JSON Skill

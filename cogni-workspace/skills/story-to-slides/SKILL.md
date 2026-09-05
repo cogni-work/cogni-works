@@ -13,14 +13,14 @@ description: >
   render-html-slides. Important: this skill CREATES the brief from a narrative source —
   it does NOT render an existing brief (use PPTX skill for that), does NOT create a web page
   (use story-to-web), and does NOT enhance prose (use cogni-workspace:copywriter).
-allowed-tools: Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion, Agent, Skill
+allowed-tools: Read Write Edit Bash Grep Glob AskUserQuestion Agent Skill
 ---
 
 # Story-to-Slides Skill
 
 ## Purpose
 
-Read any narrative document with an existing story arc and produce an optimized presentation brief that a slide renderer turns into slides. You are a **presentation strategist**: analyze the narrative's argument structure, distill it into slide-level messages using pyramid communication, apply copywriting techniques, and select the right visual layout for each message.
+Read any narrative document with an existing story arc and produce an optimized presentation brief that a slide renderer turns into slides. Act as a **presentation strategist**: analyze the narrative's argument structure, distill it into slide-level messages using pyramid communication, apply copywriting techniques, and select the right visual layout for each message.
 
 A great presentation brief is not a transcript of the narrative. It is a re-architecture of the narrative's argument into a visual medium where every slide has ONE clear message, supported by evidence the audience can absorb in 3 seconds. Slides that try to convey multiple messages become walls of text that audiences tune out — the presenter loses control of the room.
 
@@ -391,76 +391,7 @@ Frontmatter — omit `arc_id` when unresolved, and `climax` when no slide carrie
 - If `output_path` explicit: `mkdir -p "$(dirname "${output_path}")"`
 - Otherwise: set `output_path = {source_dir}/cogni-visual/presentation-brief.md` and `mkdir -p "{source_dir}/cogni-visual"`
 
-The `FRONTMATTER:` block in the prompt below is a deliberate interpolation payload — it supplies values for the keys, not a second definition of the key set; `references/07-output-template.md` → Frontmatter remains the authority, so re-derive this payload from it whenever the Frontmatter key set or any of its value annotations change.
-
-**Launch the `slides-enrichment-artist` agent:**
-
-```
-Agent tool:
-  subagent_type: "cogni-workspace:slides-enrichment-artist"
-  prompt: |
-    OUTPUT_PATH: {resolved_output_path}
-    OUTPUT_TEMPLATE_PATH: $CLAUDE_PLUGIN_ROOT/skills/story-to-slides/references/07-output-template.md
-
-    FRONTMATTER:
-      type: presentation-brief
-      version: "4.1"
-      theme: {theme_id}
-      theme_path: "{theme_path}"
-      customer: "{customer_name}"
-      provider: "{provider_name}"
-      language: "{language}"
-      generated: "{date}"
-      arc_type: "{arc_type}"
-      arc_id: "{arc_id}"
-      governing_thought: "{governing_thought}"
-      confidence_score: {avg_confidence}
-      max_slides: {max_slides}
-      slides: {slides_total}
-      climax: {climax_slide}
-      design:
-        register: {register}
-        dark_slides: {dark_slides}
-        speaker_notes: {speaker_notes}
-        imagery: {imagery}
-        variations: {variations}
-      key_figures:
-        - "{hero number promoted out of prose, provenance marker kept if it carries one}"
-      transformation_notes: |
-        Story-to-slides transformation.
-        Theme: {theme_id}. Arc: {arc_type}.
-        {N} slides, {avg}% avg confidence.
-        {number_plays} number plays, {headlines_optimized} headlines optimized.
-
-    TITLE: {title}
-    SUBTITLE: {subtitle}
-
-    SLIDE_SPECS:
-    {all slide YAML from Steps 8 + 8.1}
-
-    AUDIENCE_MODEL:
-    {audience model from Step 3}
-
-    ARC_ANALYSIS:
-    {arc analysis from Step 4}
-
-    LANGUAGE: {language}
-    ARC_ID: {arc_id or "none"}
-    ARC_DEFINITION_PATH: {path or "none"}
-    BUYER_APPENDIX_PATH: {path or "none"}
-
-    CTA_SUMMARY:
-    {cta_summary from Step 6.1 or "none"}
-
-    GENERATION_METADATA_STATS:
-      number_plays: {count}
-      headlines_optimized: {count}
-      bullets_consolidated: {count}
-      source_links: {count}
-      layout_distribution: "{layout_type: count, ...}"
-      avg_confidence: {score}
-      manual_review: [{slide list or "none"}]
-```
+**Launch the `slides-enrichment-artist` agent** via the Agent tool with `subagent_type: "cogni-workspace:slides-enrichment-artist"`, interpolating the fields above into the prompt payload in `references/07-output-template.md` → § Step 8.2 Enrichment Prompt Payload (`OUTPUT_PATH`, `OUTPUT_TEMPLATE_PATH`, the `FRONTMATTER:` block, then `TITLE`, `SUBTITLE`, `SLIDE_SPECS`, `AUDIENCE_MODEL`, `ARC_ANALYSIS`, `LANGUAGE`, `ARC_ID`, `ARC_DEFINITION_PATH`, `BUYER_APPENDIX_PATH`, `CTA_SUMMARY`, `GENERATION_METADATA_STATS`).
 
 **On success** (`ok: true`): The agent wrote the complete brief to `output_path`. Read back the first 30 lines to confirm the file exists and has correct frontmatter. **Skip Step 10** — the brief is already written. Proceed directly to Step 9 (validation).
 
@@ -529,33 +460,7 @@ Run the validation checklist (reference `09-validation-checklist.md`) one final 
 
 > The presentation brief is ready. Now guide the user to the best rendering path — currently **claude.ai chat** with the Anthropic PPTX skill, which produces the highest quality output.
 
-After the brief is written and validated, tell the user:
-
-1. **Open a new chat on claude.ai** (not Claude Code — the PPTX skill works best in the claude.ai web interface)
-2. **Paste these two files** into the chat window as attachments:
-   - `presentation-brief.md` (the brief you just generated)
-   - `theme.md` (the theme file used in this workflow)
-3. **Use this prompt:**
-
-```
-Please create a PPTX presentation using the attached presentation-brief.md and theme.md
-```
-
-Print the absolute paths to both files so the user can locate them easily:
-
-```
-─── Files to attach in claude.ai ───
-
-Presentation brief: {absolute_path_to_presentation_brief}
-Theme:              {absolute_path_to_theme_md}
-
-Open claude.ai → new chat → attach both files → paste the prompt above.
-─────────────────────────────────────────────────
-```
-
-Replace `{absolute_path_to_presentation_brief}` with the resolved `output_path` and `{absolute_path_to_theme_md}` with the `theme_path` from Step 1. Both paths must be absolute — never use `~`, `$HOME`, `$CLAUDE_PLUGIN_ROOT`, or relative paths.
-
-**Why claude.ai?** The web interface handles file attachments natively, which is what makes the PPTX skill render best there. Claude Code can also render via the `document-skills:pptx` skill — a working fallback, not the recommended path.
+After the brief is written and validated, print the hand-off in `references/10-render-handoff.md`: the two files to attach (`presentation-brief.md` and `theme.md`) as absolute paths — never `~`, `$HOME`, `$CLAUDE_PLUGIN_ROOT` or relative paths — and the one-line claude.ai prompt. claude.ai is preferred because it handles attachments natively; `document-skills:pptx` inside Claude Code is a working fallback.
 
 ---
 
@@ -576,6 +481,7 @@ Replace `{absolute_path_to_presentation_brief}` with the resolved `output_path` 
 | **08c-presenter-prep.md** | 8.2 | Internal prep slides + per-slide speaker notes process (loaded by slides-enrichment-artist agent) |
 | **09-validation-checklist.md** | 9, 10 | Five-layer validation framework |
 | **2g-diagram-simplification.md** | 2.1 | Mermaid diagram detection and simplification |
+| **10-render-handoff.md** | 11 | claude.ai attachment box and prompt printed to the user after validation |
 
 ### Libraries (loaded as needed — progressive disclosure)
 
@@ -586,13 +492,3 @@ Replace `{absolute_path_to_presentation_brief}` with the resolved `output_path` 
 | **pptx-layouts.md** | 7 | Slide layout schemas and field definitions (deferred from Step 1) |
 | **EXAMPLE_BRIEF.md** | 8 | Output format reference (deferred from Step 1) |
 | **presentation-intent.md** | 8.2 | `design` / `climax` / `key_figures` vocabulary and the design defaults the `design` override falls back to |
-
-## Backward Compatibility
-
-- Schema 4.1 is additive over 4.0 — both versions stay valid and an unfenced 4.0 brief
-  stays readable. `references/07-output-template.md` is the authority on 4.1 frontmatter
-  requiredness; `references/09-validation-checklist.md` carries the 4.0 key set for the
-  checker.
-- `arc_type: why-change` activates Why Change file discovery
-- `project_path` parameter still accepted (mapped to `source_path`)
-- Power Position extraction still supported

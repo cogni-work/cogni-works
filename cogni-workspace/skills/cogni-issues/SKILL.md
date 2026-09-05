@@ -11,7 +11,7 @@ description: |
   "das Plugin funktioniert nicht", "Fehler in {plugin}", "ich kann kein Issue
   erstellen", or any complaint about a specific plugin — even without the word
   "issue".
-allowed-tools: Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion
+allowed-tools: Read Write Edit Glob Grep Bash AskUserQuestion
 ---
 
 # Cogni Issues
@@ -58,10 +58,6 @@ cannot be found, report the missing path to the user — never guess paths.
 
 All GitHub operations route through `scripts/gh-issues-helper.sh`. JSON on stdout,
 errors on stderr.
-
-> **Canonical command list.** This table and the `usage()` function in
-> `scripts/gh-issues-helper.sh` describe the same surface. Update both together
-> when adding or renaming a subcommand.
 
 | Operation | Command |
 |-----------|---------|

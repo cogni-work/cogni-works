@@ -14,7 +14,7 @@ description: >
   It does NOT render an existing brief (use /render-infographic), create slides
   (story-to-slides), a scrollable web page or printed-poster
   storyboard (story-to-web), or enrich a report with inline visuals (enrich-report).
-allowed-tools: Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion, Agent, Skill
+allowed-tools: Read Write Edit Bash Grep Glob AskUserQuestion Agent Skill
 ---
 
 # Story-to-Infographic Skill
@@ -22,7 +22,7 @@ allowed-tools: Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion, Agent, Skil
 ## Purpose
 
 Read any narrative document with an existing story arc and produce an optimized infographic
-brief that one of the two render agents can turn into a single-page visual summary. You are a
+brief that one of the two render agents can turn into a single-page visual summary. Act as a
 **visual distillation architect**: extract the 3-5 most impactful data points, select the right
 layout type, compose content blocks with strict word limits, and generate icon prompts — all
 driven by the principle that less is categorically better.
@@ -233,38 +233,7 @@ sequence → timeline-flow, before/after comparison → comparison.
 
 **Style preset selection — two-step disclosure** (if `style_preset` is `auto`):
 
-People think about infographic style in two steps, not six. The first cognitive split is
-**hand-drawn feel vs editorial feel** — that single choice determines the rendering family
-and eliminates four of the six presets. The second step narrows to a preset inside the
-chosen family. Presenting all six at once asks the user to hold too much in their head.
-
-**Step 4a — Family choice.** Infer the likely family from source cues (workshop recap or
-learning content → hand-drawn; trend report, investor brief, or board deck → editorial)
-and present via AskUserQuestion:
-
-- **Hand-drawn (sketchnote / whiteboard)** — Mike Rohde sketchnote and RSA Animate
-  whiteboard traditions. Warm, human, feels like a facilitator drew it at a conference.
-  Best for workshops, team alignment, learning material, internal brainstorms.
-- **Editorial (economist / editorial / data-viz / corporate)** — The Economist data page
-  and data journalism tradition. Dense, disciplined, data-ink honest. Best for trend
-  reports, investor briefs, board decks, flagship insights.
-
-On empty response, auto-select the inferred family.
-
-**Step 4b — Preset narrowing inside the chosen family.** Only present the 2–3 presets that
-belong to the chosen family, with recommendations grounded in source cues:
-
-- **Hand-drawn family** → pick between `sketchnote` (warm, organic, dashed borders, accent
-  color on several marks) and `whiteboard` (disciplined minimalism, solid borders, accent
-  color only on hero numbers and CTA).
-- **Editorial family** → pick among `economist` (flagship, magazine-dense), `editorial`
-  (HBR/McKinsey, generous whitespace), `data-viz` (Bloomberg Terminal dashboard feel,
-  monospace numbers), `corporate` (annual report / governance, structured grid,
-  serif-friendly). Each preset's density budget is in the Content Density table of
-  `03-style-presets.md`, loaded at this step.
-
-Present via AskUserQuestion with 2–3 options. On empty response, auto-select top
-recommendation.
+Present the choice in two steps rather than six presets at once — **Step 4a** picks the family (hand-drawn: `sketchnote` / `whiteboard`; editorial: `economist` / `editorial` / `data-viz` / `corporate`), **Step 4b** narrows to a preset inside it. Infer the likely family from source cues (workshop recap or learning content → hand-drawn; trend report, investor brief or board deck → editorial), present each step via AskUserQuestion with 2–3 options, and auto-select the top recommendation on an empty response. The family descriptions, per-preset characters and the option wording are in `references/03-style-presets.md` § Two-Step Disclosure; each preset's density budget is that file's Content Density table.
 
 **Output:** Selected layout_type + style_preset.
 
@@ -439,21 +408,7 @@ The `/render-infographic` command handles everything from here: brief discovery 
 because we pass the path), style_preset routing, agent dispatch, and the post-render
 interactive edit checkpoint. Do not duplicate any of that logic here.
 
-**Capture the artifact path.** The render command forwards the rendering agent's single-line
-JSON back verbatim. Read the artifact path from whichever key that JSON carries — `pen_path`
-for the editorial family (Pencil backend), `excalidraw_path` for the hand-drawn family — and
-report that absolute path as `out` in the response contract. Check for both keys rather than
-assuming one; the two families genuinely differ. This reads an already-forwarded result; it
-re-implements no routing and no rendering.
-
-If the forwarded JSON reports `ok` false, or carries neither `pen_path` nor `excalidraw_path`,
-do not invent or derive a path: return the `render` error code the response contract already
-defines for a requested render that failed.
-
-That response contract — the `brief` and `out` paths, and the `param` / `skill` / `files` /
-`validation` / `render` error codes — lives in `${CLAUDE_PLUGIN_ROOT}/agents/story-to-infographic.md`
-under `## RESPONSE FORMAT`. Consult it there when this skill runs outside that agent, so the
-shape stays defined in exactly one place.
+**Capture the artifact path.** The render command forwards the rendering agent's single-line JSON verbatim; read the artifact path from `pen_path` (editorial family) or `excalidraw_path` (hand-drawn family) — check both keys — and report it as `out`. If the JSON reports `ok` false or carries neither key, return the `render` error code rather than deriving a path. The response contract (`brief`, `out`, and the `param` / `skill` / `files` / `validation` / `render` error codes) lives in `${CLAUDE_PLUGIN_ROOT}/agents/story-to-infographic.md` under `## RESPONSE FORMAT`, so the shape stays defined in one place.
 
 **When `render` parameter is `false`:**
 
@@ -466,15 +421,6 @@ Tell the user the brief is ready and how to render it manually:
 
 Report `out` as `null` on this path — no artifact was produced. A `null` marks "render never
 requested", which is why a failed render returns the `render` error code instead.
-
-**Post-render edit checkpoint** (informational note for maintainers): the render commands
-(`/render-infographic`, `/render-infographic-handdrawn`, `/render-infographic-editorial`)
-all include an interactive edit checkpoint as their final step. After the agent finishes
-drawing, the command prints a prompt telling the user they can edit the live canvas in
-the browser and say `save` to re-export the final state. This checkpoint is load-bearing
-— without it, manual edits in the browser would be silently lost. Do not remove it from
-the render commands when editing them in the future; if you restructure the commands,
-preserve the post-render `save` affordance.
 
 #### Step 10c: Copy deliverable to output/ (after render completes)
 

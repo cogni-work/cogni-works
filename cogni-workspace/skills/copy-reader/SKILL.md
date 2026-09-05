@@ -1,7 +1,7 @@
 ---
 name: copy-reader
 description: This skill should be used when the user wants to review a document from different stakeholder perspectives, simulate how different audiences would read a document, or get multi-perspective feedback before distribution. Common triggers include "review document as stakeholder", "stakeholder review", "reader review", "read as executive", "review from technical perspective", "does this document work for [audience]", "get feedback on this document", "what would [role] think of this", "check if this is ready for stakeholders", or "simulate different readers".
-allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite
+allowed-tools: Read Write Edit Bash Agent TodoWrite
 ---
 
 # Reader Skill
@@ -10,15 +10,15 @@ allowed-tools: Read, Write, Edit, Bash, Task, TodoWrite
 
 ### German Character Preservation
 
-**MANDATORY:** ALL German-specific characters MUST be preserved exactly as written. NEVER convert to ASCII equivalents (ae, oe, ue, ss). This applies to ALL text: body, headers, citations, technical terms.
+German characters (ä, ö, ü, ß and their uppercase forms) stay exactly as written in every part of the text — body, headers, citations, technical terms. Converting them to ASCII equivalents (ae, oe, ue, ss) changes meaning — "Masse" (mass) vs "Maße" (measurements) — and signals to German readers that the text was processed carelessly.
 
 ### Citation Preservation
 
-**MANDATORY:** ALL citation markers and their URLs MUST be preserved exactly as written. Removing or omitting citations is a CRITICAL FAILURE. Citations are evidence markers for audit trail integrity.
+Citation markers and their URLs stay exactly as written. They are the evidence trail a reviewer audits the document against, so a persona summary that drops or rewrites one has destroyed the thing it was asked to evaluate.
 
 ### Protected Content
 
-DO NOT modify diagram placeholders, figure references, figure captions, Obsidian embeds, or kanban tables. Preserve exactly as-is.
+Leave diagram placeholders, figure references, figure captions, Obsidian embeds and kanban tables untouched — they are rendered by other tooling, and a persona reading them as prose produces feedback about scaffolding rather than content.
 
 ## When to Use
 
@@ -77,9 +77,9 @@ Report: `Backup created: {backup_path}`
 
 ### Step 3: Run Parallel Persona Analysis
 
-Launch one Task agent per persona to analyze the document in parallel. Each persona agent reads the document and produces structured feedback from their perspective.
+Launch one subagent per persona via the Agent tool to analyze the document in parallel. Each persona agent reads the document and produces structured feedback from their perspective.
 
-**For each persona, launch a Task agent with this prompt:**
+**For each persona, launch an Agent with this prompt:**
 
 ```
 You are a {PERSONA_NAME} stakeholder reading a document. Your job is to evaluate it from your specific perspective and produce structured feedback.

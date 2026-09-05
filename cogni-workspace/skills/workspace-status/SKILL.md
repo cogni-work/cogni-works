@@ -13,7 +13,7 @@ description: >-
   workspace", "where was I in the workspace". Trigger it even without an explicit request when
   the user describes symptoms of a misconfigured workspace or hits an unclear error during
   plugin use.
-allowed-tools: Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion, Skill, ToolSearch
+allowed-tools: Read Write Edit Glob Grep Bash AskUserQuestion Skill ToolSearch
 ---
 
 # Workspace Status

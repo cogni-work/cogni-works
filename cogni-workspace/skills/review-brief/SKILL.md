@@ -11,7 +11,7 @@ description: >
   or wants quality assurance on a visual brief before rendering. Also trigger when the user
   asks to review an existing brief after manual edits, or wants to evaluate whether a brief
   is ready for the PPTX, Excalidraw, or Pencil rendering pipeline.
-allowed-tools: Read, Glob, AskUserQuestion, Agent
+allowed-tools: Read Glob AskUserQuestion Agent
 ---
 
 # Review Brief Skill

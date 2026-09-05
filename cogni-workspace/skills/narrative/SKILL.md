@@ -1,7 +1,7 @@
 ---
 name: narrative
 description: "Transform structured content into compelling executive narratives using story arc frameworks. Use this skill whenever the user asks to \"create a narrative\", \"write a narrative\", \"transform content into a story arc\", apply a specific arc framework (corporate visions, technology futures, competitive intelligence, strategic foresight, industry transformation, trend panorama), \"generate an insight summary\", or \"summarize research findings as a narrative\". Also trigger when other plugins need arc-driven narrative generation, when the user mentions \"TIPS trend narratives\", or when they have research output they want turned into an executive-readable story. Even if the user just says \"make this readable for executives\" or \"turn these findings into something presentable\", this skill is the right choice. Also handles derivative formats via --format: \"condense narrative\", \"create executive brief\", \"generate talking points\", \"make a one-pager\"."
-allowed-tools: Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion
+allowed-tools: Read Write Edit Glob Grep Bash AskUserQuestion
 ---
 
 # Narrative Transformation
@@ -169,7 +169,7 @@ After running the bridge, redirect `--source-path` to the `narrative-input/` dir
 
    If `INHERITED_ARC` is set AND not `standard-research`, store as `inherited_arc_id` for Phase 2 and log: `Inheriting story_arc_id="<INHERITED_ARC>" from <PROJECT_ROOT>`. Otherwise skip silently. The probe is layout-agnostic — it reads whichever `.metadata/` project-metadata file is present, so it works against a cogni-knowledge project, an older `project-config.json` project layout, or a bare source path with no project root. Mirrors `cogni-workspace:enrich-report` Phase 0's parent-of-source-path detection with a narrower scope (only the `.metadata/` project-metadata files are checked).
 
-**Before moving on,** make sure you can answer: How many files loaded? What are the 2-3 dominant themes? What is the approximate total word count? If you can't answer these, you haven't internalized the source material yet.
+**Before moving on,** answer three questions: How many files loaded? What are the 2-3 dominant themes? What is the approximate total word count? An unanswerable question means the source material is not yet internalized.
 
 ---
 
@@ -205,7 +205,7 @@ This phase is about loading the rhetorical framework into context. The narrative
 
 The 4 individual element pattern files (`{element}-patterns.md`) are NOT loaded here. Their guidance is already embedded in the arc-specific Phase 4b workflow file. Loading both would create ~1,500 lines of overlapping material that dilutes rather than reinforces.
 
-**After reading,** you should be able to name all 4 arc elements in order with their word targets, and know which narrative techniques apply to which elements from the technique-arc matrix. If you can't, re-read.
+**After reading,** name all 4 arc elements in order with their word targets, and state which narrative techniques apply to which elements from the technique-arc matrix. Re-read until both come without looking.
 
 ---
 

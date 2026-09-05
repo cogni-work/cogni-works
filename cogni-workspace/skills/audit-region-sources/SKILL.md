@@ -11,7 +11,7 @@ description: |
   any read-only question about market/region taxonomy. The read-write
   sibling is `manage-markets` — use it for adding markets or updating
   overlay metadata.
-allowed-tools: Read, Glob, Grep, Bash
+allowed-tools: Read Glob Grep Bash
 ---
 
 # Region Catalog Audit (Read-Only)
@@ -95,4 +95,4 @@ domains the canonical registry doesn't carry. Run `/cogni-workspace:manage-marke
 
 ## Output
 
-Render the report to stdout. Do not write files. The skill is read-only.
+Render the report to stdout. Apart from the `/tmp/audit-*.json` scratch files Step 1 captures, write nothing — the skill never touches the registry or an overlay; changes go through `manage-markets`.

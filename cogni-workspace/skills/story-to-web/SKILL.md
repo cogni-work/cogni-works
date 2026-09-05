@@ -15,14 +15,14 @@ description: >
   Produces a web-brief.md, or a storyboard-brief.md in storyboard mode. Important: this skill
   CREATES briefs from a narrative source — not rendering (use the web or storyboard
   agent), not slides (story-to-slides), not prose polish (copywriter).
-allowed-tools: Read, Write, Edit, Bash, Grep, Glob, TodoWrite, AskUserQuestion, Agent, Skill
+allowed-tools: Read Write Edit Bash Grep Glob TodoWrite AskUserQuestion Agent Skill
 ---
 
 # Story-to-Web Skill
 
 ## Purpose
 
-Read any narrative document with an existing story arc and produce an optimized web-brief that the Pencil MCP renderer can turn into a scrollable landing-page-style .pen file — or, when `mode=storyboard`, a storyboard-brief that paginates those same sections into 3-5 printed DIN A posters. You are a **web and print storytelling architect**: analyze the narrative's argument structure, resolve the visual style from the selected theme, decompose the story into web sections, and generate copy and image prompts for each section.
+Read any narrative document with an existing story arc and produce an optimized web-brief that the Pencil MCP renderer can turn into a scrollable landing-page-style .pen file — or, when `mode=storyboard`, a storyboard-brief that paginates those same sections into 3-5 printed DIN A posters. Act as a **web and print storytelling architect**: analyze the narrative's argument structure, resolve the visual style from the selected theme, decompose the story into web sections, and generate copy and image prompts for each section.
 
 A web narrative is not a slide deck pasted into a tall page. It is a scroll-driven reading experience where each section has ONE clear message, supported by visual hierarchy that guides the reader toward a conversion action. Sections alternate between light and dark to create visual rhythm — in `mode=storyboard` the same rhythm runs down each poster and across the poster sequence. This matters because walls of undifferentiated text lose readers within seconds — alternating visual weight creates natural pause points that let each message land before the next begins.
 
@@ -129,7 +129,7 @@ When invoked without explicit parameters, search the filesystem first (Step 0) r
 
 ### Execution protocol
 
-Each step: verify the previous step's output is available (entry gate), read the reference file for that step, execute, then state your output summary before moving on. Reference files contain step-specific rules that prevent downstream rework — read them at the start of each step.
+Each step: verify the previous step's output is available (entry gate), read the reference file for that step, execute, then state the output summary before moving on. Reference files contain step-specific rules that prevent downstream rework — read them at the start of each step.
 
 ---
 
@@ -281,18 +281,14 @@ For each section:
 
 ### Step 5b: Paginate Sections into Posters (`mode=storyboard` only)
 
-> A poster is one arc station holding 1-3 stacked sections. Skip this step entirely when `mode=web`.
-
-**Read reference:** `references/print/01-poster-architecture.md`
+> A poster is one arc station holding 1-3 stacked sections. Skip this step entirely when `mode=web`. **Read reference:** `references/print/01-poster-architecture.md`
 
 1. **Poster count from narrative length**, then cap at `max_posters` — take the word-count thresholds and the 3-5 bound from the reference's poster-count decision tree. Then resolve section capacity (`poster_count` x 3) per the capacity note below before mapping stations in item 2.
 2. **Map arc stations to posters** using the poster templates in the reference.
 3. **Stack 1-3 sections per poster**, taking the height splits, the split-ratio selection rules and the portrait adaptations from `$CLAUDE_PLUGIN_ROOT/libraries/storyboard-layouts.md` — the same library item 4 reads for geometry, and the authoritative home for all three. `references/print/01-poster-architecture.md` restates them for readers arriving from the poster templates.
 4. **Resolve poster geometry from `poster_size`.** Read the scale-factor table in `$CLAUDE_PLUGIN_ROOT/libraries/storyboard-layouts.md` (A0-A3, portrait only): that row gives `print_width`, `print_height` and `scale_factor`. `base_width` / `base_height` are the fixed design resolution 1440 x 2036, and `poster_gap` defaults to that library's base gap of 200px. With `poster_size` and the `poster_count` from item 1, these are exactly the eight frontmatter fields Step 10 writes.
 
-**Section capacity — `poster_count` x 3 — is the binding cap here, not `max_sections`.** Resolve it before item 2's station mapping: Step 5 caps the raw section count at `max_sections`, which can exceed capacity whenever the resolved poster count sits at the low end of the 3-5 bound. When `section_count` exceeds `poster_count` x 3, re-run the too-many-sections reduction in `references/02-section-architecture.md` (§ Step 4: Enforce Section Count -> Too Many Sections (> 10)) with `poster_count` x 3 as the target in place of `max_sections`, including in that block's own validation checkpoint. Adding posters is not an alternative — item 1's count is final.
-
-The reference's poster-count constraints and prohibited patterns bind here rather than advise: a title-only or summary-only poster spends a whole station on nothing the reader can act on, so the first poster opens on `hero`, the last closes on `cta`, and related stations merge instead of the count ever exceeding 5.
+**Section capacity (`poster_count` x 3) is the binding cap, not `max_sections`** — resolve it before item 2, and when `section_count` exceeds it re-run the too-many-sections reduction in `references/02-section-architecture.md` with `poster_count` x 3 as the target; adding posters is not an alternative. The reference's poster-count constraints and prohibited patterns bind rather than advise (first poster opens on `hero`, last closes on `cta`, related stations merge instead of exceeding 5) — see `references/print/01-poster-architecture.md` § Section Capacity Is the Binding Cap.
 
 **Content checkpoint:** State poster count, the station-to-poster mapping, the height split per poster, and the resolved poster geometry, and confirm `section_count` is at most `poster_count` x 3.
 
@@ -406,7 +402,7 @@ Four layers — stop on first failure, fix, re-check:
 3. **Visual coherence** — section theme alternation, feature position alternation, image consistency
 4. **Content integrity** — all narrative sections represented, language consistency
 
-**`mode=storyboard` only:** read `references/print/04-validation.md` **instead of** `05-validation.md`, not in addition to it. It restates all four layers against the storyboard-brief schema and then adds a fifth print group — poster count within 3-5, per-section minimum heights, poster font-size minimums, safe-area margins, and contiguous poster sequence numbering. The substitution is load-bearing, not tidiness: `05-validation.md` asserts at CRITICAL that `type` is `web-brief`, that `version` is `1.1`, and that header and footer blocks are present. A correct storyboard brief is `type: storyboard-brief`, `version: "2.1"`, and — per Step 8 — has no header or footer at all, so running the web layers over it fails four CRITICAL checks on a sound artifact, and that framework's repair phase would "fix" them by rewriting the brief into web shape, destroying the very contract Step 10 calls authoritative.
+**`mode=storyboard` only:** read `references/print/04-validation.md` **instead of** `05-validation.md`, not in addition to it. It restates all four layers against the storyboard-brief schema and then adds a fifth print group — poster count within 3-5, per-section minimum heights, poster font-size minimums, safe-area margins, and contiguous poster sequence numbering. The substitution is load-bearing — the web layers fail four CRITICAL checks on a sound storyboard brief and would rewrite it into web shape; `print/04-validation.md` opens with the full rationale.
 
 ---
 
@@ -470,43 +466,7 @@ Generate the final brief with YAML frontmatter and section specifications follow
 
 > The user needs a ready-to-use prompt for a fresh Claude chat with the renderer agent — the web agent, or the storyboard agent in print mode. Absolute paths make it self-contained.
 
-After the brief is written and validated, **append** a rendering prompt section to the end of web-brief.md (after Generation Metadata), then also print it to the conversation so the user can copy it directly.
-
-Use the absolute paths resolved during the workflow:
-
-```markdown
----
-
-## Rendering Prompt
-
-Copy this prompt into a new Claude chat to render the web narrative:
-
-> Please render a web narrative using:
-> - Web brief: {absolute_path_to_web_brief}
-> - Theme: {absolute_path_to_theme_md}
-```
-
-Replace `{absolute_path_to_web_brief}` with the resolved `output_path` and `{absolute_path_to_theme_md}` with the `theme_path` from Step 1.
-
-Both paths must be absolute — never use `~`, `$HOME`, `$CLAUDE_PLUGIN_ROOT`, or relative paths, because the receiving Claude session has no access to variables from this session.
-
-**`mode=storyboard` only:** append the prompt to the end of `storyboard-brief.md` instead, and name the print renderer:
-
-```markdown
----
-
-## Rendering Prompt
-
-Copy this prompt into a new Claude chat to render the posters:
-
-> Please render a print storyboard using:
-> - Storyboard brief: {absolute_path_to_storyboard_brief}
-> - Theme: {absolute_path_to_theme_md}
->
-> Use the `storyboard` agent; it writes a multi-poster .pen file next to the brief.
-```
-
-Replace `{absolute_path_to_storyboard_brief}` with the `output_path` resolved in Step 10. The same absolute-path rule applies.
+After the brief is written and validated, **append** the rendering prompt from `references/06-rendering-prompt.md` to the end of the brief (after Generation Metadata) and print it to the conversation — the `mode=web` template names the `web` agent and goes into `web-brief.md`; the `mode=storyboard` template names the `storyboard` agent and goes into `storyboard-brief.md`. Interpolate the `output_path` resolved in Step 10 and the `theme_path` from Step 1 as absolute paths — never `~`, `$HOME`, `$CLAUDE_PLUGIN_ROOT` or relative paths, because the receiving Claude session has no access to variables from this session.
 
 ---
 
@@ -522,6 +482,7 @@ Replace `{absolute_path_to_storyboard_brief}` with the `output_path` resolved in
 | **03-section-copywriting.md** | 6 | Web headline hierarchy, CTA copy patterns, number plays |
 | **04-image-prompts.md** | 6 | Web image formats, hero bg+overlay pattern, stock vs AI guidance |
 | **05-validation.md** | 9 | *(`mode=web`)* Four-layer validation framework |
+| **06-rendering-prompt.md** | 11 | Rendering-prompt templates for the `web` and `storyboard` agents |
 | **print/01-poster-architecture.md** | 5b | *(`mode=storyboard`)* Arc-station-to-poster mapping, poster templates, poster-count decision tree |
 | **print/02-poster-copywriting.md** | 6, 8 | *(`mode=storyboard`)* Print-vs-web copy overrides, poster governing-headline rules |
 | **print/03-image-prompts.md** | 6 | *(`mode=storyboard`)* Print-resolution prompt suffix, max-2-images rule, poster image sizing |

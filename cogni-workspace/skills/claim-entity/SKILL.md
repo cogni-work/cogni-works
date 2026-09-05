@@ -3,11 +3,11 @@ name: claim-entity
 description: |
   Cross-plugin data model for claim verification — defines ClaimRecord, DeviationRecord,
   and ResolutionRecord schemas, status transitions, deviation types, severity levels, and
-  claim-store layout. Use this skill whenever you need to "understand claim data structures",
+  claim-store layout. Use this skill whenever a plugin or user needs to "understand claim data structures",
   "create or validate claim records", "check what fields a ClaimRecord has", "understand deviation
   types or severity levels", or work with the on-disk `cogni-claims/` claim-store layout. Any plugin that submits
   or consumes claims should consult this skill for the contract, then submit via cogni-workspace:claims.
-allowed-tools: Read, Write, Edit, Glob, Grep
+allowed-tools: Read Write Edit Glob Grep
 ---
 
 # ClaimEntity Contract

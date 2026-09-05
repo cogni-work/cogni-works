@@ -211,3 +211,38 @@ When presenting style options to the user, lead with the context match:
 
 The user's context awareness (who will see this, where, for what purpose) always overrides
 the algorithmic recommendation.
+
+## Two-Step Disclosure (story-to-infographic Step 4a/4b)
+
+People think about infographic style in two steps, not six. The first cognitive split is
+**hand-drawn feel vs editorial feel** — that single choice determines the rendering family
+and eliminates four of the six presets. The second step narrows to a preset inside the
+chosen family. Presenting all six at once asks the user to hold too much in their head.
+
+**Step 4a — Family choice.** Infer the likely family from source cues (workshop recap or
+learning content → hand-drawn; trend report, investor brief, or board deck → editorial)
+and present via AskUserQuestion:
+
+- **Hand-drawn (sketchnote / whiteboard)** — Mike Rohde sketchnote and RSA Animate
+  whiteboard traditions. Warm, human, feels like a facilitator drew it at a conference.
+  Best for workshops, team alignment, learning material, internal brainstorms.
+- **Editorial (economist / editorial / data-viz / corporate)** — The Economist data page
+  and data journalism tradition. Dense, disciplined, data-ink honest. Best for trend
+  reports, investor briefs, board decks, flagship insights.
+
+On empty response, auto-select the inferred family.
+
+**Step 4b — Preset narrowing inside the chosen family.** Only present the 2–3 presets that
+belong to the chosen family, with recommendations grounded in source cues:
+
+- **Hand-drawn family** → pick between `sketchnote` (warm, organic, dashed borders, accent
+  color on several marks) and `whiteboard` (disciplined minimalism, solid borders, accent
+  color only on hero numbers and CTA).
+- **Editorial family** → pick among `economist` (flagship, magazine-dense), `editorial`
+  (HBR/McKinsey, generous whitespace), `data-viz` (Bloomberg Terminal dashboard feel,
+  monospace numbers), `corporate` (annual report / governance, structured grid,
+  serif-friendly). Each preset's density budget is in the Content Density table of
+  `03-style-presets.md`, loaded at this step.
+
+Present via AskUserQuestion with 2–3 options. On empty response, auto-select top
+recommendation.

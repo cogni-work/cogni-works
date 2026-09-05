@@ -14,7 +14,7 @@ description: >-
   workspace-status reports MCP servers as not loaded and the user wants to fix it, or
   when a rendering skill (story-to-infographic, story-to-web) fails because its MCP
   dependency is missing.
-allowed-tools: Read, Write, Edit, Bash, Glob, Grep, AskUserQuestion, ToolSearch
+allowed-tools: Read Write Edit Bash Glob Grep AskUserQuestion ToolSearch
 ---
 
 # Install MCP

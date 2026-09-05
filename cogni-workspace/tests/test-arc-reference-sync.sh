@@ -5,7 +5,7 @@
 # WHAT THIS REPLACED
 #   An earlier version of this suite kept a copywriter-side MIRROR of the narrative skill's
 #   arc headings and technique rules in sync with the upstream definitions (cases A1-A5, with
-#   a shrink-only KNOWN_UNMIRRORED ratchet for five arcs the mirror never carried). The mirror
+#   a shrink-only ratchet naming five arcs the mirror never carried). The mirror
 #   is gone: copywriter arc mode now reads each arc's contract
 #   (skills/narrative/references/story-arc/{arc}/arc-definition.md), the arc registry and
 #   the narrative techniques overview directly, so there is nothing to keep in sync and the

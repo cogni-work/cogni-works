@@ -27,8 +27,9 @@ If S1 or S2 fails, rewrite against the arc's `## Composition` rather than renami
 
 **Evidence:**
 
-- E1 — 15-25 citations at the default length, in the form `Claim text<sup>[N](source-file.md)</sup>`. The floor of 15 holds at every length; a longer narrative may carry more than 25.
-- E2 — citation numbers run sequentially from 1 in order of first appearance; a reused source reuses its number.
+- E1 — 15-25 citations at the default length, in the form `Claim text<sup>[N](source-file.md)</sup>`, counted as markers in the text. The floor of 15 holds at every length; a longer narrative may carry more than 25.
+- E2 — citation numbers run sequentially from 1 in order of first appearance; a reused source reuses its number, so a narrative built on five sources carries five numbers and many markers.
+- E3 — one number per source file and one source file per number: the same source never carries two numbers, and a number never points at two files.
 - X1 — the `**Sources**` block is mutually complete with the body: every `[N]` in the body has exactly one entry, every entry is cited at least once, and no number appears twice.
 
 **Language (when `language: de`):**

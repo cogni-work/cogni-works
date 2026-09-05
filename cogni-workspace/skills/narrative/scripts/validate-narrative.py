@@ -12,8 +12,10 @@ Gates:
   C1  body word count within [target*0.85, target*1.15]
   C2  each segment within [proportion*lower, proportion*upper]
   C3  required frontmatter fields present; arc_id matches the contract
-  E1  citation count >= 15 (<= 25 at the default length)
+  E1  citation markers >= 15 (<= 25 at the default length); a reused source
+      reuses its number, so markers are counted, not distinct numbers
   E2  citation numbers sequential from 1 by first appearance
+  E3  one number per source file and one file per number (dedup by identity)
   L1  (de only) no ASCII umlaut fallbacks in body text
   T1  (contracts without a Hook segment) opening TL;DR is 2-4 sentences and
       60-100 words
@@ -272,11 +274,20 @@ def main(argv):
     for n in numbers:
         if n not in distinct:
             distinct.append(n)
-    ceiling_ok = True if target != DEFAULT_TARGET else len(distinct) <= CITATION_CEILING_AT_DEFAULT
-    gate("E1", len(distinct) >= CITATION_FLOOR and ceiling_ok,
-         "%d distinct citations (floor %d)" % (len(distinct), CITATION_FLOOR))
+    marker_count = len(numbers)
+    ceiling_ok = True if target != DEFAULT_TARGET else marker_count <= CITATION_CEILING_AT_DEFAULT
+    gate("E1", marker_count >= CITATION_FLOOR and ceiling_ok,
+         "%d citation markers over %d source(s) (floor %d)" % (marker_count, len(distinct), CITATION_FLOOR))
     gate("E2", distinct == list(range(1, len(distinct) + 1)),
          "first-appearance order %s" % distinct[:30])
+    num_to_files, file_to_nums = {}, {}
+    for n, f in cites:
+        num_to_files.setdefault(int(n), set()).add(f)
+        file_to_nums.setdefault(f, set()).add(int(n))
+    multi_file = sorted(n for n, fs in num_to_files.items() if len(fs) > 1)
+    multi_num = sorted(f for f, ns in file_to_nums.items() if len(ns) > 1)
+    gate("E3", not multi_file and not multi_num,
+         "numbers pointing at several files %s; files carrying several numbers %s" % (multi_file, multi_num))
 
     # L1
     if language == "de":
@@ -308,7 +319,8 @@ def main(argv):
     data = {
         "gates": gates,
         "word_count": band_total,
-        "citation_count": len(distinct),
+        "citation_count": marker_count,
+        "source_count": len(distinct),
         "language": language,
         "target_length": target,
         "sources_block": sources_block is not None,

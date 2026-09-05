@@ -129,7 +129,7 @@ sed -E 's#<sup>\[[0-9]+\]\([^)]*\)</sup>##g' "$FIXTURE" > "$TMPROOT/nocites.md"
 expect_red NV6 E1 "$TMPROOT/nocites.md"
 
 # ---------------------------------------------------------------- NV7 numbering gap -> E2
-sed 's#<sup>\[3\](source-02-vdma.md)</sup>#<sup>[30](source-02-vdma.md)</sup>#' "$FIXTURE" > "$TMPROOT/gap.md"
+sed 's#<sup>\[2\](source-02-vdma.md)</sup>#<sup>[30](source-02-vdma.md)</sup>#g' "$FIXTURE" > "$TMPROOT/gap.md"
 expect_red NV7 E2 "$TMPROOT/gap.md"
 
 # ---------------------------------------------------------------- NV8 DE ASCII fallback -> L1
@@ -161,7 +161,7 @@ python3 - "$FIXTURE" "$TMPROOT/orphan.md" <<'PY'
 import sys
 src, dst = sys.argv[1], sys.argv[2]
 t = open(src, encoding="utf-8").read()
-needle = "<sup>[2](source-01-fraunhofer.md)</sup>, so the constraint"
+needle = "<sup>[1](source-01-fraunhofer.md)</sup>, so the constraint"
 if needle not in t:
     sys.exit(1)
 t = t.replace(needle, "<sup>[99](source-09-nowhere.md)</sup>, so the constraint", 1)
@@ -172,12 +172,41 @@ expect_red NV10 T2 "$TMPROOT/orphan.md"
 # ---------------------------------------------------------------- NV11 cited entry dropped from Sources -> X1
 # The replayable form of the Sources-block mutation recipe: drop one entry that the body
 # still cites, re-run the deterministic gates, expect X1 red.
-grep -v '^\[7\] ' "$FIXTURE" > "$TMPROOT/dropped.md"
+grep -v '^\[2\] ' "$FIXTURE" > "$TMPROOT/dropped.md"
 expect_red NV11 X1 "$TMPROOT/dropped.md"
 
 # ---------------------------------------------------------------- NV12 uncited entry added to Sources -> X1
-{ cat "$FIXTURE"; echo '[20] source-09-nowhere.md — Nobody, "Uncited", 2026, https://example.org/uncited'; } > "$TMPROOT/uncited.md"
+{ cat "$FIXTURE"; echo '[9] source-09-nowhere.md — Nobody, "Uncited", 2026, https://example.org/uncited'; } > "$TMPROOT/uncited.md"
 expect_red NV12 X1 "$TMPROOT/uncited.md"
+
+# ---------------------------------------------------------------- NV13 a source carrying two numbers -> E3
+# The last marker of source-02 is renumbered to a fresh 5, which keeps first-appearance order
+# intact (1,2,3,4,5) so E2 stays green and E3 alone carries the finding.
+python3 - "$FIXTURE" "$TMPROOT/twonums.md" <<'PY2'
+import sys, re
+src, dst = sys.argv[1], sys.argv[2]
+t = open(src, encoding="utf-8").read()
+body, sep, rest = t.partition("\n**Sources**")
+idx = body.rfind("<sup>[2](source-02-vdma.md)</sup>")
+if idx < 0:
+    sys.exit(1)
+body = body[:idx] + "<sup>[5](source-02-vdma.md)</sup>" + body[idx + len("<sup>[2](source-02-vdma.md)</sup>"):]
+open(dst, "w", encoding="utf-8").write(body + sep + rest)
+PY2
+expect_red NV13 E3 "$TMPROOT/twonums.md"
+
+# ---------------------------------------------------------------- NV14 / NV15 the two end-to-end fixtures pass
+for pair in "strategic-choice-en.md:strategic-choice:NV14" "consulting-problem-solving-de.md:consulting-problem-solving:NV15"; do
+  f="${pair%%:*}"; rest="${pair#*:}"; arc="${rest%%:*}"; cid="${rest#*:}"
+  OUT="$(python3 "$VALIDATOR" --narrative "$PLUGIN_DIR/tests/fixtures/narrative-output/$f" --contract "$PLUGIN_DIR/skills/narrative/references/story-arc/$arc/arc-definition.md" --json 2>&1)"
+  RC=$?
+  if [ "$RC" -eq 0 ] && printf '%s' "$OUT" | grep -q '"success": true'; then
+    pass "$cid end-to-end fixture $f passes every gate against the $arc contract"
+  else
+    printf '%s\n' "$OUT" | sed 's/^/    /'
+    fail "$cid end-to-end fixture $f passes every gate against the $arc contract (exit $RC)"
+  fi
+done
 
 # ---------------------------------------------------------------- summary
 echo ""

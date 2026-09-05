@@ -25,9 +25,12 @@ repo treats as correct: `notes-words` (a target range, not a hard gate),
 suite pins that) and the neither-citations-nor-references arm of
 `deck-references-last`. Those are `warn`; `--strict` promotes them.
 
-ONE PARSE. The brief is parsed once through `parse-brief.py`, loaded here the
-way `brief-to-outline.py` loads it. The checker therefore reads exactly what the
-renderers read, and cannot drift from them on where a unit starts.
+ONE PARSER. Every read goes through `parse-brief.py`, loaded here the way
+`brief-to-outline.py` loads it: `parse_document` for the type-agnostic units
+every profile checks, and for slides additionally `parse_brief` for the slides
+model. The slides profile therefore reads the file twice, through one parser —
+the checker reads exactly what the renderers read and cannot drift from them on
+where a unit starts.
 
 THE LAYOUT ENUM is a literal here on purpose. It lives in four homes — this
 tuple, the `## Layout N:` headings in `libraries/pptx-layouts.md`, the
@@ -789,7 +792,10 @@ def check_cite_zones(ctx):
             elif key in ("Context-Box", "Left-Column", "Right-Column") and isinstance(value, dict):
                 zones.append((key + ".Headline", value.get("Headline")))
         for name, text in zones:
-            if isinstance(text, str) and "<sup>" in text:
+            # Both spellings: the superscript form and a bare [N](url). The heading
+            # is the most important zone and cite-format skips it on purpose, so a
+            # bare marker there would otherwise be caught by nothing.
+            if isinstance(text, str) and ("<sup>" in text or BARE_CITE_RE.search(text)):
                 ctx.fail("cite-zones", unit, "citation marker inside exclusion zone {0}".format(name))
 
 

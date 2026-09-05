@@ -17,12 +17,15 @@
 #   --expr 's{if layout not in LAYOUT_ENUM:}{if False:}'                 --case cb05-mutant-layout-enum
 #   --expr 's{CONSECUTIVE_RUN = 3}{CONSECUTIVE_RUN = 4}'                 --case cb06-mutant-deck-consecutive
 #   --expr 's{"IS-Box": 15,}{"IS-Box": 150,}'                            --case cb07-mutant-density-idm
-#   --expr 's{and "<sup>" in text:}{and False:}'                         --case cb08-mutant-cite-zones
+#   --expr 's{\("<sup>" in text or BARE_CITE_RE.search\(text\)\)}{False}' --case cb08-mutant-cite-zones
 #   --expr 's{if headers < 2:}{if headers < 1:}'                         --case cb09-mutant-notes-sections
 #   --expr 's{if refs_idx != len\(ctx.slides\) - 1:}{if False:}'         --case cb10-mutant-deck-references-last
+#   --expr 's{ or BARE_CITE_RE.search\(text\)\)}{)}'                     --case cb23-mutant-bare-cite-in-heading
 #
-# Verdict at authoring: guard_verified for all seven — each search text occurs
+# Verdict at authoring: guard_verified for all eight — each search text occurs
 # exactly once in check-brief.py and each mutant case went red under its recipe.
+# cb23 is the bare-marker arm of cite-zones: removing only that arm keeps cb08
+# green (the <sup> form is still caught) and turns cb23 red.
 
 set -u
 
@@ -184,6 +187,20 @@ if [ "$RC" -eq 1 ] && has_fail "$TMPROOT/m08.json" cite-zones; then
   pass "cb08-mutant-cite-zones"
 else
   fail "cb08-mutant-cite-zones a citation marker in a headline was not reported"
+fi
+
+# --- cb23: bare [N](url) in a headline -> cite-zones ----------------------------
+# The heading is the most important exclusion zone and cite-format skips it on
+# purpose, so the bare spelling must be caught by cite-zones itself.
+cat > "$TMPROOT/t23.py" <<'PY'
+text = text.replace('## Slide 5: 42% der Überwachungssysteme sind veraltet\n',
+                    '## Slide 5: 42% der Überwachungssysteme sind veraltet [2](https://www.bka.de/kriminalstatistik)\n', 1)
+PY
+mutate "$TMPROOT/t23.py"; run slides "$TMPROOT/mutant.md" "$TMPROOT/m23.json"
+if [ "$RC" -eq 1 ] && has_fail "$TMPROOT/m23.json" cite-zones; then
+  pass "cb23-mutant-bare-cite-in-heading"
+else
+  fail "cb23-mutant-bare-cite-in-heading a bare [N](url) marker in a headline was not reported"
 fi
 
 # --- cb09: a >> notes header dropped -> notes-sections -----------------------

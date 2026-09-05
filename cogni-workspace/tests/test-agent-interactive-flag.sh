@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
 # Agent/interactive-skill pairing guard: every cogni-workspace agent that
-# delegates to an interactive-bearing skill must pin the non-interactive value,
-# and must not hold an AskUserQuestion grant.
+# delegates to an interactive-bearing skill must pin the non-interactive value
+# on its dispatch line (A3); EXEMPT entries are skipped there and policed by
+# A5. An in-scope agent's own AskUserQuestion grant is deliberately NOT
+# asserted on -- the A4 comment below records why. The grant assertions this
+# suite does make run the other way: an interactive-bearing SKILL must keep
+# its grant (A4), and an EXEMPT agent must not regain one (A5).
 #
 # Why this exists. Five cogni-workspace skills expose an `interactive` (or
 # `--interactive`) parameter that defaults to TRUE and gates one or more

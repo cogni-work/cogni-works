@@ -72,7 +72,7 @@ Briefs contain no color fields.
 | `voice_tone` | auto-detected | Micro-copy register: `executive`, `analytical`, `punchy`, `playful`. Taken from the caller when passed; otherwise inferred in Step 2 from tone cues. (The `narrative` skill does not write a `voice_tone` field — its tone is an inferred brief field it never emits — so the frontmatter of an upstream narrative is not a source for it.) Renderers use it to calibrate section subheads and CTA verbs — they never override brief text with it. |
 | `palette_override` | `theme` | Either `theme` (default — renderers derive the Economist-discipline palette from the project theme) or `canonical` (force Economist's canonical red/amber/near-black/cream regardless of theme). Only meaningful for `style_preset: economist`. |
 | `interactive` | `true` | When `true`, present choices via AskUserQuestion |
-| `stakeholder_review` | `interactive` | When `true`, run brief-review-assessor after validation |
+| `stakeholder_review` | `true` | When `true`, run brief-review-assessor after validation |
 | `render` | `true` | When `true`, auto-dispatch `/render-infographic` after validation. Set `false` to produce brief only. |
 | `governing_thought` | auto-extracted | Pre-computed governing thought from caller |
 
@@ -321,6 +321,8 @@ Launch the `brief-review-assessor` agent with:
 4. If round 2 accepts or scores 70+ with no CRITICAL issues: proceed to Step 9
 
 **On reject:** Surface the verdict to the user via AskUserQuestion.
+
+**Headless reject (`interactive=false`, which `stakeholder_review=true` no longer implies).** Since the flip decoupled this step from `interactive`, a headless run now reaches the reject branch with no user to ask. The `AskUserQuestion` above is skipped per the standing convention, and the run must instead keep the brief, do not render it, and surface the reject in the response — the verdict is still written to the review sibling below, so the signal is recorded rather than lost — then continue. Never abort or error: this matches the caller reject rule in `cogni-workspace/skills/narrative-publish/references/pipeline-contract.md`, under which a multi-target run fails only when every requested target failed.
 
 Write the review verdict to `{output_dir}/infographic-brief.review.json`.
 

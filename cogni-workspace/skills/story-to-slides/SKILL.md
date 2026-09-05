@@ -50,7 +50,7 @@ The brief describes WHAT each slide says and which layout to use. The renderer o
 | `arc_id` | from frontmatter | Narrative arc ID from the `narrative` skill (e.g., `industry-transformation`). Mapped to visual `arc_type` in Step 1. |
 | `arc_definition_path` | none | Path to arc definition file — element names become methodology slide phase labels. |
 | `interactive` | `true` | When `true`, present choices via AskUserQuestion. When `false`, auto-select. |
-| `stakeholder_review` | `interactive` | When `true`, run brief-review-assessor after validation. Defaults to value of `interactive`. |
+| `stakeholder_review` | `true` | When `true`, run brief-review-assessor after validation. |
 | `audience_context` | none | Structured audience/buyer data for targeted evidence selection and Q&A prep (Rich mode). |
 
 ### Caller-supplied overrides
@@ -438,6 +438,8 @@ Launch the `brief-review-assessor` agent with:
 5. If round 2 still has issues: present remaining issues to user, proceed to Step 10
 
 **On reject:** Surface the verdict to the user via AskUserQuestion and let them decide whether to proceed, edit manually, or abandon.
+
+**Headless reject (`interactive=false`, which `stakeholder_review=true` no longer implies).** Since the flip decoupled this step from `interactive`, a headless run now reaches the reject branch with no user to ask. The `AskUserQuestion` above is skipped per the standing convention, and the run must instead keep the brief, do not render it, and surface the reject in the response — the verdict is still written to the review sibling below, so the signal is recorded rather than lost — then continue. Never abort or error: this matches the caller reject rule in `cogni-workspace/skills/narrative-publish/references/pipeline-contract.md`, under which a multi-target run fails only when every requested target failed.
 
 Write the review verdict to `{output_dir}/presentation-brief.review.json`.
 

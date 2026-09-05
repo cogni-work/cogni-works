@@ -38,17 +38,23 @@
 #
 #   bash "$HOME/.claude/plugins/marketplaces/managed-service/cogni-service/scripts/mutation-check.sh" \
 #     --root . \
-#     --file cogni-workspace/agents/enrich-report.md \
-#     --expr 's/, always with `interactive=false`//' \
+#     --file cogni-workspace/agents/story-to-infographic.md \
+#     --expr 's/args: interactive=false/args:/' \
 #     --test 'bash cogni-workspace/tests/test-agent-interactive-flag.sh' \
 #     --case A3
 #
 # The search literal occurs exactly once at head and zero times at base, so the
 # expr cannot report expr_no_op; it is a plain non-global s/// with no capture
-# groups, so it is valid for `perl -0pi`; and the replacement is empty, so the
-# mutant cannot re-satisfy A3 — enrich-report loses its only pin and A3 goes red
-# naming that file. A1, A2, A4 and A5 are untouched, so the redness is
-# attributable to A3 alone.
+# groups, so it is valid for `perl -0pi`; and the replacement drops the value
+# while keeping the key, so the mutant cannot re-satisfy A3 — story-to-infographic
+# loses its dispatch-site pin and A3 goes red naming that file. A1, A2, A4 and A5
+# are untouched, so the redness is attributable to A3 alone.
+#
+# The expr carries no shell metacharacter -- no backtick, no $, no parenthesis.
+# The enrich-report mutant is the more obvious one to reach for (delete ", always
+# with `interactive=false`"), and it does redden A3, but its search literal
+# contains backticks and the handoff preflight rejects the whole recipe as not
+# replayable as written. A recipe that cannot be replayed is not evidence.
 
 # set -u but deliberately NOT set -e: a red arm must print its FAIL line and let
 # the run reach the summary, not abort the script at the first failing check.

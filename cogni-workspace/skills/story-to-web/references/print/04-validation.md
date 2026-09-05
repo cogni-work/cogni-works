@@ -8,14 +8,22 @@ Define the hybrid web + print validation framework for storyboard-brief.md files
 
 ---
 
+Layer 1 is mechanized; Layers 2–4 are reasoned through with `$CLAUDE_PLUGIN_ROOT/libraries/brief-validation-core.md` (§ Core principle, § Severity, § Protocol) and only the storyboard-specific rules kept here.
+
 ## Layer 1: Schema Compliance
 
-Verify the brief structure matches the expected format.
+Run the checker and fix every `fail` before reading further:
+
+```bash
+python3 "$CLAUDE_PLUGIN_ROOT/scripts/check-brief.py" --type storyboard "{brief_path}"
+```
+
+It enforces the core: the shared frontmatter keys (`fm-core-keys`), `type: storyboard-brief` with `version: "2.1"` or the legacy `"2.0"` (`fm-type-version`), `## Poster N:` units numbered without gaps and each one fenced (`unit-numbering`, `unit-fenced`), no styling field at any depth (`no-color-fields`), and a consistent `## CTA Summary` (`cta-summary-consistent`). It does not look for a header or footer — the storyboard schema has none.
+
+Then verify the storyboard-specific structure by eye:
 
 ### Frontmatter Checks
 
-- [ ] `type` field is `"storyboard-brief"`
-- [ ] `version` field is `"2.1"` (`"2.0"` is accepted as legacy)
 - [ ] `theme` field references a valid theme ID
 - [ ] `theme_path` points to an existing theme.md
 - [ ] `poster_size` is one of: A0, A1, A2, A3
@@ -91,26 +99,11 @@ Verify the brief structure matches the expected format.
 
 ## Layer 2: Message Quality
 
-Verify that content communicates effectively.
+Read `brief-validation-core.md` § Assertion headlines, § Number plays and § Bullets and body text — assertions not topic labels, unique headlines, reframed numbers with units in the label, body supporting the claim. Storyboard-specific:
 
-### Headline Quality
-
-- [ ] Every section headline is an assertion (contains a verb)
-- [ ] No topic labels ("Overview", "Summary", "Introduction")
-- [ ] Headlines are unique across all sections (no duplicates)
 - [ ] All headlines are under 70 characters
-
-### Body Text Quality
-
 - [ ] Every body text is 2-3 complete sentences
 - [ ] No body text exceeds 50 words
-- [ ] Body text supports the headline's claim
-
-### Stat Number Quality (where present)
-
-- [ ] Numbers are reframed with number plays (not raw data)
-- [ ] Units/labels included
-- [ ] Numbers are contextually meaningful
 
 ---
 
@@ -161,18 +154,9 @@ Verify that the brief faithfully represents the source narrative.
 - [ ] Governing thought is supported by the poster content
 - [ ] Arc type is correctly identified
 
-### Language Consistency
+### Language Consistency and Source Preservation
 
-- [ ] All text is in the specified language (en or de)
-- [ ] German umlauts preserved (ä, ö, ü, ß)
-- [ ] Number formatting matches language (EN: 2,661 / DE: 2.661)
-- [ ] No mixed-language content within a poster
-
-### Source Preservation
-
-- [ ] Citations with URLs preserved in `source` fields where available
-- [ ] No URLs invented or fabricated
-- [ ] Key statistics traceable to source material
+Read `brief-validation-core.md` § Language consistency and § Source preservation and apply them per poster — one language throughout, real umlauts, language-matched number formatting, no invented URL, every statistic traceable.
 
 ---
 
@@ -222,7 +206,8 @@ Verify that the brief faithfully represents the source narrative.
 Run validation after all poster content is finalized:
 
 ```
-FOR each layer:
+Layer 1: run check-brief.py --type storyboard; fix every fail; then the structure checks
+FOR each layer (2 through 4):
   Run all checks
   IF any check fails:
     Log failure with: layer, check, expected, actual

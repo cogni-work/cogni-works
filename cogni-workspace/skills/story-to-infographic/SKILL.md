@@ -80,33 +80,9 @@ Briefs contain no color fields.
 
 ## Conventions
 
-### User Interaction
+### Shared conventions
 
-Interactive checkpoints use the structured AskUserQuestion format:
-
-```
-questions: [{
-  question: "Your question here?",
-  header: "Short Label",
-  options: [
-    { label: "Option Name", description: "What this means" },
-    { label: "Another Option", description: "What this means" }
-  ],
-  multiSelect: false
-}]
-```
-
-**On empty or blank responses, auto-select the best option and move on.** Never retry AskUserQuestion on empty responses. When `interactive` is `false`, skip all AskUserQuestion calls.
-
-### Language & Formatting
-
-German infographics are displayed to executives and shared externally. Use real Unicode
-throughout: ae->ä oe->ö ue->ü ss->ß. German number formatting: 2.661 (not 2,661).
-Always specify language explicitly in the brief frontmatter.
-
-### No Color Fields
-
-Briefs contain ZERO visual fields: no `Background:`, `Text-Color:`, `Icon-Color:`. The renderer reads the theme and style preset directly.
+Read `$CLAUDE_PLUGIN_ROOT/libraries/brief-conventions.md` and apply every section: theme-driven visuals (the renderer reads the theme and style preset directly; briefs carry no color field), the structured AskUserQuestion format and the empty-response rule (never retry on an empty response), German fidelity with the language stated explicitly in the frontmatter, and absolute printed paths. When `interactive` is `false`, skip every AskUserQuestion call and auto-select.
 
 ### Content Density by Style Preset
 
@@ -124,37 +100,19 @@ the dense budget.
 
 ## Workflow
 
-> **CRITICAL:** When this skill loads without explicit parameter values, DO NOT ask the user for `source_path`, `theme`, `language`, or any other parameter. Execute Step 0 immediately — search the filesystem, present findings, then proceed.
+> **CRITICAL:** When this skill loads without explicit parameter values, DO NOT ask the user for any parameter. Execute Step 0 immediately — search the filesystem, present findings, then proceed (`$CLAUDE_PLUGIN_ROOT/libraries/brief-pipeline.md` § Execution protocol).
 
 ### Step 0: Narrative Auto-Discovery (YOUR FIRST ACTION)
 
-If `source_path` was explicitly provided: set `source_dir` to its parent directory and skip to Step 1.
-
-Otherwise, search without asking:
-
-1. **Primary:** Glob `**/insight-summary.md` from CWD (max 3 levels)
-2. For each candidate: read first 30 lines, extract title, arc_id, estimate word count
-3. **Secondary** (if 0 primary results): Glob `**/*.md`, filter for `arc_id:` in first 30 lines. Exclude SKILL.md, README.md, CLAUDE.md.
-4. Sort: insight-summary.md files first, then by path depth (shallow first)
-
-**If candidates found:** Present via AskUserQuestion (max 4 options with filename, title, arc_id, word count). On empty response, auto-select top candidate.
-
-**If no candidates:** Ask for path or cancel. On empty response, stop with: "No narrative path provided. Stopping."
-
-Set `source_dir` = parent directory of selected `source_path`.
+Read `$CLAUDE_PLUGIN_ROOT/libraries/brief-pipeline.md` § Narrative auto-discovery and execute; this skill's values: on selection, set `source_dir` and skip to Step 1.
 
 ---
 
 ### Step 1: Parse Parameters & Resolve Context
 
-**Arc resolution** (priority order):
-1. `arc_id` parameter → use directly
-2. Source narrative frontmatter `arc_id` → extract
-3. Neither → Step 2 auto-detects
+**Arc resolution:** read `$CLAUDE_PLUGIN_ROOT/libraries/brief-pipeline.md` § Arc resolution and execute; this skill's values: when the arc stays unset, Step 2 auto-detects.
 
-If arc_id set: read `$CLAUDE_PLUGIN_ROOT/libraries/arc-taxonomy.md`, map to arc_type.
-
-**Theme resolution:** If interactive and theme not explicitly set: invoke `cogni-workspace:pick-theme` via Skill tool. Otherwise use provided theme or default. Read theme.md, store absolute path.
+**Theme resolution:** read `$CLAUDE_PLUGIN_ROOT/libraries/brief-pipeline.md` § Theme resolution and execute the infographic row: `theme` is a slug (default `smarter-service`) resolved to `/cogni-workspace/themes/{theme}/theme.md`, `auto` under `interactive=true` invokes the theme entry point; read the theme.md and store its absolute path for the brief frontmatter.
 
 **Load libraries:** `$CLAUDE_PLUGIN_ROOT/libraries/infographic-layouts.md`, `$CLAUDE_PLUGIN_ROOT/libraries/EXAMPLE_INFOGRAPHIC_BRIEF.md` (data-viz, stat-heavy), `$CLAUDE_PLUGIN_ROOT/libraries/EXAMPLE_SKETCHNOTE_BRIEF.md` (sketchnote, timeline-flow, hand-drawn family anchor), `$CLAUDE_PLUGIN_ROOT/libraries/EXAMPLE_ECONOMIST_BRIEF.md` (economist, stat-heavy, editorial family anchor), `$CLAUDE_PLUGIN_ROOT/libraries/cta-taxonomy.md`.
 
@@ -295,7 +253,7 @@ If interactive: present CTA proposal via AskUserQuestion (Approve/Adjust). On em
 
 Four layers — stop on first failure, fix, re-check:
 
-1. **Schema** — block types valid, required fields present, valid YAML, no color fields
+1. **Schema** — run `python3 "$CLAUDE_PLUGIN_ROOT/scripts/check-brief.py" --type infographic "{output_path}"` and fix every `fail`, then the block-type checks the checklist keeps by eye
 2. **Content density** — content-block count and total word count within the active `style_preset`'s ceilings (Content Density table, `03-style-presets.md`), word counts within limits per block type
 3. **Data integrity** — numbers match source narrative, chart data valid, no fabricated statistics
 4. **Distillation quality** — title is assertion (not topic label), hero numbers isolated, icon prompts specific, 10-second scan test passes
@@ -304,43 +262,21 @@ Four layers — stop on first failure, fix, re-check:
 
 ### Step 8b: Stakeholder Review (when `stakeholder_review=true`)
 
-**Skip this step** if `stakeholder_review=false`.
-
-Launch the `brief-review-assessor` agent with:
-- `brief_type`: `infographic`
-- Brief content (write to a `.draft` temp file if the brief hasn't been written yet)
-- `source_narrative`: the narrative path from Step 0
-- `round`: 1
-
-**On accept (all perspectives >=85):** Proceed to Step 9.
-
-**On revise:**
-1. Apply CRITICAL improvements first, then HIGH improvements
-2. Re-run Step 8 validation
-3. Re-launch the assessor (round 2)
-4. If round 2 accepts or scores 70+ with no CRITICAL issues: proceed to Step 9
-
-**On reject:** Surface the verdict to the user via AskUserQuestion.
-
-**Headless reject (`interactive=false`, which `stakeholder_review=true` no longer implies).** Since the flip decoupled this step from `interactive`, a headless run now reaches the reject branch with no user to ask. The `AskUserQuestion` above is skipped per the standing convention, and the run must instead keep the brief, do not render it, and surface the reject in the response — the verdict is still written to the review sibling below, so the signal is recorded rather than lost — then continue. Never abort or error: this matches the caller reject rule in `cogni-workspace/skills/narrative-publish/references/pipeline-contract.md`, under which a multi-target run fails only when every requested target failed.
-
-Write the review verdict to `{output_dir}/infographic-brief.review.json`.
+Read `$CLAUDE_PLUGIN_ROOT/libraries/brief-pipeline.md` § Stakeholder review loop and execute; this skill's values: `brief_type: infographic`; the brief content is written to a `.draft` temp file when the brief is not yet written; on accept proceed to Step 9; on revise re-run Step 8 after the edits; the verdict file is `infographic-brief.review.json` beside the brief. On a headless reject, keep the brief, do not render it, and surface the reject in the response, then continue.
 
 ---
 
 ### Step 9: Write infographic-brief.md
 
-**Output path resolution** (run via Bash before writing):
-- If `output_path` explicit: `mkdir -p "$(dirname "${output_path}")"`
-- Otherwise: set `output_path = {source_dir}/cogni-visual/infographic-brief.md` and `mkdir -p "{source_dir}/cogni-visual"`
+**Output path resolution:** read `$CLAUDE_PLUGIN_ROOT/libraries/brief-pipeline.md` § Output-path resolution and execute; this skill's default filename is `infographic-brief.md`.
 
 Generate the final brief with YAML frontmatter and block specifications following
 `EXAMPLE_INFOGRAPHIC_BRIEF.md` format. Write using Write tool.
 
-**Frontmatter fields:**
+**Frontmatter fields.** `version` follows the rendering family of the resolved `style_preset`: `"1.2"` for the editorial family (`economist`, `editorial`, `data-viz`, `corporate`), whose renderer reads the v1.2 `editorial-sketch` mode, and `"1.1"` for the hand-drawn family (`sketchnote`, `whiteboard`), whose agents accept `"1.0"` and `"1.1"` only — `libraries/infographic-layouts.md` states the rule and `check-brief.py --type infographic` enforces the pairing.
 ```yaml
 type: infographic-brief
-version: "1.1"
+version: "{1.2 editorial family | 1.1 hand-drawn family}"
 theme: {theme_id}
 theme_path: "{absolute_theme_path}"
 customer: "{customer_name}"
@@ -456,7 +392,7 @@ skill creates `output/` when generating the enriched HTML.
 
 | Library | Purpose |
 |---------|---------|
-| **infographic-layouts.md** | Layout type schemas, block type catalog with field schemas and word limits (schema v1.1) |
+| **infographic-layouts.md** | Layout type schemas, block type catalog with field schemas and word limits; owns the per-family schema version (v1.2 editorial, v1.1 hand-drawn) |
 | **EXAMPLE_INFOGRAPHIC_BRIEF.md** | Reference output — stat-heavy layout, data-viz style |
 | **EXAMPLE_SKETCHNOTE_BRIEF.md** | Reference output — timeline-flow layout, sketchnote style (hand-drawn family anchor, Mike Rohde tradition) |
 | **EXAMPLE_ECONOMIST_BRIEF.md** | Reference output — stat-heavy layout, economist style (editorial family anchor, The Economist data page tradition, dense 10-14 blocks) |

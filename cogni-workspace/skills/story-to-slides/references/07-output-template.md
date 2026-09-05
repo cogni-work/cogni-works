@@ -420,8 +420,8 @@ Agent tool:
     FRONTMATTER:
       type: presentation-brief
       version: "4.1"
-      theme: {theme_id}
-      theme_path: "{theme_path}"
+      theme: {theme_id}                 # omit this line and the next when no theme was supplied
+      theme_path: "{theme_path}"        # verbatim from the caller — never rewritten or re-resolved
       customer: "{customer_name}"
       provider: "{provider_name}"
       language: "{language}"

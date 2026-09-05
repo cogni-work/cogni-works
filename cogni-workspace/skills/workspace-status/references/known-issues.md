@@ -72,14 +72,15 @@ but no `.pptx` file is produced.
 
 **Cause**: story-to-slides produces a presentation brief, not a deck — rendering that
 brief is a separate step, and the skill that performs it does not ship from this
-marketplace. The workflow's last step, "Guide User to PPTX Rendering" (Step 11),
-recommends a claude.ai chat with the Anthropic PPTX skill and notes that Claude Code
-can render via the `document-skills:pptx` skill instead; this plugin's `pptx` agent is
-the Claude Code-side wrapper that delegates to that skill.
+marketplace. The workflow's last step, the Render checkpoint (Step 11), offers the
+render paths and renders nothing on its own: Claude Design via the exported outline, a
+claude.ai chat with the Anthropic PPTX skill, the in-Claude-Code `pptx` agent, or an
+HTML deck. Under `interactive=false` it only prints the paths. The `pptx` agent
+dispatches `anthropic-skills:pptx` first and `document-skills:pptx` second; when neither
+resolves in the session it returns `pptx_skill_unavailable` and the checkpoint prints the
+claude.ai instructions instead.
 
 **Fix**: Take the claude.ai route — open a new chat there and attach the generated
-`presentation-brief.md` together with the `theme.md` it was built against, then ask for
-the presentation. To render inside Claude Code instead, confirm the
-`document-skills:pptx` skill is available in the current session before dispatching the
-`pptx` agent; when the session does not provide it, the claude.ai route is the
-supported path.
+`presentation-brief.md` together with a `theme.md` (the checkpoint resolves one through
+the theme picker when the brief carries no `theme_path`), then paste the prompt the
+checkpoint printed. For a no-PowerPoint result, choose the HTML option instead.

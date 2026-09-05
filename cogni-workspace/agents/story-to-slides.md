@@ -61,7 +61,7 @@ You require these parameters:
 |-----------|----------|---------|-------------|
 | source_path | Yes | - | Path to narrative file(s) or project directory |
 | output_path | No | {source_dir}/cogni-visual/presentation-brief.md | Override brief output location |
-| theme | No | interactive | Absolute path to theme.md — if omitted, skill triggers `pick-theme` interactive selection |
+| theme | No | none | Optional absolute path to theme.md — recorded verbatim in the brief frontmatter for the renderer; the skill never prompts for one |
 | language | No | en | Language code (en/de) |
 | arc_type | No | auto | Story arc hint: auto, why-change, problem-solution, journey, argument, report |
 | arc_id | No | from frontmatter | Narrative arc ID from the `narrative` skill (e.g., `industry-transformation`) |
@@ -74,7 +74,7 @@ You require these parameters:
 | governing_thought | No | auto-extracted | Pre-computed governing thought from caller. Skips re-derivation in Step 3. |
 | section_roles | No | auto-detected | Pre-mapped section roles from caller. Skips re-derivation in Step 3. |
 
-**Theme selection:** When no explicit theme path is provided, the skill delegates to `cogni-workspace:pick-theme` for interactive selection. The picker returns the absolute `theme_path`. The PPTX skill (downstream) reads the theme directly for all visual decisions. Any theme created via `/grab-theme`, `/manage-themes`, or theme-factory is supported.
+**Theme:** an optional pass-through. When a caller supplies an absolute `theme_path`, the skill records it in the brief frontmatter and the renderer reads the theme directly for all visual decisions. When none is supplied, the skill omits the keys; the render path chosen at its Render checkpoint resolves a theme if it needs one, and a headless run prints the paths and renders nothing.
 
 **Backward compatibility:** `project_path` parameter is accepted and mapped to `source_path`.
 
@@ -87,7 +87,7 @@ Execute these 4 phases sequentially:
 Verify required parameters are present:
 
 1. Check `source_path` (or `project_path`) is provided and not empty
-2. Set defaults: `theme="smarter-service"`, `language="en"`, `arc_type="auto"`, `max_slides=15`, `confidence_threshold=0.8`
+2. Set defaults: `language="en"`, `arc_type="auto"`, `max_slides=15`, `confidence_threshold=0.8` — `theme` has no default and is passed only when the caller supplied one
 3. If source_path missing, return error JSON
 
 **Success criteria:** All required parameters validated
@@ -108,7 +108,7 @@ Verify required parameters are present:
 **Parameter Substitution:** Replace the `{{...}}` placeholders with actual values from your prompt:
 - `{{source_path}}` → the source_path parameter (or project_path if that was provided)
 - `{{output_path}}` → the output_path parameter (if provided — override brief output location)
-- `{{theme}}` → the theme parameter (default: "smarter-service")
+- `{{theme}}` → the theme parameter, an absolute path to `theme.md` (only when provided — drop the `theme=` argument otherwise)
 - `{{language}}` → the language parameter (default: "en")
 - `{{arc_type}}` → the arc_type parameter (default: "auto")
 - `{{arc_id}}` → the arc_id parameter (if provided — narrative arc ID from the `narrative` skill)
@@ -126,7 +126,7 @@ Verify required parameters are present:
 <example>
 <invoke name="Skill">
   <parameter name="skill">cogni-workspace:story-to-slides</parameter>
-  <parameter name="args">source_path=/path/to/proposals/customer-slug theme=smarter-service language=de arc_type=why-change customer_name=Deutsche Bahn AG provider_name=TechVision Solutions</parameter>
+  <parameter name="args">source_path=/path/to/proposals/customer-slug theme=/path/to/cogni-workspace/themes/smarter-service/theme.md language=de arc_type=why-change customer_name=Deutsche Bahn AG provider_name=TechVision Solutions</parameter>
 </invoke>
 </example>
 

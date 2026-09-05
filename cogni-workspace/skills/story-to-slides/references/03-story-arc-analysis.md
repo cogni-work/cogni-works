@@ -1,5 +1,7 @@
 # Story Arc Analysis
 
+> **Consumers:** read by `skills/story-to-slides/SKILL.md` (Step 4) and, by absolute plugin path, by `skills/story-to-web/SKILL.md` (Step 2). Relocating or renaming this file changes both readers.
+
 ## Purpose
 
 Define how to read any narrative document and identify its argument structure, governing thought, and section roles — before extracting any content for slides. This is the foundation of intelligent brief generation: understanding *what the narrative is arguing* before deciding *how to present it*.

@@ -40,7 +40,7 @@ The brief describes WHAT each slide says and which layout to use. The renderer o
 |-----------|---------|-------------|
 | `source_path` | auto-discovered | Narrative file or directory. When omitted with `interactive=true`, Step 0 searches nearby. |
 | `project_path` | none | Accepted alias for `source_path`, mapped before Step 0 runs. |
-| `theme` | interactive | Absolute path to theme.md, or omit to trigger `cogni-workspace:pick-theme` interactive selection. |
+| `theme` | none | Optional absolute path to theme.md; recorded in frontmatter for the renderer, never prompted for here. |
 | `language` | `en` | Language code (en/de) |
 | `title` / `subtitle` | auto-detected | Extracted from narrative if not provided |
 | `customer_name` / `provider_name` | from metadata | Organization names |
@@ -55,47 +55,15 @@ The brief describes WHAT each slide says and which layout to use. The renderer o
 
 ### Caller-supplied overrides
 
-These are typically set by an upstream agent (e.g., why-change-work), not by a human user:
-
-| Parameter | Default | Description |
-|-----------|---------|-------------|
-| `confidence_threshold` | `0.8` | Minimum confidence for automatic layout mapping |
-| `governing_thought` | auto-extracted | Pre-computed governing thought — Step 4 validates rather than re-derives. |
-| `section_roles` | auto-detected | Pre-mapped section roles — Step 4 validates rather than re-derives. |
-| `buyer_appendix_path` | none | Path to buyer-appendix.md for enriched Q&A prep (Step 8.2 only). |
-| `design` | per `$CLAUDE_PLUGIN_ROOT/libraries/presentation-intent.md` | The deck's design intent — `register`, `dark_slides`, `speaker_notes`, `imagery`, `variations`. Unsupplied sub-keys fall back to that library's defaults (Step 8.2). |
+Read `$CLAUDE_PLUGIN_ROOT/libraries/brief-pipeline.md` § Caller-supplied overrides; this skill's column is **slides** — `confidence_threshold` (layout mapping), `governing_thought` and `section_roles` (validated in Step 4), `buyer_appendix_path` (Step 8.2), and `design`, whose unsupplied sub-keys fall back to `$CLAUDE_PLUGIN_ROOT/libraries/presentation-intent.md` (Step 8.2).
 
 ---
 
 ## Conventions
 
-### Theme-driven visuals
+### Shared conventions
 
-The renderer owns all visual decisions — colors, fonts, spacing — by reading the theme directly. Briefs specify content and layout only. Omit color/styling fields (`Background:`, `Text-Color:`, `Icon-Color:`, `Role:`, `Intensity:`, `Mood:`) because the renderer ignores them and their presence creates ambiguity about who controls styling. The nested `intent.role` key is a different, permitted 4.1 key and is not covered by this prohibition.
-
-### Interactive checkpoints
-
-Interactive prompts let the user steer creative decisions at two points: narrative selection (Step 0) and theme selection (Step 1). Use the structured format below — unstructured prose renders as empty prompts:
-
-```
-questions: [{
-  question: "Your question here?",
-  header: "Short Label",
-  options: [
-    { label: "Option Name", description: "What this means" },
-    { label: "Another Option", description: "What this means" }
-  ],
-  multiSelect: false
-}]
-```
-
-On empty or blank responses, auto-select the best option and move on. When `interactive` is `false`, skip all AskUserQuestion calls.
-
-### German fidelity
-
-German presentations go to executives. ASCII-ified umlauts (`ae`/`oe`/`ue`) immediately signal "machine-generated" and undermine credibility. Use real Unicode throughout the generated copy: ae→ä oe→ö ue→ü ss→ß. German number formatting: 2.661 (dot as thousands separator).
-
-This rule governs generated output copy only — headlines, body text, section labels, and CTA text. It does not govern filenames, slugs, or other machine identifiers, which transliterate umlauts deliberately. It also does not govern the trigger phrases in this skill's frontmatter description, where any ASCII spellings are deliberate: a user on a non-German keyboard types them that way, so respelling one silently drops German triggering coverage. Leave the frontmatter block unchanged when correcting umlauts anywhere else in this file.
+Read `$CLAUDE_PLUGIN_ROOT/libraries/brief-conventions.md` and apply every section: theme-driven visuals (briefs carry no color or styling field; the nested 4.1 `intent.role` key is permitted), the structured AskUserQuestion format and the empty-response rule, German fidelity (real Unicode in generated copy, frontmatter trigger phrases left untouched), and absolute printed paths. This skill's interactive checkpoints are narrative selection (Step 0), the CTA plan (Step 6.1) and the Render checkpoint (Step 11). When `interactive` is `false`, skip every AskUserQuestion call and auto-select.
 
 ### Client-facing copy hygiene
 
@@ -137,56 +105,27 @@ Internal prep slides carry `Bottom-Banner` with "INTERNAL — REMOVE FROM CLIENT
 
 ## Workflow
 
-When invoked without explicit parameters, search the filesystem first (Step 0) rather than prompting for paths.
-
 ### Execution protocol
 
-Each step: verify the previous step's output is available (entry gate), read the reference file for that step, execute, then state the output summary before moving on. Reference files contain step-specific rules that prevent downstream rework — read them at the start of each step.
+Read `$CLAUDE_PLUGIN_ROOT/libraries/brief-pipeline.md` § Execution protocol and follow it for every step: entry gate, read the step's reference, execute, state the output summary. When invoked without explicit parameters, search the filesystem first (Step 0) rather than prompting for paths.
 
 ---
 
 ### Step 0: Narrative Auto-Discovery
 
-> Users invoke from project directories containing their narrative. Searching first eliminates path-fumbling.
-
-If `source_path` was explicitly provided: set `source_dir` to its parent directory and proceed to Step 1.
-
-Otherwise, search without asking:
-
-1. **Primary:** Glob `**/insight-summary.md` from CWD (max 3 levels)
-2. For each candidate: read first 30 lines, extract title, arc_id, estimate word count
-3. **Secondary** (if 0 primary results): Glob `**/*.md`, filter for `arc_id:` in first 30 lines. Exclude SKILL.md, README.md, CLAUDE.md.
-4. Sort: insight-summary.md files first, then by path depth (shallow first)
-
-**If candidates found:** Present via AskUserQuestion (max 4 options with filename, title, arc_id, word count). On empty response, auto-select top candidate.
-
-**If no candidates:** Ask for path or cancel. On empty response, stop with: "No narrative path provided. Stopping."
-
-Set `source_dir` = parent directory of selected `source_path`.
+Read `$CLAUDE_PLUGIN_ROOT/libraries/brief-pipeline.md` § Narrative auto-discovery and execute; this skill's values: on selection, set `source_dir` and proceed to Step 1.
 
 ---
 
 ### Step 1: Parse Parameters & Resolve Context
 
-> Arc resolution and theme loading happen before reading the narrative because they shape how you interpret the story — a pre-resolved arc_type tells you what argument pattern to look for.
+> Arc resolution happens before reading the narrative because it shapes how you interpret the story — a pre-resolved arc_type tells you what argument pattern to look for.
 
 Determine input type (directory with metadata vs single file) and load metadata.
 
-**Arc resolution** (priority order):
-1. `arc_id` parameter → use directly
-2. Source narrative frontmatter `arc_id` → extract
-3. Neither → Step 4 auto-detects
+**Arc resolution:** read `$CLAUDE_PLUGIN_ROOT/libraries/brief-pipeline.md` § Arc resolution and execute; this skill's values: when the arc stays unset, Step 4 auto-detects; `arc_definition_path` element names become the methodology slide's phase labels.
 
-If arc_id set: read `$CLAUDE_PLUGIN_ROOT/libraries/arc-taxonomy.md`, map to arc_type. If `arc_definition_path` provided: extract element names for methodology slide.
-
-**Theme resolution:** Delegate to `cogni-workspace:pick-theme` — the ecosystem-standard theme picker.
-
-1. If `theme` parameter was explicitly provided with an absolute path: use it directly, skip the picker.
-2. Otherwise: invoke the `cogni-workspace:pick-theme` skill via the Skill tool. The picker scans standard and workspace theme directories, presents an interactive AskUserQuestion, and returns the absolute `theme_path`.
-3. Store the returned `theme_path` (absolute path to `theme.md`), `theme_name`, and `theme_slug` for downstream use.
-4. Read the selected `theme.md` to confirm it loads correctly.
-
-If pick-theme is unavailable (e.g., cogni-workspace not installed), fall back to Glob scanning `$COGNI_WORKSPACE_ROOT/themes/*/theme.md` and present via AskUserQuestion manually.
+**Theme pass-through** (per `brief-pipeline.md` § Theme resolution, slides row): when the `theme` parameter is an absolute path, record it verbatim as `theme_path` and its parent directory name as `theme` in the brief frontmatter; otherwise omit both keys. This skill never reads `theme.md` — no picker runs here, and the renderer chosen at the Render checkpoint (Step 11) resolves a theme if it needs one.
 
 **Load libraries:** `cta-taxonomy.md`, `arc-taxonomy.md` (if arc_id set). The heavier libraries (`pptx-layouts.md` and `EXAMPLE_BRIEF.md`) are deferred to the steps that consume them (Steps 7 and 8), and `presentation-intent.md` is deferred to Step 8.2, to keep context lean during the creative intelligence steps.
 
@@ -372,9 +311,7 @@ Frontmatter — omit `arc_id` when unresolved, and `climax` when no slide carrie
 | `CTA_SUMMARY` | From Step 6.1 (or "none") |
 | `GENERATION_METADATA_STATS` | Raw stats: number_plays, headlines_optimized, bullets_consolidated, source_links, layout_distribution, avg_confidence, manual_review |
 
-**Resolve output path** before launching (run via Bash):
-- If `output_path` explicit: `mkdir -p "$(dirname "${output_path}")"`
-- Otherwise: set `output_path = {source_dir}/cogni-visual/presentation-brief.md` and `mkdir -p "{source_dir}/cogni-visual"`
+**Resolve output path** before launching: read `$CLAUDE_PLUGIN_ROOT/libraries/brief-pipeline.md` § Output-path resolution and execute; this skill's default filename is `presentation-brief.md`.
 
 **Launch the `slides-enrichment-artist` agent** via the Agent tool with `subagent_type: "cogni-workspace:slides-enrichment-artist"`, interpolating the fields above into the prompt payload in `references/07-output-template.md` → § Step 8.2 Enrichment Prompt Payload (`OUTPUT_PATH`, `OUTPUT_TEMPLATE_PATH`, the `FRONTMATTER:` block, then `TITLE`, `SUBTITLE`, `SLIDE_SPECS`, `AUDIENCE_MODEL`, `ARC_ANALYSIS`, `LANGUAGE`, `ARC_ID`, `ARC_DEFINITION_PATH`, `BUYER_APPENDIX_PATH`, `CTA_SUMMARY`, `GENERATION_METADATA_STATS`).
 
@@ -390,12 +327,12 @@ Frontmatter — omit `arc_id` when unresolved, and `climax` when no slide carrie
 
 **Read reference:** `references/09-validation-checklist.md`
 
-Five layers — stop on first failure, fix, re-check:
-1. **Schema** — layout types exist, required fields present, no color/styling fields, valid YAML
+Run the checker first — `python3 "$CLAUDE_PLUGIN_ROOT/scripts/check-brief.py" --type slides "{output_path}"` — and fix every `fail` it reports; it owns Layer 1 and the mechanizable items of Layers 3–5 (density, citations, notes structure, deck shape). Then reason through the remaining layers — stop on first failure, fix, re-check:
+1. **Schema** — the checker's verdict; nothing here is verified by eye
 2. **Message quality** — assertion headlines, MECE sequence, isolated hero numbers
-3. **Copywriting** — number plays applied, bullets consolidated, no hedging
-4. **Presentation logic** — bookend slides enforced, within max_slides, layout variety
-5. **Content integrity** — all sections represented, citations preserved, German characters correct
+3. **Copywriting** — number plays applied, phrase-shaped bullets, no hedging, speaker-notes coaching with [Energy] and Q&A prep
+4. **Presentation logic** — story arc flow, prep-slide content, solution overview before the first Power Position (why-change)
+5. **Content integrity** — all sections and statistics represented, IS/DOES/MEANS semantics, the right claims carry the citations
 
 ---
 
@@ -403,29 +340,7 @@ Five layers — stop on first failure, fix, re-check:
 
 > Structural validation (Step 9) catches schema and formatting issues, but cannot tell whether the brief will actually work for the audience, the presenter, or as a visual communication. The brief-review-assessor evaluates from three stakeholder perspectives — catching weak headlines that pass schema checks, layout monotony that passes variety rules, and CTA gaps that pass structural validation. Reviewing at the brief stage is efficient because changes are text edits, not re-renders.
 
-**Skip this step** if `stakeholder_review=false`.
-
-Launch the `brief-review-assessor` agent with:
-- `brief_type`: `slides`
-- Brief content at `output_path` (the file was written by the enrichment agent in Step 8.2, or will be written in Step 10 on the fallback path)
-- `source_narrative`: the narrative path from Step 0
-- `audience_context`: if provided
-- `round`: 1
-
-**On accept (all perspectives ≥85):** Proceed to Step 10 (or Step 11 if brief already written).
-
-**On revise:**
-1. Apply CRITICAL improvements first, then HIGH improvements — edit the brief content surgically (change specific headlines, layout types, speaker notes, CTAs as recommended)
-2. Re-run Step 9 validation to ensure structural integrity after edits
-3. Re-launch the assessor (round 2)
-4. If round 2 accepts or scores 70+ with no CRITICAL issues: proceed to Step 10
-5. If round 2 still has issues: present remaining issues to user, proceed to Step 10
-
-**On reject:** Surface the verdict to the user via AskUserQuestion and let them decide whether to proceed, edit manually, or abandon.
-
-**Headless reject (`interactive=false`, which `stakeholder_review=true` no longer implies).** Since the flip decoupled this step from `interactive`, a headless run now reaches the reject branch with no user to ask. The `AskUserQuestion` above is skipped per the standing convention, and the run must instead keep the brief, do not render it, and surface the reject in the response — the verdict is still written to the review sibling below, so the signal is recorded rather than lost — then continue. Never abort or error: this matches the caller reject rule in `cogni-workspace/skills/narrative-publish/references/pipeline-contract.md`, under which a multi-target run fails only when every requested target failed.
-
-Write the review verdict to `{output_dir}/presentation-brief.review.json`.
+Read `$CLAUDE_PLUGIN_ROOT/libraries/brief-pipeline.md` § Stakeholder review loop and execute; this skill's values: `brief_type: slides`; the brief content is the file at `output_path` (written by the enrichment agent in Step 8.2, or by Step 10 on the fallback path); on accept proceed to Step 10 (or Step 11 when the brief is already written); on revise re-run Step 9 after the edits; the verdict file is `presentation-brief.review.json` beside the brief. On a headless reject, keep the brief, do not render it, and surface the reject in the response, then continue.
 
 ---
 
@@ -443,21 +358,21 @@ Run the validation checklist (reference `09-validation-checklist.md`) one final 
 
 ---
 
-### Step 11: Guide User to PPTX Rendering
+### Step 11: Render checkpoint
 
-> The presentation brief is ready. Produce both render handoffs — **PPTX** via claude.ai chat with the Anthropic PPTX skill, and an **outline** for Claude Design. Neither handoff asks the user anything, so `interactive=false` changes nothing in this step; the `narrative-publish` pipeline runs it non-interactively.
+> The brief is ready. Every render path owns its styling, so a theme is chosen here — by the renderer that needs one — and never earlier. `references/10-render-handoff.md` carries the box text, the prompts and the dispatch rules for each path; this step only decides which path runs.
 
-#### Handoff A — PPTX (claude.ai chat)
+**Export the outline first, unconditionally.** Run `python3 "$CLAUDE_PLUGIN_ROOT/skills/story-to-slides/scripts/brief-to-outline.py" --brief "{absolute_path_to_presentation_brief}"` and keep `data.outline_path`. Claude Design consumes an outline, not a brief — handed the brief it re-derives the structure and paraphrases approved copy. On `success: false` report the error and continue: a failed export degrades the handoff, it does not invalidate the brief. Report a `slide_points capped` warning, since it names slides whose on-slide copy did not fit.
 
-After the brief is written and validated, print the PPTX hand-off in `references/10-render-handoff.md`: the two files to attach (`presentation-brief.md` and `theme.md`) as absolute paths — never `~`, `$HOME`, `$CLAUDE_PLUGIN_ROOT` or relative paths — and the one-line claude.ai prompt. claude.ai is preferred because it handles attachments natively; `document-skills:pptx` inside Claude Code is a working fallback. The absolute-path rule governs printed paths only; `$CLAUDE_PLUGIN_ROOT` remains the correct way to invoke a bundled script.
+**Then, when `interactive` is `true`, ask one structured AskUserQuestion** (header "Render") with these options in this order:
 
-#### Handoff B — Outline (claude.ai/design)
+1. **Claude Design** — print the outline attachment box. Never resolves a theme: the organization design system applies.
+2. **claude.ai attachment** — resolve a theme *now*: use the brief's `theme_path` when present, otherwise invoke `cogni-workspace:pick-theme`; then print both absolute paths and the three-line prompt.
+3. **pptx inside Claude Code** — resolve a theme exactly as in option 2, then dispatch the `cogni-workspace:pptx` agent with `PRESENTATION_BRIEF`, `THEME_FILE` and `OUTPUT_PATH` (`{source_dir}/cogni-visual/presentation.pptx`); it renders through the installed Anthropic pptx skill and round-trips the deck against the brief. On `{"error": "pptx_skill_unavailable"}` print the claude.ai instructions from option 2 instead of failing.
+4. **HTML** — dispatch `cogni-workspace:render-html-slides` with `brief_path`; it resolves its own theme (falling back to `cogni-workspace:pick-theme` itself).
+5. **Later** — print the brief and outline paths and stop.
 
-Claude Design consumes an **outline**, not a brief: it has no meaning for the brief's `Layout:` vocabulary, so handed the brief unchanged it re-derives the structure and paraphrases copy the client already approved. Export the outline as well by running `python3 "$CLAUDE_PLUGIN_ROOT/skills/story-to-slides/scripts/brief-to-outline.py" --brief "{absolute_path_to_presentation_brief}"`.
-
-It writes `presentation-outline.md` next to the brief and returns the absolute path as `data.outline_path`. Pass `--include-internal` only when the presenter-prep slides (Methodology, Buying Center) belong in the handoff; by default they are excluded, since they are internal preparation rather than client-facing copy. The exporter derives each slide's `type` tag by parsing the `## Layout to type mapping` table out of `libraries/presentation-intent.md` at run time — it holds no layout name as a literal, so reshaping that table breaks the export.
-
-The exporter prints one `{success, data, error}` envelope. On `success: false`, report the `error` to the user, skip the outline box, and still deliver Handoff A — a failed outline export degrades the handoff, it does not invalidate the brief. `data.warnings` entries are advisory; report a `slide_points capped` warning, since it names slides whose on-slide copy did not fit the outline. Then print the outline attachment box from `references/10-render-handoff.md`, with `data.outline_path` as the printed path — the same absolute-path rule applies.
+When `interactive` is `false`, or on an empty response: print the brief and outline paths, render nothing, prompt for nothing — the `narrative-publish` pipeline runs this step that way. Printed paths are always absolute — never `~`, `$HOME`, `$CLAUDE_PLUGIN_ROOT` or relative; `$CLAUDE_PLUGIN_ROOT` remains the correct way to invoke a bundled script.
 
 ---
 
@@ -477,7 +392,7 @@ The exporter prints one `{success, data, error}` envelope. On `success: false`, 
 | **08b-references-slide.md** | 8.1 | References slide construction |
 | **08c-presenter-prep.md** | 8.2 | Internal prep slides + per-slide speaker notes process (loaded by slides-enrichment-artist agent) |
 | **09-validation-checklist.md** | 9, 10 | Five-layer validation framework |
-| **10-render-handoff.md** | 11 | Both attachment boxes printed to the user after validation — PPTX (Handoff A) and Claude Design outline (Handoff B) — plus what `presentation-outline.md` carries |
+| **10-render-handoff.md** | 11 | The Render checkpoint's paths — box text, prompts and dispatch rules per option — plus what `presentation-outline.md` carries |
 | **2g-diagram-simplification.md** | 2.1 | Mermaid diagram detection and simplification |
 
 ### Libraries (loaded as needed — progressive disclosure)
@@ -495,3 +410,4 @@ The exporter prints one `{success, data, error}` envelope. On `success: false`, 
 | Script | Step | Purpose |
 |--------|------|---------|
 | **brief-to-outline.py** | 11 | Export the Claude Design outline from a written brief; returns `data.outline_path`. Reads `## Layout to type mapping` from `libraries/presentation-intent.md` as the single run-time authority for a slide's `type` tag — reshaping that table breaks the export |
+| **check-brief.py** (`$CLAUDE_PLUGIN_ROOT/scripts/`) | 9, 10 | Lint the written brief against the mechanizable checklist items; exit 0 clean, 1 findings, 2 unparseable |

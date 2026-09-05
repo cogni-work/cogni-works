@@ -4,61 +4,24 @@
 
 Define the four-layer validation framework for web-brief.md files. Every brief must pass all four layers before being written to output.
 
-**Validation philosophy:** Do not mechanically tick boxes. For each layer, first reason about what is most likely to go wrong given this specific brief, then check systematically. A passing validation means the renderer will produce a visually coherent, on-message web page without manual correction.
-
----
-
-## Severity Levels
-
-Every check has a severity classification that determines how to handle failures:
-
-| Severity | Symbol | Meaning | Action Required |
-|----------|--------|---------|-----------------|
-| **CRITICAL** | `[C]` | Brief will fail to render, produce broken layout, or display wrong content | Must fix before writing. Stop and repair immediately. |
-| **WARNING** | `[W]` | Brief will render but with degraded quality, inconsistent visuals, or weak messaging | Should fix. Only skip if there is a clear justification for the deviation. |
-| **INFO** | `[I]` | Opportunity to improve. Brief is functional without the fix. | Fix if time allows. Note in validation report for future improvement. |
-
----
-
-## Validation Protocol
-
-For each layer, follow this three-phase process:
-
-### Phase A: Anticipate (think before checking)
-
-Before running any checks, reason about the brief you are validating:
-- What is unusual about this brief (arc type, language, section count, content domain)?
-- Given those characteristics, which checks are most likely to fail?
-- Are there edge cases the standard checklist might miss?
-
-### Phase B: Check (systematic verification)
-
-Run every check in the layer. For each check that fails:
-1. Record the severity level
-2. Record what was expected vs. what was found
-3. Record the specific fix needed
-
-### Phase C: Repair (fix before proceeding)
-
-- Fix all CRITICAL failures immediately
-- Fix all WARNING failures unless you document a justification
-- Note all INFO items in the validation report
-- Re-run Phase B on any repaired items to confirm the fix
+**Validation philosophy:** Layer 1 is mechanized; Layers 2–4 are reasoned through. Read `$CLAUDE_PLUGIN_ROOT/libraries/brief-validation-core.md` § Core principle, § Severity (`[C]` / `[W]` / `[I]`) and § Protocol (anticipate, check, repair) and apply them to every layer below; the rules shared by every brief type live there and only the web-specific rules are kept here. A passing validation means the renderer will produce a visually coherent, on-message web page without manual correction.
 
 ---
 
 ## Layer 1: Schema Compliance
 
-**Goal:** Verify the brief structure matches the expected format so the renderer can parse it without errors.
+Run the checker and fix every `fail` before reading further:
 
-**Think first:** Schema failures are the most common cause of renderer crashes. Before checking, consider: Does this brief have unusual section types? Are there optional fields that might be missing? Is the frontmatter complete?
+```bash
+python3 "$CLAUDE_PLUGIN_ROOT/scripts/check-brief.py" --type web "{brief_path}"
+```
+
+It enforces the core: the shared frontmatter keys (`fm-core-keys`), `type: web-brief` with `version: "1.1"` or the legacy `"1.0"` (`fm-type-version`), `## Section N:` units numbered without gaps and each one fenced, the fixed `## Header` and `## Footer` present (`unit-numbering`, `unit-fenced`), no styling field at any depth — `fill`, `color`, `background`, `textColor` and the slides six (`no-color-fields`) — and a consistent `## CTA Summary` (`cta-summary-consistent`). A missing `## Generation Metadata` block is a `warn` (`metadata-block`). A `fail` is CRITICAL.
+
+**Think first:** Schema failures the checker cannot see are the section-level ones. Before checking, consider: Does this brief have unusual section types? Are there optional fields that might be missing?
 
 ### Frontmatter Checks
 
-- `[C]` `type` field is `"web-brief"`
-  - If this fails, the renderer will not recognize the file. Fix: set `type: web-brief`
-- `[C]` `version` field is `"1.1"` (`"1.0"` is accepted as legacy)
-  - If this fails, the renderer may apply wrong parsing rules. Fix: set `version: "1.1"` — briefs already carrying `version: "1.0"` remain valid
 - `[W]` `theme` field references a valid theme ID
   - If this fails, the renderer will use fallback colors (generic blue). Fix: verify theme ID exists in `/cogni-workspace/themes/{id}/`
 - `[C]` `theme_path` points to an existing theme.md
@@ -90,8 +53,6 @@ For each section, verify:
   - If this fails, the section will render with a blank headline. Fix: write an assertion headline for the section
 - `[C]` Type-specific required fields present (see table below)
   - If this fails, the renderer will produce an incomplete section layout. Fix: add the missing fields per the table
-- `[C]` No color fields present (`fill`, `color`, `background`, `textColor`)
-  - If this fails, hardcoded colors will conflict with theme tokens. Fix: remove all color fields; the renderer decides colors from the theme tokens
 
 ### Header/Footer Checks
 
@@ -123,49 +84,25 @@ For each section, verify:
 
 **Goal:** Verify that section content communicates effectively and the reader receives a clear, compelling message at every scroll position.
 
-**Think first:** Message quality failures are subtle. The brief may be structurally valid but the messaging weak. Before checking, consider: Are the headlines actually saying something (assertion) or just labeling topics? Do the number plays create emotional impact? Is the body text supporting or just restating the headline?
+**Think first:** Message quality failures are subtle. The brief may be structurally valid but the messaging weak. Read `brief-validation-core.md` § Assertion headlines (the "About:" test, topic labels, uniqueness, completeness, imperative CTAs), § Number plays (isolated numbers, units in the label, the most visceral framing) and § Bullets and body text (body supports rather than restates, parallel bullets, no placeholders, no hedging), then apply the web-specific limits:
 
 ### Headline Quality
 
-- `[C]` Every headline is an assertion (contains a verb)
-  - **How to detect:** Read the headline. If you can put "About:" in front of it and it still makes sense, it is a topic label, not an assertion.
-  - If this fails, the section has no clear message. Fix: rewrite as `{subject} + {verb} + {object/benefit}`. Example: "Overview of Predictive Maintenance" becomes "Predictive Maintenance eliminates unplanned downtime".
-- `[C]` No topic labels ("Overview", "Summary", "Überblick", "Zusammenfassung", "Introduction", "Einleitung", "Fazit")
-  - If this fails, the reader sees a chapter title instead of a message. Fix: replace with the section's core assertion.
-- `[W]` Headlines are unique (no duplicates or near-duplicates)
-  - **How to detect:** Compare all headlines. Two headlines making the same claim in different words are near-duplicates.
-  - If this fails, the narrative feels repetitive. Fix: differentiate by emphasizing different aspects of the argument.
 - `[C]` Hero headline is transformation-first (max 10 words)
   - **How to detect:** Does the headline describe what changes for the reader? Count words.
   - If this fails, the hero lacks impact. Fix: lead with the transformation verb. Example: "Our Platform for Manufacturing" becomes "Transform Your Factory Floor into a Smart Production Line".
 - `[W]` Section headlines are under 70 characters
   - If this fails, headlines will wrap awkwardly on screen. Fix: tighten by removing unnecessary words.
-- `[W]` CTA headline is imperative (starts with an action verb: "Start", "Discover", "Starten", "Entdecken")
-  - If this fails, the CTA feels passive. Fix: rewrite as a direct command to the reader.
 
 ### Body Text Quality
 
-- `[W]` Body text supports the headline's claim (not just restates it)
-  - **How to detect:** Read the headline, then the body. Does the body add evidence, detail, or context the headline does not contain? If the body says the same thing as the headline in more words, it fails.
-  - If this fails, the section feels thin. Fix: add a specific fact, statistic, or mechanism that supports the headline's assertion.
-- `[C]` No placeholder text ("Lorem ipsum", "TODO", "TBD", "[insert here]", "xxx")
-  - If this fails, placeholder text will render on screen. Fix: write actual copy or remove the field.
-- `[W]` Bullet items are parallel in structure (all start with the same part of speech)
-  - **How to detect:** Read the first word of each bullet. Are they all nouns, all verbs, or mixed?
-  - If this fails, the bullets feel disorganized. Fix: rewrite so all bullets start with the same pattern (e.g., all noun phrases or all verb phrases).
 - `[W]` No bullet exceeds 8 words
   - If this fails, bullets lose scannability. Fix: split long bullets into two or tighten the wording.
 
 ### Number Play Quality (where present)
 
-- `[C]` Stat numbers are isolated (no units in the `number` field)
-  - **How to detect:** The `number` field should contain only digits, commas/dots, `%`, or ratio notation like `1:5`. No words like "days", "Tage", "EUR".
-  - If this fails, the stat card renders with units inside the large number, breaking the visual hierarchy. Fix: move units to the `label` field. Example: `number: "23 Tage"` becomes `number: "23"`, `label: "Tage Stillstand/Jahr"`.
-- `[W]` Labels provide unit context (the label field is not empty or generic)
-  - If this fails, the number has no meaning. Fix: write a label that gives the number unit and scope context.
-- `[I]` Numbers use the most emotionally impactful framing
-  - **How to detect:** Consider alternative framings. Would a ratio be more visceral than a percentage? Would a total be more shocking than a per-unit number?
-  - If this fails, the number play is functional but not optimal. Fix: try ratio framing, hero number isolation, or multiplier techniques from `03-section-copywriting.md`.
+- `[C]` Stat numbers are isolated (no units in the `number` field) — `number: "23 Tage"` becomes `number: "23"`, `label: "Tage Stillstand/Jahr"`; the stat card otherwise renders units inside the large number and breaks the visual hierarchy.
+- `[I]` Multiplier and ratio techniques from `03-section-copywriting.md` are the web-side toolkit for the framing question the core asks.
 
 ---
 
@@ -245,28 +182,11 @@ For each section, verify:
 
 ### Language Consistency
 
-- `[C]` All text is in the specified language (en or de)
-  - **How to detect:** Scan all headlines, body text, bullets, labels, and CTA text. Any text in the wrong language fails.
-  - If this fails, the page mixes languages, confusing the reader. Fix: translate the offending text to match the `language` field.
-- `[W]` German umlauts preserved where possible (a/o/u not ae/oe/ue)
-  - If this fails, the text looks informal or machine-generated. Fix: replace ae/oe/ue with proper umlauts where the brief system supports them.
-- `[W]` Number formatting matches language (EN: `2,661` / DE: `2.661`)
-  - **How to detect:** Check stat numbers and any numbers in body text. English uses commas for thousands; German uses dots.
-  - If this fails, numbers look foreign to the target audience. Fix: reformat numbers to match the language convention.
-- `[C]` No mixed-language content within a section
-  - **How to detect:** Read each section fully. English CTA text in an otherwise German brief is a common failure.
-  - If this fails, the section feels broken. Fix: translate all text within the section to the specified language.
+Read `brief-validation-core.md` § Language consistency and apply it: `[C]` every text field is in the declared language and no section mixes languages (an English CTA in a German brief is the common failure); `[W]` German umlauts preserved (ä/ö/ü, never ae/oe/ue) and number formatting matches the language (EN `2,661` / DE `2.661`).
 
 ### Source Preservation
 
-- `[I]` Citations with URLs preserved in section `source` fields
-  - If this fails, the brief loses provenance but renders fine. Fix: add `source:` fields with markdown links where the narrative cites external sources.
-- `[C]` No URLs invented or fabricated
-  - **How to detect:** For each URL in a `source` field, verify it matches a URL from the original narrative. If a URL appears that was not in the source, it fails.
-  - If this fails, the brief contains fabricated references, which is a credibility risk. Fix: remove the fabricated URL or replace with the actual source URL from the narrative.
-- `[W]` Key statistics traceable to source material
-  - **How to detect:** For each major statistic (stat-row numbers, problem-statement numbers), verify it appears in the original narrative.
-  - If this fails, the brief may contain invented data. Fix: correct the statistic to match the source, or remove it if no source exists.
+Read `brief-validation-core.md` § Source preservation and apply it: `[I]` citations with URLs preserved in section `source` fields; `[C]` no URL invented; `[W]` every stat-row and problem-statement number traceable to the narrative.
 
 ---
 
@@ -460,7 +380,8 @@ Validation: Schema {pass/fail} | Messages {pass/fail} | Visual {pass/fail} | Int
 Run validation after Step 7 (section copy complete) before writing the brief:
 
 ```
-FOR each layer (1 through 4):
+Layer 1: run check-brief.py --type web; fix every fail; then the section-level checks
+FOR each layer (2 through 4):
   Phase A: Reason about what is likely to fail for this specific brief
   Phase B: Run all checks systematically, recording severity and findings
   Phase C: Fix all CRITICAL issues, fix WARNING issues where possible

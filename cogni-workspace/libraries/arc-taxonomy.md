@@ -290,3 +290,24 @@ Arc contracts live in the `narrative` skill at:
 `cogni-workspace/skills/narrative/references/story-arc/{arc-id}/arc-definition.md`
 
 Each contract's `## Headings` table carries the four full section headings per language (EN, DE, and further columns where the arc supports them). The short element names in this file are derived from those headings — the segment before the first colon, or the whole heading when it carries none — and `cogni-workspace/tests/test-arc-taxonomy-sync.sh` case H1 checks that derivation for every migrated arc.
+
+---
+
+## Arc Roles
+
+The closed set of section roles every `story-to-*` producer assigns to a narrative's parts after the arc is resolved, declared here once. A 4.1 presentation brief writes the role on each slide as `intent.role`; a web or storyboard brief writes it as `arc_role`; the infographic producer uses it to order blocks. The renderer reads the declared role rather than re-deriving it.
+
+| Role | Meaning |
+|------|---------|
+| `hook` | opens — the title, the framing, the reason to listen |
+| `problem` | the situation that cannot stay as it is |
+| `urgency` | why now — the deadline, the trend, the closing window |
+| `evidence` | the numbers and sources that make the problem undeniable |
+| `solution` | what is proposed |
+| `proof` | why it works — pilots, comparisons, capability detail |
+| `options` | the choices and their trade-offs |
+| `roadmap` | the sequence and timing of getting there |
+| `investment` | what it costs and what it returns |
+| `call-to-action` | the next step the audience is asked to take |
+
+The order above is the expected emotional trajectory: tension (`problem`, `urgency`, `evidence`) → release (`solution`, `proof`) → momentum (`options`, `roadmap`, `investment`, `call-to-action`). A `solution` before any `problem` or `evidence`, or a `proof` before its `solution`, is the arc-flow defect the validation checklists ask the model to catch.

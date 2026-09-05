@@ -1,23 +1,26 @@
 # Validation Checklist
 
-Four-layer validation for infographic briefs. Stop on first failure, fix, then re-check.
-Self-assessment is unreliable without explicit measurement — models report "pass" while
-producing topic-label headlines and exceeding word limits. These gates force honest evaluation.
+Four-layer validation for infographic briefs. Layer 1 is mechanized; Layers 2–4 are reasoned through with the shared rules in `$CLAUDE_PLUGIN_ROOT/libraries/brief-validation-core.md` (§ Core principle, § Severity, § Protocol) and only the infographic-specific rules kept here. Stop on the first failure, fix, then re-check.
 
 ---
 
 ## Layer 1: Schema Validation
 
-Structural correctness. Every field must exist and conform to its type.
+Run the checker and fix every `fail` before reading further:
+
+```bash
+python3 "$CLAUDE_PLUGIN_ROOT/scripts/check-brief.py" --type infographic "{brief_path}"
+```
+
+It enforces the core: frontmatter present with the shared keys (`fm-core-keys`), `type: infographic-brief` with a version the dispatcher accepts and one the brief's own rendering family can render (`fm-type-version` — `"1.2"` for the editorial family, `"1.1"` for the hand-drawn `sketchnote` and `whiteboard` presets, whose agents accept `"1.0"` and `"1.1"` only), `## Block N:` units numbered without gaps and each one fenced, the fixed `## Title Block`, `## CTA Block` and `## Footer Block` present (`unit-numbering`, `unit-fenced`), and no styling field at any depth — `Background`, `Text-Color`, `Icon-Color`, `Role`, `Intensity`, `Mood`, `Fill`, `Border-Color` (`no-color-fields`). A missing `## Generation Metadata` block is a `warn` (`metadata-block`).
+
+Then verify the infographic-specific structure by eye:
 
 | Check | Pass | Fail |
 |-------|------|------|
-| Brief frontmatter present | `type: infographic-brief`, `version: "1.1"` | Missing frontmatter, wrong type, or any version other than `"1.1"` |
 | Required frontmatter fields | All present: theme, theme_path, language, layout_type, style_preset, orientation, dimensions, governing_thought | Any missing |
-| Block types valid | Every `Block-Type` is one of: title, kpi-card, stat-row, chart, process-strip, text-block, comparison-pair, icon-grid, svg-diagram, cta, footer | Unknown block type |
+| Block types valid | Every `Block-Type` is one of: title, kpi-card, stat-row, chart, process-strip, text-block, comparison-pair, icon-grid, svg-diagram, pull-quote, cta, footer | Unknown block type |
 | Required block fields | Each block has all required fields per infographic-layouts.md | Missing required field |
-| YAML parseable | All fenced YAML blocks parse without errors | Syntax errors |
-| No color fields | Zero instances of Background, Text-Color, Icon-Color, Fill, Border-Color | Any color field present |
 | Exactly one title block | Count of title blocks = 1 | 0 or 2+ title blocks |
 | Exactly one footer block | Count of footer blocks = 1 | 0 or 2+ footer blocks |
 | Layout type match | Blocks match the layout type's required/optional list from infographic-layouts.md | Required block missing or forbidden block present |
@@ -26,7 +29,7 @@ Structural correctness. Every field must exist and conform to its type.
 
 ## Layer 2: Content Density
 
-Infographics fail when they're overloaded. The first two limits derive from the active
+Infographics fail when they are overloaded. The first two limits derive from the active
 `style_preset`'s scan/read target — a 10-second scan for the standard presets, a 60-second
 read for `economist` — so both resolve from the Content Density table in
 `03-style-presets.md`. Every remaining row is a fixed per-block-type cap that does not vary
@@ -50,22 +53,18 @@ by preset.
 
 ## Layer 3: Data Integrity
 
-Numbers and claims must trace back to the source narrative. Infographics are shared and cited — fabricated data is a credibility disaster.
+Read `brief-validation-core.md` § Source preservation and § Language consistency — every number traces to the source, no claim the source does not support, no fabricated URL, one language throughout with real umlauts and German number formatting. Infographic-specific:
 
 | Check | Pass | Fail |
 |-------|------|------|
-| Numbers match source | Every Hero-Number, stat number, and chart data point appears in or is derivable from the source narrative | A number that doesn't exist in the source |
 | Chart data valid | Chart data arrays have matching lengths (labels.length == values.length per dataset) | Mismatched array lengths |
-| No fabricated claims | Title assertion is supported by evidence in the source | Assertion claims something the source doesn't support |
 | Source line present | Footer includes Source-Line with at least one source | No source attribution |
-| Language consistency | All text in the specified language (no mixed-language content) | Mixed languages |
-| German formatting | If language=de: umlauts are Unicode (ä not ae), numbers use dot separator (2.661 not 2,661) | ASCII umlauts or comma separators |
 
 ---
 
 ## Layer 4: Distillation Quality
 
-The hardest layer — it evaluates whether the distillation was effective, not just correct.
+The hardest layer — it evaluates whether the distillation was effective, not just correct. Read `brief-validation-core.md` § Assertion headlines and § Number plays for the title and the hero number; infographic-specific:
 
 | Check | Pass | Fail |
 |-------|------|------|
@@ -81,7 +80,7 @@ The hardest layer — it evaluates whether the distillation was effective, not j
 
 ## Validation Protocol
 
-1. Run all Layer 1 checks. If any fail → fix → re-run Layer 1.
+1. Run Layer 1 (the checker, then the structure table). If any fail → fix → re-run Layer 1.
 2. Run all Layer 2 checks. If any fail → reduce content → re-run Layers 1-2.
 3. Run all Layer 3 checks. If any fail → verify against source → re-run Layers 1-3.
 4. Run all Layer 4 checks. If any fail → improve distillation → re-run all layers.

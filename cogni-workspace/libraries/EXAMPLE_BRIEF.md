@@ -383,15 +383,15 @@ visual:
 Slide-Title: KI-Videoanalytik für Bahnsicherheit
 
 IS-Box:
-  Label: IS
+  Label: IST
   Text: Eine KI-gestützte Plattform für automatisierte Echtzeit-Überwachung von Bahninfrastruktur
 
 DOES-Box:
-  Label: DOES
+  Label: MACHT
   Text: Analysiert 24/7 Videomaterial, erkennt kritische Ereignisse (Personen auf Gleisen, Vandalismus, unbefugter Zugang) und sendet Echtzeitwarnungen
 
 MEANS-Box:
-  Label: MEANS
+  Label: BEDEUTET
   Text: Computer Vision Modelle (YOLOv8, Faster R-CNN) + Anomaly Detection + Edge Computing für <2s Latenz
 
 Bottom-Banner:

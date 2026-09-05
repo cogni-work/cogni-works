@@ -2,8 +2,8 @@
 name: story-to-slides
 description: >
   Use this agent when a narrative that already has a story arc must become an optimized
-  presentation brief. Typical triggers include the why-change-work orchestrator invoking
-  it for Phase 5 Step 4 (Synthesis); turning a research report, strategy document, or
+  presentation brief. Typical triggers include the narrative-publish pipeline skill
+  dispatching it as its slides hop; turning a research report, strategy document, or
   project update into a slide brief; and smoke-testing the narrative transformation before
   batch processing. See "When to Use" in the agent body for the full scenario list.
 model: opus
@@ -21,7 +21,7 @@ Orchestrate narrative-to-YAML transformation by invoking the story-to-slides ski
 
 ## When to Use
 
-- Why-change-work orchestrator invokes for Phase 5 Step 4 (Synthesis)
+- Running the slides hop as an autonomous subprocess, the work the narrative-publish pipeline also drives in-context
 - User requests presentation brief generation from any narrative
 - Transforming research reports, strategy documents, or project updates into slide briefs
 - Testing narrative transformation before batch processing
@@ -303,48 +303,14 @@ This agent returns **minimal JSON** to preserve orchestrator context:
 
 - MUST preserve German umlauts (ä, ö, ü, Ä, Ö, Ü, ß)
 
-## Integration with Phase 5 Synthesis
+## Called by narrative-publish
 
-This agent is invoked by why-change-work Phase 5 Step 4:
-
-```bash
-# Phase 5 Step 6: Generate Presentation Brief
-USE: Task tool
-INVOKE: cogni-workspace:story-to-slides
-PARAMETERS:
-  subagent_type: "cogni-workspace:story-to-slides"
-  prompt: |
-    Generate presentation brief from narrative files.
-    Source Path: ${project_path}
-    Theme: ${theme_selected}
-    Language: ${language}
-    Arc Type: why-change
-    Customer: ${customer_name}
-    Provider: ${user_company}
-    Governing Thought: ${governing_thought}
-    Audience Context: |
-      Economic Buyer: ${eb_title} — Priority: ${eb_priorities} — Objection: ${eb_objections}
-      Technical Evaluator: ${te_title} — Priority: ${te_priorities} — Objection: ${te_objections}
-      End Users: ${eu_teams} — Priority: ${eu_priorities} — Objection: ${eu_objections}
-      Champion: ${champion_status} — ${champion_motivation}
-      Blockers: ${blocker_summary}
-      Source: ${buying_center_source}
-    Buyer Appendix Path: ${buyer_appendix_path}
-
-# Parse JSON response
-response=$(echo "${agent_output}" | jq -r '.')
-ok=$(echo "${response}" | jq -r '.ok')
-conf=$(echo "${response}" | jq -r '.conf // 0')
-
-IF ok=true AND conf >= 0.8:
-  - Use generated ${project_path}/cogni-visual/presentation-brief.md
-  - SKIP template approach (Attempt 2)
-  - Proceed to Step 5
-
-IF ok=false OR conf < 0.8:
-  - FALLBACK to template approach (Attempt 2)
-  - Log error code or low confidence for manual review
-```
+The `narrative-publish` pipeline skill owns the slides hop this agent also serves, and
+consolidates the compact JSON above into its own envelope alongside its other targets. The
+pipeline runs that hop by dispatching the `story-to-slides` **skill** in-context; this agent is
+the autonomous-subprocess entry point to the same work, for callers that need it dispatched as a
+subprocess. Per-hop parameters are declared once, in
+`skills/narrative-publish/references/pipeline-contract.md`.
 
 ## Quality Metrics
 
@@ -353,11 +319,10 @@ IF ok=false OR conf < 0.8:
 - Agent response time: <5 seconds (skill does heavy work)
 - JSON format: 100% valid
 - Context usage: <120 characters per invocation
-- Confidence threshold: 0.8+ for automatic acceptance
 
 **Failure Modes:**
 
 - Missing source_path: Return `{"ok":false,"e":"param"}`
 - Missing source files: Return `{"ok":false,"e":"files"}`
 - Skill execution error: Return `{"ok":false,"e":"skill"}`
-- Low confidence (<0.8): Return success JSON, orchestrator handles fallback
+- Low confidence: return the success JSON with `conf` set; the caller decides what to do with it

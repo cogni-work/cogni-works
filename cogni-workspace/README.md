@@ -153,6 +153,7 @@ State lives in two layers that other plugins consume. Configuration (env vars, t
 | `reader` | agent | Delegation wrapper for the `copy-reader` skill |
 | `commands/claims.md` | command | Registers `/claims` as the entry point to the verification lifecycle |
 | `commands/narrative.md` | command | Registers `/narrative`, with `/narrative-adapt` alongside it |
+| `commands/narrative-publish.md` | command | Registers `/narrative-publish`, the one-invocation pipeline entry point |
 | `commands/copywrite.md` | command | Registers `/copywrite`, with `/review-doc` alongside it |
 | `commands/render-infographic.md` | command | Registers `/render-infographic`, the style-agnostic renderer entry point that auto-routes on the brief's `style_preset` |
 | `commands/render-infographic-handdrawn.md` | command | Registers `/render-infographic-handdrawn` for direct sketchnote / whiteboard dispatch |
@@ -181,6 +182,7 @@ State lives in two layers that other plugins consume. Configuration (env vars, t
 | `render-html-slides` | skill | Render a presentation brief into self-contained HTML slides with speaker notes |
 | `enrich-report` | skill | Turn a markdown report into a themed HTML deliverable with charts and inline SVG diagrams |
 | `review-brief` | skill | Score a visual brief from three stakeholder perspectives before rendering |
+| `narrative-publish` | skill | Sequence narrative, optional polish, theme and brief generation in one invocation; render is opt-in |
 | `story-to-slides` | agent | Drive the story-to-slides skill as an autonomous subprocess |
 | `story-to-web` | agent | Drive the story-to-web skill as an autonomous subprocess |
 | `story-to-storyboard` | agent | Drive story-to-web's storyboard mode as an autonomous subprocess |
@@ -209,7 +211,7 @@ State lives in two layers that other plugins consume. Configuration (env vars, t
 ```
 cogni-workspace/
 ├── .claude-plugin/plugin.json    Plugin manifest
-├── skills/                       21 workspace and visual-rendering skills
+├── skills/                       22 workspace and visual-rendering skills
 │   ├── audit-region-sources/     Audit per-plugin region-source overlays against the registry
 │   ├── claim-entity/             Cross-plugin ClaimEntity data contract and store layout
 │   ├── claims/                   Claim-verification lifecycle (+ scripts/claims-store.sh)
@@ -219,6 +221,7 @@ cogni-workspace/
 │   ├── manage-markets/           Write path for the canonical supported-markets registry
 │   ├── manage-themes/
 │   ├── manage-workspace/         Init or update workspace (includes Obsidian integration)
+│   ├── narrative-publish/        One invocation: narrative -> brief(s) -> optional render
 │   ├── pick-theme/
 │   ├── render-html-slides/       Presentation brief -> self-contained HTML slides
 │   ├── review-brief/             Score a visual brief from three stakeholder perspectives
@@ -236,9 +239,9 @@ cogni-workspace/
 │   ├── render-infographic-*.md   Three infographic renderers (pencil, sketchnote, whiteboard)
 │   └── concept-diagram*.md       Diagram workers (Excalidraw and inline-SVG variants)
 ├── libraries/                    18 layout, taxonomy and worked-example files read at render time
-├── commands/                     12 slash commands
+├── commands/                     13 slash commands
 │   ├── claims.md                 Registers /claims
-│   ├── narrative*.md             Registers /narrative, /narrative-adapt
+│   ├── narrative*.md             Registers /narrative, /narrative-adapt, /narrative-publish
 │   ├── copywrite.md              Registers /copywrite and /review-doc
 │   ├── render-infographic*.md    Registers /render-infographic and its two direct-dispatch variants
 │   ├── render-html-slides.md     Registers /render-html-slides

@@ -53,9 +53,14 @@ rather than inferring them from the procedure below.
    `--theme`; do not prompt.
 5. **Build each brief.** Walk `--to` in order, dispatching the matching
    `story-to-*` skill sequentially — never in parallel, since they share the
-   source directory. Pass `stakeholder_review=true` and, for the infographic
-   target, `render=false` explicitly on every hop. Both have callee defaults that
-   otherwise override this skill's contract; the reference explains each.
+   source directory. Spell the review flag out at each hop; it is not inherited:
+   - `slides` → `story-to-slides` with `stakeholder_review=true`
+   - `web` and `storyboard` → `story-to-web` with `stakeholder_review=true`
+     (plus `mode=storyboard` for the latter)
+   - `infographic` → `story-to-infographic` with `stakeholder_review=true` and
+     `render=false` unless `--render` was given
+   Both flags have callee defaults that otherwise override this skill's contract;
+   the reference explains each.
 6. **Apply the reject rule** after each target — read the brief's `.review.json`
    sibling and branch on its verdict string, per the contract's reject rule, which
    fixes both the field to read and the continue-or-fail semantics.

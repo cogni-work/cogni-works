@@ -414,11 +414,6 @@
     {
       "skill": "narrative",
       "arm": "reference-depth",
-      "file": "cogni-workspace/skills/narrative/references/phase-workflows"
-    },
-    {
-      "skill": "narrative",
-      "arm": "reference-depth",
       "file": "cogni-workspace/skills/narrative/references/story-arc"
     },
     {
@@ -475,81 +470,6 @@
       "skill": "narrative",
       "arm": "reference-depth",
       "file": "cogni-workspace/skills/narrative/references/story-arc/trend-panorama"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/phase-workflows/phase-4b-synthesis-smarter-service.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/phase-workflows/phase-4b-synthesis-theme-thesis.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/phase-workflows/phase-4b-synthesis-trend-panorama.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/smarter-service/forces-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/smarter-service/foundations-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/smarter-service/horizons-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/smarter-service/impact-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/theme-thesis/why-change-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/theme-thesis/why-now-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/theme-thesis/why-pay-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/theme-thesis/why-you-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/trend-panorama/forces-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/trend-panorama/foundations-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/trend-panorama/horizons-patterns.md"
-    },
-    {
-      "skill": "narrative",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/narrative/references/story-arc/trend-panorama/impact-patterns.md"
     },
     {
       "skill": "portfolio-scan",

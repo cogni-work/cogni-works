@@ -49,7 +49,7 @@ PHASE_DIR="${ARC_CONTRACT_PHASE_DIR:-$PLUGIN_DIR/skills/narrative/references/pha
 LANG_TEMPLATES="$PLUGIN_DIR/skills/narrative/references/language-templates.md"
 
 # Arcs still on the three-layer shape. Shrink-only — see THE RATCHET above.
-UNMIGRATED="smarter-service theme-thesis trend-panorama"
+UNMIGRATED=""
 
 # The contract shape, stated once. Order matters for C1; the six subfields for C2.
 HEADINGS="Intent Selection Headings Composition Elements Validation See_Also"

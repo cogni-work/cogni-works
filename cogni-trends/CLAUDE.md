@@ -120,7 +120,7 @@ Each project lives in a directory with:
 - **Ansoff Weak Signals** (1979) — 5-level signal intensity scale mapped to action horizons
 - **Rogers Diffusion of Innovation** (1962) — Adoption stage classification with chasm threshold at 16%
 - **CRAAP Test** (Blakeslee, 2004) — Source quality assessment in signal extraction and curation
-- **Smarter Service** (theme-aware sibling of Trend Panorama) — Macro skeleton: Forces -> Impact -> Horizons -> Foundations as 4 H2 sections, with investment themes nested as anchored H3 cases. Closes on a Foundations-anchored "Capability Imperative" synthesis. The canonical TIPS report skeleton produced by `trend-synthesis`. The arc is registered upstream in `cogni-workspace/skills/narrative/references/story-arc/smarter-service/`.
+- **Smarter Service** (theme-aware sibling of Trend Panorama) — Macro skeleton: Forces -> Impact -> Horizons -> Foundations as 4 H2 sections, with investment themes nested as anchored H3 cases. The report closes on a Foundations-anchored "Capability Imperative" synthesis, which is `trend-report-composer`'s own composition — the upstream arc contract is exactly four sections and states that boundary. The canonical TIPS report skeleton produced by `trend-synthesis`. The arc is registered upstream as one contract file, `cogni-workspace/skills/narrative/references/story-arc/smarter-service/arc-definition.md`; the composer reads its `### N.` element sections and `## Composition`.
 
 ### LLM Research Techniques
 

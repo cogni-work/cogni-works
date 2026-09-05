@@ -103,9 +103,9 @@ Each arc has 4 ordered elements that represent the phases of the narrative struc
 | # | Element (EN) | Element (DE) | Narrative Function |
 |---|-------------|-------------|-------------------|
 | 1 | Why Change | Warum Veränderung | Investment context and market forces |
-| 2 | Why Now | Warum Jetzt | Urgency and window of opportunity |
-| 3 | Why You | Warum Wir | Strategic capabilities and differentiation |
-| 4 | Why Pay | Warum Investieren | Business case and expected returns |
+| 2 | Why Now | Warum jetzt | Urgency and window of opportunity |
+| 3 | Why You | Warum Sie | Strategic capabilities and differentiation |
+| 4 | Why Pay | Geschäftliche Auswirkungen | Business case and expected returns |
 
 ### jtbd-portfolio
 

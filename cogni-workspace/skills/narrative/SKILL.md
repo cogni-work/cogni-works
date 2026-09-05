@@ -184,7 +184,7 @@ Read two files, in full, before writing anything:
 1. `references/story-arc/{arc_id}/arc-definition.md` — the arc contract: `## Headings`, `## Composition`, `## Elements`, `## Validation`.
 2. `references/narrative-techniques/techniques-overview.md` — the eight techniques and the application matrix.
 
-**Transition rule for unmigrated arcs.** An arc whose contract does not carry `contract: 2` in its frontmatter is listed in `UNMIGRATED` in `cogni-workspace/tests/test-arc-contract-shape.sh` and still ships its `references/phase-workflows/phase-4b-synthesis-{arc_id}.md`. For such an arc, read that file (and the `shared-steps.md` it links) after the two above; Pass 1 follows its element-writing steps in place of the contract's `## Elements`, and its `## Arc-Specific Headers` block — mirrored in `references/language-templates.md` — is the heading authority. Everything else in this workflow applies unchanged.
+Every arc carries `contract: 2`; `cogni-workspace/tests/test-arc-contract-shape.sh` keeps that true, so there is no other file to read for an arc. The EN/DE heading tables in `references/language-templates.md` mirror the contracts' `## Headings` until that file is retired.
 
 **After reading,** name the four elements in order with their proportions, and say which techniques the matrix assigns to each. Re-read until both come without looking.
 

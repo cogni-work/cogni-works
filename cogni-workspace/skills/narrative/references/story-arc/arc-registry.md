@@ -537,7 +537,7 @@ story-arc/{arc-id}/
 └── arc-definition.md          # v2 contract: Intent, Selection, Headings, Composition, Elements, Validation, See Also
 ```
 
-A contract carries `contract: 2` in its frontmatter and the seven `##` sections in that order; `## Elements` holds exactly four `### N.` sections, each with Purpose, Evidence sought, Argument move, Techniques, Hard rules and Failure modes. `cogni-workspace/tests/test-arc-contract-shape.sh` enforces the shape. Arcs not yet migrated to it are listed in that suite's `UNMIGRATED` ratchet and still ship a `phase-workflows/phase-4b-synthesis-{arc-id}.md` workflow file, which SKILL.md Phase 3 follows for them.
+A contract carries `contract: 2` in its frontmatter and the seven `##` sections in that order; `## Elements` holds exactly four `### N.` sections, each with Purpose, Evidence sought, Argument move, Techniques, Hard rules and Failure modes. `cogni-workspace/tests/test-arc-contract-shape.sh` enforces the shape for every arc directory it finds; its `UNMIGRATED` ratchet is empty and can only stay so — an arc directory carrying anything other than a `contract: 2` file turns the suite red.
 
 ## Interactive Selection Format
 

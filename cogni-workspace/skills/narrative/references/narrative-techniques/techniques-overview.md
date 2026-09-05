@@ -160,13 +160,13 @@ Total Cost of Inaction =
 
 One column per registered arc (arc ids in the header). Each cell names the element(s) the technique serves in that arc; `-` means the arc does not call for it.
 
-| Technique | corporate-visions | technology-futures | competitive-intelligence | strategic-foresight | industry-transformation | trend-panorama | theme-thesis | jtbd-portfolio | company-credo | engagement-model |
-|-----------|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
-| Pyramid Principle | All | All | All | All | All | All | All | All | All | All |
-| PSB | Why Change | - | Landscape | - | Forces | Forces | Why Change | Job Landscape | - | - |
-| IS-DOES-MEANS | Why You | What's Possible, What's Required | Positioning | Strategies | Leadership | Horizons, Foundations | Why You | Portfolio Map | Promise | Outcomes |
-| Number Plays | All | All | All | All | All | All | All | All | Credibility | Process |
-| Forcing Functions | Why Now | What's Required | Shifts, Implications | Signals, Decisions | Forces | Forces, Foundations | Why Now | Friction Map | Mission | Principles |
-| Contrast Structure | Why Change | What's Emerging, What's Converging | Landscape, Shifts | Signals, Scenarios, Strategies | Forces, Friction, Evolution | Forces, Impact | Why Change | Job Landscape | Mission, Conviction, Credibility | Principles, Partnership |
-| You-Phrasing | Why You | What's Possible | Positioning | Strategies | Leadership | Horizons, Foundations | Why You | Portfolio Map, Invitation | Conviction, Promise | Process, Partnership, Outcomes |
-| Compound Impact | Why Pay | What's Required | Implications | Decisions | Friction, Leadership | Impact, Foundations | Why Pay | Friction Map | - | - |
+| Technique | corporate-visions | technology-futures | competitive-intelligence | strategic-foresight | industry-transformation | trend-panorama | smarter-service | theme-thesis | jtbd-portfolio | company-credo | engagement-model |
+|-----------|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+| Pyramid Principle | All | All | All | All | All | All | All | All | All | All | All |
+| PSB | Why Change | - | Landscape | - | Forces | Forces | Forces | Why Change | Job Landscape | - | - |
+| IS-DOES-MEANS | Why You | What's Possible, What's Required | Positioning | Strategies | Leadership | Horizons, Foundations | Horizons, Foundations | Why You | Portfolio Map | Promise | Outcomes |
+| Number Plays | All | All | All | All | All | All | All | All | All | Credibility | Process |
+| Forcing Functions | Why Now | What's Required | Shifts, Implications | Signals, Decisions | Forces | Forces, Impact, Foundations | Forces, Impact, Foundations | Why Now | Friction Map | Mission | Principles |
+| Contrast Structure | Why Change | What's Emerging, What's Converging | Landscape, Shifts | Signals, Scenarios, Strategies | Forces, Friction, Evolution | Forces, Impact, Horizons | Forces, Impact, Horizons | Why Change, Why Now | Job Landscape | Mission, Conviction, Credibility | Principles, Partnership |
+| You-Phrasing | Why You | What's Possible | Positioning | Strategies | Leadership | Horizons, Foundations | Horizons, Foundations | Why You | Portfolio Map, Invitation | Conviction, Promise | Process, Partnership, Outcomes |
+| Compound Impact | Why Pay | What's Required | Implications | Decisions | Friction, Leadership | Impact, Foundations | Impact, Foundations | Why Pay | Friction Map | - | - |

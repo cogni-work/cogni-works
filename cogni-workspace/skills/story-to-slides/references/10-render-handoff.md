@@ -54,17 +54,29 @@ Open claude.ai → new chat → attach both files → paste the prompt above.
 ─────────────────────────────────────────────────
 ```
 
-## Option 3 — HTML deck (render-html-slides)
+## Option 3 — pptx inside Claude Code (pptx agent)
+
+Resolve a theme exactly as in Option 2, then dispatch the `cogni-workspace:pptx` agent via the Agent tool with:
+
+```
+PRESENTATION_BRIEF: {absolute_path_to_presentation_brief}
+THEME_FILE: {absolute_path_to_theme_md}
+OUTPUT_PATH: {source_dir}/cogni-visual/presentation.pptx
+```
+
+The agent resolves the installed Anthropic pptx skill (`anthropic-skills:pptx` first, `document-skills:pptx` from the marketplace second), builds the deck from the brief's Rendering Contract and `libraries/pptx-render-recipe.md`, then round-trips the result against the brief and reports a `qa` block. Print the returned `output_path` and summarise `qa` (missing text or notes, validation status, thumbnails status). When the agent returns `{"success": false, "error": "pptx_skill_unavailable"}`, neither skill name resolves in this session: print the Option 2 instructions and paths instead — never fail the run on it.
+
+## Option 4 — HTML deck (render-html-slides)
 
 Dispatch `cogni-workspace:render-html-slides` via the Skill tool with `brief_path={absolute_path_to_presentation_brief}`. The renderer resolves its own theme — the brief's `theme_path` when present, otherwise the ecosystem picker — so nothing is resolved here. Report the HTML path it returns.
 
-## Option 4 — Later
+## Option 5 — Later
 
 Print the brief path and the outline path, render nothing, and stop.
 
 ## Headless runs
 
-When `interactive` is `false`, or the user answers with an empty response, the checkpoint behaves as Option 4 after the outline export: it prints the brief and outline paths, renders nothing, and asks nothing. The `narrative-publish` pipeline relies on this.
+When `interactive` is `false`, or the user answers with an empty response, the checkpoint behaves as Option 5 after the outline export: it prints the brief and outline paths, renders nothing, and asks nothing. The `narrative-publish` pipeline relies on this.
 
 ## Printed paths
 

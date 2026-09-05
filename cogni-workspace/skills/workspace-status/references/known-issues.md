@@ -74,8 +74,11 @@ but no `.pptx` file is produced.
 brief is a separate step, and the skill that performs it does not ship from this
 marketplace. The workflow's last step, the Render checkpoint (Step 11), offers the
 render paths and renders nothing on its own: Claude Design via the exported outline, a
-claude.ai chat with the Anthropic PPTX skill, or an HTML deck. Under
-`interactive=false` it only prints the paths.
+claude.ai chat with the Anthropic PPTX skill, the in-Claude-Code `pptx` agent, or an
+HTML deck. Under `interactive=false` it only prints the paths. The `pptx` agent
+dispatches `anthropic-skills:pptx` first and `document-skills:pptx` second; when neither
+resolves in the session it returns `pptx_skill_unavailable` and the checkpoint prints the
+claude.ai instructions instead.
 
 **Fix**: Take the claude.ai route — open a new chat there and attach the generated
 `presentation-brief.md` together with a `theme.md` (the checkpoint resolves one through

@@ -105,6 +105,8 @@ remedy. Each has a `references/known-issues.md` entry that carries the fix.
   probes, so `references/known-issues.md` stays its documented owner — see
   "GitHub not logged in".
 - **PPTX rendering skill unavailable** — the skill that renders a
-  story-to-slides brief into a `.pptx` does not ship from this marketplace.
-  Take story-to-slides Step 11, the Render checkpoint: the claude.ai attachment
-  path or the HTML deck need nothing installed here.
+  story-to-slides brief into a `.pptx` does not ship from this marketplace; the
+  `pptx` agent tries `anthropic-skills:pptx` then `document-skills:pptx` and
+  returns `pptx_skill_unavailable` when neither resolves. Take story-to-slides
+  Step 11, the Render checkpoint: the claude.ai attachment path or the HTML deck
+  need nothing installed here.

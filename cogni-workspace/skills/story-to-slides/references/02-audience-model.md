@@ -1,5 +1,7 @@
 # Audience Model
 
+> **Consumers:** read by `skills/story-to-slides/SKILL.md` (Step 3) and, by absolute plugin path, by `skills/story-to-web/SKILL.md` (Step 3). Relocating or renaming this file changes both readers.
+
 ## Purpose
 
 Define how to build an Audience Model at pipeline start — before arc analysis, message architecture, or copywriting begins. The Audience Model answers: **WHO is this presentation for, what do they care about, and what will make them say yes?**

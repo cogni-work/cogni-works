@@ -60,97 +60,27 @@ The brief describes WHAT each section says and which section type to use. The Pe
 
 ### Caller-supplied overrides
 
-These are typically set by an upstream agent (e.g., why-change-work), not by a human user:
-
-| Parameter | Default | Description |
-|-----------|---------|-------------|
-| `confidence_threshold` | `0.8` | Minimum confidence for automatic section-type mapping |
-| `governing_thought` | auto-extracted | Pre-computed governing thought — Step 2 validates rather than re-derives. |
-| `section_roles` | auto-detected | Pre-mapped section roles — Step 2 validates rather than re-derives. |
-| `buyer_appendix_path` | none | Path to buyer-appendix.md for enriched audience model (Step 3 only). |
+Read `$CLAUDE_PLUGIN_ROOT/libraries/brief-pipeline.md` § Caller-supplied overrides; this skill's column is **web** — `confidence_threshold` (section-type mapping), `governing_thought` and `section_roles` (validated in Step 2), `buyer_appendix_path` (Step 3 only).
 
 ---
 
 ## Conventions
 
-### Theme-driven visuals
-
-The Pencil renderer owns all visual decisions — colors, fonts, spacing — by reading the theme directly. Briefs specify content and section type only. Omit visual fields (`Background:`, `Text-Color:`, `Icon-Color:`) because the renderer ignores them and their presence creates ambiguity about who controls styling.
-
-### Interactive checkpoints
-
-Interactive prompts let the user steer creative decisions without micromanaging. The structured format below ensures AskUserQuestion renders properly — unstructured prose produces empty prompts:
-
-```
-questions: [{
-  question: "Your question here?",
-  header: "Short Label",
-  options: [
-    { label: "Option Name", description: "What this means" },
-    { label: "Another Option", description: "What this means" }
-  ],
-  multiSelect: false
-}]
-```
-
-On empty or blank responses, auto-select the best option and move on. When `interactive` is `false`, skip all AskUserQuestion calls.
-
-### German fidelity
-
-German web narratives go to executives and get embedded in reports. ASCII-ified umlauts (`ae`/`oe`/`ue`) immediately signal "machine-generated" and undermine credibility. Use real Unicode throughout the generated copy: ae->ä oe->ö ue->ü ss->ß. German number formatting: 2.661 (dot as thousands separator).
-
-This rule governs generated output copy only — headlines, body text, section labels, and CTA text. It does not govern filenames, slugs, or other machine identifiers, which transliterate umlauts deliberately. It also does not govern the trigger phrases in this skill's frontmatter description, where any ASCII spellings are deliberate: a user on a non-German keyboard types them that way, so respelling one silently drops German triggering coverage. Leave the frontmatter block unchanged when correcting umlauts anywhere else in this file.
-
----
-
-## Quick Reference: Good vs Bad Output
-
-**Headlines** — assert, don't label:
-- Bad: "Our Approach" (topic label — reader must scroll through the section to get the point)
-- Good: "AI-Powered Monitoring Cuts Response Time from Hours to Seconds" (assertion — message lands instantly)
-
-**Number plays** — reframe for impact:
-- Bad: "There were 688 incidents in 2023" (buried in body text)
-- Good: Hero number `688` isolated in stat-row, sublabel `+ 2,661 related events`, supporting text explains scale
-
-**Bullets** — scan-optimized, not sentences:
-- Bad: "The security staff are unable to adequately cover all areas of the network on a 24/7 basis" (19 words)
-- Good: "Staff cannot cover all areas 24/7" (6 words, max 10 words per bullet)
-
-**CTAs** — imperative verb, not passive label:
-- Bad: "Contact Us" (generic, no urgency)
-- Good: "Schedule Your Security Assessment" (specific action tied to conversion goal)
+Read `$CLAUDE_PLUGIN_ROOT/libraries/brief-conventions.md` and apply every section: theme-driven visuals (the Pencil renderer owns styling; briefs carry no color field), the structured AskUserQuestion format and the empty-response rule, German fidelity (real Unicode in generated copy, frontmatter trigger phrases left untouched), the good-vs-bad quick reference for headlines, number plays, bullets and CTAs, and absolute printed paths. This skill's interactive checkpoints are narrative selection (Step 0), the section plan (Step 5) and the CTA plan (Step 6b). When `interactive` is `false`, skip every AskUserQuestion call and auto-select.
 
 ---
 
 ## Workflow
 
-When invoked without explicit parameters, search the filesystem first (Step 0) rather than prompting for paths. Users invoke this skill from project directories that already contain their narrative — asking for a path they're sitting next to creates unnecessary friction.
-
 ### Execution protocol
 
-Each step: verify the previous step's output is available (entry gate), read the reference file for that step, execute, then state the output summary before moving on. Reference files contain step-specific rules that prevent downstream rework — read them at the start of each step.
+Read `$CLAUDE_PLUGIN_ROOT/libraries/brief-pipeline.md` § Execution protocol and follow it for every step: entry gate, read the step's reference, execute, state the output summary. When invoked without explicit parameters, search the filesystem first (Step 0) rather than prompting for paths.
 
 ---
 
 ### Step 0: Narrative Auto-Discovery
 
-> Users invoke from project directories containing their narrative. Searching first eliminates path-fumbling.
-
-If `source_path` was explicitly provided: set `source_dir` to its parent directory and proceed to Step 1.
-
-Otherwise, search without asking:
-
-1. **Primary:** Glob `**/insight-summary.md` from CWD (max 3 levels)
-2. For each candidate: read first 30 lines, extract title, arc_id, estimate word count
-3. **Secondary** (if 0 primary results): Glob `**/*.md`, filter for `arc_id:` in first 30 lines. Exclude SKILL.md, README.md, CLAUDE.md.
-4. Sort: insight-summary.md files first, then by path depth (shallow first)
-
-**If candidates found:** Present via AskUserQuestion (max 4 options with filename, title, arc_id, word count). On empty response, auto-select top candidate.
-
-**If no candidates:** Ask for path or cancel. On empty response, stop with: "No narrative path provided. Stopping."
-
-Set `source_dir` = parent directory of selected `source_path`.
+Read `$CLAUDE_PLUGIN_ROOT/libraries/brief-pipeline.md` § Narrative auto-discovery and execute; this skill's values: on selection, set `source_dir` and proceed to Step 1.
 
 ---
 
@@ -160,23 +90,9 @@ Set `source_dir` = parent directory of selected `source_path`.
 
 Determine input type (directory with metadata vs single file) and load metadata.
 
-**Arc resolution** (priority order):
-1. `arc_id` parameter -> use directly
-2. Source narrative frontmatter `arc_id` -> extract
-3. Neither -> Step 2 auto-detects
+**Arc resolution:** read `$CLAUDE_PLUGIN_ROOT/libraries/brief-pipeline.md` § Arc resolution and execute; this skill's values: when the arc stays unset, Step 2 auto-detects; `arc_definition_path` element names and their translations become `section_label` values.
 
-If arc_id set: read `$CLAUDE_PLUGIN_ROOT/libraries/arc-taxonomy.md`, map to arc_type. Mapped arc_type overrides `arc_type` parameter. If `arc_definition_path` provided: extract element names and translations for section labels.
-
-**Theme resolution:** Delegate to `cogni-workspace:pick-theme` — the ecosystem-standard theme picker.
-
-1. If `theme` parameter was explicitly provided with an absolute path: use it directly, skip the picker.
-2. Otherwise: invoke the `cogni-workspace:pick-theme` skill via the Skill tool. The picker scans standard and workspace theme directories, presents an interactive AskUserQuestion, and returns the absolute `theme_path`.
-3. Store the returned `theme_path` (absolute path to `theme.md`), `theme_name`, and `theme_slug` for downstream use.
-4. Read the selected `theme.md` to confirm it loads correctly.
-
-If pick-theme is unavailable (e.g., cogni-workspace not installed), fall back to Glob scanning `$COGNI_WORKSPACE_ROOT/themes/*/theme.md` and present via AskUserQuestion manually.
-
-> **Path convention:** The `theme_path` stored in the brief frontmatter must be the **absolute filesystem path** to the theme.md file, so the renderer agent can read it without path resolution ambiguity.
+**Theme resolution:** read `$CLAUDE_PLUGIN_ROOT/libraries/brief-pipeline.md` § Theme resolution and execute the web row: a caller-supplied absolute path is used directly, otherwise the theme entry point returns `theme_path` (the absolute path to `theme.md`), `theme_name` and `theme_slug`; store all three, and read the theme at Step 4.
 
 **Provider/customer resolution:** Extract `provider_name` and `customer_name` from source metadata. If not found in the source file's frontmatter, search parent and sibling directories for files with `provider:` or `customer:` fields (e.g., sales-presentation.md, pitch-log.json). If still not found, leave empty — never default to the theme name.
 
@@ -400,7 +316,7 @@ Four layers — stop on first failure, fix, re-check:
 3. **Visual coherence** — section theme alternation, feature position alternation, image consistency
 4. **Content integrity** — all narrative sections represented, language consistency
 
-**`mode=storyboard` only:** read `references/print/04-validation.md` **instead of** `05-validation.md`, not in addition to it. It restates all four layers against the storyboard-brief schema and then adds a fifth print group — poster count within 3-5, per-section minimum heights, poster font-size minimums, safe-area margins, and contiguous poster sequence numbering. The substitution is load-bearing — the web layers fail four CRITICAL checks on a sound storyboard brief and would rewrite it into web shape; `print/04-validation.md` opens with the full rationale.
+**`mode=storyboard` only:** read `references/print/04-validation.md` **instead of** `05-validation.md`, not in addition to it. It restates all four layers against the storyboard-brief schema and then adds a fifth print group — poster count within 3-5, per-section minimum heights, poster font-size minimums, safe-area margins, and contiguous poster sequence numbering. The substitution is load-bearing, not tidiness — the web layers fail four CRITICAL checks on a sound storyboard brief and would rewrite it into web shape; `print/04-validation.md` opens with the full rationale.
 
 ---
 
@@ -408,31 +324,7 @@ Four layers — stop on first failure, fix, re-check:
 
 > Structural validation catches schema and formatting issues, but cannot tell whether the web brief will create an effective scroll experience — whether the opening hooks visitors, whether CTAs are placed at motivation peaks, or whether the content converts. In `mode=storyboard` the same question is a print one — whether a poster reads at arm's length, whether the station sequence survives a physical walkthrough, and whether any single poster is overloaded. The brief-review-assessor evaluates from the perspective trio matching the `brief_type` it is given.
 
-**Skip this step** if `stakeholder_review=false`.
-
-Launch the `brief-review-assessor` agent with:
-- `brief_type`: `web`
-- Brief content (write to a `.draft` temp file if the brief hasn't been written yet)
-- `source_narrative`: the narrative path from Step 0
-- `audience_context`: if provided
-- `round`: 1
-
-**`mode=storyboard` only:** pass `brief_type`: `storyboard` instead — the assessor then loads the Print Designer (30%) / Target Audience (40%) / Exhibition Presenter (30%) trio from `libraries/brief-review-perspectives.md` rather than the web trio (see `agents/brief-review-assessor.md`).
-
-**On accept (all perspectives ≥85):** Proceed to Step 10.
-
-**On revise:**
-1. Apply CRITICAL improvements first, then HIGH improvements — edit section headlines, types, CTAs, image prompts, and section sequence as recommended
-2. Re-run Step 9 validation to ensure structural integrity after edits
-3. Re-launch the assessor (round 2)
-4. If round 2 accepts or scores 70+ with no CRITICAL issues: proceed to Step 10
-5. If round 2 still has issues: present remaining issues to user, proceed to Step 10
-
-**On reject:** Surface the verdict to the user via AskUserQuestion and let them decide whether to proceed, edit manually, or abandon.
-
-**Headless reject (`interactive=false`, which `stakeholder_review=true` no longer implies).** Since the flip decoupled this step from `interactive`, a headless run now reaches the reject branch with no user to ask. The `AskUserQuestion` above is skipped per the standing convention, and the run must instead keep the brief, do not render it, and surface the reject in the response — the verdict is still written to the review sibling below, so the signal is recorded rather than lost — then continue. Never abort or error: this matches the caller reject rule in `cogni-workspace/skills/narrative-publish/references/pipeline-contract.md`, under which a multi-target run fails only when every requested target failed.
-
-Write the review verdict alongside the brief, deriving its name from the resolved `output_path` — replace the trailing `.md` with `.review.json`. The defaults yield `web-brief.review.json` and `storyboard-brief.review.json`, and a caller-supplied `output_path` keeps its own stem, so the verdict always sits beside the brief it grades and is named after it.
+Read `$CLAUDE_PLUGIN_ROOT/libraries/brief-pipeline.md` § Stakeholder review loop and execute; this skill's values: `brief_type: web`, or `storyboard` in `mode=storyboard` (the assessor then loads the Print Designer / Target Audience / Exhibition Presenter trio from `libraries/brief-review-perspectives.md`); the brief content is written to a `.draft` temp file when the brief is not yet written; on accept proceed to Step 10; on revise re-run Step 9 after the edits; the verdict file is the brief's name with `.md` replaced by `.review.json` (`web-brief.review.json` or `storyboard-brief.review.json` by default). On a headless reject, keep the brief, do not render it, and surface the reject in the response, then continue.
 
 ---
 
@@ -440,9 +332,7 @@ Write the review verdict alongside the brief, deriving its name from the resolve
 
 > The output path convention keeps briefs in `cogni-visual/` to prevent clutter.
 
-**Output path resolution** (run via Bash before writing):
-- If `output_path` explicit: `mkdir -p "$(dirname "${output_path}")"`
-- Otherwise: set `output_path = {source_dir}/cogni-visual/web-brief.md` and `mkdir -p "{source_dir}/cogni-visual"` — in `mode=storyboard` the default filename is `storyboard-brief.md` instead.
+**Output path resolution:** read `$CLAUDE_PLUGIN_ROOT/libraries/brief-pipeline.md` § Output-path resolution and execute; this skill's default filename is `web-brief.md`, or `storyboard-brief.md` in `mode=storyboard`.
 
 Generate the final brief with YAML frontmatter and section specifications following `EXAMPLE_WEB_BRIEF.md` format. Write using Write tool.
 

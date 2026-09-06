@@ -116,7 +116,7 @@ These apply even in `--scope=tone` because they are readability essentials, not 
 
 **Pre-check order:** resolve source (1) → no-op (2) → arc gate (3) → accept-set (4) → pivot guard (5). The arc and accept-set messages are the most actionable, so they win when multiple conditions hold.
 
-The scope override and Step 2.5 below apply only when `TARGET_LANG` is set **and** the source==target no-op did not fire (i.e. translation actually runs). When translation runs, the pre-checks guarantee a valid direction pair (one end EN or DE, both in the accept-set), so a `translation-{source_lang}-to-{TARGET_LANG}.md` file is guaranteed to exist.
+The scope override and Step 2.5 below apply only when `TARGET_LANG` is set **and** the source==target no-op did not fire (i.e. translation actually runs). When translation runs, the pre-checks guarantee a valid direction pair: one end EN or DE, both in the accept-set.
 
 **Load the reference index first:**
 
@@ -198,7 +198,7 @@ Arc-element and bridge headings are NOT freely translated — they are **substit
    - A **subtitle** rendered as an H2 (the single H2 that is neither an arc element nor the bridge — match it against the document's H2 subtitle text / frontmatter `subtitle:`) is preserved byte-identical, never substituted. Both in-scope arcs emit the subtitle as italic text, not an H2.
    - The remaining H2s, in document order, are arc elements 1..4. **If the remaining count is not exactly 4, do not substitute** — log `fallback_reason="arc_elements_not_resolved"`, leave all headings as-is, and continue with body translation only. This guards against mis-indexed substitution (e.g. an unexpected extra H2).
    - Prefix-match each element heading against the source-language column as a **sanity guard** — if positional index and prefix-match disagree, trust the position and note the discrepancy. (A real narrative's source headings may legitimately differ from any cached form.)
-3. Replace arc-element heading *i* with the **`TARGET_LANG`** canonical full heading for index *i*; replace the bridge (if present) with the `TARGET_LANG` bridge form. The canonical strings already carry the target language's required diacritics (FR é/è/ê/ç, IT à/è/é/ì/ò/ù, PL ą/ć/ę/ł/ń/ó/ś/ź/ż, ES á/é/í/ó/ú/ñ, DE ä/ö/ü/ß; NL is ASCII) — copy them byte-for-byte, never ASCII-fold them. See `translation-principles.md` § "Per-Language Charset Rules".
+3. Replace arc-element heading *i* with the **`TARGET_LANG`** canonical full heading for index *i*; replace the bridge (if present) with the `TARGET_LANG` bridge form. The canonical strings already carry the target language's required diacritics — copy them byte-for-byte, never ASCII-fold them. See `translation-principles.md` § "Per-Language Charset Rules".
 4. Translate the body prose under each heading per the invariants above (citations, URLs, protected content byte-identical).
 5. Preserve H2 count, element order, and heading hierarchy exactly — substitution changes heading *text*, never structure.
 
@@ -280,7 +280,7 @@ Args: FILE_PATH={{output_path}} PERSONAS={{stakeholders}} AUTO_IMPROVE=true
 
 The reader skill runs parallel multi-persona Q&A against its own persona profiles, synthesizes the feedback through its own synthesis protocol, and applies one auto-improvement loop directly to the document.
 
-Step 4 has one implementation: it delegates to `cogni-workspace:copy-reader`, which handles its own reference loading. `review_mode: skip` bypasses the step; `automated` is a deprecated alias for `reader`.
+Step 4 has one implementation: it delegates to `cogni-workspace:copy-reader`, which handles its own reference loading. `review_mode: skip` bypasses the step.
 
 Review enhances quality but never blocks delivery — if review fails, continue to Step 5 with the document as-is.
 
@@ -307,7 +307,7 @@ Review enhances quality but never blocks delivery — if review fails, continue 
   4. Source tag: `\[(portfolio-validated|claim-verified|[a-z-]+-validated)\]`
   (These mirror the four marker types enumerated in `translation-principles.md` § "Preserve byte-identical".)
 - **Frontmatter technical IDs unchanged** — `arc_id`, `source_url`, `entity_ref`, and any other technical identifier fields in the frontmatter are byte-identical to source values. The `target_language:` field is set to the new value (added if absent).
-- **Protected content byte-identical** — diagram-placeholder blocks, figure/Abbildung numeric refs, Obsidian embeds, kanban tables, every `{{asm:...}}` assumption placeholder, and the `## Persona Challenges` table match the source byte-for-byte (fail loud on any `{{asm:...}}`/persona-row mutation; `sources[]` frontmatter exempt).
+- **Protected content byte-identical** — every item enumerated in § "Protected Content" above matches the source byte-for-byte (fail loud on any `{{asm:...}}`/persona-row mutation; `sources[]` frontmatter exempt).
 - **Readability relative to source** — when `TARGET_LANG` is set, score source and output on the **target-language Flesch scale**, then compare. Invocation (read `flesch_score` from each JSON result):
   - `python3 scripts/calculate_readability.py <source.md> --lang $TARGET_LANG` → `source_score` (= `flesch_score`)
   - `python3 scripts/calculate_readability.py <output.md> --lang $TARGET_LANG` → `output_score` (= `flesch_score`)
@@ -322,7 +322,7 @@ Review enhances quality but never blocks delivery — if review fails, continue 
 - **Every named entity retained** — every named organization, person, product, regulation, or place in the source is present in the output (do not generalize "the Bundesnetzagentur" to "the regulator").
 - **Every distinct claim retained** — no distinct factual assertion is silently dropped to save words. Merging two sentences is allowed; dropping the claim one of them made is not.
 - **Charset preserved** — per-language diacritics exactly per `references/translation-principles.md` § "Per-Language Charset Rules"; never ASCII substitutes.
-- **Protected content byte-identical** — diagram-placeholder blocks, figure/Abbildung numeric refs, Obsidian `![[assets/*.svg]]` embeds, kanban tables, every `{{asm:...}}` assumption placeholder, and the `## Persona Challenges` table match the source byte-for-byte (fail loud on any `{{asm:...}}`/persona-row mutation; `sources[]` frontmatter exempt).
+- **Protected content byte-identical** — every item enumerated in § "Protected Content" above matches the source byte-for-byte (fail loud on any `{{asm:...}}`/persona-row mutation; `sources[]` frontmatter exempt).
 - **Frontmatter technical IDs unchanged** — `arc_id`, slugs, synthesis IDs, `source_url`, `entity_ref`, and any other technical identifier fields are byte-identical to source values.
 - **Word count materially reduced** — the output is shorter than the source. If it is not, either the source was already minimal or the lossless passes were not applied aggressively enough.
 
@@ -335,7 +335,7 @@ Review enhances quality but never blocks delivery — if review fails, continue 
 **Arc-aware validation** (when `arc_mode` is active):
 
 Run the technique validation checklist in `arc-preservation.md` § Validation Checklist, sourced from the detected arc's contract — the Techniques and Hard rules of each `### N.` section under `## Elements`, and the assertions under `## Validation`:
-- Heading text unchanged — **except in translation mode** (`TARGET_LANG` set), where arc-element headings must instead **match the `TARGET_LANG` column of the contract's `## Headings`** byte-for-byte and the bridge the `TARGET_LANG` form in `language/shared.md`, carrying the target language's required diacritics per `translation-principles.md` § "Per-Language Charset Rules" (e.g. ä/ö/ü/ß for `de`, é/è/ê/ç for `fr`, à/è/é/ì/ò/ù for `it`, ą/ć/ę/ł/ń/ó/ś/ź/ż for `pl`, á/é/í/ó/ú/ñ for `es`; `nl` is ASCII) — never ASCII substitutes
+- Heading text unchanged — **except in translation mode** (`TARGET_LANG` set), where arc-element headings must instead **match the `TARGET_LANG` column of the contract's `## Headings`** byte-for-byte and the bridge the `TARGET_LANG` form in `language/shared.md`, carrying the target language's required diacritics per `translation-principles.md` § "Per-Language Charset Rules" — never ASCII substitutes
 - Primary technique intact per element (the contract's Techniques subfield)
 - Hard rules of each element still hold
 - Word count within +-50 words of the element's share of the source — **in translation mode** use the relative band instead (see `arc-preservation.md` § Translation-mode word band: `source_element_words × factor × (1 ± 0.20)`, factor per the per-target table there — ≈ 1.20 →de, ≈ 0.83 →en, ≈ 1.15 →fr, ≈ 1.10 →it, ≈ 1.20 →es, ≈ 1.05 →nl, ≈ 1.10 →pl)
@@ -383,9 +383,11 @@ Auto-detects language. Returns `flesch_score`, `flesch_target_min/max`, `avg_par
 
 ## Bundled Resources
 
-`references/` is one level deep, so every basename below is also its path. Which of them
-a given scope loads is decided by `references/00-index.md`, not here — read it first. The
-groups below say what each file is for, so this section stays an inventory.
+`references/` is one level deep, so every reference basename below is also its path. Which
+of them a given scope loads is decided by `references/00-index.md`, not here — read it
+first; its § "File Inventory" carries the authoritative per-file description. The reference
+groups below re-sort those same files by when they apply. The **Scripts** group is the
+exception: those two files live in `scripts/`, and the inventory does not cover them.
 
 **Core principles** — `clarity-principles.md`, `conciseness-principles.md`,
 `active-voice-principles.md`, `plain-language-principles.md`,
@@ -408,9 +410,8 @@ EN or DE: `translation-de-to-en.md`, `translation-de-to-es.md`,
 `translation-it-to-en.md`, `translation-nl-to-de.md`, `translation-nl-to-en.md`,
 `translation-pl-to-de.md`, `translation-pl-to-en.md`.
 
-**Formatting** — `citation-formatting.md` (read in Step 5, and the authority on the
-four citation-marker patterns), `heading-hierarchy.md`, `markdown-basics.md`,
-`visual-elements.md`.
+**Formatting** — `citation-formatting.md` (read in Step 5), `heading-hierarchy.md`,
+`markdown-basics.md`, `visual-elements.md`.
 
 **Sales mode** — `power-positions.md` (IS-DOES-MEANS).
 
@@ -424,9 +425,10 @@ checklists behind the five core steps above and the conditional Step 2.5.
 (invocation above). `scripts/readability.sh` is the wrapper the `narrative` skill's
 Pass 4 calls; that skill owns which band it measures against.
 
-The messaging frameworks, the deliverable-type conventions, the impact techniques and
-stakeholder review have no reference file here. `references/00-index.md` § "Outside this
-tree" says where each of them does come from.
+The messaging frameworks and the deliverable-type conventions have no reference file
+here — `references/00-index.md` Step 4 carries the framework selection table and Step 3
+the deliverable-type table. The impact techniques and stakeholder review live outside
+this plugin tree; `references/00-index.md` § "Outside this tree" names both.
 
 ## Cross-Plugin Next Steps
 

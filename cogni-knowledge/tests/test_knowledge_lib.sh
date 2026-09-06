@@ -1512,10 +1512,21 @@ def assert_author_date_reference_entry():
         assert e(numbered, "A", "2024", "T", "P", url) == ""
 
     # Degradations. Each returns a well-formed entry; none raises.
-    # No year -> n.d. in that format's own slot.
+    # No year -> n.d. in that format's own slot, and NEVER a doubled period.
+    # mla is the only format whose year sits at the end of a segment, so it is
+    # the only one where `n.d.` can collide with the sentence period — assert the
+    # correct shape AND the absence of the doubled one, so the fix is pinned in
+    # both directions and cannot silently regress back into the expected value.
     assert '. (n.d.). ' in e("apa", "A", "", "T", "P", url)
-    assert ', n.d..' in e("mla", "A", None, "T", "P", url)
+    mla_nd = e("mla", "A", None, "T", "P", url)
+    assert 'P, n.d. ' in mla_nd and 'n.d..' not in mla_nd, mla_nd
     assert 'A (n.d.) ' in e("harvard", "A", "   ", "T", "P", url)
+    # The same collision with no publisher, where the tail IS the bare year.
+    mla_nd_nopub = e("mla", "A", "", "T", "", url)
+    assert 'A. "T." n.d. ' in mla_nd_nopub and 'n.d..' not in mla_nd_nopub, mla_nd_nopub
+    # No format may double the period on a year-less entry.
+    for fmt in ("apa", "mla", "harvard"):
+        assert "n.d.." not in e(fmt, "", "", "T", "P", ""), fmt
     # No author -> the entry LEADS with the title, in each format's own order.
     assert e("apa", "", "2024", "T", "P", url).startswith('"T". (2024).')
     assert e("mla", None, "2024", "T", "P", url).startswith('"T." P, 2024.')

@@ -1017,7 +1017,16 @@ def author_date_reference_entry(
         # quote, so its quoted title is built separately from the other two.
         quoted = '"' + title + '."'
         segments.append((author + ". " + quoted) if author else quoted)
-        segments.append(((publisher + ", " + year) if publisher else year) + ".")
+        # MLA is the only format that ends this segment on the YEAR, so it is the
+        # only one where the `n.d.` fallback can collide with the sentence period
+        # and render `n.d..`. Append the period only when the tail does not
+        # already carry one; a real year never does, so this changes nothing for
+        # a dated entry. It is not an edge case: `resolve_author_year` returns no
+        # year for any page carrying neither `published_date:` nor the
+        # `fetched_at:` surrogate, which is every synthesis, concept, entity and
+        # question node the pipeline writes.
+        tail = (publisher + ", " + year) if publisher else year
+        segments.append(tail if tail.endswith(".") else tail + ".")
         if link:
             segments.append(link)
     elif fmt == "harvard":

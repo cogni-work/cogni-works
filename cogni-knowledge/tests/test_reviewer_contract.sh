@@ -162,7 +162,11 @@ assert_grep 'structural_scores' "$REV" "reviewer-45-claims-engine-replacement-pr
 # and its two load-bearing properties live in those metacharacters — the
 # scheme anchor (ordinary parenthesized prose links are not citations) and the
 # label class excluding [ and ] (so [[N]] can never match as a citation).
-assert_grep_f '\(\[[^\[\]]+\]\((?:https?|file)://[^)]+\)\)' "$REV" "reviewer-46-density-gate-counts-author-date wiki-reviewer: the density gate counts the author-date marker alongside the two numbered shapes, scheme-anchored and with a label class excluding [ and ]"
+assert_grep_f '\(\[[^\[\]]+\]\((?:<(?:https?|file)://[^>]+>|(?:https?|file)://[^)]+)\)\)' "$REV" "reviewer-46-density-gate-counts-author-date wiki-reviewer: the density gate counts the author-date marker alongside the two numbered shapes, scheme-anchored, label class excluding [ and ], and carrying the bracketed (<url>) alternative the composer emits for a paren-bearing destination"
+# The bracketed arm is the half a first pass drops, and dropping it makes a
+# paren-bearing citation invisible to the density count — so pin its presence
+# separately from the pattern as a whole.
+assert_grep_f 'The bracketed `(<url>)` alternative comes FIRST and is not optional' "$REV" "reviewer-48-density-gate-bracketed-arm-required wiki-reviewer: the density gate's bracketed (<url>) alternative is stated as required, not incidental — the composer angle-brackets a paren-bearing destination"
 # A branch with no reachable source for the family is a branch that can never be
 # taken: the reviewer receives no CITATION_FORMAT parameter, so its plan read is
 # the only channel.

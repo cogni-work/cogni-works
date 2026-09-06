@@ -155,6 +155,19 @@ assert_not_grep 'Skill("cogni-wiki:' "$REV" "reviewer-44-no-skill-cogni-wiki wik
 # job, not its own, so it would not track this agent losing its mechanism.
 assert_grep 'structural_scores' "$REV" "reviewer-45-claims-engine-replacement-present wiki-reviewer: claims-engine replacement present — emits its own structural_scores verdict instead of a claims-verification multiplier"
 
+# --- author-date awareness in the density gate ----------------------------
+# A fully-cited author-date section carries no [N] at all, so a numbered-only
+# scan scores it as a citation-density deficit purely because of marker shape.
+# The pattern is asserted as a fixed string: it is a regex-metacharacter thicket,
+# and its two load-bearing properties live in those metacharacters — the
+# scheme anchor (ordinary parenthesized prose links are not citations) and the
+# label class excluding [ and ] (so [[N]] can never match as a citation).
+assert_grep_f '\(\[[^\[\]]+\]\((?:https?|file)://[^)]+\)\)' "$REV" "reviewer-46-density-gate-counts-author-date wiki-reviewer: the density gate counts the author-date marker alongside the two numbered shapes, scheme-anchored and with a label class excluding [ and ]"
+# A branch with no reachable source for the family is a branch that can never be
+# taken: the reviewer receives no CITATION_FORMAT parameter, so its plan read is
+# the only channel.
+assert_grep 'Capture `citation_format`' "$REV" "reviewer-47-reads-citation-format-from-plan wiki-reviewer: resolves the citation family by reading citation_format from the PLAN_PATH it already receives — no dispatch parameter carries it"
+
 if [ $errors -eq 0 ]; then
   green ""
   green "ALL PASS"

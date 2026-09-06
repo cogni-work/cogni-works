@@ -231,6 +231,7 @@ python3 ${CLAUDE_PLUGIN_ROOT}/scripts/citation-store.py build \
     --draft "<project_path>/output/draft-v<N>.md" \
     --out "<project_path>/.metadata/citation-manifest.json" \
     --draft-version <N> \
+    --citation-format <CITATION_FORMAT> \
     --ingest-manifest "<project_path>/.metadata/ingest-manifest.json"
 ```
 

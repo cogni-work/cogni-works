@@ -112,6 +112,28 @@ print(density if density in ("standard", "executive") else "standard")
 
 `PROSE_DENSITY` defaults to `standard` — a missing/unreadable `plan.json` or an unknown value falls back, never aborts. It is threaded into Step 3.1(a)'s pre-filter invocation. **Why it matters:** the substring pre-filter only marks a citation `verbatim` on a near-exact draft↔claim match, but `executive` prose paraphrases sources by design (BLUF + Pyramid) — so on an executive draft the pre-filter measures a 0% hit rate yet still scans every citation and reads every cited page. Passing `--prose-density executive` skips that dead-weight scan and routes every citation straight to the LLM verifier (identical verdict set, less latency).
 
+### 0.7 Resolve CITATION_FORMAT
+
+Read the run's citation format from the same `plan.json`, so the two scripts this
+phase runs parse the draft's own inline-marker family:
+
+```
+CITATION_FORMAT=$(PLAN_PATH="<project_path>/.metadata/plan.json" \
+python3 -c '
+import json, os
+from pathlib import Path
+p = Path(os.environ["PLAN_PATH"])
+fmt = "ieee"
+try:
+    fmt = (json.loads(p.read_text(encoding="utf-8")).get("citation_format") or "ieee")
+except (OSError, ValueError):
+    pass
+print(fmt)
+')
+```
+
+`CITATION_FORMAT` defaults to `ieee` — a missing/unreadable `plan.json` or an absent field falls back, never aborts. It is passed **verbatim, unvalidated**: both scripts normalize it through `_knowledge_lib.normalize_citation_format` (lowercasing, mapping the deprecated `wikilink` alias to `ieee`, and falling back to `ieee` on anything unknown), so validating it a second time here would only add a place for the two rules to drift. It is threaded into Step 3.1(a)'s pre-filter and into the revisor-round `citation-store.py build` rebuild. **Why it matters:** `apa`/`mla`/`harvard` drafts carry author-date markers, not `<sup>[N](url)</sup>`. A numbered-only prefilter never strips those markers from the compared core string, and a numbered-only `citation-store.py` extracts **no** URLs from them at all — so its ingest-manifest cross-check would pass having checked nothing, which is worse than rejecting the draft.
+
 ### 1. Resolve current draft version N
 
 ```
@@ -339,6 +361,7 @@ Parse the return envelope:
       --draft "<project_path>/output/draft-v<NEW_DRAFT_VERSION>.md" \
       --out "<project_path>/.metadata/citation-manifest.json" \
       --draft-version <NEW_DRAFT_VERSION> \
+      --citation-format <CITATION_FORMAT> \
       --ingest-manifest "<project_path>/.metadata/ingest-manifest.json"
   ```
 

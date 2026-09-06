@@ -208,7 +208,7 @@ Draft in four passes. Each pass has one job; doing two at once is how a narrativ
 bash "${CLAUDE_PLUGIN_ROOT}/skills/copywriter/scripts/readability.sh" --file "${OUTPUT_PATH}" --lang "${LANGUAGE}" --json
 ```
 
-Compare `flesch_score` with the language's target band in `skills/copywriter/contracts/readability.yml`. On a miss, revise once — the script's sub-metrics point at the passages — and measure again; report the final score as `readability_score` whatever the outcome. Count words per element against `## Composition` and adjust by adding evidence to a thin element or trimming redundant transitions, never evidence.
+Compare `flesch_score` with the language's target band in `tests/fixtures/copywriter/readability.yml`. On a miss, revise once — the script's sub-metrics point at the passages — and measure again; report the final score as `readability_score` whatever the outcome. Count words per element against `## Composition` and adjust by adding evidence to a thin element or trimming redundant transitions, never evidence.
 
 #### Why exactly 4 sections matters
 

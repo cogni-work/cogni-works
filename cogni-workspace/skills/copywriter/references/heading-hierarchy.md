@@ -341,4 +341,4 @@ Before finalizing any document, verify every item. If any check fails, revise th
 ## See Also
 - `visual-elements.md` - visual hierarchy complements heading hierarchy
 - `markdown-basics.md` - heading syntax details
-- `../01-core-principles/readability-principles.md` - scannability principles
+- `../readability-principles.md` - scannability principles

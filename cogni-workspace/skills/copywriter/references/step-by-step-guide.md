@@ -93,7 +93,7 @@ Before loading any framework, check whether the input document is an arc narrati
 **If arc mode activates:**
 
 ```text
-READ: references/09-preservation-modes/arc-preservation.md
+READ: references/arc-preservation.md
 READ: ${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/story-arc/{arc_id}/arc-definition.md
 READ: ${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/narrative-techniques/techniques-overview.md
 ```
@@ -109,7 +109,7 @@ Proceed to 1C.
 Load exactly this reference and no more:
 
 ```text
-READ: references/01-core-principles/clarity-principles.md
+READ: references/clarity-principles.md
 ```
 
 Resolve the deliverable type and the messaging framework from `references/00-index.md` Steps 3 and 4 -- the house length and formality conventions and the framework selection table live there, and neither has a per-item reference file. If framework was not specified, use the deliverable's default framework from the Quick Lookup table in `references/00-index.md`.
@@ -122,7 +122,7 @@ Resolve the deliverable type and the messaging framework from `references/00-ind
   ```
 - If `MODE: sales`:
   ```text
-  READ: references/08-sales-techniques/power-positions.md
+  READ: references/power-positions.md
   READ: ${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/narrative-techniques/techniques-overview.md
   ```
 
@@ -243,7 +243,7 @@ Determine the language from content, user request, or `--lang` parameter.
 **If German detected:**
 
 ```text
-READ: references/01-core-principles/german-style-principles.md
+READ: references/german-style-principles.md
 ```
 
 Apply Wolf Schneider rules:
@@ -327,7 +327,7 @@ Do NOT apply techniques generically across the whole document in arc mode.
 
 **If `MODE: sales`:** Apply Power Positions enhancement.
 
-Load `references/08-sales-techniques/power-positions.md` (if not already loaded in Step 1).
+Load `references/power-positions.md` (if not already loaded in Step 1).
 
 Enhancement rules by layer:
 - **IS layer**: Make specific and concrete (add numbers, specs, timeframes)
@@ -347,7 +347,7 @@ Application targets from that file:
 - **Number Plays** (`## 4`): Transform vague claims into specific data. Apply to key metrics, comparisons, and outcomes.
 - **Forcing Functions, Contrast Structure, You-Phrasing, Compound Impact Calculation** (`## 5` through `## 8`): Stack urgency with quantified consequences, frame against conventional wisdom, address the reader directly, and compound the impact arithmetic.
 
-Application targets that file does NOT carry. No reference file carries them either, except sales mode's `references/08-sales-techniques/power-positions.md` and its MEANS-layer power-word categories. Apply from your own knowledge of the craft, at these house densities:
+Application targets that file does NOT carry. No reference file carries them either, except sales mode's `references/power-positions.md` and its MEANS-layer power-word categories. Apply from your own knowledge of the craft, at these house densities:
 - **Power Words**: 3-5 per page, concentrated in headlines and CTAs. Match category to context (urgency for deadlines, trust for risk reduction).
 - **Rhetorical Devices**: 2-3 per document, placed at opening and closing. Rule of Three for key messages, antithesis for contrasts.
 - **Executive Framing**: Lead with the ask, quantify everything, one page max, decision clarity.
@@ -508,7 +508,7 @@ Report backup creation if applicable.
 ### 8D: Apply Citation Formatting (if document contains citations)
 
 ```text
-READ: references/03-formatting-standards/citation-formatting.md
+READ: references/citation-formatting.md
 ```
 
 1. Move citations from "Begründung:" paragraphs to individual "Umsetzung:" list items (place at end of specific claim)

@@ -18,7 +18,7 @@ REPO_ROOT="$(cd "$HERE/../../../../.." && pwd)"
 SCRIPT="$REPO_ROOT/cogni-workspace/skills/copywriter/scripts/calculate_readability.py"
 SOFT_FLOOR=5
 
-DE_SOURCE="$REPO_ROOT/cogni-workspace/skills/copywriter/test-docs/german-with-citations.md"
+DE_SOURCE="$REPO_ROOT/cogni-workspace/tests/fixtures/copywriter/test-docs/german-with-citations.md"
 EN_TRANSLATION="$HERE/de-dense-source.en.md"
 EN_CLEAN="$HERE/en-clean-source.md"
 EN_DEGRADED="$HERE/en-degraded-translation.md"

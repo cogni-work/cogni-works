@@ -35,6 +35,6 @@ Proper Unicode umlauts and ß throughout — title, subtitle, TL;DR, headings an
 
 The numeric targets German prose is measured against live in the copywriter skill and are not restated here, so there is one authority for each number:
 
-- Clause length, sentence-rhythm variance and the Floskel list: `skills/copywriter/references/01-core-principles/german-style-principles.md` (Wolf Schneider's maxims).
-- The opening sentence — length, main-clause form, surprise before scene: `skills/copywriter/references/01-core-principles/german-hook-principles.md`; the narrative's Executive TL;DR first sentence is where those rules apply.
-- The German readability band and the diagnostics the script reports: `skills/copywriter/contracts/readability.yml`, run by `skills/copywriter/scripts/readability.sh` in Pass 4.
+- Clause length, sentence-rhythm variance and the Floskel list: `skills/copywriter/references/german-style-principles.md` (Wolf Schneider's maxims).
+- The opening sentence — length, main-clause form, surprise before scene: `skills/copywriter/references/german-hook-principles.md`; the narrative's Executive TL;DR first sentence is where those rules apply.
+- The German readability band and the diagnostics the script reports: `tests/fixtures/copywriter/readability.yml`, run by `skills/copywriter/scripts/readability.sh` in Pass 4.

@@ -35,7 +35,7 @@ Translate the prose. Preserve the scaffolding. The list below is exhaustive — 
 ### Translate (target language)
 
 - Body paragraphs, sentences, clauses
-- Heading text (H1, H2, H3) — **except arc-element and bridge headings in `arc_mode`**, which are **substituted** (not freely translated) from the canonical target-language set in `09-preservation-modes/arc-preservation.md` (see SKILL.md Step 2.5). EN/DE-pivot arc-mode translation (de/en/fr/it/pl/nl/es, with EN or DE on one end) ships for `corporate-visions` and `jtbd-portfolio`; the other 9 arcs (any language) and direct non-EN/DE pairs stay blocked.
+- Heading text (H1, H2, H3) — **except arc-element and bridge headings in `arc_mode`**, which are **substituted** (not freely translated) from the canonical target-language set in `arc-preservation.md` (see SKILL.md Step 2.5). EN/DE-pivot arc-mode translation (de/en/fr/it/pl/nl/es, with EN or DE on one end) ships for `corporate-visions` and `jtbd-portfolio`; the other 9 arcs (any language) and direct non-EN/DE pairs stay blocked.
 - Image captions, table cell prose, list item prose
 - Block-quote prose
 - Bold and italic phrase content (preserve the formatting markers, translate the text inside)
@@ -129,7 +129,7 @@ When translating **into** EN, the charset rule is *absence*: the only umlauts/ac
 There is exactly one direction file per valid pair, named `translation-{source}-to-{target}.md`. After loading this `translation-principles.md` hub, construct the filename from the resolved `source_lang` and `TARGET_LANG` and load it:
 
 ```
-LOAD: references/01-core-principles/translation-{source_lang}-to-{TARGET_LANG}.md
+LOAD: references/translation-{source_lang}-to-{TARGET_LANG}.md
 ```
 
 These files contain the linguistic specifics (register, diacritic traps, compound handling, clause-splitting, number/date conventions, worked example) that the generic principles above do not cover.

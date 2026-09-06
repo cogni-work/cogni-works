@@ -55,7 +55,7 @@ When polishing an existing document, scope determines which steps run:
 | 4. Review | YES | SKIP | SKIP | SKIP | optional |
 | 5. Validate & write | YES | YES | YES | YES | YES (+ precision gate) |
 
-`compress` makes minimizing word count the **primary** objective, subject to zero precision loss — no citation, number, named entity, or distinct claim may be dropped. This is a different trade-off than the readability-driven conciseness of `--scope=tone`: Step 3 runs as a compression pass and Step 5 adds a precision-preservation gate. See `references/01-core-principles/compression-principles.md`.
+`compress` makes minimizing word count the **primary** objective, subject to zero precision loss — no citation, number, named entity, or distinct claim may be dropped. This is a different trade-off than the readability-driven conciseness of `--scope=tone`: Step 3 runs as a compression pass and Step 5 adds a precision-preservation gate. See `references/compression-principles.md`.
 
 When `arc_mode` is active, arc-preservation rules override scope. See `arc-preservation.md`. **`compress` is incompatible with `arc_mode`** — arc preservation enforces per-element word bands (±50 words) that directly conflict with word-count minimization; when both are requested, abort with a message naming the conflict rather than silently picking one.
 
@@ -154,18 +154,18 @@ Skip entirely when `TARGET_LANG` is unset. When set, this pass runs after Step 2
 **Load translation references:**
 
 ```text
-READ: references/01-core-principles/translation-principles.md
+READ: references/translation-principles.md
 ```
 
 Then load the direction-specific guide by constructing its filename deterministically from the resolved languages (the Step 1 pre-checks guarantee a valid pair, so this file always exists):
 
 ```text
-READ: references/01-core-principles/translation-{source_lang}-to-{TARGET_LANG}.md
+READ: references/translation-{source_lang}-to-{TARGET_LANG}.md
 ```
 
 For example: `en`→`fr` loads `translation-en-to-fr.md`; `pl`→`de` loads `translation-pl-to-de.md`. The validity matrix in `translation-principles.md` lists all 22 supported directions. DE-pivot composition files (e.g. `translation-de-to-fr.md`) cross-reference the matching EN-pivot file for the full target-language production rules; X→de files cross-reference `translation-en-to-de.md` for German production.
 
-When `arc_mode` is active, `references/09-preservation-modes/arc-preservation.md` and the upstream files in the cross-skill dependencies table below are loaded **in addition** to the translation references (per `00-index.md` CHECK 0). The arc contract's `## Headings` table supplies the canonical target-language headings for the substitution below.
+When `arc_mode` is active, `references/arc-preservation.md` and the upstream files in the cross-skill dependencies table below are loaded **in addition** to the translation references (per `00-index.md` CHECK 0). The arc contract's `## Headings` table supplies the canonical target-language headings for the substitution below.
 
 **Cross-skill dependencies (read at runtime, never mirrored):**
 
@@ -218,7 +218,7 @@ The translate pass output is an intermediate draft. Step 3 will tighten clause l
 **For German documents**, apply Wolf Schneider rules:
 
 ```text
-READ: references/01-core-principles/german-style-principles.md
+READ: references/german-style-principles.md
 ```
 
 Key targets: max 12 words per clause, Satzklammer breaking, Mittelfeld shortening, Floskel elimination, rhythmic sentence variation.
@@ -232,9 +232,9 @@ Key targets: max 12 words per clause, Satzklammer breaking, Mittelfeld shortenin
 3. **Heading levels**: Max 3 (H1, H2, H3). Restructure if H4 is needed.
 4. **Visual element rhythm**: Insert a visual element (table, list, callout) every 2-3 consecutive prose paragraphs.
 5. **White space**: Blank line between every paragraph, around every heading, list, table, and block quote.
-6. **Acronym handling on first mention**: expand acronyms once at first occurrence per document; depth tuned to AUDIENCE (expert / mixed / lay). See `references/01-core-principles/acronym-handling-principles.md`. Subsequent mentions verbatim; proper nouns, brand names, and arc/sales discipline markers (`**IS**:`, `**DOES**:`, `**MEANS**:`) excluded.
+6. **Acronym handling on first mention**: expand acronyms once at first occurrence per document; depth tuned to AUDIENCE (expert / mixed / lay). See `references/acronym-handling-principles.md`. Subsequent mentions verbatim; proper nouns, brand names, and arc/sales discipline markers (`**IS**:`, `**DOES**:`, `**MEANS**:`) excluded.
 
-**Compression pass (`--scope=compress`)**: when scope is `compress`, Step 3 runs as a compression pass whose **primary** objective is minimizing word count subject to zero precision loss — not the readability transformation above. Load `references/01-core-principles/compression-principles.md` and apply its passes (the five lossless conciseness passes, then structural merging). Two relaxations and one hard floor:
+**Compression pass (`--scope=compress`)**: when scope is `compress`, Step 3 runs as a compression pass whose **primary** objective is minimizing word count subject to zero precision loss — not the readability transformation above. Load `references/compression-principles.md` and apply its passes (the five lossless conciseness passes, then structural merging). Two relaxations and one hard floor:
 
 - **Relax decorative formatting** — drop the bold-anchoring density target (item 2 above, "2-3 bold instances per paragraph") and the visual-element rhythm (item 4 above, "a visual element every 2-3 paragraphs"). These spend words the brevity objective wants back; add bold or a visual element only where it genuinely prevents a misread or is itself shorter than the prose it replaces.
 - **Keep baseline readability** — paragraph separation, white space between blocks, and heading levels (items 1, 3, 5 above) still hold. A wall of unbroken text is not "compressed", it is unreadable. The `### Baseline Formatting (all scopes)` rules are NOT suspended; only the decorative-density rules are.
@@ -247,7 +247,7 @@ Load `techniques-overview.md` from the `narrative` skill, as the reference index
 - **Number plays** (`## 4`) — Transform vague claims into concrete data (ratio framing, specific quantification, comparative anchoring, before/after contrast, compound impact, hero number isolation)
 - **Forcing functions, contrast structure, you-phrasing and compound impact calculation** (`## 5`–`## 8`) — Urgency stacking, cognitive-dissonance framing, reader-centred phrasing, and the compound-impact arithmetic
 
-Power words, rhetorical devices and executive framing are **not** in `techniques-overview.md`, and no reference file carries them — the one exception is sales mode, where `references/08-sales-techniques/power-positions.md` carries its own MEANS-layer power-word categories. Otherwise apply them from your own knowledge of the craft, against these house density rules:
+Power words, rhetorical devices and executive framing are **not** in `techniques-overview.md`, and no reference file carries them — the one exception is sales mode, where `references/power-positions.md` carries its own MEANS-layer power-word categories. Otherwise apply them from your own knowledge of the craft, against these house density rules:
 
 - **Power words** — 3-5 per page, concentrated in headlines and CTAs. Match category to context (urgency for deadlines, trust for risk reduction).
 - **Rhetorical devices** — 2-3 per document, placed at opening and closing. Rule of Three for key messages, antithesis for contrasts.
@@ -299,14 +299,7 @@ Review enhances quality but never blocks delivery — if review fails, continue 
 
 **Translation-specific validation** (only when `TARGET_LANG` was set):
 
-- **Target charset matches** — validate against the per-language diacritic rules in `references/01-core-principles/translation-principles.md` § "Per-Language Charset Rules" (the single source of truth). In summary:
-  - `de`: output contains ä/ö/ü/ß where German prose requires them; never ASCII substitutes (ae/oe/ue/ss).
-  - `fr`: required accents é/è/ê/ç (and à/â/ë/î/ï/ô/û/ù); no bare-vowel substitutes.
-  - `it`: required accents à/è/é/ì/ò/ù; note è (is) vs e (and).
-  - `pl`: required ą/ć/ę/ł/ń/ó/ś/ź/ż; no bare-Latin substitutes.
-  - `es`: required á/é/í/ó/ú/ñ (and inverted ¿/¡ on questions/exclamations); no bare-vowel substitutes, n→ñ never dropped.
-  - `nl`: ASCII — Dutch needs no special set; ensure no German umlauts leaked from the source.
-  - `en`: output contains no ä/ö/ü/ß or other diacritics except inside preserved proper nouns or quoted source-language terms.
+- **Target charset matches** — validate against the per-language diacritic rules in `references/translation-principles.md` § "Per-Language Charset Rules", the single source of truth for every language's required and forbidden characters. Consult it directly for the full per-language sets.
 - **Citation count exactly preserved** — for each of the four citation-marker patterns supported by the skill, the regex count in the output equals the source count, and every URL is byte-identical to its source URL:
   1. Inline cite with URL: `\[P\d+-\d+\]\([^)]+\)`
   2. Inline cite without URL: `\[P\d+-\d+\](?!\()`
@@ -320,15 +313,15 @@ Review enhances quality but never blocks delivery — if review fails, continue 
   - `python3 scripts/calculate_readability.py <output.md> --lang $TARGET_LANG` → `output_score` (= `flesch_score`)
   - **Pass rule**: `output_score >= source_score - 5`. The 5-point soft floor absorbs measurement noise and unavoidable cross-language structural drift (e.g., German compound length pushing Amstad down 2–4 points for a faithful EN→DE rendering).
   - **Absolute band reporting**: also print the absolute band (`EN 50-60` / `DE 30-50`) as an aspirational note. If `output_score` lands in the band, report `in absolute band`. If it lands below the band but at or above `source_score - 5`, report `below absolute band, faithful to source — pass`. Only fail when `output_score < source_score - 5`.
-  - **Rationale**: see `references/01-core-principles/translation-principles.md` § "Readability in Translation Mode".
+  - **Rationale**: see `references/translation-principles.md` § "Readability in Translation Mode".
 
-**Compress-specific validation** (only when `--scope=compress`): the precision-preservation gate. Every check below must pass; on any failure the compressed output is **rejected** (re-compress less aggressively, restoring whatever the failing check protects). Full rules in `references/01-core-principles/compression-principles.md` § "Validation Checklist".
+**Compress-specific validation** (only when `--scope=compress`): the precision-preservation gate. Every check below must pass; on any failure the compressed output is **rejected** (re-compress less aggressively, restoring whatever the failing check protects). Full rules in `references/compression-principles.md` § "Validation Checklist".
 
 - **Citation count exactly preserved** — for each of the four citation-marker patterns (the same patterns enumerated in the Translation-specific block above), the regex count in the output equals the source count, and every URL is byte-identical to its source URL. Citation markers are never counted toward word-count reduction.
 - **Every number / data point retained** — every percentage, count, ratio, date, and monetary figure present in the source is present in the output. A number is never deleted to save words.
 - **Every named entity retained** — every named organization, person, product, regulation, or place in the source is present in the output (do not generalize "the Bundesnetzagentur" to "the regulator").
 - **Every distinct claim retained** — no distinct factual assertion is silently dropped to save words. Merging two sentences is allowed; dropping the claim one of them made is not.
-- **Charset preserved** — per-language diacritics exactly per `references/01-core-principles/translation-principles.md` § "Per-Language Charset Rules"; never ASCII substitutes.
+- **Charset preserved** — per-language diacritics exactly per `references/translation-principles.md` § "Per-Language Charset Rules"; never ASCII substitutes.
 - **Protected content byte-identical** — diagram-placeholder blocks, figure/Abbildung numeric refs, Obsidian `![[assets/*.svg]]` embeds, kanban tables, every `{{asm:...}}` assumption placeholder, and the `## Persona Challenges` table match the source byte-for-byte (fail loud on any `{{asm:...}}`/persona-row mutation; `sources[]` frontmatter exempt).
 - **Frontmatter technical IDs unchanged** — `arc_id`, slugs, synthesis IDs, `source_url`, `entity_ref`, and any other technical identifier fields are byte-identical to source values.
 - **Word count materially reduced** — the output is shorter than the source. If it is not, either the source was already minimal or the lossless passes were not applied aggressively enough.
@@ -362,7 +355,7 @@ filename=$(basename "{output_path}")
 
 **Apply citation formatting** (if document contains citations):
 
-Read `references/03-formatting-standards/citation-formatting.md` for complete rules. Key steps:
+Read `references/citation-formatting.md` for complete rules. Key steps:
 1. Move citations to specific claims they support
 2. Add superscript commas between consecutive citations:
    ```bash
@@ -390,27 +383,50 @@ Auto-detects language. Returns `flesch_score`, `flesch_target_min/max`, `avg_par
 
 ## Bundled Resources
 
-All references are organized in progressive disclosure tiers. Start with `references/00-index.md` — it routes you to exactly the files needed for any given task.
+`references/` is one level deep, so every basename below is also its path. Which of them
+a given scope loads is decided by `references/00-index.md`, not here — read it first. The
+groups below say what each file is for, so this section stays an inventory.
 
-**Core Principles** (01-core-principles/) — Clarity, conciseness, active voice, German style (Wolf Schneider), German hooks, plain language, readability, acronym handling (audience-tuned first-mention expansion), translation (two-pass translate-then-polish; EN/DE-pivot directions for de/en/fr/it/pl/nl/es via `translation-{src}-to-{tgt}.md`)
+**Core principles** — `clarity-principles.md`, `conciseness-principles.md`,
+`active-voice-principles.md`, `plain-language-principles.md`,
+`readability-principles.md`, `acronym-handling-principles.md`, and the
+`--scope=compress` counterpart `compression-principles.md`.
 
-**Messaging Frameworks** — BLUF, Pyramid, SCQA, Inverted Pyramid, STAR, PSB, FAB. Selected from the table in `references/00-index.md` Step 4 and applied from model knowledge; no per-framework reference file.
+**German** — `german-style-principles.md` (Wolf Schneider's maxims: clause length,
+Floskeln, sentence-rhythm variance) and `german-hook-principles.md` (the opening
+sentence).
 
-**Formatting Standards** (03-formatting-standards/) — Citation formatting, visual elements, heading hierarchy, markdown basics
+**Translation** — `translation-principles.md` is the contract, and the authority on the
+charset rules and the byte-identical citation rule; read it whenever `TARGET_LANG` is
+set. Then read the single direction file for the pair — every supported pair pivots on
+EN or DE: `translation-de-to-en.md`, `translation-de-to-es.md`,
+`translation-de-to-fr.md`, `translation-de-to-it.md`, `translation-de-to-nl.md`,
+`translation-de-to-pl.md`, `translation-en-to-de.md`, `translation-en-to-es.md`,
+`translation-en-to-fr.md`, `translation-en-to-it.md`, `translation-en-to-nl.md`,
+`translation-en-to-pl.md`, `translation-es-to-de.md`, `translation-es-to-en.md`,
+`translation-fr-to-de.md`, `translation-fr-to-en.md`, `translation-it-to-de.md`,
+`translation-it-to-en.md`, `translation-nl-to-de.md`, `translation-nl-to-en.md`,
+`translation-pl-to-de.md`, `translation-pl-to-en.md`.
 
-**Deliverable Types** — Memos, emails, briefs, reports, proposals, one-pagers, executive summaries, business letters, blogs. House length and formality conventions are in the `references/00-index.md` Step 3 table; the conventional structure of each form comes from model knowledge.
+**Formatting** — `citation-formatting.md` (read in Step 5, and the authority on the
+four citation-marker patterns), `heading-hierarchy.md`, `markdown-basics.md`,
+`visual-elements.md`.
 
-**Examples and Templates** — No reference files. Produce a worked example or a fillable scaffold on request, for the resolved deliverable type and framework.
+**Sales mode** — `power-positions.md` (IS-DOES-MEANS).
 
-**Impact Techniques** — Number plays, forcing functions, contrast structure, you-phrasing, compound impact. The ecosystem's single copy lives upstream in the `narrative` skill at `references/narrative-techniques/techniques-overview.md`, which also carries the per-arc-element application matrix.
+**Arc mode** — `arc-preservation.md`; it names the upstream `narrative` files it depends
+on.
 
-**Sales Techniques** (08-sales-techniques/) — Power Positions (IS-DOES-MEANS)
+**Workflow** — `step-by-step-guide.md`, the expanded sub-steps and validation
+checklists behind the five core steps above and the conditional Step 2.5.
 
-**Arc Preservation** (09-preservation-modes/) — Arc detection and preservation rules, per-element technique map
+**Scripts** — `scripts/calculate_readability.py` computes the metrics Step 5 gates on
+(invocation above). `scripts/readability.sh` is the wrapper the `narrative` skill's
+Pass 4 calls; that skill owns which band it measures against.
 
-**Stakeholder Review** — delegated to `cogni-workspace:copy-reader`; personas and synthesis protocol live in that skill's `references/`
-
-**Workflow** (workflow/) — Detailed sub-steps and validation checklists
+The messaging frameworks, the deliverable-type conventions, the impact techniques and
+stakeholder review have no reference file here. `references/00-index.md` § "Outside this
+tree" says where each of them does come from.
 
 ## Cross-Plugin Next Steps
 

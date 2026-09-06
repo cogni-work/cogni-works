@@ -110,8 +110,8 @@ Acronym-shaped brand names belong to their owners — leave them verbatim:
 
 The Power Position markers `**IS**:`, `**DOES**:`, `**MEANS**:` and standalone `IS` / `DOES` / `MEANS` tokens used as arc-element labels in the portfolio JTBD map are **never** acronym candidates. They are structural markers, not abbreviations. See:
 
-- `08-sales-techniques/power-positions.md` — structure marker preservation (line 318)
-- `09-preservation-modes/arc-preservation.md` — arc structure preservation rules
+- `power-positions.md` — structure marker preservation (line 318)
+- `arc-preservation.md` — arc structure preservation rules
 
 If you cannot tell from context whether a token is a structural marker or an acronym, treat it as a structural marker (safer default).
 

@@ -27,7 +27,7 @@ cross-language mode) + #259 (this fixture suite). Extended for #255 Slice 1
 | 3 | EN → FR composition, faithful + polished | `en-clean-source.md` | `en-clean-source.fr.md` | `fr` | **PASS** — EN scored on the FR (Kandel-Moles) scale runs high (English is less syllable-dense than French); a polished short-sentence FR rendering still clears the floor |
 | 4 | ES → EN decomposition, faithful | `es-clean-source.md` (clean ES, detects as `es`) | `es-clean-source.en.md` | `en` | **PASS** — dense ES on the EN scale sits low; a faithful EN translation clears the relative rule comfortably |
 
-Fixture 1 reuses the canonical DE source from `skills/copywriter/test-docs/`
+Fixture 1 reuses the canonical DE source from `cogni-workspace/tests/fixtures/copywriter/test-docs/`
 rather than copying it here — single source of truth, no symlink, no drift.
 The fixtures directory holds the other files.
 
@@ -39,7 +39,7 @@ faithful output must be tightened to clear the floor — exactly what Pass B doe
 ## Run
 
 ```bash
-bash cogni-workspace/skills/copywriter/test-fixtures/readability-rule/run.sh
+bash cogni-workspace/tests/fixtures/copywriter/readability-rule/run.sh
 ```
 
 Output is one line per fixture plus a summary, e.g.:

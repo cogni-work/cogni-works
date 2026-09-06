@@ -40,7 +40,7 @@ ARC_DIR="$WS_ROOT/skills/narrative/references/story-arc"
 REGISTRY="$ARC_DIR/arc-registry.md"
 CW_SKILL="${ARC_SYNC_CW_SKILL:-$WS_ROOT/skills/copywriter/SKILL.md}"
 CW_INDEX="$WS_ROOT/skills/copywriter/references/00-index.md"
-CW_PRESERVATION="$WS_ROOT/skills/copywriter/references/09-preservation-modes/arc-preservation.md"
+CW_PRESERVATION="$WS_ROOT/skills/copywriter/references/arc-preservation.md"
 
 TMPROOT="$(mktemp -d)"
 trap 'rm -rf "$TMPROOT"' EXIT
@@ -124,7 +124,7 @@ fi
 
 # ---------------------------------------------------------------------------- X3
 x3_bad=""
-[ -f "$WS_ROOT/skills/copywriter/references/09-preservation-modes/arc-technique-map.md" ] && x3_bad="$x3_bad technique-map-present"
+[ -f "$WS_ROOT/skills/copywriter/references/arc-technique-map.md" ] && x3_bad="$x3_bad technique-map-present"
 grep -qE '^\| *Arc *\| *# *\| *EN' "$CW_PRESERVATION" && x3_bad="$x3_bad heading-mirror-table"
 grep -qiE 'do (\*\*)?not(\*\*)? read' "$CW_SKILL" "$CW_PRESERVATION" && x3_bad="$x3_bad do-not-read-rule"
 if [ -z "$x3_bad" ]; then

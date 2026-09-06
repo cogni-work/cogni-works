@@ -92,7 +92,7 @@ Simple dot-path with `[*]` for arrays:
 3. For each extracted field, trim whitespace and validate:
    - **Charset** — direction-aware:
      - `TARGET_LANG` unset: ä/ö/ü/ß and uppercase forms still present if they were in the original (preservation)
-     - `TARGET_LANG` set: validate the target language's diacritic set per the copywriter skill's single source of truth — `${CLAUDE_PLUGIN_ROOT}/skills/copywriter/references/01-core-principles/translation-principles.md` § "Per-Language Charset Rules" (e.g. `de` requires ä/ö/ü/ß and forbids ae/oe/ue/ss; `fr` requires é/è/ê/ç; `pl` requires ą/ć/ę/ł/ń/ó/ś/ź/ż; `es` requires á/é/í/ó/ú/ñ; `nl` is ASCII; `en` forbids stray umlauts/accents outside proper nouns)
+     - `TARGET_LANG` set: validate the target language's diacritic set per the copywriter skill's single source of truth — `${CLAUDE_PLUGIN_ROOT}/skills/copywriter/references/translation-principles.md` § "Per-Language Charset Rules" (e.g. `de` requires ä/ö/ü/ß and forbids ae/oe/ue/ss; `fr` requires é/è/ê/ç; `pl` requires ą/ć/ę/ł/ń/ó/ś/ź/ż; `es` requires á/é/í/ó/ú/ñ; `nl` is ASCII; `en` forbids stray umlauts/accents outside proper nouns)
    - **No markdown injection**: reject if polished text contains `**`, `__`, `# `, `- ` list markers, or `| table |` syntax (these don't belong in JSON string values)
    - **Length guard**: polished text must not exceed 2x length of original (prevents prose expansion). For translations, allow 2.5x — German translations of English text are typically 20-30% longer.
    - **Citations preserved**: if original contained `[P1-1]` or similar citation markers, they must still be present (translation requires exact count match; non-translation requires count >= original)

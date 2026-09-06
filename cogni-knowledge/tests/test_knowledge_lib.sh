@@ -1477,6 +1477,65 @@ def assert_build_author_date_reference_list():
         kl.author_surname_sort_key(bad)
 
 
+def assert_author_date_reference_entry():
+    # The three author-date formats must render three DISTINCT bibliography
+    # strings. A shared string would satisfy "not numbered" while leaving mla and
+    # harvard unimplemented, so every arm is pinned by full-string equality, and
+    # the three are asserted pairwise distinct on top — an assertion set that
+    # would still pass if all three arms were collapsed onto one would prove
+    # nothing about the property this case exists for.
+    e = kl.author_date_reference_entry
+    url = "https://ipa.fraunhofer.de/pm"
+    link = "[" + url + "](" + url + ")"
+    apa = e("apa", "Fraunhofer IPA", "2024", "Titel", "Fraunhofer", url)
+    mla = e("mla", "Fraunhofer IPA", "2024", "Titel", "Fraunhofer", url)
+    harvard = e("harvard", "Fraunhofer IPA", "2024", "Titel", "Fraunhofer", url)
+    assert apa == 'Fraunhofer IPA. (2024). "Titel". Fraunhofer. ' + link, apa
+    assert mla == 'Fraunhofer IPA. "Titel." Fraunhofer, 2024. ' + link, mla
+    assert harvard == 'Fraunhofer IPA (2024) "Titel". Fraunhofer. Available at: ' + link, harvard
+    assert len({apa, mla, harvard}) == 3, "three formats must not collapse onto one shape"
+    # MLA is the only one that puts the sentence period INSIDE the closing quote.
+    assert '"Titel."' in mla and '"Titel"' in apa and '"Titel."' not in apa
+
+    # Un-numbered by construction: no **[N]** prefix, and no [[ ]] shape that the
+    # wiki-reviewer's high-severity [[N]] detector would have to adjudicate.
+    for line in (apa, mla, harvard):
+        assert "**[" not in line and "[[" not in line, line
+
+    # A NUMBERED format renders nothing rather than guessing an author-date shape
+    # — finalize builds those entries in its own **[N]** arm.
+    assert e("ieee", "A", "2024", "T", "P", url) == ""
+    assert e("chicago", "A", "2024", "T", "P", url) == ""
+    # The deprecated wikilink alias resolves to ieee, so it is numbered too, and
+    # an unknown/empty/None format falls back to ieee rather than raising.
+    for numbered in ("wikilink", "bibtex", "", None):
+        assert e(numbered, "A", "2024", "T", "P", url) == ""
+
+    # Degradations. Each returns a well-formed entry; none raises.
+    # No year -> n.d. in that format's own slot.
+    assert '. (n.d.). ' in e("apa", "A", "", "T", "P", url)
+    assert ', n.d..' in e("mla", "A", None, "T", "P", url)
+    assert 'A (n.d.) ' in e("harvard", "A", "   ", "T", "P", url)
+    # No author -> the entry LEADS with the title, in each format's own order.
+    assert e("apa", "", "2024", "T", "P", url).startswith('"T". (2024).')
+    assert e("mla", None, "2024", "T", "P", url).startswith('"T." P, 2024.')
+    assert e("harvard", "", "2024", "T", "P", url).startswith('"T" (2024).')
+    # No publisher -> the segment is dropped; mla folds to the bare year.
+    assert e("mla", "A", "2024", "T", "", url) == 'A. "T." 2024. ' + link
+    assert e("apa", "A", "2024", "T", None, url) == 'A. (2024). "T". ' + link
+    # No url -> the link goes, and harvard's "Available at:" lead-in goes with it.
+    assert e("harvard", "A", "2024", "T", "P", "") == 'A (2024) "T". P.'
+    assert "Available at" not in e("harvard", "A", "2024", "T", "P", None)
+    # Everything degenerate at once still returns a string rather than raising.
+    for fmt in ("apa", "mla", "harvard"):
+        assert isinstance(e(fmt, None, None, None, None, None), str)
+
+    # A paren-bearing URL is angle-bracketed through md_link_dest, exactly as the
+    # numbered reference row does — otherwise the link truncates at the inner ')'.
+    paren = "https://x.eu/a_(b)"
+    assert "](<" + paren + ">)" in e("apa", "A", "2024", "T", "P", paren)
+
+
 check("parse_synthesis_sources", assert_parse_synthesis_sources)
 check("frontmatter_scalar", assert_frontmatter_scalar)
 check("tokenization_primitives", assert_tokenization_primitives)
@@ -1525,6 +1584,7 @@ check("citation_family_dispatch", assert_citation_family_dispatch)
 check("strip_author_date_citation_markers", assert_strip_author_date_citation_markers)
 check("extract_author_date_citation_urls", assert_extract_author_date_citation_urls)
 check("build_author_date_reference_list", assert_build_author_date_reference_list)
+check("author_date_reference_entry", assert_author_date_reference_entry)
 PY
 )
 
@@ -1589,6 +1649,7 @@ grade strip_author_date_citation_markers "klib-45 strip_author_date_citation_mar
 grade extract_author_date_citation_urls "klib-46 extract_author_date_citation_urls (#1748) — the edge set klib-11 pins, transposed: appearance order, file:// first-class, unbracketed file:// with a literal space captured whole, angle-bracketed form, mixed file+http both in order, URL-less marker and ''→[]; scheme-anchored; extract_citation_urls dispatches per family"
 grade build_author_date_reference_list "klib-47 build_author_date_reference_list (#1748) — dedup by SOURCE identity not rendered string, alphabetical by surname across 'Last, First' and 'First Last', un-numbered (no **[N]**/[[N]]), ('','')+surname-less publisher surrogate sort last without raising, slug tiebreak, empty/None→[]"
 grade page_type_line "klib-48 page_type_line (#931) — the reader-facing Type: <Display> · <stage> header: per-type display name and stage word for all seven types, U+00B7 middle dot as the separator and never an ASCII substitute, case-insensitive key, and the fail-safe arms (unknown -> title-cased + raw, None/empty -> Unknown + raw, non-str int coerced) that must never raise"
+grade author_date_reference_entry "klib-51 author_date_reference_entry — the three author-date bibliography strings, pinned per format by full-string equality AND asserted pairwise distinct so a collapse onto one shared shape cannot pass; mla's period inside the closing quote; un-numbered (no **[N]**/[[N]]); a numbered format (incl. the wikilink alias and unknown/''/None) renders '' rather than guessing an author-date shape; and the four degradations — no year -> n.d., no author -> title-first per format, no publisher dropped (mla folds to the bare year), no url dropped with harvard's 'Available at:' — plus md_link_dest angle-bracketing a paren-bearing URL, none of which may raise"
 grade parse_distilled_claims_with_backlinks "klib-49 parse_distilled_claims_with_backlinks (#885) — the dual-level retrieval join reader: claim_id + text + backlinks and nothing else, inline list parsed with or without a space after the comma, order preserved, missing/empty backlinks normalized to [] so every claim carries the key, the with_id sibling left byte-identical (additive), and inline []/no key/empty/no-frontmatter -> []"
 
 # --- klib-50: check/grade census -------------------------------------------

@@ -76,7 +76,7 @@ Simple dot-path with `[*]` for arrays:
    ```
 
    Additional instructions to copywriter:
-   - Preserve all `<!-- FIELD: ... -->` comment delimiters exactly as-is (they fall under the protected-content invariant — the translate pass must also leave them byte-identical)
+   - Preserve all `<!-- FIELD: ... -->` comment delimiters exactly as-is, including through the translate pass — copy-json splits the polished file back apart on these delimiters, so a reworded or translated delimiter loses that field's text entirely. This is a constraint copy-json adds for this invocation; the copywriter's own § "Protected Content" enumeration does not name these comments.
    - Each field is an independent text snippet — do not merge or reorder them
    - These are JSON string values — do NOT add markdown formatting (no `**bold**`, `# headings`, `- lists`)
    - Keep each field as a single paragraph unless the original has line breaks

@@ -428,7 +428,8 @@ Pass 4 calls; that skill owns which band it measures against.
 The messaging frameworks and the deliverable-type conventions have no reference file
 here — `references/00-index.md` Step 4 carries the framework selection table and Step 3
 the deliverable-type table. The impact techniques and stakeholder review live outside
-this plugin tree; `references/00-index.md` § "Outside this tree" names both.
+this tree, in sibling skills of the same plugin; `references/00-index.md` § "Outside this
+tree" names both.
 
 ## Cross-Plugin Next Steps
 

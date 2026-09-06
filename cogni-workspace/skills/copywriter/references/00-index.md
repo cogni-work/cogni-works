@@ -45,7 +45,7 @@ CHECK 1 -- ARC PRESERVATION MODE
 Trigger conditions (any one is sufficient):
 - Document YAML frontmatter contains `arc_id`
 - User says "polish this arc" or "arc preservation" or similar
-- Document H2 headings match a known arc pattern (corporate-visions, technology-futures, competitive-intelligence, strategic-foresight, industry-transformation)
+- Document H2 headings match a registered arc's element headings — `arc-preservation.md` § "Arc Detection Reference", Step 2 is the authority for the registry read and the match threshold
 
 If triggered, set `mode = arc` and go to the Arc Loading Block below.
 

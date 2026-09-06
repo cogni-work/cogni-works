@@ -307,7 +307,7 @@ Review enhances quality but never blocks delivery — if review fails, continue 
   4. Source tag: `\[(portfolio-validated|claim-verified|[a-z-]+-validated)\]`
   (These mirror the four marker types enumerated in `translation-principles.md` § "Preserve byte-identical".)
 - **Frontmatter technical IDs unchanged** — `arc_id`, `source_url`, `entity_ref`, and any other technical identifier fields in the frontmatter are byte-identical to source values. The `target_language:` field is set to the new value (added if absent).
-- **Protected content byte-identical** — every item enumerated in § "Protected Content" above matches the source byte-for-byte (fail loud on any `{{asm:...}}`/persona-row mutation; `sources[]` frontmatter exempt).
+- **Protected content byte-identical** — every item enumerated in § "Protected Content" above matches the source byte-for-byte (fail loud on any `{{asm:...}}`/persona-row mutation; `sources[]` frontmatter exempt). For the figure item, `references/translation-principles.md` § "Preserve byte-identical" holds only the `Figure N` / `Abbildung N` numeric reference byte-identical; its § "Translate (target language)" list covers image captions, so caption title prose is translated.
 - **Readability relative to source** — when `TARGET_LANG` is set, score source and output on the **target-language Flesch scale**, then compare. Invocation (read `flesch_score` from each JSON result):
   - `python3 scripts/calculate_readability.py <source.md> --lang $TARGET_LANG` → `source_score` (= `flesch_score`)
   - `python3 scripts/calculate_readability.py <output.md> --lang $TARGET_LANG` → `output_score` (= `flesch_score`)
@@ -431,7 +431,7 @@ the deliverable-type table. The impact techniques and stakeholder review live ou
 this tree, in sibling skills of the same plugin; `references/00-index.md` § "Outside this
 tree" names both.
 
-## Cross-Plugin Next Steps
+## Next Steps: Visual Pipeline
 
 When polishing a research report (detected by project directory containing `project-config.json` or `00-sub-questions/`), include this guidance after the quality metrics:
 

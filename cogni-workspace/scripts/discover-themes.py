@@ -89,17 +89,11 @@ def _load_tier_validator():
     if plugin_root:
         candidates.append(os.path.join(plugin_root, "scripts", "validate-theme-manifest.py"))
 
+    # Sibling-first: the validator sits beside this file in the plugin's own
+    # scripts/ directory, so no walk-up is needed. The env-var candidate above
+    # still wins when CLAUDE_PLUGIN_ROOT names a different checkout.
     here = os.path.dirname(os.path.abspath(__file__))
-    walk = here
-    for _ in range(6):
-        candidate = os.path.join(walk, "scripts", "validate-theme-manifest.py")
-        if os.path.isfile(candidate):
-            candidates.append(candidate)
-            break
-        parent = os.path.dirname(walk)
-        if parent == walk:
-            break
-        walk = parent
+    candidates.append(os.path.join(here, "validate-theme-manifest.py"))
 
     for path in candidates:
         if not os.path.isfile(path):

@@ -50,7 +50,7 @@ Your ENTIRE response to the orchestrator must be:
 | Parameter | Required | Default | Description |
 |-----------|----------|---------|-------------|
 | source_path | Yes | - | Path to narrative file(s) or project directory |
-| theme | No | interactive | Absolute path to theme.md, or omit to trigger pick-theme selection |
+| theme | No | interactive | Absolute path to theme.md, or omit to trigger manage-themes Operation 11 selection |
 | language | No | en | Language code (en/de) |
 | arc_type | No | auto | Story arc hint |
 | arc_id | No | from frontmatter | Narrative arc ID from the `narrative` skill (e.g., `industry-transformation`) |

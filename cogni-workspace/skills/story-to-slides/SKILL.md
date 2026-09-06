@@ -367,9 +367,9 @@ Run the validation checklist (reference `09-validation-checklist.md`) one final 
 **Then, when `interactive` is `true`, ask one structured AskUserQuestion** (header "Render") with these options in this order:
 
 1. **Claude Design** — print the outline attachment box. Never resolves a theme: the organization design system applies.
-2. **claude.ai attachment** — resolve a theme *now*: use the brief's `theme_path` when present, otherwise invoke `cogni-workspace:pick-theme`; then print both absolute paths and the three-line prompt.
+2. **claude.ai attachment** — resolve a theme *now*: use the brief's `theme_path` when present, otherwise invoke `cogni-workspace:manage-themes` (Operation 11, Select Theme); then print both absolute paths and the three-line prompt.
 3. **pptx inside Claude Code** — resolve a theme exactly as in option 2, then dispatch the `cogni-workspace:pptx` agent with `PRESENTATION_BRIEF`, `THEME_FILE` and `OUTPUT_PATH` (`{source_dir}/cogni-visual/presentation.pptx`); it renders through the installed Anthropic pptx skill and round-trips the deck against the brief. On `{"error": "pptx_skill_unavailable"}` print the claude.ai instructions from option 2 instead of failing.
-4. **HTML** — dispatch `cogni-workspace:render-html-slides` with `brief_path`; it resolves its own theme (falling back to `cogni-workspace:pick-theme` itself).
+4. **HTML** — dispatch `cogni-workspace:render-html-slides` with `brief_path`; it resolves its own theme (falling back to `cogni-workspace:manage-themes` Operation 11 itself).
 5. **Later** — print the brief and outline paths and stop.
 
 When `interactive` is `false`, or on an empty response: print the brief and outline paths, render nothing, prompt for nothing — the `narrative-publish` pipeline runs this step that way. Printed paths are always absolute — never `~`, `$HOME`, `$CLAUDE_PLUGIN_ROOT` or relative; `$CLAUDE_PLUGIN_ROOT` remains the correct way to invoke a bundled script.

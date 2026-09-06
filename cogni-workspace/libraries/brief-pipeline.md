@@ -44,7 +44,7 @@ Set `source_dir` = parent directory of the selected `source_path`.
 
 ## Theme resolution
 
-The **theme entry point** is the ecosystem's theme picker — today `cogni-workspace:pick-theme`, which scans the standard and workspace theme directories, presents an interactive AskUserQuestion and returns the absolute `theme_path` (to `theme.md`), `theme_name` and `theme_slug`. Producers name the entry point through this section rather than in their own text, so folding the picker into another skill changes one line here. If the entry point is unavailable (cogni-workspace not installed), fall back to Glob scanning `$COGNI_WORKSPACE_ROOT/themes/*/theme.md` and present via AskUserQuestion manually.
+The **theme entry point** is the ecosystem's theme picker — today `cogni-workspace:manage-themes` Operation 11 (Select Theme), which scans the standard and workspace theme directories, presents an interactive AskUserQuestion and returns the absolute `theme_path` (to `theme.md`), `theme_name` and `theme_slug`. Producers name the entry point through this section rather than in their own text, so folding the picker into another skill changes one line here. If the entry point is unavailable (cogni-workspace not installed), fall back to Glob scanning `$COGNI_WORKSPACE_ROOT/themes/*/theme.md` and present via AskUserQuestion manually.
 
 **Path convention:** a `theme_path` written into brief frontmatter is the **absolute filesystem path** to the `theme.md` file, so the renderer can read it without path-resolution ambiguity. A caller-supplied path is recorded verbatim — never rewritten, relativised or re-resolved; the `narrative-publish` pipeline resolves the theme once and passes the path through to every producer.
 

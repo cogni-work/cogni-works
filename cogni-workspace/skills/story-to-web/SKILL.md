@@ -40,7 +40,7 @@ The brief describes WHAT each section says and which section type to use. The Pe
 | Parameter | Default | Description |
 |-----------|---------|-------------|
 | `source_path` | auto-discovered | Narrative file or directory. When omitted with `interactive=true`, Step 0 searches nearby. |
-| `theme` | interactive | Absolute path to theme.md, or omit to trigger `cogni-workspace:pick-theme` interactive selection. |
+| `theme` | interactive | Absolute path to theme.md, or omit to trigger `cogni-workspace:manage-themes` Operation 11 interactive selection. |
 | `language` | `en` | Language code (en/de) |
 | `title` | auto-detected | Brief title — the web page title, or the poster-set title in `mode=storyboard` (extracted from narrative if not provided) |
 | `customer_name` / `provider_name` | from metadata | Organization names |
@@ -161,9 +161,9 @@ python3 $CLAUDE_PLUGIN_ROOT/scripts/load-theme-component.py \
 
 Probe per section type you are about to render — pass the section type name (`hero`, `feature-alternating`, `stat-row`, `cta`, …) as `--component`. If no component name is in hand, skip the probe and take the Tier-0 / miss path below; it lands on the same complete style source.
 
-Derive `themes_dir` explicitly, because `pick-theme` yields a slug but no themes directory: `themes_dir` = `dirname(dirname(theme_path))`. Passing `--themes-dir` explicitly is the first-ranked source in `theme-component-loader.md` §Themes-dir resolution, so this derived value wins over the `$COGNI_WORKSPACE_ROOT/themes` and walk-up fallbacks the loader would otherwise try — which is what you want here, since the slug `pick-theme` returned is only guaranteed to exist under the directory that produced it.
+Derive `themes_dir` explicitly, because Operation 11 yields a slug but no themes directory: `themes_dir` = `dirname(dirname(theme_path))`. Passing `--themes-dir` explicitly is the first-ranked source in `theme-component-loader.md` §Themes-dir resolution, so this derived value wins over the `$COGNI_WORKSPACE_ROOT/themes` and walk-up fallbacks the loader would otherwise try — which is what you want here, since the slug Operation 11 returned is only guaranteed to exist under the directory that produced it.
 
-Tiers come only from this probe. `pick-theme` returns exactly `theme_path`, `theme_name`, and `theme_slug` — never a `tiers` map — so never read tiers off its return contract.
+Tiers come only from this probe. `cogni-workspace:manage-themes` Operation 11 returns exactly `theme_path`, `theme_name`, and `theme_slug` — never a `tiers` map — so never read tiers off its return contract.
 
 **Tier-0 / miss path.** A theme with no `manifest.json` emits no `tiers` key at all, and the probe returns `status: "miss"` at exit 0. Treat a miss as normal control flow: fall back to the `theme.md` tokens plus the `libraries/web-layouts.md` defaults and continue — in `mode=storyboard`, the `libraries/storyboard-layouts.md` defaults, plus `web-layouts.md` for the shared section-type schemas, rather than blocking or prompting — a tier-0 theme is a supported configuration, not a failure.
 

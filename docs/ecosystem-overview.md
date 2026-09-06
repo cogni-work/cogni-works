@@ -150,7 +150,7 @@ All plugins depend on cogni-workspace for three shared concerns:
 
 **Environment variables.** `manage-workspace` generates `.claude/settings.local.json`, which Claude Code auto-injects at session start. Plugins resolve sibling plugin paths via these variables rather than hardcoding paths.
 
-**Theme management.** Visual-output plugins (cogni-marketing, cogni-website) call the `pick-theme` skill from cogni-workspace to resolve a brand theme, as do cogni-workspace's own rendering skills. Themes live in `{workspace}/cogni-workspace/themes/` and are shared across all plugins that produce HTML or visual output.
+**Theme management.** Visual-output plugins (cogni-marketing, cogni-website) call the `manage-themes` skill from cogni-workspace — Operation 11, Select Theme — to resolve a brand theme, as do cogni-workspace's own rendering skills. Themes live in `{workspace}/cogni-workspace/themes/` and are shared across all plugins that produce HTML or visual output.
 
 **Session hooks.** cogni-workspace installs an `on-session-start.sh` hook that sources workspace environment variables and validates plugin availability each time a Claude Code session opens.
 

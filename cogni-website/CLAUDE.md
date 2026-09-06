@@ -59,7 +59,7 @@ Any page entry in `website-plan.json` carrying an `arc_id` is rendered through t
 | Plugin | Required | Purpose |
 |--------|----------|---------|
 | cogni-portfolio | Yes | Products, features, propositions, solutions, customer narratives |
-| cogni-workspace | Yes | Theme system (pick-theme skill, design-variables pattern); arc taxonomy and story-to-web decomposition references (website-plan); image-prompt conventions (hero-renderer) |
+| cogni-workspace | Yes | Theme system (manage-themes skill, Operation 11 selection, design-variables pattern); arc taxonomy and story-to-web decomposition references (website-plan); image-prompt conventions (hero-renderer) |
 | cogni-marketing | No | Blog posts, articles, whitepapers |
 | cogni-trends | No | Trend reports, investment themes for insights page |
 | cogni-knowledge | No | Research syntheses for resources page |

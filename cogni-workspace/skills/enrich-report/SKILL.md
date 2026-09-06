@@ -57,7 +57,7 @@ This division matters because chart design benefits from LLM creativity (context
 **Visual subordination** — in the report body, content max-width is 860px while enrichment max-width is 720px (centered). Charts max 300px height. This size difference signals that text is the backbone and visuals are insets. Dashboard patterns (hero banners, KPI grids, section-lead summaries) belong in the infographic header, not the report body.
 
 **Theming** follows the 3-stage design-variables pattern from cogni-workspace:
-1. User picks theme via `cogni-workspace:pick-theme`
+1. User picks theme via `cogni-workspace:manage-themes` (Operation 11, Select Theme)
 2. LLM derives `design-variables.json` from theme.md
 3. All colors in Chart.js configs and SVGs reference the design-variables palette — the same report can be re-themed by swapping the JSON
 
@@ -69,7 +69,7 @@ This division matters because chart design benefits from LLM creativity (context
 | `output_path` | auto | Scroll HTML output path. Default: `{dir}/output/{stem}-enriched.html`. Flipbook variant is always derived as `{stem}-enriched-flipbook.html` alongside it. |
 | `report_type` | `auto` | Override detection: `trend-report`, `research-report`, `generic` |
 | `language` | from frontmatter | `en` or `de` — affects chart labels, axis titles, summary card text |
-| `theme` | interactive | Theme path, or omit to trigger `cogni-workspace:pick-theme` |
+| `theme` | interactive | Theme path, or omit to trigger `cogni-workspace:manage-themes` (Operation 11, Select Theme) |
 | `design_variables` | derived from theme | Pre-computed design-variables.json path (skips derivation) |
 | `layout` | `both` | Output layout mode. Always produces both `scroll` (sidebar + continuous scroll) and `flipbook` (two-page spread with 3D page-curl animation). The agent writes scroll HTML once; the Python post-processor derives the flipbook variant automatically. |
 | `density` | `balanced` | Report-body enrichment density: `none` (0 visuals, themed prose only), `minimal` (1-2), `balanced` (3-5), `rich` (5-8). The infographic header is always generated regardless of density. |
@@ -143,7 +143,7 @@ This ensures the skill finds pre-existing infographic artifacts regardless of wh
 **Theme setup:**
 1. If `design_variables` path provided: load and validate against schema.
 2. If `theme` path provided: derive design-variables.json from theme.md (read `${CLAUDE_PLUGIN_ROOT}/references/design-variables-pattern.md` for derivation rules, validate against `schemas/design-variables.schema.json`).
-3. Otherwise: invoke `cogni-workspace:pick-theme`, then derive.
+3. Otherwise: invoke `cogni-workspace:manage-themes` (Operation 11, Select Theme), then derive.
 
 **Output path resolution:**
 Both layouts are always generated from a single agent dispatch. If `output_path` was not explicitly provided:

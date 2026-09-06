@@ -11,7 +11,7 @@ translation, the reject rule, render ordering and the consolidated JSON shape.
 | `<source>` | directory, or `.md` with `arc_id:` frontmatter | — | Required. A `.md` **without** `arc_id:` frontmatter is rejected, never treated as a narrative. |
 | `--to` | comma list of `slides`, `web`, `storyboard`, `infographic` | `slides` | Targets run in the order given. `storyboard` is `story-to-web` in `mode=storyboard`. |
 | `--polish[=SCOPE]` | `tone`, `full`, `formatting` | off; bare `--polish` means `tone` | Maps onto copywriter's `--scope`. `compress` is deliberately not offered. |
-| `--theme` | theme name or path | prompt via `pick-theme` | Required under `--interactive false`. |
+| `--theme` | theme name or path | prompt via `manage-themes` Operation 11 | Required under `--interactive false`. |
 | `--render` | flag | off | Render is opt-in at this layer. |
 | `--interactive` | `front`, `full`, `false` | `front` | See "Interactivity" below. |
 
@@ -25,7 +25,7 @@ The hops do **not** share an argument style. `narrative` is flag-style; every
 | `narrative` | flag | `--source-path`, `--arc-id`, `--output-path`, `--language`, `--target-length`, `--interactive` |
 | `story-to-slides` / `story-to-web` / `story-to-infographic` | snake_case | `source_path`, `theme`, `arc_id`, `interactive`, `stakeholder_review`, `output_path`, `render` (infographic only), `mode` (web only) |
 | `copywriter` | flag + skill args | `--scope`; `review_mode` |
-| `pick-theme` | — | returns `theme_path`, `theme_name`, `theme_slug` |
+| `manage-themes` (Operation 11) | — | returns `theme_path`, `theme_name`, `theme_slug` |
 
 ### Two explicit hop overrides
 
@@ -108,7 +108,7 @@ bare form.
 
 | Value | Prompts presented |
 |---|---|
-| `front` (default) | At most three, all up front — the narrative Phase 0 clarification (only when a brief field is unresolved and material), the narrative arc-shortlist confirmation, and one `pick-theme` prompt. Every `story-to-*` hop receives `interactive=false`. |
+| `front` (default) | At most three, all up front — the narrative Phase 0 clarification (only when a brief field is unresolved and material), the narrative arc-shortlist confirmation, and one `manage-themes` Operation 11 prompt. Every `story-to-*` hop receives `interactive=false`. |
 | `full` | Each hop stays interactive. |
 | `false` | None. `--theme` is required, and the narrative hop receives `--interactive false`. |
 

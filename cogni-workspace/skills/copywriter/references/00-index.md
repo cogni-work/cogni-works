@@ -136,7 +136,7 @@ IF visual hierarchy and scannability are priorities:
 
 ---
 
-## Step 3: Select and Load Deliverable Type
+## Step 3: Select Deliverable Type
 
 Identify which deliverable the user wants. This is REQUIRED for standard mode.
 
@@ -312,15 +312,15 @@ All reference files in this system, organized by directory. Use this as the sour
 ### 08-sales-techniques/
 - `power-positions.md` -- IS-DOES-MEANS structure, enhancement by layer, Value Wedge
 
-### Upstream (loaded from the `narrative` skill, not from this tree)
-- `${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/narrative-techniques/techniques-overview.md` -- the ecosystem's single copy of the impact techniques: Number Plays (6), Forcing Functions, Contrast Structure, You-Phrasing, Compound Impact Calculation, plus the per-arc-element application matrix
-- The `copy-reader` skill's own `references/personas/` and `references/synthesis-protocol.md` -- the ecosystem's single copy of the stakeholder personas and the synthesis protocol. Not loaded from here: Step 5 delegates the whole review to that skill, which loads them itself.
-
 ### 09-preservation-modes/
 - `arc-preservation.md` -- Arc detection, structure preservation, forbidden vs allowed modifications, translation-mode word band, validation checklist. Per-arc per-element technique rules are read at runtime from the `narrative` skill's arc contract (`story-arc/{arc_id}/arc-definition.md` `## Elements`) and `techniques-overview.md`
 
 ### workflow/
 - `step-by-step-guide.md` -- Complete sub-steps, gate checks, validation procedures
+
+### Outside this tree
+- `${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/narrative-techniques/techniques-overview.md` -- the ecosystem's single copy of the impact techniques: Number Plays (6), Forcing Functions, Contrast Structure, You-Phrasing, Compound Impact Calculation, plus the per-arc-element application matrix. Loaded by the Arc and Sales blocks and by Step 5.
+- The `copy-reader` skill's own `references/personas/` and `references/synthesis-protocol.md` -- the ecosystem's single copy of the stakeholder personas and the synthesis protocol. Not loaded from here: Step 5 delegates the whole review to that skill, which loads them itself.
 
 ---
 

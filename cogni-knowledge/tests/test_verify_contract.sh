@@ -341,6 +341,18 @@ assert_grep 'citation-consistent' "$PIPELINE" "verify-contract-107-phase-6-names
 assert_grep 'wiki-claims-resweep' "$PIPELINE" "verify-contract-108-names-opt-wiki-claims inverted-pipeline.md: names the opt-in wiki-claims-resweep delegation (#337)"
 assert_grep '#337' "$PIPELINE" "verify-contract-109-references-337 inverted-pipeline.md: references #337"
 
+# --- revisor: author-date awareness --------------------------------------
+# The read-back citation-integrity check counts inline markers and returns
+# write_failed on a mismatch. A numbered-only count over an author-date draft
+# returns zero for every retained citation, so a CORRECT draft fails. Reuses the
+# $REVISOR bind above rather than adding a second one.
+assert_grep_f '([Author, Year](url))' "$REVISOR" "verify-contract-110-revisor-counts-author-date-markers revisor: the read-back citation-integrity check counts markers of the draft's own family, including the author-date shapes"
+# That check needs a reachable source for the family. The Task(revisor, ...)
+# dispatch threads no CITATION_FORMAT, so the plan read under the PROJECT_PATH
+# it already receives is the only channel — without it the branch above is
+# unreachable and the assertion would prove nothing.
+assert_grep 'Read the citation format' "$REVISOR" "verify-contract-111-revisor-reads-citation-format revisor: resolves the citation family by reading plan.json under the PROJECT_PATH it already receives — no dispatch parameter carries it"
+
 if [ $errors -eq 0 ]; then
   green ""
   green "ALL PASS"

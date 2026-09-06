@@ -421,6 +421,28 @@ assert_grep 'severity == "high"\|high-severity\|high severity' "$COMPOSER" "comp
 PIPELINE="$PLUGIN_ROOT/references/inverted-pipeline.md"
 assert_grep 'Phase 5 — `knowledge-compose`' "$PIPELINE" "compose-contract-152-phase-5-section-header inverted-pipeline.md: Phase 5 section header anchored"
 
+# --- author-date rendering (apa/mla/harvard) ------------------------------
+# The composer's rendering is carried entirely in agent-prompt prose, so the
+# achievable bar here is a shape-anchored grep over the exact marker strings the
+# downstream primitives parse — not a render test. Each inline shape is pinned
+# SEPARATELY (assert_grep_f, since every one of them is a regex-metacharacter
+# thicket) so a diff that collapsed all three onto the APA form would redden two
+# cases rather than pass: the whole point of the family is three distinct shapes.
+assert_grep_f '([Author, Year](url))' "$COMPOSER" "compose-contract-153-apa-inline-shape wiki-composer: apa renders the ([Author, Year](url)) inline shape"
+assert_grep_f '([Author](url))' "$COMPOSER" "compose-contract-154-mla-inline-shape wiki-composer: mla renders the ([Author](url)) inline shape — no year, distinct from apa"
+assert_grep_f '([Author Year](url))' "$COMPOSER" "compose-contract-155-harvard-inline-shape wiki-composer: harvard renders the ([Author Year](url)) inline shape — no comma, distinct from apa"
+# The reference list under this family must be alphabetical and un-numbered: a
+# surviving **[N]** prefix would re-couple it to the numbered renumber pass that
+# knowledge-finalize deliberately bypasses for author-date.
+assert_grep 'alphabetical, un-numbered\|alphabetically by author surname, un-numbered' "$COMPOSER" "compose-contract-156-author-date-list-unnumbered wiki-composer: the author-date reference list is alphabetical and un-numbered"
+# Author/year must resolve with the SAME surrogate fallback resolve_author_year
+# uses, or a legacy base (no author:/published_date: frontmatter) renders blank
+# markers instead of the publisher/fetched_at surrogates.
+assert_grep 'else `publisher:`' "$COMPOSER" "compose-contract-157-author-year-surrogate-fallback wiki-composer: author/year resolve explicit-key-first with the publisher:/fetched_at: surrogate fallback"
+# The staged fall-through instruction must be gone, not merely supplemented — an
+# additive edit that left it in place would keep ordering the numbered shape.
+assert_not_grep 'staged author-date' "$COMPOSER" "compose-contract-158-no-staged-fallthrough wiki-composer: no surviving instruction to render apa/mla/harvard as the numbered IEEE shape"
+
 if [ $errors -eq 0 ]; then
   green ""
   green "ALL PASS"

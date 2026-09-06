@@ -244,10 +244,14 @@ Key targets: max 12 words per clause, Satzklammer breaking, Mittelfeld shortenin
 
 Load `techniques-overview.md` from the `narrative` skill, as the reference index routes you. It carries the decision processes and checklists for:
 
-- **Number plays** — Transform vague claims into concrete data (ratio framing, comparative anchoring, before/after contrasts, compound impact)
-- **Power words** — Strategic emotional triggers at decision points (3-5 per page, concentrated in headlines and CTAs)
-- **Rhetorical devices** — Structural persuasion (Rule of Three, anaphora, antithesis, cadence — 2-3 per document)
-- **Executive impact** — C-suite optimization (lead with ask, quantify everything, one-page max)
+- **Number plays** (`## 4`) — Transform vague claims into concrete data (ratio framing, specific quantification, comparative anchoring, before/after contrast, compound impact, hero number isolation)
+- **Forcing functions, contrast structure, you-phrasing and compound impact calculation** (`## 5`–`## 8`) — Urgency stacking, cognitive-dissonance framing, reader-centred phrasing, and the compound-impact arithmetic
+
+Power words, rhetorical devices and executive framing are **not** in `techniques-overview.md`, and no reference file carries them — the one exception is sales mode, where `references/08-sales-techniques/power-positions.md` carries its own MEANS-layer power-word categories. Otherwise apply them from your own knowledge of the craft, against these house density rules:
+
+- **Power words** — 3-5 per page, concentrated in headlines and CTAs. Match category to context (urgency for deadlines, trust for risk reduction).
+- **Rhetorical devices** — 2-3 per document, placed at opening and closing. Rule of Three for key messages, antithesis for contrasts.
+- **Executive framing** — Lead with the ask, quantify everything, one page max, decision clarity.
 
 **Arc-aware technique application**: When `arc_mode` is active, apply techniques per-element using the arc contract's `## Elements` — each `### N.` section names the element's Techniques and Hard rules — and the application matrix in narrative's `techniques-overview.md`, rather than generically across the document. Each arc element has its own technique profile.
 
@@ -257,14 +261,7 @@ Load `techniques-overview.md` from the `narrative` skill, as the reference index
 
 Skip if `skip_review: true`, or for informal deliverables (emails, casual memos).
 
-```text
-Skill: cogni-workspace:copy-reader
-Args: FILE_PATH={{output_path}} PERSONAS={{stakeholders}} AUTO_IMPROVE=true
-```
-
-The reader skill runs parallel multi-persona Q&A against its own persona profiles, synthesizes the feedback through its own synthesis protocol, and applies one auto-improvement loop directly to the document.
-
-Resolve `{{stakeholders}}` from the user's explicit persona list when one is given; otherwise use the audience defaults:
+First resolve `{{stakeholders}}` — it is the dispatch's `PERSONAS` argument. Use the user's explicit persona list when one is given; otherwise take the audience defaults:
 
 | Audience | Default Stakeholders |
 |----------|---------------------|
@@ -273,6 +270,15 @@ Resolve `{{stakeholders}}` from the user's explicit persona list when one is giv
 | general | end-user, marketing, executive |
 | legal | legal, executive, technical |
 | sales/marketing | marketing, executive, end-user |
+
+Then dispatch:
+
+```text
+Skill: cogni-workspace:copy-reader
+Args: FILE_PATH={{output_path}} PERSONAS={{stakeholders}} AUTO_IMPROVE=true
+```
+
+The reader skill runs parallel multi-persona Q&A against its own persona profiles, synthesizes the feedback through its own synthesis protocol, and applies one auto-improvement loop directly to the document.
 
 Step 4 has one implementation: it delegates to `cogni-workspace:copy-reader`, which handles its own reference loading. `review_mode: skip` bypasses the step; `automated` is a deprecated alias for `reader`.
 

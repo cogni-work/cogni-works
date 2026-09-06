@@ -279,12 +279,12 @@ The most common enhancement failure is layer bleeding -- putting the wrong type 
 
 ## Integration with Other Techniques
 
-When MODE: sales is active, Power Positions enhancement draws on techniques from sibling references. Apply them in a targeted way:
+When MODE: sales is active, Power Positions enhancement draws on the impact techniques. Apply them in a targeted way:
 
 | Technique | Primary layer | How to apply |
 |-----------|--------------|--------------|
-| Number Plays (number-plays.md) | DOES | Before/after contrast, ratio framing, compound impact for quantifying outcomes |
-| Power Words (power-words.md) | MEANS | 1-2 achievement or safety words per MEANS statement for executive resonance |
+| Number Plays | DOES | Before/after contrast, ratio framing, compound impact for quantifying outcomes |
+| Power Words | MEANS | 1-2 achievement or safety words per MEANS statement for executive resonance |
 | Rule of Three | IS | When listing multiple capabilities: "processes X, analyzes Y, and predicts Z" |
 | Comparative Anchoring | Competitor Gap | Frame your advantage relative to competitor baseline |
 | Specific Quantification | Proof | Replace vague evidence with precise metrics |
@@ -321,4 +321,5 @@ After enhancing all Power Positions in a document, validate each one against the
 
 ## See Also
 
-- `${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/narrative-techniques/techniques-overview.md` -- the impact techniques, in one place: `## 4. Number Plays (6 Techniques)` for quantifying the DOES layer, and `## 5. Forcing Functions` through `## 8. Compound Impact Calculation` for the structural and board-level framing the IS and MEANS layers use.
+- `${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/narrative-techniques/techniques-overview.md` -- `## 4. Number Plays (6 Techniques)` for quantifying the DOES layer, and `## 5. Forcing Functions` through `## 8. Compound Impact Calculation` for the urgency and contrast framing the IS and MEANS layers build on.
+- Power words for the MEANS layer are in **this file**: the `MEANS layer Power Word categories` table above. The Rule of Three named in the table above has no reference file anywhere -- apply it from your own knowledge, at the per-layer density this file states.

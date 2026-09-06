@@ -82,7 +82,7 @@ IF document language is German:
   LOAD: 01-core-principles/german-hook-principles.md
 ```
 
-Impact techniques for arc mode come from `techniques-overview.md`, already loaded above: `## 4. Number Plays (6 Techniques)` for quantification, and `## 5. Forcing Functions` through `## 8. Compound Impact Calculation` for rhetorical structure and executive framing. Apply them per-element via that file's application matrix, not generically across the document.
+Impact techniques for arc mode come from `techniques-overview.md`, already loaded above: `## 4. Number Plays (6 Techniques)` for quantification, and `## 5. Forcing Functions` through `## 8. Compound Impact Calculation` for urgency, contrast framing, you-phrasing and compound-impact arithmetic. Apply them per-element via that file's application matrix, not generically across the document. Power words and rhetorical devices are NOT in that file, and no reference arc mode loads carries them -- apply them from your own knowledge, at the densities Step 5 states.
 
 After loading, SKIP Steps 3-4 below. Proceed directly to skill workflow Step 3 (structure comes from the arc, not from a framework).
 
@@ -97,7 +97,7 @@ LOAD: 08-sales-techniques/power-positions.md
 LOAD: ${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/narrative-techniques/techniques-overview.md
 ```
 
-In `techniques-overview.md`, sales mode uses `## 4. Number Plays (6 Techniques)` for the DOES layer and `## 5. Forcing Functions` through `## 8. Compound Impact Calculation` for the MEANS layer.
+In `techniques-overview.md`, sales mode uses `## 4. Number Plays (6 Techniques)` for the DOES layer and `## 5. Forcing Functions` through `## 8. Compound Impact Calculation` for the urgency and framing behind the MEANS layer. Power words are NOT in that file: the MEANS-layer vocabulary sales mode uses is the `MEANS layer Power Word categories` table inside `08-sales-techniques/power-positions.md`, already loaded above.
 
 Then continue to the Standard Loading Block for deliverable + framework selection.
 
@@ -197,7 +197,15 @@ IF impact_level = high OR audience is executive/C-suite OR deliverable is execut
   LOAD: ${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/narrative-techniques/techniques-overview.md
 ```
 
-That file is the ecosystem's single copy of the impact material: `## 4. Number Plays (6 Techniques)` for quantification, `## 5. Forcing Functions`, `## 6. Contrast Structure` and `## 7. You-Phrasing` for rhetorical structure, and `## 8. Compound Impact Calculation` for executive framing.
+What that file carries: `## 4. Number Plays (6 Techniques)` for quantification, `## 5. Forcing Functions` for urgency stacking, `## 6. Contrast Structure` for cognitive-dissonance framing, `## 7. You-Phrasing` for reader-centred phrasing, and `## 8. Compound Impact Calculation` for the compound-impact arithmetic.
+
+What it does NOT carry. No reference file carries these either, except sales mode's `08-sales-techniques/power-positions.md`, which has its own MEANS-layer power-word categories. Apply each from your own knowledge of the craft, at the house densities below:
+
+```
+Power words        -- 3-5 per page, in headlines and CTAs; match category to context
+Rhetorical devices -- 2-3 per document, at opening and closing (Rule of Three, antithesis)
+Executive framing  -- lead with the ask, quantify everything, one page max, decision clarity
+```
 
 ### Formatting Standards
 

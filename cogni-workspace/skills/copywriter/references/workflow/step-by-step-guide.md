@@ -343,11 +343,14 @@ Load as needed:
 READ: ${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/narrative-techniques/techniques-overview.md
 ```
 
-Application targets:
+Application targets from that file:
 - **Number Plays** (`## 4`): Transform vague claims into specific data. Apply to key metrics, comparisons, and outcomes.
+- **Forcing Functions, Contrast Structure, You-Phrasing, Compound Impact Calculation** (`## 5` through `## 8`): Stack urgency with quantified consequences, frame against conventional wisdom, address the reader directly, and compound the impact arithmetic.
+
+Application targets that file does NOT carry. No reference file carries them either, except sales mode's `references/08-sales-techniques/power-positions.md` and its MEANS-layer power-word categories. Apply from your own knowledge of the craft, at these house densities:
 - **Power Words**: 3-5 per page, concentrated in headlines and CTAs. Match category to context (urgency for deadlines, trust for risk reduction).
-- **Rhetorical Devices** (`## 5` through `## 8`): 2-3 per document, placed at opening and closing. Rule of Three for key messages, antithesis for contrasts.
-- **Executive Impact**: Lead with the ask, quantify everything, one page max, decision clarity.
+- **Rhetorical Devices**: 2-3 per document, placed at opening and closing. Rule of Three for key messages, antithesis for contrasts.
+- **Executive Framing**: Lead with the ask, quantify everything, one page max, decision clarity.
 
 ### Step 5 Gate
 
@@ -364,18 +367,11 @@ Before proceeding, verify:
 
 **Skip this step if:** `skip_review: true` OR `review_mode: skip` OR deliverable is informal (email, casual memo).
 
-### 6A: Delegate to the Reader Skill
+### 6A: Resolve Stakeholders
 
-```text
-Delegate to: cogni-workspace:copy-reader
-Args: FILE_PATH={{output_path}} PERSONAS={{stakeholders}} AUTO_IMPROVE=true
-```
+Resolve `{{stakeholders}}` before dispatching -- it is the reader skill's `PERSONAS` argument.
 
-The reader skill handles parallel multi-persona Q&A, synthesis and automatic improvement against its own persona profiles and synthesis protocol. `review_mode` accepts `reader` (the default) and `skip`; `automated` is a deprecated alias for `reader`.
-
-### 6B: Resolve Stakeholders
-
-**Select stakeholders** based on audience parameter:
+Use the explicit `stakeholders` parameter when one is given. Otherwise take the defaults for the audience parameter:
 
 | Audience | Default Stakeholders |
 |----------|---------------------|
@@ -385,9 +381,16 @@ The reader skill handles parallel multi-persona Q&A, synthesis and automatic imp
 | legal | legal, executive, technical |
 | sales/marketing | marketing, executive, end-user |
 
-Override with explicit `stakeholders` parameter if provided.
+### 6B: Delegate to the Reader Skill
 
-Pass the resolved list to the reader skill as `PERSONAS`. It loads each persona's criteria from its own `references/personas/`, scores each criterion PASS (100) / CONCERN (60) / FAIL (0), computes the weighted overall score, and returns structured feedback with priority labels.
+```text
+Delegate to: cogni-workspace:copy-reader
+Args: FILE_PATH={{output_path}} PERSONAS={{stakeholders}} AUTO_IMPROVE=true
+```
+
+The reader skill handles parallel multi-persona Q&A, synthesis and automatic improvement against its own persona profiles and synthesis protocol. It loads each persona's criteria from its own `references/personas/`, scores each criterion PASS (100) / CONCERN (60) / FAIL (0), computes the weighted overall score, and returns structured feedback with priority labels.
+
+`review_mode` accepts `reader` (the default) and `skip`; `automated` is a deprecated alias for `reader`.
 
 **Scoring thresholds** (as returned by the reader skill):
 
@@ -567,13 +570,15 @@ Is the audience executive/C-suite?
 ### When to Load Additional References
 
 ```text
-User mentions quantifiable data -> READ: number-plays.md
-User mentions executive audience -> READ: executive-impact.md
-User mentions persuasion/impact -> READ: power-words.md, rhetorical-devices.md
+User mentions quantifiable data -> READ: narrative's techniques-overview.md (## 4 Number Plays)
+User mentions executive audience -> no file: apply executive framing from model knowledge
+User mentions persuasion/impact -> READ: narrative's techniques-overview.md (## 5 to ## 8);
+                                   power words and rhetorical devices have no file -- apply
+                                   from model knowledge at the Step 5 densities
 Document contains German text -> READ: german-style-principles.md
 Document contains citations -> READ: citation-formatting.md (at Step 8)
 Document has arc_id -> READ: arc-preservation.md, the arc's arc-definition.md, narrative's techniques-overview.md
-MODE is sales -> READ: power-positions.md, number-plays.md, power-words.md
+MODE is sales -> READ: power-positions.md, narrative's techniques-overview.md
 ```
 
 ### Handling Insufficient Information
@@ -583,7 +588,7 @@ If the user provides insufficient information to complete a step:
 1. Ask targeted questions (from Step 2 question bank) for only the missing information
 2. If the user declines to provide details, apply reasonable defaults:
    - Missing audience -> "general business audience"
-   - Missing framework -> deliverable's recommended framework
+   - Missing framework -> the deliverable's row in the Quick Lookup table in `references/00-index.md`
    - Missing tone -> semi-formal
    - Missing key messages -> extract from any source material provided
 3. State which defaults you are applying so the user can correct them

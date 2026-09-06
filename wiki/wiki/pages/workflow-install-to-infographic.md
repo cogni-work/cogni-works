@@ -39,7 +39,7 @@ A themed infographic rendered as SVG (Excalidraw) or `.pen` file (Pencil), align
 
 ## How it works
 
-The workflow is sequenced so you verify each layer before depending on it. [[plugin-cogni-workspace]] is installed first because it owns the shared workspace state the later steps read. `manage-workspace` initializes the directory structure, `install-mcp` brings up the MCP servers ([[concept-mcp-server-map]]), and `manage-themes` materializes your theme from a Claude Design bundle (Operation 10) or a theme-factory preset (Operation 5).
+The workflow is sequenced so you verify each layer before depending on it. [[plugin-cogni-workspace]] is installed first because it owns the shared workspace state the later steps read. `manage-workspace` initializes the directory structure, `install-mcp` brings up the MCP servers ([[concept-mcp-server-map]]), and `manage-themes` materializes your theme from a Claude Design bundle (Operation 10) or a bundled preset (Operation 5).
 
 [[plugin-cogni-workspace]] then renders an infographic. `story-to-infographic` turns a narrative (e.g., a one-paragraph product positioning) into a structured `infographic-brief.md`. The matching render skill (Pencil for editorial, Excalidraw for sketchnote/whiteboard) then produces the visual. See [[concept-brief-based-rendering]].
 
@@ -53,7 +53,7 @@ It exercises every layer of the platform — workspace foundation, MCP installat
 
 **2 — Initialize the workspace and install MCP servers.** `cogni-workspace:manage-workspace`, then `cogni-workspace:install-mcp`. Accept the defaults — one pass wires up Pencil, Excalidraw and claude-in-chrome. Step 4 uses Pencil and Excalidraw to render; claude-in-chrome is installed in the same pass for later workflows, and this one does not need it. Verify with `cogni-workspace:workspace-status`: every MCP should report green before continuing.
 
-**3 — Build a theme.** `cogni-workspace:manage-themes`. If you have a Claude Design bundle, import it (Operation 10) — the recommended path: you author the design system in Claude Design, export a handoff bundle, and the skill materializes it as a complete tiered theme. If you don't have a bundle yet, start from a theme-factory preset (Operation 5) instead. Then select it with Operation 11, which makes it the theme for slides, infographics, dashboards and websites — see [[concept-theme-inheritance]].
+**3 — Build a theme.** `cogni-workspace:manage-themes`. If you have a Claude Design bundle, import it (Operation 10) — the recommended path: you author the design system in Claude Design, export a handoff bundle, and the skill materializes it as a complete tiered theme. If you don't have a bundle yet, start from a bundled preset (Operation 5) instead — the plugin ships a reference theme plus four archetypes (corporate, minimal, bold-accent and editorial). Then select it with Operation 11, which makes it the theme for slides, infographics, dashboards and websites — see [[concept-theme-inheritance]].
 
 **4 — Render the first infographic.** `cogni-workspace:story-to-infographic` with `--style=sketchnote`, then again with `--style=economist`. A four-to-six-sentence narrative works well as a first try. Running both presets doubles as a live check that both renderers are wired up: `sketchnote` and `whiteboard` route to Excalidraw, `economist`, `editorial`, `data-viz` and `corporate` route to Pencil. Both inherit the theme from step 3, so their colors should match.
 

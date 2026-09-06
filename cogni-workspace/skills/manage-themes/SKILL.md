@@ -30,9 +30,9 @@ Before any operation, resolve the workspace themes directory:
 
 1. Use `${COGNI_WORKSPACE_ROOT}/themes/` if the env var is set
 2. Otherwise fall back to `{workspace}/cogni-workspace/themes/`
-3. If the themes directory does not exist, create it (and `_template/` inside it) before proceeding
+3. Write operations (5 when forking or generating, 7, 10) create the workspace themes directory and `_template/` inside it on first use. Operations 2, 9 and 11 never create anything — reading the catalog must not leave a directory behind in someone's workspace.
 
-Themes are authored in Claude Design and imported as a bundle (Operation 10). If the user has no bundle, offer a theme-factory preset (Operation 5) or build a theme.md directly from colours and fonts they supply.
+Themes are authored in Claude Design and imported as a bundle (Operation 10). If the user has no bundle, offer a bundled preset (Operation 5) or build a theme.md directly from colours and fonts they supply.
 
 ## Theme Storage
 
@@ -146,8 +146,8 @@ When the user asks for theme advice — e.g., "what theme for my brand?", "recom
 |---|---|
 | A Claude Design bundle URL (`api.anthropic.com/v1/design/h/<hash>`) | → **Operation 10** (Import from Claude Design Bundle) — the recommended authoring path; ships tokens, components, and assets in one re-syncable step |
 | A website URL or a PPTX template | → **Operation 10** (Import from Claude Design Bundle) — recreate the source in Claude Design, then import the bundle |
-| Specific colors/fonts but no file | → Create a custom theme.md directly from their inputs, following the template |
-| Nothing concrete, just a description | → **Operation 5** (Create from Preset) — recommend 2-3 theme-factory presets that match their mood/industry, let them pick or blend |
+| Specific colors/fonts but no file | → **Operation 5** — create their own theme from those inputs, following the template |
+| Nothing concrete, just a description | → **Operation 5** — start from `cogni-work` or an archetype preset, or generate a custom theme from the description |
 | An existing workspace theme that's close | → **Operation 6** (Audit/Improve) — review it and suggest targeted tweaks |
 | Existing themes, just wants to choose one | → **Operation 11** (Select Theme) — no interview needed |
 
@@ -165,19 +165,28 @@ python3 "$CLAUDE_PLUGIN_ROOT/scripts/discover-themes.py" --pretty
 
 Present each theme with its name, slug, source (standard or workspace), description, primary and accent colours, and font. A Glob over the workspace themes directory alone would miss every bundled theme, so it is not the enumerator here.
 
-### 5. Create Theme from Preset
+### 5. Create Theme — from a bundled preset or your own inputs
 
-Delegate to `document-skills:theme-factory` for preset theme creation:
+Two paths, one operation. Both end at a contrast-audited theme; neither depends on anything outside this plugin.
 
-1. Invoke the `theme-factory` skill to show available presets or create custom themes
-2. Once user selects/creates a theme, capture the color palette and typography
-3. Generate a theme.md following the template (see Theme File Format below)
-4. Save to `{themes-dir}/{theme-slug}/theme.md`
-5. Emit a starter `manifest.json` next to `theme.md` (see [Starter Manifest](#starter-manifest) below) and validate with `validate-theme-manifest.py` before completing
-6. Offer to deepen this into a tiered theme system (Operation 7)
-7. Offer to generate a theme showcase (Operation 8)
+**Start from a bundled preset in `$CLAUDE_PLUGIN_ROOT/themes/`:**
 
-This bridges theme-factory's preset system with the workspace's theme storage.
+1. Select through Operation 11. Present `cogni-work` first and mark it recommended — it is the reference theme every consumer already exercises — then the archetype presets: `boardroom` (corporate/enterprise), `clean-slate` (minimal grayscale), `signal` (bold accent), `editorial` (warm editorial/print).
+2. Ask whether to use it as-is or fork it. **Using it as-is writes nothing** — a bundled preset is already discoverable and already has a path.
+3. To fork, copy `theme.md` and `manifest.json` into `${COGNI_WORKSPACE_ROOT}/themes/<new-slug>/`. Default to a *new* slug, so the workspace copy does not shadow the bundled one. A same-slug override is allowed when the user wants it; `check-theme-drift.py` will then report the slug as shadowed, which is accurate — explain the advisory rather than suppressing it.
+4. Update the forked `theme.md` — its name, description and `Origin` — to reflect the fork, and its `manifest.json` `name` and `slug` to match the new directory.
+
+**Create your own theme when no candidate fits.** Build a new tier-0 theme from whatever the user supplies — a description of mood, industry and audience; explicit colors and fonts; or a preset to blend from:
+
+1. Name the slug per the [Naming Convention](#naming-convention) below.
+2. Write `theme.md` following `{themes-dir}/_template/theme.md` end to end, so every section the template defines is present.
+3. Emit a starter `manifest.json` beside it (see [Starter Manifest](#starter-manifest) below).
+4. Run the Operation 6 script-backed contrast audit **before** reporting success, and fix or explain any pair below AA.
+5. Show the result for review.
+
+Both paths then validate with `validate-theme-manifest.py`, offer to deepen into a tiered theme system (Operation 7), and offer a theme showcase (Operation 8).
+
+Presets are versioned with the plugin; a fork is the user's own theme. That split is the point — shipped presets and user themes stay on opposite sides of the plugin/workspace boundary.
 
 ### 6. Audit / Improve Theme
 
@@ -388,7 +397,7 @@ Operation 5 finishes by running `python3 "${CLAUDE_PLUGIN_ROOT}/scripts/validate
 Theme directories use kebab-case slugs derived from the brand/source name:
 - `digital-x` (from DIGITAL X brand)
 - `cogni-work` (from cogni-work.ai)
-- `ocean-depths` (from theme-factory preset)
+- `boardroom` (bundled preset)
 - `client-acme` (from client brand name)
 
 ## Additional Resources

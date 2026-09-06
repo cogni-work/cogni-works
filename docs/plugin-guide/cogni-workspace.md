@@ -137,7 +137,7 @@ Nine operations are available:
 | `select theme` | Discovers themes across the bundled and workspace directories, presents an interactive picker, and returns the chosen theme's absolute path. This is the entry point every visual plugin calls |
 | `recommend` | Suggests themes based on your industry or audience description |
 | `list` | Shows all available themes in the workspace |
-| `create from preset` | Builds a theme from a named preset (e.g., corporate, minimal, vibrant) |
+| `create from preset` | Starts from a preset the plugin ships — `cogni-work`, `boardroom`, `clean-slate`, `signal` or `editorial` — used as-is or forked into your workspace, or generates a new theme from colors, fonts and a description you supply |
 | `audit` | Checks a theme for contrast ratios, color harmony, and completeness |
 | `author deep theme system` | Deepens a theme into a tiered Theme System v2 directory (tokens, primitives, assets) |
 | `generate showcase` | Renders a visual sample of how a theme looks applied to real content |

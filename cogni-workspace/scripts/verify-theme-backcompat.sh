@@ -330,6 +330,32 @@ case "$TIERS_PROBE" in
   *) fail "tbc13-cogni-work-tiers-tokens tiered probe unknown response" "Unexpected probe output: $TIERS_PROBE" ;;
 esac
 
+# A3. Every bundled theme except _template validates and is discoverable.
+# _template is excluded because discover-themes.py filters underscore-prefixed
+# directories by design; it is covered by the tier-0 fixture above instead.
+# The slug is the per-case discriminator, so a theme added to the catalog gets
+# its own addressable result line rather than sharing one.
+for theme_dir in "$PLUGIN_ROOT"/themes/*/; do
+  theme="$(basename "$theme_dir")"
+  case "$theme" in _*) continue ;; esac
+
+  if python3 "$VALIDATOR_SCRIPT" "$theme_dir" >/dev/null 2>&1; then
+    c_pass "tbc24-bundled-theme-valid-$theme validate-theme-manifest accepts themes/$theme"
+  else
+    fail "tbc24-bundled-theme-valid-$theme validate-theme-manifest rejects themes/$theme" "Run \`python3 $VALIDATOR_SCRIPT $theme_dir\` for the error. A bundled theme must be schema-valid before it is offered as a preset."
+  fi
+
+  if printf "%s" "$TIERED_OUTPUT" | python3 -c '
+import json, sys
+want = sys.argv[1]
+sys.exit(0 if any(t.get("slug") == want for t in json.load(sys.stdin)) else 1)
+' "$theme"; then
+    c_pass "tbc25-bundled-theme-discovered-$theme discover returns themes/$theme"
+  else
+    fail "tbc25-bundled-theme-discovered-$theme discover does not return themes/$theme" "The directory exists but discover-themes.py did not surface it, so Operation 11 would never offer it."
+  fi
+done
+
 # --------------------------------------------------------------------------
 # Phase B: workspace-internal consumers
 # --------------------------------------------------------------------------
@@ -442,7 +468,11 @@ phase "Phase D — voice consumers (soft)"
 VOICE_PLUGINS=(cogni-sales)
 VOICE_HEADER='## Voice & Copy Guidelines'
 
-for theme in _template cogni-work; do
+# Enumerated rather than hardcoded: a theme added to themes/ used to get no case
+# at all, so the catalog could grow past the checks silently. The slug is the
+# per-case discriminator, so each theme owns its own addressable result line.
+for theme_dir in "$PLUGIN_ROOT"/themes/*/; do
+  theme="$(basename "$theme_dir")"
   theme_file="$PLUGIN_ROOT/themes/$theme/theme.md"
   if grep -qF "$VOICE_HEADER" "$theme_file"; then
     c_pass "tbc21-voice-section-$theme themes/$theme/theme.md has Voice & Copy Guidelines section"

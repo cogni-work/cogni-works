@@ -34,7 +34,7 @@ Five of the eight plugins ship **no** commands directory at all: cogni-knowledge
 
 **cogni-consult** — `consult-setup`, `consult-scope`, `consult-action-fields`, `consult-design-thinking`, `consult-personas`, `consult-project-plan`, `consult-publish`, `consult-dashboard`, `consult-resume`
 
-**cogni-workspace** — `manage-workspace`, `workspace-status`, `workspace-dashboard`, `pick-theme`, `manage-themes`, `manage-market-registry`, `install-mcp`, `claims`, `claim-entity`, `cogni-issues`, `story-to-slides`, `story-to-web`, `story-to-infographic`, `render-html-slides`, `enrich-report`, `narrative`, `narrative-publish`, `copywriter`, `copy-reader`, `copy-json`
+**cogni-workspace** — `manage-workspace`, `workspace-status`, `workspace-dashboard`, `manage-themes`, `manage-market-registry`, `install-mcp`, `claims`, `claim-entity`, `cogni-issues`, `story-to-slides`, `story-to-web`, `story-to-infographic`, `render-html-slides`, `enrich-report`, `narrative`, `narrative-publish`, `copywriter`, `copy-reader`, `copy-json`
 
 **cogni-trends** — `trend-scout`, `trend-research`, `trend-synthesis`, `trend-booklet`, `value-modeler`, `verify-trend-report`, `trends-catalog`, `trends-dashboard`, `trends-resume`
 

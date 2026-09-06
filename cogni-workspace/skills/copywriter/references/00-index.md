@@ -66,7 +66,7 @@ No special mode detected. Set `mode = standard` and go to the Standard Loading B
 
 ### Arc Loading Block
 
-When `mode = arc`, the arc IS the document structure. Do NOT load messaging frameworks or deliverable types.
+When `mode = arc`, the arc IS the document structure. Do NOT apply a messaging framework or a deliverable-type convention.
 
 ```
 LOAD: 09-preservation-modes/arc-preservation.md
@@ -142,52 +142,46 @@ Identify which deliverable the user wants. This is REQUIRED for standard mode.
 <deliverable_selection>
 Map the user's request to exactly one deliverable type. Use this lookup table:
 
-| User says                                      | deliverable_type     | File to load                              |
+| User says                                      | deliverable_type     | House conventions                         |
 |------------------------------------------------|----------------------|-------------------------------------------|
-| memo, memorandum, internal communication       | memo                 | 04-deliverable-types/memos.md             |
-| email, message, correspondence                 | email                | 04-deliverable-types/emails.md            |
-| brief, briefing, briefing document             | brief                | 04-deliverable-types/briefs.md            |
-| report, analysis, findings                     | report               | 04-deliverable-types/reports.md           |
-| proposal, pitch, business case                 | proposal             | 04-deliverable-types/proposals.md         |
-| one-pager, one pager, summary sheet            | one-pager            | 04-deliverable-types/one-pagers.md        |
-| executive summary, exec summary                | executive-summary    | 04-deliverable-types/executive-summaries.md |
-| letter, business letter, formal letter         | business-letter      | 04-deliverable-types/business-letters.md  |
-| blog, blog post, article, thought leadership   | blog                 | 04-deliverable-types/blogs.md             |
+| memo, memorandum, internal communication       | memo                 | 1 page, medium formality                  |
+| email, message, correspondence                 | email                | 200-300 words, medium formality           |
+| brief, briefing, briefing document             | brief                | 1-3 pages, medium-high formality          |
+| report, analysis, findings                     | report               | variable length, high formality           |
+| proposal, pitch, business case                 | proposal             | variable length, high formality           |
+| one-pager, one pager, summary sheet            | one-pager            | exactly 1 page, medium formality          |
+| executive summary, exec summary                | executive-summary    | 1-2 pages, high formality                 |
+| letter, business letter, formal letter         | business-letter      | 1 page, very high formality               |
+| blog, blog post, article, thought leadership   | blog                 | 800-1500 words, medium formality          |
 
 If the user's request does not clearly map to one of these, ask them to clarify before proceeding.
-</deliverable_selection>
 
-```
-LOAD: 04-deliverable-types/{deliverable_type}.md
-```
+The length and formality conventions above are the house-specific part. Produce the deliverable's conventional structure from your own knowledge of the form — this reference system does not restate it.
+</deliverable_selection>
 
 ---
 
-## Step 4: Select and Load Messaging Framework
+## Step 4: Select Messaging Framework
 
 <framework_selection>
 Apply this logic in order:
 
-1. If the user explicitly names a framework, load that framework.
-2. If the user does not name a framework, read the `recommended-frameworks` field from the deliverable file you loaded in Step 3. Use the FIRST listed framework as the default.
-3. If multiple frameworks seem equally suitable and the user has not chosen, pick the first recommended one -- do not ask unless genuinely ambiguous.
+1. If the user explicitly names a framework, apply that framework.
+2. If the user does not name a framework, take the default from the `Default Framework` column of the `## Quick Lookup: Deliverable to Default Load Set` table below, keyed on the `deliverable_type` resolved in Step 3.
+3. If multiple frameworks seem equally suitable and the user has not chosen, use the Quick Lookup default -- do not ask unless genuinely ambiguous.
 
-Available frameworks:
+Available frameworks. There is no reference file per framework: apply each from your own knowledge of it. This table pins the vocabulary and the house selection criterion, which is what the skill actually supplies.
 
-| Framework         | File                                                | Best for                                              |
-|-------------------|-----------------------------------------------------|-------------------------------------------------------|
-| BLUF              | 02-messaging-frameworks/bluf-framework.md           | Action-required, time-sensitive, executive audience    |
-| Pyramid           | 02-messaging-frameworks/pyramid-framework.md        | Complex recommendations, structured analysis           |
-| SCQA              | 02-messaging-frameworks/scqa-framework.md           | Narrative flow, problem-solving, building urgency      |
-| Inverted Pyramid  | 02-messaging-frameworks/inverted-pyramid-framework.md | Web content, press releases, scannable documents     |
-| STAR              | 02-messaging-frameworks/star-framework.md           | Case studies, examples, behavioral contexts            |
-| PSB               | 02-messaging-frameworks/psb-framework.md            | Marketing, sales, customer-facing content              |
-| FAB               | 02-messaging-frameworks/fab-framework.md            | Product focus, feature-heavy content                   |
+| Framework         | Best for                                              |
+|-------------------|-------------------------------------------------------|
+| BLUF              | Action-required, time-sensitive, executive audience    |
+| Pyramid           | Complex recommendations, structured analysis           |
+| SCQA              | Narrative flow, problem-solving, building urgency      |
+| Inverted Pyramid  | Web content, press releases, scannable documents       |
+| STAR              | Case studies, examples, behavioral contexts            |
+| PSB               | Marketing, sales, customer-facing content              |
+| FAB               | Product focus, feature-heavy content                   |
 </framework_selection>
-
-```
-LOAD: 02-messaging-frameworks/{framework}-framework.md
-```
 
 ---
 
@@ -317,31 +311,11 @@ All reference files in this system, organized by directory. Use this as the sour
 - `translation-nl-to-de.md` -- NL→DE: u→Sie, re-spell compounds + add umlauts, cognate false friends (German production → en-to-de)
 - `translation-pl-to-de.md` -- PL→DE: Pan/Pani→Sie, add articles, recompose compounds (German production → en-to-de)
 
-### 02-messaging-frameworks/
-- `bluf-framework.md` -- Bottom Line Up Front
-- `pyramid-framework.md` -- McKinsey Pyramid Principle (MECE)
-- `scqa-framework.md` -- Situation-Complication-Question-Answer
-- `inverted-pyramid-framework.md` -- Key info first, details second, background last
-- `star-framework.md` -- Situation-Task-Action-Result
-- `psb-framework.md` -- Problem-Solution-Benefit
-- `fab-framework.md` -- Feature-Advantage-Benefit
-
 ### 03-formatting-standards/
 - `visual-elements.md` -- Tables, callouts, lists, emphasis (~1 visual per 2 paragraphs)
 - `heading-hierarchy.md` -- Max 3 levels, front-loaded keywords, parallel structure
 - `citation-formatting.md` -- Citation placement, superscript commas, preservation rules
 - `markdown-basics.md` -- Standard markdown syntax reference
-
-### 04-deliverable-types/
-- `memos.md` -- 1 page, medium formality, BLUF/Pyramid/SCQA
-- `emails.md` -- 200-300 words, medium formality, BLUF/SCQA
-- `briefs.md` -- 1-3 pages, medium-high formality, BLUF/Pyramid/SCQA
-- `reports.md` -- Variable length, high formality, Pyramid/SCQA/Inverted Pyramid
-- `proposals.md` -- Variable length, high formality, FAB/PSB/Pyramid
-- `one-pagers.md` -- Exactly 1 page, medium formality, PSB/FAB
-- `executive-summaries.md` -- 1-2 pages, high formality, BLUF/Pyramid
-- `business-letters.md` -- 1 page, very high formality, Direct/Indirect
-- `blogs.md` -- 800-1500 words, medium formality, Inverted Pyramid/SCQA
 
 ### 05-examples/
 - `example-memo-bluf.md`
@@ -387,9 +361,9 @@ When the user's request is ambiguous or does not specify a deliverable type:
 
 1. Load the three core principles (clarity, conciseness, active-voice). These are always safe to load.
 2. Ask the user to specify their deliverable type. Present the nine options from the deliverable selection table above.
-3. Do NOT guess a deliverable type. Do NOT load all deliverable references. Wait for clarification.
+3. Do NOT guess a deliverable type. Wait for clarification.
 
-When a reference file does not exist at the expected path (e.g., an example for a deliverable-framework combination that has not been written yet):
+When a reference file does not exist at the expected path:
 
 1. Log a note that the reference was not found.
-2. Continue without it. The reference system is designed so that no single file is a hard dependency -- the deliverable and framework files together contain enough information to produce quality output.
+2. Continue without it. No single file is a hard dependency -- the deliverable conventions and framework selection in Steps 3 and 4 of this index are enough to produce quality output.

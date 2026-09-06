@@ -106,15 +106,13 @@ Proceed to 1C.
 
 ### 1C: Load References (Standard Mode)
 
-Load exactly these three references and no more:
+Load exactly this reference and no more:
 
 ```text
-READ: references/04-deliverable-types/{deliverable_type}.md
-READ: references/02-messaging-frameworks/{framework}-framework.md
 READ: references/01-core-principles/clarity-principles.md
 ```
 
-If framework was not specified, use the deliverable's recommended framework from the Quick Reference table in SKILL.md.
+Resolve the deliverable type and the messaging framework from `references/00-index.md` Steps 3 and 4 -- the house length and formality conventions and the framework selection table live there, and neither has a per-item reference file. If framework was not specified, use the deliverable's default framework from the Quick Lookup table in `references/00-index.md`.
 
 **Conditional additional loads:**
 

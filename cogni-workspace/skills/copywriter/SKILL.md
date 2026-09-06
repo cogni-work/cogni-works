@@ -398,11 +398,11 @@ All references are organized in progressive disclosure tiers. Start with `refere
 
 **Core Principles** (01-core-principles/) — Clarity, conciseness, active voice, German style (Wolf Schneider), German hooks, plain language, readability, acronym handling (audience-tuned first-mention expansion), translation (two-pass translate-then-polish; EN/DE-pivot directions for de/en/fr/it/pl/nl/es via `translation-{src}-to-{tgt}.md`)
 
-**Messaging Frameworks** (02-messaging-frameworks/) — BLUF, Pyramid, SCQA, Inverted Pyramid, STAR, PSB, FAB
+**Messaging Frameworks** — BLUF, Pyramid, SCQA, Inverted Pyramid, STAR, PSB, FAB. Selected from the table in `references/00-index.md` Step 4 and applied from model knowledge; no per-framework reference file.
 
 **Formatting Standards** (03-formatting-standards/) — Citation formatting, visual elements, heading hierarchy, markdown basics
 
-**Deliverable Types** (04-deliverable-types/) — Memos, emails, briefs, reports, proposals, one-pagers, executive summaries, business letters, blogs
+**Deliverable Types** — Memos, emails, briefs, reports, proposals, one-pagers, executive summaries, business letters, blogs. House length and formality conventions are in the `references/00-index.md` Step 3 table; the conventional structure of each form comes from model knowledge.
 
 **Examples** (05-examples/) — Memo-BLUF, email-SCQA, brief-Pyramid, proposal-FAB
 

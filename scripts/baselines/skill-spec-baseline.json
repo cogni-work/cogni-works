@@ -19,17 +19,7 @@
     {
       "skill": "copywriter",
       "arm": "reference-depth",
-      "file": "cogni-workspace/skills/copywriter/references/02-messaging-frameworks"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "reference-depth",
       "file": "cogni-workspace/skills/copywriter/references/03-formatting-standards"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "reference-depth",
-      "file": "cogni-workspace/skills/copywriter/references/04-deliverable-types"
     },
     {
       "skill": "copywriter",
@@ -194,41 +184,6 @@
     {
       "skill": "copywriter",
       "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/copywriter/references/02-messaging-frameworks/bluf-framework.md"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/copywriter/references/02-messaging-frameworks/fab-framework.md"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/copywriter/references/02-messaging-frameworks/inverted-pyramid-framework.md"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/copywriter/references/02-messaging-frameworks/psb-framework.md"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/copywriter/references/02-messaging-frameworks/pyramid-framework.md"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/copywriter/references/02-messaging-frameworks/scqa-framework.md"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/copywriter/references/02-messaging-frameworks/star-framework.md"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "unreferenced-resource",
       "file": "cogni-workspace/skills/copywriter/references/03-formatting-standards/heading-hierarchy.md"
     },
     {
@@ -240,51 +195,6 @@
       "skill": "copywriter",
       "arm": "unreferenced-resource",
       "file": "cogni-workspace/skills/copywriter/references/03-formatting-standards/visual-elements.md"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/copywriter/references/04-deliverable-types/blogs.md"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/copywriter/references/04-deliverable-types/briefs.md"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/copywriter/references/04-deliverable-types/business-letters.md"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/copywriter/references/04-deliverable-types/emails.md"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/copywriter/references/04-deliverable-types/executive-summaries.md"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/copywriter/references/04-deliverable-types/memos.md"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/copywriter/references/04-deliverable-types/one-pagers.md"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/copywriter/references/04-deliverable-types/proposals.md"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/copywriter/references/04-deliverable-types/reports.md"
     },
     {
       "skill": "copywriter",

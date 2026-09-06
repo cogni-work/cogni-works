@@ -22,7 +22,9 @@
 # tests/*.sh and */tests/*.sh globs are NOT the reason: a .py file matches
 # neither glob at any depth, so this parser would go undiscovered sitting
 # directly at tests/ too. The globs are what keep a sourced-only *bash* helper
-# out of the sweep; for this file the convention is the whole reason.
+# under fixtures/ out of the sweep — one level deeper than the globs reach —
+# whereas a bash helper sitting directly at tests/ WOULD be swept in. For this
+# file the convention is the whole reason.
 #
 # Every case id has both a PASS and a FAIL arm, structurally: expect_green and
 # expect_red each take the id once and own both arms, so the two can never

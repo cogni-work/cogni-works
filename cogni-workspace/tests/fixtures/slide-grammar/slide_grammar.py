@@ -10,12 +10,34 @@ checker to admit them would weaken it for real briefs, which is the worse trade.
 
 Two ops:
 
-    <check-name> <role>=<path> ...   grade one check; exit non-zero on findings
+    <check-name> <role>=<path> ...   grade one check; exit 1 on findings
     locate <role>=<path> <selector>  print a 0-based line index (mutation targets)
+
+Exit codes are the harness's whole discriminator, so they are a contract --
+the same 0/1/2 split check-brief.py draws with its CheckError and
+brief-render-qa.py with its QAError, so this fixture reads like its neighbours:
+
+    0  the check ran and found nothing
+    1  the check ran and found something -- the ONLY code that means a finding
+    2  the tool was misused or could not run (unknown check, unreadable
+       surface, malformed argv, bad selector). Never a grammar finding.
+
+Before that split, an unknown check name and a missing file both raised and
+exited 1, indistinguishable from a real finding: every red arm accepted any
+non-zero, so nine cases could assert nothing and still report PASS. Anything
+that widens exit 1 to cover a crash reopens that hole.
 """
 import json
 import re
 import sys
+import traceback
+
+EXIT_USAGE = 2
+
+
+class UsageError(Exception):
+    """The tool was misused or could not run. Exits EXIT_USAGE, never 1."""
+
 
 HEADING_RE = re.compile(r"^##\s+Slide\s+(\S+)\s*:")
 ANY_H2_RE = re.compile(r"^##\s+")
@@ -25,6 +47,26 @@ ANY_H2_RE = re.compile(r"^##\s+")
 LOOSE_SLIDE_RE = re.compile(r"^##\s+Slide\b")
 FENCE_RE = re.compile(r"^```(\S*)\s*$")
 TOPLEVEL_KEY_RE = re.compile(r"^([A-Za-z][A-Za-z0-9_-]*):")
+# The colour scan's own key regex, deliberately NOT shared with TOPLEVEL_KEY_RE.
+# Matches at any indentation and tolerates space before the colon, mirroring
+# check-brief.py's check_no_color_fields, which walks _keys() recursively and
+# flags `Background : x` too. CASE, not indentation, is what separates the
+# permitted nested `role:` from the forbidden `Role:` (check-brief.py:81-82).
+# TOPLEVEL_KEY_RE cannot simply be widened to match: two structural callers
+# (subkey_counts, _locate) read its None-on-an-indented-line as "nested under
+# the last key seen", so an `^\s*` there would zero the intent.role /
+# visual.kind counts and turn sg08 red.
+#
+# Precision boundary, so the next author widening COLOUR_FIELDS knows it: this
+# is a line regex, not a yaml parse, so it cannot tell a nested key from a line
+# inside a `|` block scalar -- and the graded bodies do carry them
+# (Speaker-Notes:, Diagram:). check-brief.py is structurally immune because it
+# walks parsed yaml. The corpus is clean today (the newly-visible keys are all
+# genuine nested ones), but Role, Mood and Intensity are ordinary English words,
+# so a Speaker-Notes line opening `Mood: confident` would false-positive. If
+# that ever bites, the fix is to route the fence body through
+# parse-brief.py's parse_yaml_subset rather than to narrow this back.
+ANY_DEPTH_KEY_RE = re.compile(r"^\s*([A-Za-z][A-Za-z0-9_-]*)\s*:")
 SLIDE_KIND_ENUM = {"content", "internal-prep", "references"}
 
 # 07-output-template.md:185 — "Three top-level keys are new in 4.1 and appear on
@@ -42,10 +84,18 @@ COLOUR_FIELDS = {"Background", "Text-Color", "Icon-Color", "Role", "Intensity", 
 def toplevel_key(line):
     """The line's top-level (unindented) yaml key, or None.
 
-    Indentation is the whole discriminator for the colour scan: `intent.role` is
-    a permitted 4.1 key, a bare top-level `Role:` is the forbidden styling key.
+    Serves the STRUCTURAL checks -- Slide-Kind extraction, sub-key parenting in
+    subkey_counts, and mutation targeting in _locate -- all of which read the
+    None on an indented line as "this is nested under the last key seen". The
+    colour scan deliberately does not use this: see any_depth_key.
     """
     m = TOPLEVEL_KEY_RE.match(line)
+    return m.group(1) if m else None
+
+
+def any_depth_key(line):
+    """The line's yaml key at any indentation, or None. See ANY_DEPTH_KEY_RE."""
+    m = ANY_DEPTH_KEY_RE.match(line)
     return m.group(1) if m else None
 
 
@@ -146,13 +196,14 @@ def slide_kinds(slide):
 
 
 def colour_hits(slide):
-    """Top-level colour keys inside the slide's yaml body.
+    """Colour keys at any depth inside the slide's yaml body.
 
     Scoped to fenced body content, never whole-document text: EXAMPLE_BRIEF.md
     and 07-output-template.md both NAME these fields in prose, documenting that
     they are forbidden, so a whole-file grep goes red on a correct tree.
+    Depth and spacing tolerance come from any_depth_key.
     """
-    return [k for k in map(toplevel_key, slide["body"]) if k in COLOUR_FIELDS]
+    return [k for k in map(any_depth_key, slide["body"]) if k in COLOUR_FIELDS]
 
 
 def subkey_counts(slide):
@@ -273,9 +324,32 @@ def _refs_last(docs):
     return bad
 
 
+@check("references-slide-kind")
+def _refs_kind(docs):
+    """The refslide surface's single slide must carry Slide-Kind: references.
+
+    references-slide-last is require(docs, "brief")-scoped, so it never reads
+    08b-references-slide.md at all. Without this check the one file whose entire
+    purpose is to document the references slide contributes only "one slide,
+    well-formed" to the binding, and demoting its Slide-Kind to `content` leaves
+    the whole suite green.
+    """
+    hits, err = require(docs, "refslide")
+    if err:
+        return err
+    bad = []
+    for d in hits:
+        for s in d["slides"]:
+            kinds = [v for _, v in slide_kinds(s)]
+            if kinds != ["references"]:
+                bad.append("%s:%d slide %s kind=%r, expected ['references']"
+                           % (d["path"], s["line"], s["label"], kinds))
+    return bad
+
+
 @check("no-colour-fields")
 def _no_colour(docs):
-    return _per_slide(docs, lambda s: ["top-level %s" % k for k in colour_hits(s)])
+    return _per_slide(docs, lambda s: ["colour field %s" % k for k in colour_hits(s)])
 
 
 @check("required-4.1-subkeys")
@@ -333,7 +407,7 @@ def _locate(docs, selector):
                 continue
             if seen == parent and re.match(r"^\s+%s:" % REQUIRED_SUBKEYS[parent], line):
                 return s["body_start"] + i
-        raise SystemExit("no %s sub-key on slide %s" % (parent, nth))
+        raise UsageError("no %s sub-key on slide %s" % (parent, nth))
 
     s = slides[-1] if which == "last" else slides[int(which) - 1]
     if kind == "fence-open":
@@ -344,23 +418,43 @@ def _locate(docs, selector):
         return s["body_start"]
     if kind == "kind-line":
         return slide_kinds(s)[0][0]
-    raise SystemExit("unknown selector %r" % selector)
+    raise UsageError("unknown selector %r" % selector)
 
 
 def main():
+    if len(sys.argv) < 2:
+        print("usage: slide_grammar.py <check-name|locate|dump-colour-fields> <role>=<path> ...")
+        return EXIT_USAGE
     op = sys.argv[1]
     args = sys.argv[2:]
+    # Validate the op before reading a single file: the name is the cheapest
+    # thing to check, and a mis-typed check should report itself rather than
+    # whatever the corpus happens to say.
+    if op not in CHECKS and op not in ("locate", "dump-colour-fields"):
+        print("unknown check %r (known: %s)" % (op, ", ".join(sorted(CHECKS))))
+        return EXIT_USAGE
     if op == "locate":
+        if not args:
+            print("locate needs a selector")
+            return EXIT_USAGE
         selector = args.pop()
     docs = []
     for arg in args:
         role, sep, path = arg.partition("=")
         if not sep:
             print("argument %r is not role=path" % arg)
-            return 1
-        docs.append(parse(role, path))
+            return EXIT_USAGE
+        try:
+            docs.append(parse(role, path))
+        except OSError as e:
+            print("cannot read %s: %s" % (path, e))
+            return EXIT_USAGE
     if op == "locate":
-        print(_locate(docs, selector))
+        try:
+            print(_locate(docs, selector))
+        except UsageError as e:
+            print(e)
+            return EXIT_USAGE
         return 0
     if op == "dump-colour-fields":
         print(json.dumps(sorted(COLOUR_FIELDS)))
@@ -372,4 +466,16 @@ def main():
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    # The backstop that makes the exit-code contract TRUE rather than merely
+    # enumerated. The named arms inside main() are better diagnostics and stay,
+    # but they can only cover the failures someone thought of: a binary surface
+    # (UnicodeDecodeError, not an OSError), an out-of-range locate index and a
+    # locate with no document all used to crash out as exit 1, wearing the
+    # finding code. Exit 1 is produced only by `return 1 if bad` below, never by
+    # an exception, so nothing legitimate passes through here.
+    try:
+        rc = main()
+    except Exception:
+        traceback.print_exc()
+        rc = EXIT_USAGE
+    sys.exit(rc)

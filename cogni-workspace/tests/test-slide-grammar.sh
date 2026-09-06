@@ -23,9 +23,19 @@
 # Every case id has both a PASS and a FAIL arm, structurally: expect_green and
 # expect_red each take the id once and own both arms, so the two can never
 # drift apart. The sgNN-mutant-* cases corrupt a mktemp copy and assert the
-# matching check goes red, so no assertion can rot into a tautology unnoticed.
-# Mutants address their target through the parser's `locate` op rather than by
-# absolute line number; no mutant is ever committed.
+# matching check goes red. Mutants address their target through the parser's
+# `locate` op rather than by absolute line number; no mutant is ever committed.
+#
+# What keeps a red arm honest is the parser's exit code, not the arm's
+# structure: every case asserts an EXACT code, and 1 alone means "the check
+# found something" (the 0/1/2 contract is stated once, in slide_grammar.py's
+# module docstring). This replaces the earlier claim that "no assertion can rot
+# into a tautology unnoticed", which was false when written: every red arm
+# accepted any non-zero, so a crashed parser read as a caught defect. Nine cases
+# were exposed — the eight expect_red sites (sg10-sg16, sg19) plus sg17's
+# then-hand-rolled arm — and could assert nothing while reporting PASS.
+# sg24/sg25 guard the two enumerated crash arms; sg26 guards the contract
+# itself, so a crash nobody enumerated cannot quietly reclaim exit 1.
 #
 # ## Mutation recipe
 #
@@ -39,12 +49,19 @@
 #   --expr 's{if not hits:}{if False:}'                 --case sg17-mutant-missing-role-fails-closed
 #   --expr 's{if n != 1}{if False}'                     --case sg19-mutant-missing-required-subkey
 #   --expr 's{"Mood"}{"Mood", "Bogus"}'                 --case sg18-colour-fields-match-check-brief
+#   --expr 's{EXIT_USAGE = 2}{EXIT_USAGE = 1}'          --case sg24-unknown-check-exits-usage
+#   --expr 's{compile\(r"\^\\s\*\(}{compile(r"^(}'      --case sg22-mutant-nested-colour-field
+#   --expr 's{\*\)\\s\*:"\)}{*):")}'                    --case sg23-mutant-spaced-colon-colour-field
+#   --expr 's{kinds != \["references"\]}{kinds != kinds}' --case sg21-mutant-refslide-kind-demoted
+#   --expr 's{rc = EXIT_USAGE}{rc = 1}'                  --case sg26-unenumerated-crash-exits-usage
 #
-# Verdict at authoring: guard_verified for all five — each search text occurs
+# Verdict at authoring: guard_verified for all ten — each search text occurs
 # exactly once in slide_grammar.py and each named case went red under its recipe,
-# replayed against the literal harness path above exactly as written. The first
-# is the load-bearing one: it reinstates the digits-only regex that is this
-# suite's central failure mode.
+# replayed against the literal harness path above exactly as written. The
+# heading-counts one is the load-bearing original: it reinstates the digits-only
+# regex that is this suite's central failure mode. The EXIT_USAGE one collapses
+# the crash code back onto the finding code and so reddens sg25 alongside its
+# named sg24 — both assert rc 2, and that is the pair the collapse breaks.
 
 set -u
 
@@ -75,11 +92,34 @@ clean() { python3 "$GRAM" "$1" "brief=$BRIEF" "template=$TEMPLATE" "refslide=$RE
 # the deliberately different filenames here cannot make a check self-skip.
 mutant() { python3 "$GRAM" "$2" "brief=$1/brief.md" "template=$1/template.md" "refslide=$1/refslide.md" >/dev/null 2>&1; }
 
+# Every arm asserts an EXACT exit code, never "zero vs non-zero" — that is the
+# whole mechanism, so it lives in exactly one place here and the wrappers below
+# only bind the code they want.
+
+# expect_rc <wanted-rc> <case-id> <failure-sentence> <cmd...>
+# On failure, replay without the redirect and indent the output — an rc=2 says
+# only "it crashed", and the traceback is the whole diagnosis. Same shape as
+# test-narrative-validate.sh's failure arm.
+expect_rc() {
+  local want="$1" id="$2" msg="$3"; shift 3
+  local rc=0
+  "$@" >/dev/null 2>&1 || rc=$?
+  if [ "$rc" -eq "$want" ]; then
+    pass "$id"
+  else
+    "$@" 2>&1 | sed 's/^/    /'
+    fail "$id $msg (rc=$rc)"
+  fi
+}
+
 # expect_green <case-id> <check> <failure-sentence>
-expect_green() { if clean "$2"; then pass "$1"; else fail "$1 $3"; fi; }
+expect_green() { expect_rc 0 "$1" "$3" clean "$2"; }
 
 # expect_red <case-id> <staged-dir> <check> <failure-sentence>
-expect_red() { if mutant "$2" "$3"; then fail "$1 $4"; else pass "$1"; fi; }
+expect_red() { expect_rc 1 "$1" "$4" mutant "$2" "$3"; }
+
+# expect_usage <case-id> <failure-sentence> <argv...> — the parser must exit 2.
+expect_usage() { local id="$1" msg="$2"; shift 2; expect_rc 2 "$id" "$msg" python3 "$GRAM" "$@"; }
 
 # Stage a fresh copy of all three surfaces and echo the directory. All three are
 # copied even when one is mutated, so `mutant` can always pass every role.
@@ -135,11 +175,13 @@ expect_green sg05-slide-kind-enum slide-kind-enum \
 expect_green sg06-references-slide-last references-slide-last \
   "the references slide is not the last slide of EXAMPLE_BRIEF.md"
 expect_green sg07-no-colour-fields no-colour-fields \
-  "a top-level colour field appears inside a slide yaml block"
+  "a colour field appears inside a slide yaml block"
 expect_green sg08-required-41-subkeys required-4.1-subkeys \
   "a slide is missing its nested intent.role or visual.kind key"
 expect_green sg09-non-numeric-slide-labels-graded non-numeric-slide-labels-graded \
   "the N / N+1 / N+2 headings were not graded"
+expect_green sg20-refslide-kind-is-references references-slide-kind \
+  "08b-references-slide.md's slide does not carry Slide-Kind: references"
 
 # --------------------------------------------------------------------- mutants
 
@@ -187,11 +229,9 @@ expect_red sg16-mutant-non-numeric-labels-removed "$d" non-numeric-slide-labels-
 # A role-scoped check handed no document for its role must go red rather than
 # report green having graded nothing — the silent-skip failure this suite exists
 # to prevent, applied to the suite's own plumbing.
-if python3 "$GRAM" references-slide-last "template=$TEMPLATE" >/dev/null 2>&1; then
-  fail "sg17-mutant-missing-role-fails-closed a check with no document for its role reported green"
-else
-  pass "sg17-mutant-missing-role-fails-closed"
-fi
+expect_rc 1 sg17-mutant-missing-role-fails-closed \
+  "a check with no document for its role did not report a finding" \
+  python3 "$GRAM" references-slide-last "template=$TEMPLATE"
 
 # The forbidden set is copied here rather than imported, to keep the fixture
 # standalone. check-brief.py owns the live prohibition list and has already
@@ -216,5 +256,44 @@ fi
 d="$(stage m19)"; mutate "$d" brief subkey:intent/1 del
 expect_red sg19-mutant-missing-required-subkey "$d" required-4.1-subkeys \
   "a slide stripped of its nested intent.role key was not reported"
+
+# The refslide surface's defining property. references-slide-last is brief-scoped
+# and never reads this file, so before sg20/sg21 the one document whose whole
+# purpose is the references slide contributed only "one slide, well-formed".
+d="$(stage m21)"; mutate "$d" refslide kind-line:1 set 'Slide-Kind: content'
+expect_red sg21-mutant-refslide-kind-demoted "$d" references-slide-kind \
+  "a demoted references-slide Slide-Kind was not reported"
+
+# Depth. check-brief.py's check_no_color_fields walks _keys() recursively, and
+# it cannot parse either template surface at all, so a nested styling key there
+# is guarded by this scan alone.
+d="$(stage m22)"; mutate "$d" template subkey:visual/1 ins '  Background: "#ff0000"'
+expect_red sg22-mutant-nested-colour-field "$d" no-colour-fields \
+  "a colour key nested under visual: was not reported"
+
+# Spacing. `Background : x` is a real yaml key that check-brief.py flags; a
+# regex requiring the colon to follow the key immediately misses it entirely.
+d="$(stage m23)"; mutate "$d" template body-top:1 ins 'Background : "#ff0000"'
+expect_red sg23-mutant-spaced-colon-colour-field "$d" no-colour-fields \
+  "a colour key written with a space before its colon was not reported"
+
+# The two cases below guard the crash-vs-finding split itself, replaying the two
+# reproductions that falsified this suite's own header claim. Both previously
+# yielded 19 PASS and exit 0, because expect_red accepted any non-zero.
+expect_usage sg24-unknown-check-exits-usage \
+  "an unknown check name did not exit 2, so a mis-typed check reads as a caught defect" \
+  no-such-checkZZZ "brief=$BRIEF" "template=$TEMPLATE" "refslide=$REFSLIDE"
+
+expect_usage sg25-unreadable-surface-exits-usage \
+  "an unreadable surface did not exit 2, so a failed stage() reads as a caught defect" \
+  fences-balanced "brief=$TMPROOT/does-not-exist.md"
+
+# sg24 and sg25 pin the two ENUMERATED arms. This one pins the contract
+# sentence: a crash nobody enumerated must still not wear the finding code.
+# `locate` with no document raises IndexError on docs[0]; before the __main__
+# backstop it exited 1.
+expect_usage sg26-unenumerated-crash-exits-usage \
+  "an unhandled parser exception did not exit 2, so an unenumerated crash still reads as a finding" \
+  locate "kind-line:1"
 
 exit "$failures"

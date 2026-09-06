@@ -384,7 +384,7 @@ When `interactive` is `false`, or on an empty response: print the brief and outl
 |-----------|------|---------|
 | **02-audience-model.md** | 3 | Audience Model construction (Rich/Lean mode) |
 | **03-story-arc-analysis.md** | 4 | Arc detection, governing thought, section roles |
-| **04-message-architecture.md** | 5 | Pyramid Principle, one-message-per-slide, MECE, consolidation |
+| **04-message-architecture.md** | 5 | Pyramid patterns per arc type, split/combine and message-extraction rules, `max_slides` consolidation, MECE gate, arc flow templates and sequencing rules |
 | **05a-slide-copywriting.md** | 6 | Assertion headlines, number plays, bullet consolidation |
 | **05b-speaker-notes.md** | 8.2 | Two-section speaker notes format reference (loaded by slides-enrichment-artist agent) |
 | **06-slide-mapping-rules.md** | 7 | Layout selection, confidence scoring, fallback strategies |

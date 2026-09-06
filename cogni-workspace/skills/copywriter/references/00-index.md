@@ -66,7 +66,7 @@ No special mode detected. Set `mode = standard` and go to the Standard Loading B
 
 ### Arc Loading Block
 
-When `mode = arc`, the arc IS the document structure. Do NOT load messaging frameworks or deliverable types.
+When `mode = arc`, the arc IS the document structure. Do NOT apply a messaging framework or a deliverable-type convention.
 
 ```
 LOAD: 09-preservation-modes/arc-preservation.md
@@ -76,13 +76,13 @@ LOAD: 01-core-principles/clarity-principles.md
 LOAD: 01-core-principles/conciseness-principles.md
 LOAD: 01-core-principles/active-voice-principles.md
 LOAD: 01-core-principles/acronym-handling-principles.md
-LOAD: 07-impact-techniques/number-plays.md
-LOAD: 07-impact-techniques/power-words.md
 
 IF document language is German:
   LOAD: 01-core-principles/german-style-principles.md
   LOAD: 01-core-principles/german-hook-principles.md
 ```
+
+Impact techniques for arc mode come from `techniques-overview.md`, already loaded above: `## 4. Number Plays (6 Techniques)` for quantification, and `## 5. Forcing Functions` through `## 8. Compound Impact Calculation` for urgency, contrast framing, you-phrasing and compound-impact arithmetic. Apply them per-element via that file's application matrix, not generically across the document. Power words and rhetorical devices are NOT in that file, and no reference arc mode loads carries them -- apply them from your own knowledge, at the densities Step 5 states.
 
 After loading, SKIP Steps 3-4 below. Proceed directly to skill workflow Step 3 (structure comes from the arc, not from a framework).
 
@@ -94,9 +94,10 @@ When `mode = sales`, load Power Positions plus supporting impact techniques. Sal
 
 ```
 LOAD: 08-sales-techniques/power-positions.md
-LOAD: 07-impact-techniques/number-plays.md
-LOAD: 07-impact-techniques/power-words.md
+LOAD: ${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/narrative-techniques/techniques-overview.md
 ```
+
+In `techniques-overview.md`, sales mode uses `## 4. Number Plays (6 Techniques)` for the DOES layer and `## 5. Forcing Functions` through `## 8. Compound Impact Calculation` for the urgency and framing behind the MEANS layer. Power words are NOT in that file: the MEANS-layer vocabulary sales mode uses is the `MEANS layer Power Word categories` table inside `08-sales-techniques/power-positions.md`, already loaded above.
 
 Then continue to the Standard Loading Block for deliverable + framework selection.
 
@@ -135,59 +136,53 @@ IF visual hierarchy and scannability are priorities:
 
 ---
 
-## Step 3: Select and Load Deliverable Type
+## Step 3: Select Deliverable Type
 
 Identify which deliverable the user wants. This is REQUIRED for standard mode.
 
 <deliverable_selection>
 Map the user's request to exactly one deliverable type. Use this lookup table:
 
-| User says                                      | deliverable_type     | File to load                              |
+| User says                                      | deliverable_type     | House conventions                         |
 |------------------------------------------------|----------------------|-------------------------------------------|
-| memo, memorandum, internal communication       | memo                 | 04-deliverable-types/memos.md             |
-| email, message, correspondence                 | email                | 04-deliverable-types/emails.md            |
-| brief, briefing, briefing document             | brief                | 04-deliverable-types/briefs.md            |
-| report, analysis, findings                     | report               | 04-deliverable-types/reports.md           |
-| proposal, pitch, business case                 | proposal             | 04-deliverable-types/proposals.md         |
-| one-pager, one pager, summary sheet            | one-pager            | 04-deliverable-types/one-pagers.md        |
-| executive summary, exec summary                | executive-summary    | 04-deliverable-types/executive-summaries.md |
-| letter, business letter, formal letter         | business-letter      | 04-deliverable-types/business-letters.md  |
-| blog, blog post, article, thought leadership   | blog                 | 04-deliverable-types/blogs.md             |
+| memo, memorandum, internal communication       | memo                 | 1 page, medium formality                  |
+| email, message, correspondence                 | email                | 200-300 words, medium formality           |
+| brief, briefing, briefing document             | brief                | 1-3 pages, medium-high formality          |
+| report, analysis, findings                     | report               | variable length, high formality           |
+| proposal, pitch, business case                 | proposal             | variable length, high formality           |
+| one-pager, one pager, summary sheet            | one-pager            | exactly 1 page, medium formality          |
+| executive summary, exec summary                | executive-summary    | 1-2 pages, high formality                 |
+| letter, business letter, formal letter         | business-letter      | 1 page, very high formality               |
+| blog, blog post, article, thought leadership   | blog                 | 800-1500 words, medium formality          |
 
 If the user's request does not clearly map to one of these, ask them to clarify before proceeding.
-</deliverable_selection>
 
-```
-LOAD: 04-deliverable-types/{deliverable_type}.md
-```
+The length and formality conventions above are the house-specific part. Produce the deliverable's conventional structure from your own knowledge of the form — this reference system does not restate it.
+</deliverable_selection>
 
 ---
 
-## Step 4: Select and Load Messaging Framework
+## Step 4: Select Messaging Framework
 
 <framework_selection>
 Apply this logic in order:
 
-1. If the user explicitly names a framework, load that framework.
-2. If the user does not name a framework, read the `recommended-frameworks` field from the deliverable file you loaded in Step 3. Use the FIRST listed framework as the default.
-3. If multiple frameworks seem equally suitable and the user has not chosen, pick the first recommended one -- do not ask unless genuinely ambiguous.
+1. If the user explicitly names a framework, apply that framework.
+2. If the user does not name a framework, take the default from the `Default Framework` column of the `## Quick Lookup: Deliverable to Default Load Set` table below, keyed on the `deliverable_type` resolved in Step 3.
+3. If multiple frameworks seem equally suitable and the user has not chosen, use the Quick Lookup default -- do not ask unless genuinely ambiguous.
 
-Available frameworks:
+Available frameworks. There is no reference file per framework: apply each from your own knowledge of it. This table pins the vocabulary and the house selection criterion, which is what the skill actually supplies.
 
-| Framework         | File                                                | Best for                                              |
-|-------------------|-----------------------------------------------------|-------------------------------------------------------|
-| BLUF              | 02-messaging-frameworks/bluf-framework.md           | Action-required, time-sensitive, executive audience    |
-| Pyramid           | 02-messaging-frameworks/pyramid-framework.md        | Complex recommendations, structured analysis           |
-| SCQA              | 02-messaging-frameworks/scqa-framework.md           | Narrative flow, problem-solving, building urgency      |
-| Inverted Pyramid  | 02-messaging-frameworks/inverted-pyramid-framework.md | Web content, press releases, scannable documents     |
-| STAR              | 02-messaging-frameworks/star-framework.md           | Case studies, examples, behavioral contexts            |
-| PSB               | 02-messaging-frameworks/psb-framework.md            | Marketing, sales, customer-facing content              |
-| FAB               | 02-messaging-frameworks/fab-framework.md            | Product focus, feature-heavy content                   |
+| Framework         | Best for                                              |
+|-------------------|-------------------------------------------------------|
+| BLUF              | Action-required, time-sensitive, executive audience    |
+| Pyramid           | Complex recommendations, structured analysis           |
+| SCQA              | Narrative flow, problem-solving, building urgency      |
+| Inverted Pyramid  | Web content, press releases, scannable documents       |
+| STAR              | Case studies, examples, behavioral contexts            |
+| PSB               | Marketing, sales, customer-facing content              |
+| FAB               | Product focus, feature-heavy content                   |
 </framework_selection>
-
-```
-LOAD: 02-messaging-frameworks/{framework}-framework.md
-```
 
 ---
 
@@ -199,10 +194,17 @@ These references load only when specific conditions are met. Check each independ
 
 ```
 IF impact_level = high OR audience is executive/C-suite OR deliverable is executive-summary:
-  LOAD: 07-impact-techniques/number-plays.md
-  LOAD: 07-impact-techniques/power-words.md
-  LOAD: 07-impact-techniques/rhetorical-devices.md
-  LOAD: 07-impact-techniques/executive-impact.md
+  LOAD: ${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/narrative-techniques/techniques-overview.md
+```
+
+What that file carries: `## 4. Number Plays (6 Techniques)` for quantification, `## 5. Forcing Functions` for urgency stacking, `## 6. Contrast Structure` for cognitive-dissonance framing, `## 7. You-Phrasing` for reader-centred phrasing, and `## 8. Compound Impact Calculation` for the compound-impact arithmetic.
+
+What it does NOT carry. No reference file carries these either, except sales mode's `08-sales-techniques/power-positions.md`, which has its own MEANS-layer power-word categories. Apply each from your own knowledge of the craft, at the house densities below:
+
+```
+Power words        -- 3-5 per page, in headlines and CTAs; match category to context
+Rhetorical devices -- 2-3 per document, at opening and closing (Rule of Three, antithesis)
+Executive framing  -- lead with the ask, quantify everything, one page max, decision clarity
 ```
 
 ### Formatting Standards
@@ -224,13 +226,11 @@ IF user asks about markdown syntax:
 ### Stakeholder Review
 
 ```
-IF review_mode = reader:
+IF review not explicitly skipped:
   Delegate to cogni-workspace:copy-reader skill (handles its own reference loading)
-
-IF review_mode = automated OR review not explicitly skipped:
-  LOAD: 10-stakeholder-review/{perspective}-review.md (for each selected stakeholder)
-  LOAD: 10-stakeholder-review/synthesis-guidelines.md (after reviews complete)
 ```
+
+`review_mode` accepts `reader` (the default) and `skip`. `automated` is a deprecated alias for `reader` -- it no longer selects an inline review path.
 
 Stakeholder defaults by audience:
 
@@ -244,13 +244,7 @@ Stakeholder defaults by audience:
 
 ### Examples and Templates
 
-```
-IF user requests an example OR this is a new framework combination:
-  LOAD: 05-examples/example-{deliverable}-{framework}.md
-
-IF user requests a template OR wants a fillable structure:
-  LOAD: 06-templates/template-{deliverable}.md
-```
+There are no example or template reference files. When the user asks for a worked example or a fillable scaffold, produce one for the resolved deliverable type and framework, honouring the length and formality conventions in Step 3 and the core principles already loaded.
 
 ### Workflow Guide
 
@@ -273,7 +267,7 @@ Use this table to confirm you have the right references for common tasks. Each r
 | report             | Pyramid           | clarity, conciseness, active-voice | visual-elements, heading-hierarchy |
 | proposal           | FAB               | clarity, conciseness, active-voice | visual-elements, heading-hierarchy |
 | one-pager          | PSB               | clarity, conciseness, active-voice | visual-elements                |
-| executive-summary  | BLUF              | clarity, conciseness, active-voice | executive-impact               |
+| executive-summary  | BLUF              | clarity, conciseness, active-voice | techniques-overview (impact)   |
 | business-letter    | (Direct/Indirect) | clarity, conciseness, active-voice | --                             |
 | blog               | Inverted Pyramid  | clarity, readability, active-voice | visual-elements                |
 
@@ -317,49 +311,11 @@ All reference files in this system, organized by directory. Use this as the sour
 - `translation-nl-to-de.md` -- NL→DE: u→Sie, re-spell compounds + add umlauts, cognate false friends (German production → en-to-de)
 - `translation-pl-to-de.md` -- PL→DE: Pan/Pani→Sie, add articles, recompose compounds (German production → en-to-de)
 
-### 02-messaging-frameworks/
-- `bluf-framework.md` -- Bottom Line Up Front
-- `pyramid-framework.md` -- McKinsey Pyramid Principle (MECE)
-- `scqa-framework.md` -- Situation-Complication-Question-Answer
-- `inverted-pyramid-framework.md` -- Key info first, details second, background last
-- `star-framework.md` -- Situation-Task-Action-Result
-- `psb-framework.md` -- Problem-Solution-Benefit
-- `fab-framework.md` -- Feature-Advantage-Benefit
-
 ### 03-formatting-standards/
 - `visual-elements.md` -- Tables, callouts, lists, emphasis (~1 visual per 2 paragraphs)
 - `heading-hierarchy.md` -- Max 3 levels, front-loaded keywords, parallel structure
 - `citation-formatting.md` -- Citation placement, superscript commas, preservation rules
 - `markdown-basics.md` -- Standard markdown syntax reference
-
-### 04-deliverable-types/
-- `memos.md` -- 1 page, medium formality, BLUF/Pyramid/SCQA
-- `emails.md` -- 200-300 words, medium formality, BLUF/SCQA
-- `briefs.md` -- 1-3 pages, medium-high formality, BLUF/Pyramid/SCQA
-- `reports.md` -- Variable length, high formality, Pyramid/SCQA/Inverted Pyramid
-- `proposals.md` -- Variable length, high formality, FAB/PSB/Pyramid
-- `one-pagers.md` -- Exactly 1 page, medium formality, PSB/FAB
-- `executive-summaries.md` -- 1-2 pages, high formality, BLUF/Pyramid
-- `business-letters.md` -- 1 page, very high formality, Direct/Indirect
-- `blogs.md` -- 800-1500 words, medium formality, Inverted Pyramid/SCQA
-
-### 05-examples/
-- `example-memo-bluf.md`
-- `example-email-scqa.md`
-- `example-brief-pyramid.md`
-- `example-proposal-fab.md`
-
-### 06-templates/
-- `template-memo.md`
-- `template-email.md`
-- `template-brief.md`
-- `template-proposal.md`
-
-### 07-impact-techniques/
-- `number-plays.md` -- Ratio framing, specific quantification, comparative anchoring, before/after
-- `power-words.md` -- Emotional triggers by category (urgency, exclusivity, trust, achievement)
-- `rhetorical-devices.md` -- Rule of Three, anaphora, antithesis, cadence
-- `executive-impact.md` -- C-suite optimization, lead with ask, quantify everything
 
 ### 08-sales-techniques/
 - `power-positions.md` -- IS-DOES-MEANS structure, enhancement by layer, Value Wedge
@@ -367,17 +323,12 @@ All reference files in this system, organized by directory. Use this as the sour
 ### 09-preservation-modes/
 - `arc-preservation.md` -- Arc detection, structure preservation, forbidden vs allowed modifications, translation-mode word band, validation checklist. Per-arc per-element technique rules are read at runtime from the `narrative` skill's arc contract (`story-arc/{arc_id}/arc-definition.md` `## Elements`) and `techniques-overview.md`
 
-### 10-stakeholder-review/
-- `00-index.md` -- Stakeholder review system overview
-- `executive-review.md` -- Decision-readiness, clarity, ROI
-- `technical-review.md` -- Accuracy, precision, logical consistency
-- `legal-review.md` -- Risk language, regulatory alignment
-- `marketing-review.md` -- Persuasiveness, audience resonance
-- `end-user-review.md` -- Accessibility, plain language, actionability
-- `synthesis-guidelines.md` -- Multi-stakeholder feedback aggregation and conflict resolution
-
 ### workflow/
 - `step-by-step-guide.md` -- Complete sub-steps, gate checks, validation procedures
+
+### Outside this tree
+- `${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/narrative-techniques/techniques-overview.md` -- the ecosystem's single copy of the impact techniques: Number Plays (6), Forcing Functions, Contrast Structure, You-Phrasing, Compound Impact Calculation, plus the per-arc-element application matrix. Loaded by the Arc and Sales blocks and by Step 5.
+- The `copy-reader` skill's own `references/personas/` and `references/synthesis-protocol.md` -- the ecosystem's single copy of the stakeholder personas and the synthesis protocol. Not loaded from here: Step 5 delegates the whole review to that skill, which loads them itself.
 
 ---
 
@@ -387,9 +338,9 @@ When the user's request is ambiguous or does not specify a deliverable type:
 
 1. Load the three core principles (clarity, conciseness, active-voice). These are always safe to load.
 2. Ask the user to specify their deliverable type. Present the nine options from the deliverable selection table above.
-3. Do NOT guess a deliverable type. Do NOT load all deliverable references. Wait for clarification.
+3. Do NOT guess a deliverable type. Wait for clarification.
 
-When a reference file does not exist at the expected path (e.g., an example for a deliverable-framework combination that has not been written yet):
+When a reference file does not exist at the expected path:
 
 1. Log a note that the reference was not found.
-2. Continue without it. The reference system is designed so that no single file is a hard dependency -- the deliverable and framework files together contain enough information to produce quality output.
+2. Continue without it. No single file is a hard dependency -- the deliverable conventions and framework selection in Steps 3 and 4 of this index are enough to produce quality output.

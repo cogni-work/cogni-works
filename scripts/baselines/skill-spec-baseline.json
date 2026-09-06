@@ -19,32 +19,7 @@
     {
       "skill": "copywriter",
       "arm": "reference-depth",
-      "file": "cogni-workspace/skills/copywriter/references/02-messaging-frameworks"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "reference-depth",
       "file": "cogni-workspace/skills/copywriter/references/03-formatting-standards"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "reference-depth",
-      "file": "cogni-workspace/skills/copywriter/references/04-deliverable-types"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "reference-depth",
-      "file": "cogni-workspace/skills/copywriter/references/05-examples"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "reference-depth",
-      "file": "cogni-workspace/skills/copywriter/references/06-templates"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "reference-depth",
-      "file": "cogni-workspace/skills/copywriter/references/07-impact-techniques"
     },
     {
       "skill": "copywriter",
@@ -55,11 +30,6 @@
       "skill": "copywriter",
       "arm": "reference-depth",
       "file": "cogni-workspace/skills/copywriter/references/09-preservation-modes"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "reference-depth",
-      "file": "cogni-workspace/skills/copywriter/references/10-stakeholder-review"
     },
     {
       "skill": "copywriter",
@@ -194,41 +164,6 @@
     {
       "skill": "copywriter",
       "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/copywriter/references/02-messaging-frameworks/bluf-framework.md"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/copywriter/references/02-messaging-frameworks/fab-framework.md"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/copywriter/references/02-messaging-frameworks/inverted-pyramid-framework.md"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/copywriter/references/02-messaging-frameworks/psb-framework.md"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/copywriter/references/02-messaging-frameworks/pyramid-framework.md"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/copywriter/references/02-messaging-frameworks/scqa-framework.md"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/copywriter/references/02-messaging-frameworks/star-framework.md"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "unreferenced-resource",
       "file": "cogni-workspace/skills/copywriter/references/03-formatting-standards/heading-hierarchy.md"
     },
     {
@@ -240,146 +175,6 @@
       "skill": "copywriter",
       "arm": "unreferenced-resource",
       "file": "cogni-workspace/skills/copywriter/references/03-formatting-standards/visual-elements.md"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/copywriter/references/04-deliverable-types/blogs.md"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/copywriter/references/04-deliverable-types/briefs.md"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/copywriter/references/04-deliverable-types/business-letters.md"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/copywriter/references/04-deliverable-types/emails.md"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/copywriter/references/04-deliverable-types/executive-summaries.md"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/copywriter/references/04-deliverable-types/memos.md"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/copywriter/references/04-deliverable-types/one-pagers.md"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/copywriter/references/04-deliverable-types/proposals.md"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/copywriter/references/04-deliverable-types/reports.md"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/copywriter/references/05-examples/example-acronyms-audience.md"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/copywriter/references/05-examples/example-brief-pyramid.md"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/copywriter/references/05-examples/example-email-scqa.md"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/copywriter/references/05-examples/example-memo-bluf.md"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/copywriter/references/05-examples/example-proposal-fab.md"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/copywriter/references/06-templates/template-brief.md"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/copywriter/references/06-templates/template-email.md"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/copywriter/references/06-templates/template-memo.md"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/copywriter/references/06-templates/template-proposal.md"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/copywriter/references/07-impact-techniques/executive-impact.md"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/copywriter/references/07-impact-techniques/number-plays.md"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/copywriter/references/07-impact-techniques/power-words.md"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/copywriter/references/07-impact-techniques/rhetorical-devices.md"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/copywriter/references/08-sales-techniques/power-positions.md"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/copywriter/references/10-stakeholder-review/end-user-review.md"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/copywriter/references/10-stakeholder-review/executive-review.md"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/copywriter/references/10-stakeholder-review/legal-review.md"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/copywriter/references/10-stakeholder-review/marketing-review.md"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/copywriter/references/10-stakeholder-review/technical-review.md"
     },
     {
       "skill": "copywriter",

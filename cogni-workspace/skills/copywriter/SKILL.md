@@ -85,7 +85,7 @@ These apply even in `--scope=tone` because they are readability essentials, not 
 - `framework` (optional): bluf | pyramid | scqa | star | psb | fab | inverted-pyramid
 - `impact_level` (optional): standard | high
 - `MODE` (optional): standard | sales (default: standard)
-- `review_mode` (optional): reader | automated | skip (default: automated) — selects the Step 4 review path
+- `review_mode` (optional): reader | skip (default: reader) — Step 4 always delegates to `cogni-workspace:copy-reader`; `automated` is accepted as a deprecated alias for `reader`
 - `AUDIENCE` (optional): expert | mixed | lay (default: mixed) — tunes audience-aware disciplines such as acronym expansion depth
 - `TARGET_LANG` (optional): de | en | fr | it | pl | nl | es — when set, runs a translate-then-polish two-pass flow (see Step 2.5). When unset, the skill polishes in the source language only. Translation requires EN or DE on one end of the pair (the pivot); direct non-EN/DE pairs (e.g. fr↔it) are rejected — see pre-check #5.
 
@@ -242,12 +242,16 @@ Key targets: max 12 words per clause, Satzklammer breaking, Mittelfeld shortenin
 
 **Impact techniques** (when `impact_level: high` or executive audience):
 
-Load techniques from the reference index. The reference files contain detailed decision processes, examples, and checklists for:
+Load `techniques-overview.md` from the `narrative` skill, as the reference index routes you. It carries the decision processes and checklists for:
 
-- **Number plays** — Transform vague claims into concrete data (ratio framing, comparative anchoring, before/after contrasts, compound impact)
-- **Power words** — Strategic emotional triggers at decision points (3-5 per page, concentrated in headlines and CTAs)
-- **Rhetorical devices** — Structural persuasion (Rule of Three, anaphora, antithesis, cadence — 2-3 per document)
-- **Executive impact** — C-suite optimization (lead with ask, quantify everything, one-page max)
+- **Number plays** (`## 4`) — Transform vague claims into concrete data (ratio framing, specific quantification, comparative anchoring, before/after contrast, compound impact, hero number isolation)
+- **Forcing functions, contrast structure, you-phrasing and compound impact calculation** (`## 5`–`## 8`) — Urgency stacking, cognitive-dissonance framing, reader-centred phrasing, and the compound-impact arithmetic
+
+Power words, rhetorical devices and executive framing are **not** in `techniques-overview.md`, and no reference file carries them — the one exception is sales mode, where `references/08-sales-techniques/power-positions.md` carries its own MEANS-layer power-word categories. Otherwise apply them from your own knowledge of the craft, against these house density rules:
+
+- **Power words** — 3-5 per page, concentrated in headlines and CTAs. Match category to context (urgency for deadlines, trust for risk reduction).
+- **Rhetorical devices** — 2-3 per document, placed at opening and closing. Rule of Three for key messages, antithesis for contrasts.
+- **Executive framing** — Lead with the ask, quantify everything, one page max, decision clarity.
 
 **Arc-aware technique application**: When `arc_mode` is active, apply techniques per-element using the arc contract's `## Elements` — each `### N.` section names the element's Techniques and Hard rules — and the application matrix in narrative's `techniques-overview.md`, rather than generically across the document. Each arc element has its own technique profile.
 
@@ -257,22 +261,7 @@ Load techniques from the reference index. The reference files contain detailed d
 
 Skip if `skip_review: true`, or for informal deliverables (emails, casual memos).
 
-**Two modes available:**
-
-**Option A — Interactive Reader Skill (recommended for formal deliverables):**
-
-```text
-Skill: cogni-workspace:copy-reader
-Args: FILE_PATH={{output_path}} PERSONAS={{stakeholders}} AUTO_IMPROVE=true
-```
-
-The reader skill runs parallel multi-persona Q&A, synthesizes feedback, and applies one auto-improvement loop directly to the document. Use for reports, proposals, executive summaries, and briefs.
-
-Resolve `{{stakeholders}}` from the user's explicit persona list when one is given; otherwise take the audience defaults from the Option B table below.
-
-**Option B — Automated Checklist Review (lighter weight):**
-
-Load stakeholder review profiles from `references/10-stakeholder-review/`. Default stakeholders by audience:
+First resolve `{{stakeholders}}` — it is the dispatch's `PERSONAS` argument. Use the user's explicit persona list when one is given; otherwise take the audience defaults:
 
 | Audience | Default Stakeholders |
 |----------|---------------------|
@@ -282,9 +271,16 @@ Load stakeholder review profiles from `references/10-stakeholder-review/`. Defau
 | legal | legal, executive, technical |
 | sales/marketing | marketing, executive, end-user |
 
-Evaluate against each stakeholder's 5 weighted criteria. Aggregate feedback, prioritize (3+ stakeholders = CRITICAL, 2 = HIGH, 1 = OPTIONAL), and apply CRITICAL/HIGH improvements. Load `references/10-stakeholder-review/synthesis-guidelines.md` for conflict resolution patterns.
+Then dispatch:
 
-Which option runs is set by the `review_mode` parameter resolved in Step 1: `reader` selects Option A, `automated` (the default) selects Option B, and `skip` bypasses this step.
+```text
+Skill: cogni-workspace:copy-reader
+Args: FILE_PATH={{output_path}} PERSONAS={{stakeholders}} AUTO_IMPROVE=true
+```
+
+The reader skill runs parallel multi-persona Q&A against its own persona profiles, synthesizes the feedback through its own synthesis protocol, and applies one auto-improvement loop directly to the document.
+
+Step 4 has one implementation: it delegates to `cogni-workspace:copy-reader`, which handles its own reference loading. `review_mode: skip` bypasses the step; `automated` is a deprecated alias for `reader`.
 
 Review enhances quality but never blocks delivery — if review fails, continue to Step 5 with the document as-is.
 
@@ -398,23 +394,21 @@ All references are organized in progressive disclosure tiers. Start with `refere
 
 **Core Principles** (01-core-principles/) — Clarity, conciseness, active voice, German style (Wolf Schneider), German hooks, plain language, readability, acronym handling (audience-tuned first-mention expansion), translation (two-pass translate-then-polish; EN/DE-pivot directions for de/en/fr/it/pl/nl/es via `translation-{src}-to-{tgt}.md`)
 
-**Messaging Frameworks** (02-messaging-frameworks/) — BLUF, Pyramid, SCQA, Inverted Pyramid, STAR, PSB, FAB
+**Messaging Frameworks** — BLUF, Pyramid, SCQA, Inverted Pyramid, STAR, PSB, FAB. Selected from the table in `references/00-index.md` Step 4 and applied from model knowledge; no per-framework reference file.
 
 **Formatting Standards** (03-formatting-standards/) — Citation formatting, visual elements, heading hierarchy, markdown basics
 
-**Deliverable Types** (04-deliverable-types/) — Memos, emails, briefs, reports, proposals, one-pagers, executive summaries, business letters, blogs
+**Deliverable Types** — Memos, emails, briefs, reports, proposals, one-pagers, executive summaries, business letters, blogs. House length and formality conventions are in the `references/00-index.md` Step 3 table; the conventional structure of each form comes from model knowledge.
 
-**Examples** (05-examples/) — Memo-BLUF, email-SCQA, brief-Pyramid, proposal-FAB
+**Examples and Templates** — No reference files. Produce a worked example or a fillable scaffold on request, for the resolved deliverable type and framework.
 
-**Templates** (06-templates/) — Memo, email, brief, proposal
-
-**Impact Techniques** (07-impact-techniques/) — Number plays, power words, rhetorical devices, executive impact
+**Impact Techniques** — Number plays, forcing functions, contrast structure, you-phrasing, compound impact. The ecosystem's single copy lives upstream in the `narrative` skill at `references/narrative-techniques/techniques-overview.md`, which also carries the per-arc-element application matrix.
 
 **Sales Techniques** (08-sales-techniques/) — Power Positions (IS-DOES-MEANS)
 
 **Arc Preservation** (09-preservation-modes/) — Arc detection and preservation rules, per-element technique map
 
-**Stakeholder Review** (10-stakeholder-review/) — Executive, technical, legal, marketing, end-user perspectives, synthesis guidelines
+**Stakeholder Review** — delegated to `cogni-workspace:copy-reader`; personas and synthesis protocol live in that skill's `references/`
 
 **Workflow** (workflow/) — Detailed sub-steps and validation checklists
 

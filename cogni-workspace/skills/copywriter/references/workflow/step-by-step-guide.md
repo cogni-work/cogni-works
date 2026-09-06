@@ -29,8 +29,8 @@ Step 2: Gather Content Requirements
 Step 3: Apply Structure & Framework
 Step 4: Apply Writing Principles
 Step 5: Apply Impact Techniques (optional)
-Step 6: Stakeholder Review (optional)
-Step 7: Synthesis & Refinement (optional)
+Step 6: Stakeholder Review (optional, delegated to copy-reader)
+Step 7: Synthesis & Refinement (owned by copy-reader)
 Step 8: Validate & Write Document
 ```
 
@@ -76,7 +76,7 @@ Parse the user's request to extract these parameters. Think through what the use
 | `output_path` | File path | Current working directory |
 | `tone` | formal, semi-formal, casual | semi-formal |
 | `length` | Word count or page count | Use deliverable default |
-| `review_mode` | reader, automated, skip | automated |
+| `review_mode` | reader, skip (`automated` = deprecated alias for reader) | reader |
 | `skip_review` | true, false | false |
 | `stakeholders` | List of perspective names | Use audience-based defaults from SKILL.md |
 
@@ -106,27 +106,24 @@ Proceed to 1C.
 
 ### 1C: Load References (Standard Mode)
 
-Load exactly these three references and no more:
+Load exactly this reference and no more:
 
 ```text
-READ: references/04-deliverable-types/{deliverable_type}.md
-READ: references/02-messaging-frameworks/{framework}-framework.md
 READ: references/01-core-principles/clarity-principles.md
 ```
 
-If framework was not specified, use the deliverable's recommended framework from the Quick Reference table in SKILL.md.
+Resolve the deliverable type and the messaging framework from `references/00-index.md` Steps 3 and 4 -- the house length and formality conventions and the framework selection table live there, and neither has a per-item reference file. If framework was not specified, use the deliverable's default framework from the Quick Lookup table in `references/00-index.md`.
 
 **Conditional additional loads:**
 
 - If `impact_level: high` OR audience is executive/C-suite:
   ```text
-  READ: references/07-impact-techniques/executive-impact.md
+  READ: ${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/narrative-techniques/techniques-overview.md
   ```
 - If `MODE: sales`:
   ```text
   READ: references/08-sales-techniques/power-positions.md
-  READ: references/07-impact-techniques/number-plays.md
-  READ: references/07-impact-techniques/power-words.md
+  READ: ${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/narrative-techniques/techniques-overview.md
   ```
 
 ### Step 1 Gate
@@ -339,20 +336,21 @@ Enhancement rules by layer:
 
 Critical: NEVER merge IS into DOES or DOES into MEANS. Preserve all structure markers exactly.
 
-**Standard high-impact mode:** Apply techniques from `references/07-impact-techniques/`.
+**Standard high-impact mode:** Apply the impact techniques from the upstream `narrative` reference.
 
 Load as needed:
 ```text
-READ: references/07-impact-techniques/number-plays.md
-READ: references/07-impact-techniques/power-words.md
-READ: references/07-impact-techniques/rhetorical-devices.md
+READ: ${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/narrative-techniques/techniques-overview.md
 ```
 
-Application targets:
-- **Number Plays**: Transform vague claims into specific data. Apply to key metrics, comparisons, and outcomes.
+Application targets from that file:
+- **Number Plays** (`## 4`): Transform vague claims into specific data. Apply to key metrics, comparisons, and outcomes.
+- **Forcing Functions, Contrast Structure, You-Phrasing, Compound Impact Calculation** (`## 5` through `## 8`): Stack urgency with quantified consequences, frame against conventional wisdom, address the reader directly, and compound the impact arithmetic.
+
+Application targets that file does NOT carry. No reference file carries them either, except sales mode's `references/08-sales-techniques/power-positions.md` and its MEANS-layer power-word categories. Apply from your own knowledge of the craft, at these house densities:
 - **Power Words**: 3-5 per page, concentrated in headlines and CTAs. Match category to context (urgency for deadlines, trust for risk reduction).
 - **Rhetorical Devices**: 2-3 per document, placed at opening and closing. Rule of Three for key messages, antithesis for contrasts.
-- **Executive Impact**: Lead with the ask, quantify everything, one page max, decision clarity.
+- **Executive Framing**: Lead with the ask, quantify everything, one page max, decision clarity.
 
 ### Step 5 Gate
 
@@ -369,22 +367,11 @@ Before proceeding, verify:
 
 **Skip this step if:** `skip_review: true` OR `review_mode: skip` OR deliverable is informal (email, casual memo).
 
-### Option A: Interactive Review via Reader Skill (Recommended)
+### 6A: Resolve Stakeholders
 
-If `review_mode: reader`:
+Resolve `{{stakeholders}}` before dispatching -- it is the reader skill's `PERSONAS` argument.
 
-```text
-Delegate to: cogni-workspace:copy-reader
-Args: FILE_PATH={{output_path}} PERSONAS={{stakeholders}} AUTO_IMPROVE=true
-```
-
-The reader skill handles parallel multi-persona Q&A and automatic improvement. After delegation, skip Step 7 (the reader skill handles its own synthesis).
-
-### Option B: Automated Checklist Review (Default)
-
-If `review_mode: automated` (or default):
-
-**Select stakeholders** based on audience parameter:
+Use the explicit `stakeholders` parameter when one is given. Otherwise take the defaults for the audience parameter:
 
 | Audience | Default Stakeholders |
 |----------|---------------------|
@@ -394,20 +381,18 @@ If `review_mode: automated` (or default):
 | legal | legal, executive, technical |
 | sales/marketing | marketing, executive, end-user |
 
-Override with explicit `stakeholders` parameter if provided.
+### 6B: Delegate to the Reader Skill
 
-**For each stakeholder:**
+```text
+Delegate to: cogni-workspace:copy-reader
+Args: FILE_PATH={{output_path}} PERSONAS={{stakeholders}} AUTO_IMPROVE=true
+```
 
-1. Load review criteria:
-   ```text
-   READ: references/10-stakeholder-review/{perspective}-review.md
-   ```
-2. Evaluate the document against the perspective's 5 weighted criteria
-3. Score each criterion: PASS (100), CONCERN (60), FAIL (0)
-4. Calculate weighted overall score (0-100)
-5. Generate structured feedback: strengths, concerns, recommendations (with priority labels)
+The reader skill handles parallel multi-persona Q&A, synthesis and automatic improvement against its own persona profiles and synthesis protocol. It loads each persona's criteria from its own `references/personas/`, scores each criterion PASS (100) / CONCERN (60) / FAIL (0), computes the weighted overall score, and returns structured feedback with priority labels.
 
-**Scoring thresholds:**
+`review_mode` accepts `reader` (the default) and `skip`; `automated` is a deprecated alias for `reader`.
+
+**Scoring thresholds** (as returned by the reader skill):
 
 | Score | Assessment |
 |-------|-----------|
@@ -428,62 +413,19 @@ Before proceeding, verify:
 
 ---
 
-## Step 7: Synthesis & Refinement (Optional)
+## Step 7: Synthesis & Refinement (Owned by the reader skill)
 
-**Skip this step if:** Step 6 used reader skill (Option A) OR Step 6 was skipped.
-
-### 7A: Aggregate and Prioritize Feedback
-
-Load synthesis guidelines:
-```text
-READ: references/10-stakeholder-review/synthesis-guidelines.md
-```
-
-Priority determination:
-
-| Condition | Priority |
-|-----------|----------|
-| 3+ stakeholders mention same issue | CRITICAL |
-| Executive + 1 other stakeholder on same issue | CRITICAL |
-| 2 stakeholders mention same issue | HIGH |
-| High-weight criterion (>=20%) flagged | HIGH |
-| 1 stakeholder, low-weight criterion (<15%) | OPTIONAL |
-
-### 7B: Apply Improvements
-
-For each improvement by priority:
-
-- **CRITICAL**: Apply the change. Validate it improved the relevant section. Mark complete.
-- **HIGH**: Assess feasibility. Apply if feasible. Log if skipped with reason.
-- **OPTIONAL**: Log for manual review. Do NOT apply automatically.
-
-### 7C: Resolve Conflicts
-
-When stakeholders disagree, apply these resolution patterns:
-
-| Conflict | Resolution |
-|----------|-----------|
-| Executive wants brevity vs. Technical wants detail | Executive summary + technical appendix |
-| Marketing wants emotion vs. Executive wants data | Lead with data, use power words for emphasis |
-| End-user wants simple vs. Technical wants precision | Plain language with technical glossary |
-| Legal wants hedging vs. Marketing wants bold claims | Strong but hedged: "designed to deliver" |
-
-**Tiebreaker hierarchy:**
-1. Primary audience perspective (if specified)
-2. Deliverable requirements (framework, regulatory)
-3. Impact technique effectiveness
-4. User-specified preference
+There is no inline synthesis pass. The reader skill dispatched in Step 6 aggregates and prioritizes the persona feedback, resolves conflicts and applies improvements itself, using its own `references/synthesis-protocol.md` — the single copy of the priority-escalation ladder, the conflict-resolution table and the tiebreaker hierarchy.
 
 **Graceful degradation:**
-- Individual improvement fails -> Revert change, log failure, continue with remaining
-- Synthesis calculation fails -> Continue to Step 8 with original document, log `fallback_reason: "synthesis_failure"`
+- The reader skill validates its own output and reverts to its backup on failure.
+- Reader dispatch fails -> Continue to Step 8 with the document as written, log `fallback_reason: "review_failure"`.
 
 ### Step 7 Gate
 
 Before proceeding, verify:
-- All CRITICAL improvements are applied
-- HIGH improvements are applied or logged with skip reason
-- Conflict resolutions follow the hierarchy
+- The reader skill returned, or its failure is logged with a `fallback_reason`
+- Review never blocks delivery: an unavailable review means Step 8 proceeds on the unreviewed document
 
 ---
 
@@ -628,13 +570,15 @@ Is the audience executive/C-suite?
 ### When to Load Additional References
 
 ```text
-User mentions quantifiable data -> READ: number-plays.md
-User mentions executive audience -> READ: executive-impact.md
-User mentions persuasion/impact -> READ: power-words.md, rhetorical-devices.md
+User mentions quantifiable data -> READ: narrative's techniques-overview.md (## 4 Number Plays)
+User mentions executive audience -> no file: apply executive framing from model knowledge
+User mentions persuasion/impact -> READ: narrative's techniques-overview.md (## 5 to ## 8);
+                                   power words and rhetorical devices have no file -- apply
+                                   from model knowledge at the Step 5 densities
 Document contains German text -> READ: german-style-principles.md
 Document contains citations -> READ: citation-formatting.md (at Step 8)
 Document has arc_id -> READ: arc-preservation.md, the arc's arc-definition.md, narrative's techniques-overview.md
-MODE is sales -> READ: power-positions.md, number-plays.md, power-words.md
+MODE is sales -> READ: power-positions.md, narrative's techniques-overview.md
 ```
 
 ### Handling Insufficient Information
@@ -644,7 +588,7 @@ If the user provides insufficient information to complete a step:
 1. Ask targeted questions (from Step 2 question bank) for only the missing information
 2. If the user declines to provide details, apply reasonable defaults:
    - Missing audience -> "general business audience"
-   - Missing framework -> deliverable's recommended framework
+   - Missing framework -> the deliverable's row in the Quick Lookup table in `references/00-index.md`
    - Missing tone -> semi-formal
    - Missing key messages -> extract from any source material provided
 3. State which defaults you are applying so the user can correct them

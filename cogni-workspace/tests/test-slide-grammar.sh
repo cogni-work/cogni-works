@@ -16,9 +16,13 @@
 # traps it is shaped around and the required-key table it grades live in
 # fixtures/slide-grammar/slide_grammar.py; this file does not restate them.
 #
-# The parser sits under fixtures/ rather than beside this file because the
-# runner's discovery glob is a non-recursive tests/*.sh — a helper at tests/
-# level would be discovered and run as a second suite.
+# The parser sits under fixtures/ because that is where this repo parks test
+# assets that are not themselves suites — tests/fixtures/ already holds brief/,
+# narrative-output/ and narrative-source/. Note the runner's non-recursive
+# tests/*.sh and */tests/*.sh globs are NOT the reason: a .py file matches
+# neither glob at any depth, so this parser would go undiscovered sitting
+# directly at tests/ too. The globs are what keep a sourced-only *bash* helper
+# out of the sweep; for this file the convention is the whole reason.
 #
 # Every case id has both a PASS and a FAIL arm, structurally: expect_green and
 # expect_red each take the id once and own both arms, so the two can never

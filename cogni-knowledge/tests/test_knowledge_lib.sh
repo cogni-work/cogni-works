@@ -1523,6 +1523,13 @@ def assert_author_date_reference_entry():
     # No publisher -> the segment is dropped; mla folds to the bare year.
     assert e("mla", "A", "2024", "T", "", url) == 'A. "T." 2024. ' + link
     assert e("apa", "A", "2024", "T", None, url) == 'A. (2024). "T". ' + link
+    # A publisher EQUAL to the author drops the same way (case-insensitively):
+    # on a legacy page resolve_author_year falls back to the publisher: surrogate
+    # for the author, so keeping both prints the publisher twice in one entry.
+    assert e("apa", "acme.de", "2019", "T", "acme.de", url) == 'acme.de. (2019). "T". ' + link
+    assert e("harvard", "ACME.DE", "2019", "T", "acme.de", url) == 'ACME.DE (2019) "T". Available at: ' + link
+    # A genuinely different publisher is still kept.
+    assert 'Zeta Institute.' in e("apa", "Zimmermann, Ada", "2024", "T", "Zeta Institute", url)
     # No url -> the link goes, and harvard's "Available at:" lead-in goes with it.
     assert e("harvard", "A", "2024", "T", "P", "") == 'A (2024) "T". P.'
     assert "Available at" not in e("harvard", "A", "2024", "T", "P", None)

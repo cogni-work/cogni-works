@@ -984,7 +984,11 @@ def author_date_reference_entry(
       all three styles actually prescribe. `author_surname_sort_key` already
       sorts such an entry LAST as a block, so the list order stays deterministic.
     * No publisher drops that segment; MLA folds its ``Publisher, Year`` clause
-      down to the bare year.
+      down to the bare year. A publisher EQUAL to the author drops the same way:
+      on a legacy page `resolve_author_year` falls back to the ``publisher:``
+      surrogate for the author, so keeping both would print the publisher twice
+      in one entry — the visible signature of the no-migration path, and a
+      needless one.
     * No url drops the link segment, and Harvard's ``Available at:`` lead-in with
       it — the URL-less page kinds (synthesis, distilled, question node) have no
       external destination to link.
@@ -1002,6 +1006,8 @@ def author_date_reference_entry(
     year = str(year or "").strip() or "n.d."
     title = str(title or "").strip()
     publisher = str(publisher or "").strip()
+    if publisher and publisher.casefold() == author.casefold():
+        publisher = ""
     url = str(url or "").strip()
     link = ("[" + url + "](" + md_link_dest(url) + ")") if url else ""
 

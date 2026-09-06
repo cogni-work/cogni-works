@@ -213,15 +213,15 @@ Requires an authenticated `gh` CLI. Without it the skill reports the gap rather 
 
 ---
 
-### `manage-markets` and `audit-region-sources` — Canonical market registry
+### `manage-market-registry` — Canonical market registry
 
 cogni-workspace owns the canonical market registry (`references/supported-markets-registry.json`) that every market-aware plugin reads through `scripts/get-market-config.py`. The full list of built-out markets, registered markets, and supported output languages lives in the [Supported markets & languages](../../cogni-workspace/README.md#supported-markets--languages) section of the cogni-workspace README — that is the single source of truth other plugin READMEs link to.
 
-`manage-markets` is the write path: use it to check registry status or add new markets. `audit-region-sources` is read-only: it audits per-plugin region-source overlays against the registry to catch orphan domains and drift.
+`manage-market-registry` owns both directions over that one registry. Its `status` sub-action is read-only: it reports coverage across research, trends and portfolio and audits per-plugin region-source overlays against the registry to catch orphan domains. Its `add` sub-action is the write path for scaffolding a new market.
 
 ```
-/manage-markets
-/audit-region-sources
+/cogni-workspace:manage-market-registry status
+/cogni-workspace:manage-market-registry add
 ```
 
 ---

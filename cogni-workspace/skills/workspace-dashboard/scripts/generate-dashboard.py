@@ -1125,7 +1125,7 @@ def render_markets(markets_meta, plugin_sets, plugin_files):
       <tbody>{''.join(rows)}</tbody>
     </table>
     </div>
-    <div class="note">Static view of registry vs plugin catalogs. For drift detection run <code>/cogni-workspace:audit-region-sources</code>.</div>
+    <div class="note">Static view of registry vs plugin catalogs. For drift detection run <code>/cogni-workspace:manage-market-registry status</code>.</div>
   </div>
 </section>
 """

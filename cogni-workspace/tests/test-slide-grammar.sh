@@ -60,8 +60,9 @@
 # replayed against the literal harness path above exactly as written. The
 # heading-counts one is the load-bearing original: it reinstates the digits-only
 # regex that is this suite's central failure mode. The EXIT_USAGE one collapses
-# the crash code back onto the finding code and so reddens sg25 alongside its
-# named sg24 — both assert rc 2, and that is the pair the collapse breaks.
+# the crash code back onto the finding code and so reddens sg25 and sg26
+# alongside its named sg24 — all three assert rc 2 (sg26 through the __main__
+# backstop), and that is the set the collapse breaks.
 
 set -u
 
@@ -85,12 +86,15 @@ trap 'rm -rf "$TMPROOT"' EXIT
 pass() { printf '%s\n' "PASS: $1"; }
 fail() { printf '%s\n' "FAIL: $1"; failures=$((failures + 1)); }
 
-# Run one check against the real corpus.
-clean() { python3 "$GRAM" "$1" "brief=$BRIEF" "template=$TEMPLATE" "refslide=$REFSLIDE" >/dev/null 2>&1; }
+# Run one check against the real corpus. Output is NOT suppressed here —
+# expect_rc owns the suppression on its first invocation, so its failure replay
+# has something to print. Baking the redirect in here silently emptied that
+# replay for every wrapper-routed case, which is most of them.
+clean() { python3 "$GRAM" "$1" "brief=$BRIEF" "template=$TEMPLATE" "refslide=$REFSLIDE"; }
 
 # Run one check against a staged (mutated) copy. Roles are passed explicitly, so
 # the deliberately different filenames here cannot make a check self-skip.
-mutant() { python3 "$GRAM" "$2" "brief=$1/brief.md" "template=$1/template.md" "refslide=$1/refslide.md" >/dev/null 2>&1; }
+mutant() { python3 "$GRAM" "$2" "brief=$1/brief.md" "template=$1/template.md" "refslide=$1/refslide.md"; }
 
 # Every arm asserts an EXACT exit code, never "zero vs non-zero" — that is the
 # whole mechanism, so it lives in exactly one place here and the wrappers below

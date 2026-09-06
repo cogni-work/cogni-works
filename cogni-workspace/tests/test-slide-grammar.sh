@@ -32,8 +32,9 @@
 # module docstring). This replaces the earlier claim that "no assertion can rot
 # into a tautology unnoticed", which was false when written: every red arm
 # accepted any non-zero, so a crashed parser read as a caught defect. Nine cases
-# were exposed — the eight expect_red sites (sg10-sg16, sg19) plus sg17's
-# then-hand-rolled arm — and could assert nothing while reporting PASS.
+# were exposed — the eight expect_red sites then present (sg10-sg16, sg19)
+# plus sg17's then-hand-rolled arm — and could assert nothing while reporting
+# PASS.
 # sg24/sg25 guard the two enumerated crash arms; sg26 guards the contract
 # itself, so a crash nobody enumerated cannot quietly reclaim exit 1.
 #
@@ -63,6 +64,72 @@
 # the crash code back onto the finding code and so reddens sg25 and sg26
 # alongside its named sg24 — all three assert rc 2 (sg26 through the __main__
 # backstop), and that is the set the collapse breaks.
+#
+# Those ten all mutate slide_grammar.py — the parser this suite ships with —
+# so together they prove the suite reads its own machinery. They cannot show it
+# grades anything else: the three bound surfaces predate the parser and none of
+# the ten touches one. What follows closes that, one recipe per bound surface,
+# because "a guard that passes on a broken corpus is not a guard" is checkable
+# only by breaking the corpus. Treat one-entry-per-surface as the rule rather
+# than the sample: a surface listed at the top of this file with no recipe here
+# is a hole, not an omission.
+#
+# All three use the same harness and the same --test as the ten above, and each
+# rewrites the FIRST occurrence of its search text — mutation-check.sh applies
+# its s{}{} without /g. For the two Slide-Kind recipes that first occurrence is
+# the graded key inside the slide's yaml fence; the later one is a prose mention
+# of the same string, which is why /g would corrupt the wrong thing.
+#
+# Corpus recipe 1 of 3, for the primary brief (the discriminator is
+# sg06-references-slide-last):
+#
+#   bash ~/GitHub/dev/managed-service/cogni-service/scripts/mutation-check.sh \
+#     --root . \
+#     --file cogni-workspace/libraries/EXAMPLE_BRIEF.md \
+#     --expr 's{Slide-Kind: references}{Slide-Kind: content}' \
+#     --test 'bash cogni-workspace/tests/test-slide-grammar.sh' \
+#     --case sg06-references-slide-last
+#
+# Demoting the brief's own references slide leaves the deck with no slide of
+# that kind, so references-slide-last has nothing to find last and sg06 — a
+# clean-corpus green arm — goes RED.
+#
+# Corpus recipe 2 of 3, for the slide template (the discriminator is
+# sg03-heading-counts):
+#
+#   bash ~/GitHub/dev/managed-service/cogni-service/scripts/mutation-check.sh \
+#     --root . \
+#     --file cogni-workspace/skills/story-to-slides/references/07-output-template.md \
+#     --expr 's{## Slide N\+1: }{## Slidez N+1: }' \
+#     --test 'bash cogni-workspace/tests/test-slide-grammar.sh' \
+#     --case sg03-heading-counts
+#
+# This is the load-bearing one on the corpus side, and the mirror of the
+# parser-side heading-counts recipe above: misspelling one heading drops the
+# template's graded count from 8 to 7, so the pinned per-surface counts stop
+# matching and sg03 goes RED. Between the two, heading-counts is now bound from
+# both directions — the parser cannot silently stop counting, and the corpus
+# cannot silently stop being counted.
+#
+# Corpus recipe 3 of 3, for the references-slide template (the discriminator is
+# sg20-refslide-kind-is-references):
+#
+#   bash ~/GitHub/dev/managed-service/cogni-service/scripts/mutation-check.sh \
+#     --root . \
+#     --file cogni-workspace/skills/story-to-slides/references/08b-references-slide.md \
+#     --expr 's{Slide-Kind: references}{Slide-Kind: content}' \
+#     --test 'bash cogni-workspace/tests/test-slide-grammar.sh' \
+#     --case sg20-refslide-kind-is-references
+#
+# The mirror of the parser-targeted sg21, which reddens the same check by
+# breaking the comparison instead of the corpus. Neither substitutes for the
+# other: sg21 stages its own copy and sets the kind line regardless of the
+# file's starting value, so a corpus mutation leaves it green, and sg20 reads
+# the real file, so a parser mutation leaves it green.
+#
+# Verdict at authoring: guard_verified for all three — each went RED under its
+# recipe and green again on restore, replayed against the literal harness path
+# above exactly as written.
 
 set -u
 

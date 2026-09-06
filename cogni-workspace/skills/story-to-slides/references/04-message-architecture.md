@@ -9,107 +9,9 @@ Define how to transform a narrative's content into slide-level messages using th
 > A presentation is a pyramid, not a stream.
 > The audience should understand the full argument from the titles alone.
 
-## Why This Matters
-
-A narrative written for reading unfolds linearly — details accumulate, nuance builds, conclusions emerge. A presentation must do the opposite: state the conclusion first, then prove it. Message architecture is the intellectual work of restructuring a narrative's argument into a visual medium where:
-
-1. **The governing thought** sits at the top (title slide subtitle)
-2. **3-5 arguments** support it (slide groups)
-3. **Evidence** proves each argument (individual slides)
-
-Without this restructuring, slide generation becomes mechanical extraction — dumping content into layouts without understanding what the audience should take away.
-
 ---
 
 ## Step 4a: Build the Pyramid Structure
-
-### Reasoning Approach
-
-Building a pyramid is NOT content extraction — it is argument reconstruction. The goal is to identify the narrative's logical skeleton: what is being argued, what supports it, and what proves each support.
-
-Before creating any slides, reason through the narrative's argument architecture:
-
-```text
-REASON through the narrative's argument structure:
-
-  1. RECALL the governing thought from Step 3b
-     → This is the pyramid's apex. Every slide must connect to it.
-
-  2. IDENTIFY the main arguments (3-5)
-     → Read the section roles from Step 3c
-     → Group sections that serve the SAME argument function
-     → Ask: "What are the 3-5 distinct reasons the governing thought is true?"
-
-  3. MAP evidence to arguments
-     → For each argument, list the narrative sections that provide proof
-     → Ask: "What data, examples, or logic supports this argument?"
-
-  4. TEST the pyramid
-     → Read the governing thought, then each argument label, then the evidence
-     → Does it flow as a coherent logical chain?
-     → Could the audience understand the full case from just the governing thought
-       + argument labels (without seeing any evidence)?
-```
-
-### How to Identify Arguments
-
-Arguments are NOT topic labels — they are claims that support the governing thought. Each argument must be a complete assertion.
-
-```text
-DISTINGUISH arguments from topics:
-
-  TOPIC (BAD):   "Security"
-  ARGUMENT (GOOD): "Rail security has reached crisis levels with 688 deaths annually"
-
-  TOPIC (BAD):   "Our Solution"
-  ARGUMENT (GOOD): "AI video analytics detects 97% of incidents in real time"
-
-  TOPIC (BAD):   "Costs"
-  ARGUMENT (GOOD): "€280K investment returns 4.3x in Year One"
-
-WHY: Topics organize information. Arguments advance the case.
-     The audience must hear CLAIMS that build toward the governing thought,
-     not CATEGORIES that organize content.
-```
-
-### Argument Grouping Process
-
-```text
-PHASE 1 — Collect section roles from Step 3c:
-
-  List all sections with their assigned roles:
-    Section A: "Schienensuizide" → role: problem
-    Section B: "Übergriffe auf Bahnhöfen" → role: problem
-    Section C: "Veraltete Infrastruktur" → role: problem
-    Section D: "Regulatorischer Druck 2025" → role: urgency
-    Section E: "Förderfenster schließt" → role: urgency
-    Section F: "KI-Videoanalytik Lösung" → role: solution
-    ...
-
-PHASE 2 — Group into argument clusters:
-
-  Look for sections that serve the SAME argument at the pyramid level:
-    → Sections A, B, C all describe different crisis areas → ARGUMENT 1: "Crisis"
-    → Sections D, E both create time pressure → ARGUMENT 2: "Urgency"
-    → Section F presents the solution → ARGUMENT 3: "Solution"
-
-  Each cluster becomes one pyramid argument.
-  Each section within a cluster becomes one or more evidence slides.
-
-PHASE 3 — Label each argument as a claim:
-
-  Convert cluster labels to assertion statements:
-    × "Crisis" → ✓ "German rail faces a security crisis: 688 deaths, 2,661 attacks annually"
-    × "Urgency" → ✓ "Regulatory deadlines and closing funding windows demand action now"
-    × "Solution" → ✓ "AI video analytics prevents 97% of incidents at 73% lower cost"
-
-PHASE 4 — Verify pyramid coherence:
-
-  Read aloud: Governing Thought → Argument 1 → Argument 2 → Argument 3
-  Does it tell a complete, logical story?
-    → If YES: proceed
-    → If NO: adjust argument labels or regroup sections
-```
 
 ### Level Mapping
 
@@ -146,47 +48,6 @@ PROBLEM: Sections don't clearly map to arguments
   → The issue is usually at the role level, not the pyramid level
 ```
 
-### Worked Example
-
-Given a narrative about cloud migration with these sections from Step 3c:
-
-```text
-Governing Thought (from Step 3b):
-  "Migrating to cloud saves €3.2M annually and reduces downtime by 73%"
-
-Section roles from Step 3c:
-  1. "Hidden Cost of Legacy" (role: problem)
-  2. "Downtime Crisis" (role: problem)
-  3. "Competitor Cloud Adoption" (role: urgency)
-  4. "Cloud Migration Approach" (role: solution)
-  5. "Architecture Overview" (role: solution)
-  6. "Case Study: Deutsche Telekom" (role: proof)
-  7. "Case Study: BMW" (role: proof)
-  8. "ROI Calculation" (role: investment)
-  9. "Implementation Roadmap" (role: roadmap)
-  10. "Next Steps" (role: call-to-action)
-
-PHASE 2 — Group into arguments:
-  Sections 1-2 → ARGUMENT 1: Problem/Pain
-  Section 3 → ARGUMENT 2: Urgency
-  Sections 4-5 → ARGUMENT 3: Solution
-  Sections 6-7 → ARGUMENT 4: Proof
-  Sections 8-9 → ARGUMENT 5: Investment & Path
-
-PHASE 3 — Label as claims:
-  A1: "Legacy infrastructure costs €3.2M/year and causes 40% more downtime"
-  A2: "78% of DACH competitors have already migrated"
-  A3: "Managed cloud migration delivers 99.9% uptime in 14 months"
-  A4: "12 enterprise migrations prove 73% downtime reduction"
-  A5: "€1.4M investment returns 2.3x in Year One"
-
-PHASE 4 — Read aloud:
-  GT + A1 + A2 + A3 + A4 + A5 = coherent story ✓
-  But 5 arguments may be too many for a 12-slide deck.
-  → Merge A3 + A4 (solution + proof are tightly linked)
-  → Final: 4 arguments
-```
-
 ---
 
 ## Step 4b: Extract One Message Per Slide
@@ -194,36 +55,6 @@ PHASE 4 — Read aloud:
 ### The Rule
 
 Every slide must have exactly **ONE message** — a single sentence that captures what the audience should take away. This sentence becomes the slide title (assertion headline).
-
-### Reasoning Approach
-
-Message extraction is NOT summarization — it is distillation. The goal is not "what does this section say?" but "what is the ONE thing the audience must understand from this slide?"
-
-```text
-REASON through each narrative section:
-
-  1. READ the section fully — absorb all content
-
-  2. ASK: "What is the one thing this section is ARGUING?"
-     → Not "what topics does it cover?" (that gives topic labels)
-     → Not "what data does it contain?" (that gives data dumps)
-     → But "what CLAIM is it making?" (that gives assertion messages)
-
-  3. WRITE the claim as a single sentence
-     → Must contain a VERB (active voice)
-     → Should include a NUMBER when data exists
-     → Must stand alone (understandable without other slides)
-
-  4. TEST: Can this be split into INDEPENDENT claims?
-     → If the sentence uses "and" to join two unrelated claims → SPLIT
-     → If the sentence describes one thing with supporting detail → KEEP
-
-  5. VERIFY connection to pyramid:
-     → Does this message support one of the arguments from Step 4a?
-     → If not, either:
-       (a) the message drifted from the section's role → re-extract
-       (b) the section is tangential → candidate for consolidation/cut
-```
 
 ### Split vs. Combine Decision Logic
 
@@ -275,72 +106,6 @@ ROLE → MESSAGE PATTERN:
   call-to-action → "[Action verb] [specific next step] [this timeframe]"
 ```
 
-### Worked Examples
-
-**Example 1: Section that should SPLIT**
-
-```text
-Narrative section:
-  "Our platform processes 1 million records daily, 10x faster than the industry
-   average. The AI model achieves 97% accuracy. Customers report 60% cost savings."
-
-REASONING:
-  Step 2: What is this section arguing?
-    → Three distinct claims: speed, accuracy, cost savings
-  Step 4: Can these be split into independent claims?
-    → Speed (1M records, 10x faster) — proves CAPABILITY
-    → Accuracy (97%) — proves RELIABILITY
-    → Cost savings (60%) — proves VALUE
-    → These are independent metrics (each could stand alone) → candidate for SPLIT
-
-  BUT WAIT — Question 2 from split/combine logic:
-    → These are parallel metrics about the same solution
-    → All prove one argument: "solution delivers results"
-    → Better COMBINED into one four-quadrants or stat-card slide
-
-  DECISION: COMBINE into one slide (parallel metrics reinforce same argument)
-  SLIDE MESSAGE: "AI platform delivers 10x speed, 97% accuracy, and 60% cost savings"
-```
-
-**Example 2: Section that should SPLIT**
-
-```text
-Narrative section:
-  "The German rail network faces a security crisis with 688 annual deaths.
-   Meanwhile, EU regulation DIN-2025 mandates video surveillance by 2026,
-   creating a €200M market opportunity."
-
-REASONING:
-  Step 2: Two distinct claims joined by "Meanwhile"
-    → Claim A: security crisis (688 deaths) — serves role: problem
-    → Claim B: regulatory deadline + market opportunity — serves role: urgency
-  Step 4: Independent claims? YES — crisis and regulation are separate arguments
-  Question 4: Does splitting help the audience?
-    → YES: crisis creates emotional impact (best as hero stat)
-    → Regulation creates time pressure (different emotional register)
-
-  DECISION: SPLIT into two slides
-  SLIDE 1 MESSAGE: "688 lives lost annually to preventable rail incidents"
-  SLIDE 2 MESSAGE: "DIN-2025 mandates video surveillance by 2026 — €200M market opens"
-```
-
-**Example 3: Sections that should COMBINE**
-
-```text
-Narrative sections:
-  Section A: "Response times improved from 48 hours to 15 minutes" (3 sentences)
-  Section B: "Customer satisfaction increased from 62% to 94%" (2 sentences)
-
-REASONING:
-  Both sections serve role: proof
-  Both prove the same argument: "solution delivers measurable results"
-  Section B is too thin for a standalone slide (only 2 sentences)
-  Together they form a compelling before/after comparison
-
-  DECISION: COMBINE into one two-columns-equal slide
-  SLIDE MESSAGE: "Solution cuts response time 192x and lifts satisfaction to 94%"
-```
-
 ---
 
 ## Step 4c: Consolidation
@@ -350,26 +115,6 @@ REASONING:
 Consolidation is needed when message extraction produces more slides than `max_slides`. This is common — a 20-page narrative easily produces 18-25 potential slide messages, but a deck should rarely exceed 12-15 slides.
 
 **Why the default limit is 15:** Audience attention declines measurably after 15-20 minutes of continuous presentation. At roughly 90-120 seconds per slide, 15 slides fills a 20-25 minute slot. Longer decks either rush through slides (undermining comprehension) or run over time (losing the audience). The `max_slides` parameter reflects this attention window — it is a presentation design constraint, not an arbitrary formatting rule.
-
-### Reasoning Approach
-
-Consolidation is NOT random cutting — it is strategic compression. The goal is to reduce slide count while preserving argument strength and emotional arc.
-
-```text
-REASON through consolidation needs:
-
-  1. COUNT extracted slide messages vs. max_slides
-     → If count ≤ max_slides: no consolidation needed, proceed to Step 4d
-     → If count > max_slides: calculate overage (e.g., 18 messages, max 12 = 6 over)
-
-  2. ASSESS which arguments have the most evidence slides
-     → Arguments with 4+ evidence slides are consolidation candidates
-     → Arguments with only 1 evidence slide are PROTECTED
-
-  3. PLAN consolidation by argument, not randomly across the deck
-     → Keep the argument structure intact
-     → Reduce evidence WITHIN arguments, not arguments themselves
-```
 
 ### Consolidation Priority Order
 
@@ -495,176 +240,25 @@ Consolidation Applied: Yes
   - Protected: Governing thought, hero stats (688, €2.8M, 97%), CTA, 3 Power Positions
 ```
 
-### Worked Example
-
-```text
-SCENARIO: max_slides = 12, extracted messages = 17
-
-Messages:
-  1. Title slide (protected — mandatory)
-  2. Crisis: 688 rail deaths (problem, hero stat — protected)
-  3. Crisis: 2,661 station attacks (problem)
-  4. Crisis: 42% outdated systems (problem)
-  5. Crisis: €2.8M emergency costs (problem, hero stat — protected)
-  6. Urgency: DIN-2025 deadline (urgency)
-  7. Urgency: Competitor adoption 78% (urgency)
-  8. Solution: Power Position 1 (proof — protected)
-  9. Solution: Power Position 2 (proof — protected)
-  10. Solution: Power Position 3 (proof — protected)
-  11. Investment: ROI 4.3x (investment, hero stat — protected)
-  12. Investment: 3 pricing tiers (options)
-  13. Roadmap: 4-phase implementation (roadmap)
-  14. Roadmap: Team structure (evidence)
-  15. Roadmap: Risk mitigation (evidence)
-  16. References slide
-  17. CTA: Next steps (protected — mandatory)
-
-  Need to cut 5 slides (17 → 12).
-
-REASONING:
-
-  Priority 1 (MERGE parallel evidence):
-    → Slides 2-5 are 4 parallel crisis stats for same argument
-    → MERGE into one four-quadrants slide
-    → SAVES 3 slides (4 → 1). Remaining overage: 2.
-
-  Priority 3 (PROMOTE to speaker notes):
-    → Slide 14 (team structure) supports roadmap but isn't essential
-    → PROMOTE to speaker notes on Slide 13 (roadmap)
-    → SAVES 1 slide. Remaining overage: 1.
-
-  Priority 2 (MERGE argument + evidence):
-    → Slides 6-7 (DIN deadline + competitor adoption) both create urgency
-    → MERGE into one two-columns-equal (deadline left, competitors right)
-    → SAVES 1 slide. Remaining overage: 0.
-
-  Cut Slide 15 (risk mitigation) would be Priority 5 — not needed since we hit target.
-
-RESULT: 12 slides
-  1. Title slide
-  2. Crisis quadrant (688 + 2,661 + 42% + €2.8M)
-  3. Urgency comparison (deadline + competitors)
-  4. Power Position 1
-  5. Power Position 2
-  6. Power Position 3
-  7. ROI 4.3x
-  8. 3 pricing tiers
-  9. Roadmap (with team structure in notes)
-  10. Risk mitigation
-  11. References
-  12. CTA
-```
-
 ---
 
 ## Step 4d: MECE Verification and Sequencing
 
-### What MECE Means for Slides
+### MECE Gate
 
-After extracting and consolidating slide messages, verify the final list is **Mutually Exclusive and Collectively Exhaustive** — and then sequence it for maximum impact.
-
-### Mutual Exclusivity Check
-
-No two slides should make the SAME claim. Overlap dilutes the argument and wastes audience attention.
+Before sequencing, verify the slide set against the two MECE conditions. Both are
+gates on this deck, not an explanation of MECE:
 
 ```text
-REASON through mutual exclusivity:
+MUTUALLY EXCLUSIVE: no two slide messages make the same claim.
+  → FIX if violated: merge the pair, or re-extract one against a different
+    argument from Step 4a.
 
-  FOR each pair of adjacent or related slides:
-
-    1. COMPARE their message sentences
-       → Do they make the SAME claim with different data?
-       → Or do they make DIFFERENT claims?
-
-    2. THE TEST: If you removed either slide, would the argument lose a UNIQUE point?
-       → YES for both: they are mutually exclusive ✓
-       → NO for one: that slide is redundant → merge or cut
-
-  COMMON OVERLAPS TO CATCH:
-
-    "Costs are rising" + "Emergency operations cost €2.8M"
-      → These are the SAME point (cost problem)
-      → FIX: Merge into one stat-card ("€2.8M annual emergency costs — and rising")
-
-    "AI detects 97% of incidents" + "Response time reduced by 87%"
-      → These are DIFFERENT points (detection vs. response speed)
-      → KEEP as separate slides ✓
-
-    "78% of competitors adopted cloud" + "Competitors gain 35% cost advantage"
-      → SAME point (competitive pressure) with different evidence
-      → FIX: Combine into one urgency slide (competition + their results)
-```
-
-### Collective Exhaustiveness Check
-
-Together, all slides must cover the COMPLETE argument. No critical gap should remain.
-
-```text
-REASON through collective exhaustiveness:
-
-  1. RE-READ the governing thought
-     → What claims must be proven for this to be convincing?
-
-  2. CHECK each pyramid argument has at least one slide
-     → List arguments from Step 4a
-     → Count slides per argument
-     → If any argument has ZERO slides → gap found
-
-  3. CHECK the emotional arc is complete
-     → Is there a PROBLEM slide? (audience must feel the pain)
-     → Is there a SOLUTION slide? (audience must see the answer)
-     → Is there an EVIDENCE/PROOF slide? (audience must believe it works)
-     → Is there a CTA slide? (audience must know what to do next)
-
-  4. THE GAP TEST:
-     → Read all slide messages in sequence
-     → Does the audience have enough information to make a decision?
-     → If you were the audience, what question would you still have?
-     → If a question remains → there's a gap
-
-  COMMON GAPS TO CATCH:
-
-    Missing urgency: "Why should I care NOW?"
-      → FIX: Add a deadline, trend, or competitive pressure slide
-
-    Missing proof: "Does this actually work?"
-      → FIX: Add a case study, pilot result, or testimonial slide
-
-    Missing cost: "What does it cost?"
-      → FIX: Add an investment/ROI slide
-
-    Missing next step: "What do I do now?"
-      → FIX: Ensure CTA slide has specific, actionable next step
-```
-
-### MECE Examples
-
-**Mutually Exclusive — GOOD:**
-```text
-Slide 2: 688 rail deaths annually (CRISIS — safety dimension)
-Slide 3: 42% of systems past end-of-life (CRISIS — infrastructure dimension)
-Slide 4: DIN-2025 mandates action by 2026 (URGENCY — regulatory dimension)
-→ Each addresses a DIFFERENT dimension. No overlap. ✓
-```
-
-**NOT Mutually Exclusive — BAD:**
-```text
-Slide 2: Rail safety crisis escalates (general crisis)
-Slide 3: 688 deaths prove the crisis is real (specific crisis)
-→ Slide 3 is just evidence FOR Slide 2. They overlap.
-→ FIX: Merge into one stat-card (688 as hero number + crisis context)
-```
-
-**Collectively Exhaustive — GOOD:**
-```text
-Why Change + Why Now + Why Us + How Much = complete sales pitch
-Problem → Evidence → Solution → Proof → Investment → CTA = full argument
-```
-
-**NOT Collectively Exhaustive — BAD:**
-```text
-Why Change + Why Us = missing urgency ("why now?") and investment ("how much?")
-Problem → Solution → CTA = missing proof ("does it work?") and cost ("what's the investment?")
+COLLECTIVELY EXHAUSTIVE: the arguments from Step 4a are each supported, and
+together they establish the governing thought with no gap.
+  → FIX if violated: an argument with no supporting slide is either
+    unsupported evidence in the narrative (cut the argument) or a section
+    that was consolidated away in Step 4c (restore it).
 ```
 
 ---
@@ -672,29 +266,6 @@ Problem → Solution → CTA = missing proof ("does it work?") and cost ("what's
 ## Slide Sequencing
 
 After MECE verification, arrange slides in the optimal order for the detected arc type.
-
-### Sequencing Reasoning
-
-```text
-REASON through slide order:
-
-  1. RECALL the arc type from Step 3a
-     → This determines the default flow pattern
-
-  2. ASSIGN each slide to a flow position
-     → Use the flow template for the arc type (see below)
-     → If a slide doesn't fit a position, it may be tangential
-
-  3. CHECK emotional trajectory
-     → Problem/urgency slides should BUILD tension
-     → Solution/proof slides should RELEASE tension
-     → CTA should CREATE momentum
-     → The peak of tension should come BEFORE the solution appears
-
-  4. VERIFY evidence proximity
-     → Each claim should be followed quickly by its proof
-     → Don't separate a statistic from the argument it supports
-```
 
 ### Flow Templates by Arc Type
 
@@ -800,158 +371,3 @@ FULL DECK CHECK (read ALL messages in sequence):
   □ Is there a clear call to action in the final message?
   □ Does the emotional arc work? (tension builds, peaks, then resolves)
 ```
-
----
-
-## Full Pipeline Worked Example
-
-End-to-end message architecture for a 15-slide Why Change deck:
-
-```text
-INPUT FROM STEP 3:
-  Arc type: why-change
-  Governing thought: "Deutsche Bahn must deploy AI video analytics to prevent
-    688 annual rail deaths and save €2.8M in emergency costs."
-  Sections with roles:
-    S1: Value Story title (hook)
-    S2: Security crisis — 688 deaths (problem)
-    S3: Station attacks — 2,661 incidents (problem)
-    S4: Infrastructure decay — 42% outdated (problem)
-    S5: Emergency costs — €2.8M (problem)
-    S6: DIN-2025 regulation (urgency)
-    S7: Funding window closing (urgency)
-    S8: Competitor adoption data (urgency)
-    S9: 03-why-you Executive Summary (solution — overview)
-    S10: PP#1 AI Video Analytics (proof)
-    S11: PP#2 Predictive Maintenance (proof)
-    S12: PP#3 Passenger Flow Optimization (proof)
-    S13: ROI calculation (investment)
-    S14: Pricing tiers (options)
-    S15: Implementation roadmap (roadmap)
-    S16: Next steps (call-to-action)
-
-═══════════════════════════════════════════════
-STEP 4a — BUILD PYRAMID:
-
-  Governing Thought (apex):
-    "Deutsche Bahn must deploy AI video analytics to prevent 688 annual
-     rail deaths and save €2.8M in emergency costs."
-
-  Arguments (from section grouping):
-    A1: "German rail faces a multi-dimensional crisis: safety, infrastructure,
-         and costs" (S2-S5)
-    A2: "Regulatory deadlines and market pressure demand immediate action"
-         (S6-S8)
-    A3: "AI video analytics platform addresses all crisis dimensions" (S9 — solution overview)
-    A4: "Three Power Positions prove each capability" (S10-S12 — proof)
-    A5: "€280K investment returns 4.3x in Year One" (S13-S15)
-
-  Test: GT → A1 → A2 → A3 → A4 → A5 flows logically ✓
-  5 arguments for 16-slide deck = appropriate ✓
-
-═══════════════════════════════════════════════
-STEP 4b — EXTRACT ONE MESSAGE PER SLIDE:
-
-  S1 → "Deutsche Bahn AI: Preventing 688 Deaths, Saving €2.8M Annually"
-        (title slide — governing thought as subtitle)
-
-  S2 → "688 Lives Lost Annually to Preventable Rail Incidents"
-        (hero stat: 688, role: problem)
-
-  S3+S4 → COMBINE decision:
-    S3 (2,661 attacks) and S4 (42% outdated) are parallel crisis metrics.
-    S5 (€2.8M costs) is another parallel metric.
-    → All 3 remaining crisis points: four-quadrants candidate
-    → But S2 already took 688 as hero stat
-    → COMBINE S3+S4+S5 into one slide:
-    "Four Crisis Dimensions Demand Unified Response"
-    (quadrants: 688 deaths, 2,661 attacks, 42% outdated, €2.8M costs)
-
-  Wait — S2 (688) is already a standalone hero stat.
-  → S3+S4+S5 = three remaining crisis stats
-  → Three stats don't fit four-quadrants perfectly
-  → OPTION A: Keep S2 as hero stat + COMBINE S3+S4+S5 as second crisis slide
-  → OPTION B: COMBINE all four (S2-S5) into one four-quadrants, lose hero impact
-  → DECISION: OPTION A — 688 deaths deserves solo hero treatment (max emotional impact)
-
-  S3+S4+S5 → "Attacks, Decay, and Costs Compound the Rail Crisis"
-              (three remaining crisis metrics in one slide)
-
-  S6 → "DIN-2025 Mandates Video Surveillance by 2026"
-        (urgency: regulatory deadline)
-
-  S7+S8 → COMBINE decision:
-    S7 (funding window) and S8 (competitor adoption) both create urgency.
-    → Same argument, different evidence → MERGE
-    "Funding Closes Q2 2026 While 78% of Peers Already Act"
-    (two-columns: deadline left, competition right)
-
-  S9 → "AI Video Analytics Platform Addresses All Crisis Dimensions"
-        (solution overview from 03-why-you Executive Summary, two-columns-equal layout)
-        (Left: What We Propose — platform concept, architecture principles)
-        (Right: How It Maps to Your Needs — connects to unconsidered needs from 01-why-change)
-
-  S10 → "PP#1: AI Video Analytics Detects 97% of Incidents in Real Time"
-         (is-does-means layout)
-
-  S11 → "PP#2: Predictive Maintenance Cuts Downtime by 73%"
-         (is-does-means layout)
-
-  S12 → "PP#3: Passenger Flow Optimization Recovers €1.2M Annually"
-         (is-does-means layout)
-
-  S13 → "€280K Investment Returns 4.3x in Year One"
-         (stat-card: hero number €280K or 4.3x)
-
-  S14 → "Three Rollout Strategies: Pilot to National Scale"
-         (three-options layout)
-
-  S15 → "4-Phase Rollout Achieves Full Coverage in 6 Months"
-         (timeline-steps layout)
-
-  S16 → "Schedule Discovery Workshop This Quarter"
-         (closing-slide)
-
-  + References slide between S15 and S16
-
-  MESSAGE COUNT: 14 content slides + title + references + closing = 16 ≤ max_slides ✓
-  No consolidation needed.
-
-═══════════════════════════════════════════════
-STEP 4c — CONSOLIDATION CHECK:
-
-  Count: 16 slides = max_slides + 1. Minor overage acceptable (or increase max_slides). ✓
-
-═══════════════════════════════════════════════
-STEP 4d — MECE VERIFICATION:
-
-  Mutual Exclusivity:
-    Slide 2 (688 deaths) vs Slide 3 (attacks+decay+costs):
-      → Different crisis dimensions. No overlap. ✓
-    Slide 4 (DIN-2025) vs Slide 5 (funding+peers):
-      → Regulation vs. market pressure. No overlap. ✓
-    Slide 6 (solution overview) vs Slides 7-9 (Power Positions):
-      → Overview = WHAT the approach is. PPs = HOW each component delivers.
-      → Different abstraction levels. No overlap. ✓
-    Slide 10 (ROI) vs Slide 11 (tiers):
-      → Value justification vs. pricing options. No overlap. ✓
-
-  Collective Exhaustiveness:
-    Problem covered? ✓ (Slides 2-3: crisis stats)
-    Urgency covered? ✓ (Slides 4-5: deadline + competition)
-    Solution overview covered? ✓ (Slide 6: platform concept)
-    Proof covered? ✓ (Slides 7-9: three Power Positions)
-    Investment covered? ✓ (Slides 10-11: ROI + pricing)
-    CTA covered? ✓ (Slide 16: discovery workshop)
-
-  Sequence check (Why Change flow):
-    Title → Problem → Urgency → Solution Overview → Power Positions → Investment → CTA ✓
-    Tension builds through crisis and urgency ✓
-    Tension releases at solution overview (RELEASE point) ✓
-    Proof builds confidence through Power Positions ✓
-    Ends with action ✓
-
-  RESULT: MECE verified. Sequence correct. Proceed to Step 5.
-```
-
----

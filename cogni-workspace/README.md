@@ -66,7 +66,7 @@ cogni-workspace owns the **canonical market registry** (`references/supported-ma
 
 **Languages.** 16+ output languages with native UTF-8 encoding — German (ä/ö/ü/ß), French (é/è/ç), Italian (à/ò/ù), Polish (ą/ć/ę/ł/ż), Spanish (á/é/ñ), Dutch, Portuguese, Czech, Slovak, Hungarian, Romanian, Croatian, Greek, Macedonian, Chinese, Japanese, English — never ASCII substitutes — plus **bilingual (local + English) search** so research draws on local-language and international sources alike.
 
-**Managing markets.** The registry is the single source of truth: add or update markets with `cogni-workspace:manage-markets`, and audit per-plugin source overlays for drift with `cogni-workspace:audit-region-sources`.
+**Managing markets.** The registry is the single source of truth, and `cogni-workspace:manage-market-registry` is the single entry point to it: `status` reports coverage across research, trends and portfolio plus any orphan overlay domain the registry does not carry, and `add` scaffolds a new market.
 
 ## Install
 
@@ -135,8 +135,7 @@ State lives in two layers that other plugins consume. Configuration (env vars, t
 | `pick-theme` | skill | Centralized theme picker — discovers themes, presents interactive selection, returns path |
 | `workspace-status` | skill | Layered diagnostic: foundation, env vars, plugin registry, themes, dependencies, Python packages, MCP servers, plus plugin-level faults |
 | `install-mcp` | skill | End-to-end MCP server installation — clone and build git-based MCPs, configure native app MCPs, and write the server into the user's own config (`~/.claude.json` or `claude_desktop_config.json`) |
-| `manage-markets` | skill | Write path for the canonical supported-markets registry — show status and add markets (codes, locales, authorities) |
-| `audit-region-sources` | skill | Read-only sibling of manage-markets — audit per-plugin region-source overlays against the canonical registry for orphans and drift |
+| `manage-market-registry` | skill | Single entry point for the canonical supported-markets registry — coverage and orphan-domain status across research/trends/portfolio, and adding markets (codes, locales, authorities) |
 | `workspace-dashboard` | skill | Interactive HTML dashboard of workspace foundation, env vars, plugin registry, themes, and dependencies |
 | `cogni-issues` | skill | File, deduplicate, list, and inspect plugin issues through the authenticated GitHub CLI |
 | `claims` | skill | Six-mode claim-verification lifecycle — submit, verify, dashboard, inspect, resolve, cobrowse |
@@ -209,14 +208,13 @@ State lives in two layers that other plugins consume. Configuration (env vars, t
 ```
 cogni-workspace/
 ├── .claude-plugin/plugin.json    Plugin manifest
-├── skills/                       21 workspace and visual-rendering skills
-│   ├── audit-region-sources/     Audit per-plugin region-source overlays against the registry
+├── skills/                       20 workspace and visual-rendering skills
 │   ├── claim-entity/             Cross-plugin ClaimEntity data contract and store layout
 │   ├── claims/                   Claim-verification lifecycle (+ scripts/claims-store.sh)
 │   ├── cogni-issues/             File and track plugin issues through the GitHub CLI
 │   ├── enrich-report/            Markdown report -> themed HTML with charts and diagrams
 │   ├── install-mcp/              MCP server installation and user-config patching
-│   ├── manage-markets/           Write path for the canonical supported-markets registry
+│   ├── manage-market-registry/   Read and write path for the canonical supported-markets registry
 │   ├── manage-themes/
 │   ├── manage-workspace/         Init or update workspace (includes Obsidian integration)
 │   ├── narrative-publish/        One invocation: narrative -> brief(s) -> optional render
@@ -262,6 +260,7 @@ cogni-workspace/
 │   ├── check-workspace-python-deps.sh  Health check for optional Python packages
 │   ├── discover-plugins.sh
 │   ├── generate-settings.sh
+│   ├── check-market-orphans.py   Report overlay domains the canonical market registry does not carry
 │   ├── get-market-config.py      Merge canonical market registry with plugin overlays
 │   ├── install-mcp.sh            Clone, build, and wrap git-based MCP servers
 │   ├── install-workspace-deps.sh Provision optional Python deps into an isolated venv
@@ -292,7 +291,7 @@ cogni-workspace/
 | cogni-website | No | Referenced in manage-workspace and workspace-status for website-related workspace configuration |
 | cogni-portfolio | No | install-mcp references cogni-portfolio as a consumer of excalidraw MCP in the installation plan |
 | claude-in-chrome | No | The `claims` skill's cobrowse mode and `workspace-status`' MCP health check use the Chrome extension; claim verification degrades to WebFetch without it |
-| cogni-trends | No | audit-region-sources and manage-markets read the trends region-authority overlay when auditing market coverage |
+| cogni-trends | No | manage-market-registry reads the trends region-authority overlay when reporting market coverage and orphan domains |
 | cogni-knowledge | No | Named as the consumer of `pypdf` in cogni-workspace's own `references/python-deps-registry.json`, which manage-workspace provisions into the shared venv and workspace-status reports on |
 
 ## Contributing

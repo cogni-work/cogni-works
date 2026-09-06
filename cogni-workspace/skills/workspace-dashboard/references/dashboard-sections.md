@@ -61,7 +61,7 @@ cogni-portfolio is intentionally not a column: under the centralized markets mod
 
 **Output**: heatmap grid. Rows = markets (sorted by `tier` then alphabetically). Columns = the two consuming plugins. Cell = green when the market is present in that plugin's overlay, neutral when absent. Below the matrix: per-market summary chips (authority-domain counts, primary authorities).
 
-This section is **read-only**. `audit-region-sources` is the dedicated coverage reporter (overlay-vs-registry coverage and orphan-domain detection); `manage-markets` is the write path (`status` + `add` sub-actions). Drift on the shared market set is structurally impossible under the centralized model — the matrix shows the static current state.
+This section is **read-only**. `manage-market-registry` owns both directions over the registry: its `status` sub-action is the dedicated coverage reporter (overlay-vs-registry coverage and orphan-domain detection, computed by `scripts/check-market-orphans.py`), and its `add` sub-action is the write path. Drift on the shared market set is structurally impossible under the centralized model — the matrix shows the static current state.
 
 ## 6. Cross-Plugin Hooks
 

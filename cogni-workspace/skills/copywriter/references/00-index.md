@@ -76,13 +76,13 @@ LOAD: 01-core-principles/clarity-principles.md
 LOAD: 01-core-principles/conciseness-principles.md
 LOAD: 01-core-principles/active-voice-principles.md
 LOAD: 01-core-principles/acronym-handling-principles.md
-LOAD: 07-impact-techniques/number-plays.md
-LOAD: 07-impact-techniques/power-words.md
 
 IF document language is German:
   LOAD: 01-core-principles/german-style-principles.md
   LOAD: 01-core-principles/german-hook-principles.md
 ```
+
+Impact techniques for arc mode come from `techniques-overview.md`, already loaded above: `## 4. Number Plays (6 Techniques)` for quantification, and `## 5. Forcing Functions` through `## 8. Compound Impact Calculation` for rhetorical structure and executive framing. Apply them per-element via that file's application matrix, not generically across the document.
 
 After loading, SKIP Steps 3-4 below. Proceed directly to skill workflow Step 3 (structure comes from the arc, not from a framework).
 
@@ -94,9 +94,10 @@ When `mode = sales`, load Power Positions plus supporting impact techniques. Sal
 
 ```
 LOAD: 08-sales-techniques/power-positions.md
-LOAD: 07-impact-techniques/number-plays.md
-LOAD: 07-impact-techniques/power-words.md
+LOAD: ${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/narrative-techniques/techniques-overview.md
 ```
+
+In `techniques-overview.md`, sales mode uses `## 4. Number Plays (6 Techniques)` for the DOES layer and `## 5. Forcing Functions` through `## 8. Compound Impact Calculation` for the MEANS layer.
 
 Then continue to the Standard Loading Block for deliverable + framework selection.
 
@@ -193,11 +194,10 @@ These references load only when specific conditions are met. Check each independ
 
 ```
 IF impact_level = high OR audience is executive/C-suite OR deliverable is executive-summary:
-  LOAD: 07-impact-techniques/number-plays.md
-  LOAD: 07-impact-techniques/power-words.md
-  LOAD: 07-impact-techniques/rhetorical-devices.md
-  LOAD: 07-impact-techniques/executive-impact.md
+  LOAD: ${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/narrative-techniques/techniques-overview.md
 ```
+
+That file is the ecosystem's single copy of the impact material: `## 4. Number Plays (6 Techniques)` for quantification, `## 5. Forcing Functions`, `## 6. Contrast Structure` and `## 7. You-Phrasing` for rhetorical structure, and `## 8. Compound Impact Calculation` for executive framing.
 
 ### Formatting Standards
 
@@ -238,13 +238,7 @@ Stakeholder defaults by audience:
 
 ### Examples and Templates
 
-```
-IF user requests an example OR this is a new framework combination:
-  LOAD: 05-examples/example-{deliverable}-{framework}.md
-
-IF user requests a template OR wants a fillable structure:
-  LOAD: 06-templates/template-{deliverable}.md
-```
+There are no example or template reference files. When the user asks for a worked example or a fillable scaffold, produce one for the resolved deliverable type and framework, honouring the length and formality conventions in Step 3 and the core principles already loaded.
 
 ### Workflow Guide
 
@@ -267,7 +261,7 @@ Use this table to confirm you have the right references for common tasks. Each r
 | report             | Pyramid           | clarity, conciseness, active-voice | visual-elements, heading-hierarchy |
 | proposal           | FAB               | clarity, conciseness, active-voice | visual-elements, heading-hierarchy |
 | one-pager          | PSB               | clarity, conciseness, active-voice | visual-elements                |
-| executive-summary  | BLUF              | clarity, conciseness, active-voice | executive-impact               |
+| executive-summary  | BLUF              | clarity, conciseness, active-voice | techniques-overview (impact)   |
 | business-letter    | (Direct/Indirect) | clarity, conciseness, active-voice | --                             |
 | blog               | Inverted Pyramid  | clarity, readability, active-voice | visual-elements                |
 
@@ -317,26 +311,11 @@ All reference files in this system, organized by directory. Use this as the sour
 - `citation-formatting.md` -- Citation placement, superscript commas, preservation rules
 - `markdown-basics.md` -- Standard markdown syntax reference
 
-### 05-examples/
-- `example-memo-bluf.md`
-- `example-email-scqa.md`
-- `example-brief-pyramid.md`
-- `example-proposal-fab.md`
-
-### 06-templates/
-- `template-memo.md`
-- `template-email.md`
-- `template-brief.md`
-- `template-proposal.md`
-
-### 07-impact-techniques/
-- `number-plays.md` -- Ratio framing, specific quantification, comparative anchoring, before/after
-- `power-words.md` -- Emotional triggers by category (urgency, exclusivity, trust, achievement)
-- `rhetorical-devices.md` -- Rule of Three, anaphora, antithesis, cadence
-- `executive-impact.md` -- C-suite optimization, lead with ask, quantify everything
-
 ### 08-sales-techniques/
 - `power-positions.md` -- IS-DOES-MEANS structure, enhancement by layer, Value Wedge
+
+### Upstream (loaded from the `narrative` skill, not from this tree)
+- `${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/narrative-techniques/techniques-overview.md` -- the ecosystem's single copy of the impact techniques: Number Plays (6), Forcing Functions, Contrast Structure, You-Phrasing, Compound Impact Calculation, plus the per-arc-element application matrix
 
 ### 09-preservation-modes/
 - `arc-preservation.md` -- Arc detection, structure preservation, forbidden vs allowed modifications, translation-mode word band, validation checklist. Per-arc per-element technique rules are read at runtime from the `narrative` skill's arc contract (`story-arc/{arc_id}/arc-definition.md` `## Elements`) and `techniques-overview.md`

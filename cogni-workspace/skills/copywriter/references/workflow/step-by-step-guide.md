@@ -118,13 +118,12 @@ Resolve the deliverable type and the messaging framework from `references/00-ind
 
 - If `impact_level: high` OR audience is executive/C-suite:
   ```text
-  READ: references/07-impact-techniques/executive-impact.md
+  READ: ${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/narrative-techniques/techniques-overview.md
   ```
 - If `MODE: sales`:
   ```text
   READ: references/08-sales-techniques/power-positions.md
-  READ: references/07-impact-techniques/number-plays.md
-  READ: references/07-impact-techniques/power-words.md
+  READ: ${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/narrative-techniques/techniques-overview.md
   ```
 
 ### Step 1 Gate
@@ -337,19 +336,17 @@ Enhancement rules by layer:
 
 Critical: NEVER merge IS into DOES or DOES into MEANS. Preserve all structure markers exactly.
 
-**Standard high-impact mode:** Apply techniques from `references/07-impact-techniques/`.
+**Standard high-impact mode:** Apply the impact techniques from the upstream `narrative` reference.
 
 Load as needed:
 ```text
-READ: references/07-impact-techniques/number-plays.md
-READ: references/07-impact-techniques/power-words.md
-READ: references/07-impact-techniques/rhetorical-devices.md
+READ: ${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/narrative-techniques/techniques-overview.md
 ```
 
 Application targets:
-- **Number Plays**: Transform vague claims into specific data. Apply to key metrics, comparisons, and outcomes.
+- **Number Plays** (`## 4`): Transform vague claims into specific data. Apply to key metrics, comparisons, and outcomes.
 - **Power Words**: 3-5 per page, concentrated in headlines and CTAs. Match category to context (urgency for deadlines, trust for risk reduction).
-- **Rhetorical Devices**: 2-3 per document, placed at opening and closing. Rule of Three for key messages, antithesis for contrasts.
+- **Rhetorical Devices** (`## 5` through `## 8`): 2-3 per document, placed at opening and closing. Rule of Three for key messages, antithesis for contrasts.
 - **Executive Impact**: Lead with the ask, quantify everything, one page max, decision clarity.
 
 ### Step 5 Gate

@@ -321,7 +321,4 @@ After enhancing all Power Positions in a document, validate each one against the
 
 ## See Also
 
-- `../07-impact-techniques/number-plays.md` (Quantification techniques for DOES layer)
-- `../07-impact-techniques/power-words.md` (Emotional trigger vocabulary for MEANS layer)
-- `../07-impact-techniques/rhetorical-devices.md` (Structural patterns for IS layer Rule of Three)
-- `../07-impact-techniques/executive-impact.md` (Board-level framing for MEANS layer)
+- `${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/narrative-techniques/techniques-overview.md` -- the impact techniques, in one place: `## 4. Number Plays (6 Techniques)` for quantifying the DOES layer, and `## 5. Forcing Functions` through `## 8. Compound Impact Calculation` for the structural and board-level framing the IS and MEANS layers use.

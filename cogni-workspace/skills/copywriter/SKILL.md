@@ -242,7 +242,7 @@ Key targets: max 12 words per clause, Satzklammer breaking, Mittelfeld shortenin
 
 **Impact techniques** (when `impact_level: high` or executive audience):
 
-Load techniques from the reference index. The reference files contain detailed decision processes, examples, and checklists for:
+Load `techniques-overview.md` from the `narrative` skill, as the reference index routes you. It carries the decision processes and checklists for:
 
 - **Number plays** — Transform vague claims into concrete data (ratio framing, comparative anchoring, before/after contrasts, compound impact)
 - **Power words** — Strategic emotional triggers at decision points (3-5 per page, concentrated in headlines and CTAs)
@@ -404,11 +404,9 @@ All references are organized in progressive disclosure tiers. Start with `refere
 
 **Deliverable Types** — Memos, emails, briefs, reports, proposals, one-pagers, executive summaries, business letters, blogs. House length and formality conventions are in the `references/00-index.md` Step 3 table; the conventional structure of each form comes from model knowledge.
 
-**Examples** (05-examples/) — Memo-BLUF, email-SCQA, brief-Pyramid, proposal-FAB
+**Examples and Templates** — No reference files. Produce a worked example or a fillable scaffold on request, for the resolved deliverable type and framework.
 
-**Templates** (06-templates/) — Memo, email, brief, proposal
-
-**Impact Techniques** (07-impact-techniques/) — Number plays, power words, rhetorical devices, executive impact
+**Impact Techniques** — Number plays, forcing functions, contrast structure, you-phrasing, compound impact. The ecosystem's single copy lives upstream in the `narrative` skill at `references/narrative-techniques/techniques-overview.md`, which also carries the per-arc-element application matrix.
 
 **Sales Techniques** (08-sales-techniques/) — Power Positions (IS-DOES-MEANS)
 

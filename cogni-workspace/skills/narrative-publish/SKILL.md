@@ -48,7 +48,7 @@ rather than inferring them from the procedure below.
 3. **Polish** (only when `--polish` was given). Dispatch `copywriter` in-context.
    Map the `--polish` value onto copywriter's `--scope`. Never offer `compress`:
    copywriter rejects it in arc mode and aborts.
-4. **Resolve the theme once.** Dispatch `pick-theme` a single time and keep all
+4. **Resolve the theme once.** Dispatch `manage-themes` Operation 11 a single time and keep all
    three return values. Under `--interactive false` a theme must come from
    `--theme`; do not prompt.
 5. **Build each brief.** Walk `--to` in order, dispatching the matching

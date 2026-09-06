@@ -93,13 +93,13 @@ Set up a visual theme so every visual output — infographics, slides, websites 
 
    You pick from the available presets, and the skill stores the result as a theme you can deepen or replace later.
 
-3. **Browse and set your new theme as the default:**
+3. **Browse and select your new theme:**
 
    ```
-   /pick-theme
+   /manage-themes
    ```
 
-**What success looks like:** `/pick-theme` lists your new theme in the available themes, the palette swatches match what you imported or picked, and you can select it as the default.
+**What success looks like:** the skill's Select Theme operation lists your new theme among the available themes, the palette swatches match what you imported or picked, and you can select it.
 
 **If this step fails:** for the bundle path, the usual cause is an expired or mistyped bundle URL — re-export from Claude Design (re-exporting produces a new URL) and try again. For the preset path, no MCP server is involved — if the skill cannot reach your workspace themes directory, re-run `/workspace-status` to see which tier is failing, then `/manage-workspace` to repair it.
 

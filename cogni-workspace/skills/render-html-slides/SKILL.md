@@ -27,7 +27,7 @@ all in a single `.html` file.
 | Parameter | Default | Description |
 |-----------|---------|-------------|
 | `brief_path` | auto-discovered | Path to presentation-brief.md |
-| `theme` | from brief frontmatter | Path to theme.md (or omit for pick-theme) |
+| `theme` | from brief frontmatter | Path to theme.md (or omit to select one through manage-themes) |
 | `design_variables` | derived from theme | Pre-computed design-variables.json path |
 | `output_path` | `{brief_dir}/{slug}-slides.html` | HTML output path. `{slug}` is the deck title Phase 1 assembles into `metadata.title`, lowercased with every run of non-alphanumerics collapsed to a single `-`. |
 | `transition` | `fade` | Slide transition: `fade`, `slide`, `none` |
@@ -54,7 +54,7 @@ all in a single `.html` file.
 1. If `design_variables` parameter provided → use directly, skip to Phase 1
 2. If `theme` parameter provided → read that theme.md
 3. Otherwise read `theme_path` from brief frontmatter
-4. If no theme found → invoke `cogni-workspace:pick-theme` via Skill tool
+4. If no theme found → invoke `cogni-workspace:manage-themes` (Operation 11, Select Theme) via Skill tool
 
 ### Phase 1: Brief Parsing
 

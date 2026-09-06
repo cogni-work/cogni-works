@@ -127,7 +127,7 @@ cogni-consult/
     ├── consult-resume/SKILL.md    Engagement re-entry point: discovery + WBS
     │                              dashboard + workflow-state next-action routing
     └── consult-dashboard/         Themed HTML engagement dashboard (read-only)
-        ├── SKILL.md               pick-theme → design-variables → generate → open
+        ├── SKILL.md               select theme → design-variables → generate → open
         ├── scripts/generate-dashboard.py  Render dashboard.html from project + field.json
         ├── schemas/               design-variables.schema.json (theme contract)
         └── examples/              design-variables example

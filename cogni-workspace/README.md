@@ -26,12 +26,11 @@ cogni-workspace is the ecosystem's infrastructure-as-plugin layer: a dedicated p
 ## What it does
 
 1. **Manage workspace** — initialize or update a workspace with auto-detection, dependency checks, plugin discovery, preference gathering, settings generation, backup and rollback → `references/supported-markets-registry.json` → doc-generate, doc-power, doc-hub, doc-readme-root, doc-audit
-2. **Manage themes** — import a Claude Design bundle or create from presets; audit harmony and script-checked WCAG contrast; author tiered theme systems (tokens → assets → components → templates) per Theme System v2 (see [migration guide](docs/theme-system-v2-migration.md)); apply to downstream skills
-3. **Pick themes** — centralized theme picker used by all visual plugins
-4. **Discover plugins** — scan installed cogni-x plugins, detect versions, compute env var names
-5. **Diagnose** workspace health — eight checks reported as seven status rows (foundation, env vars, plugin registry, themes, dependencies, optional Python packages, MCP servers) plus a plugin-level tier
-6. **Install MCP servers** — clone and build git-based MCP servers, detect native app MCPs, and write the server into your own MCP config (`~/.claude.json` for Claude Code, `claude_desktop_config.json` for Claude Desktop) so rendering plugins find their tools without manual JSON editing
-7. **Obsidian integration** — scaffold `.obsidian/` vault or incrementally update terminal profiles, handled as sub-steps of manage-workspace
+2. **Manage themes** — select a theme (the single entry point every visual plugin calls); import a Claude Design bundle or create from presets; audit harmony and script-checked WCAG contrast; author tiered theme systems (tokens → assets → components → templates) per Theme System v2 (see [migration guide](docs/theme-system-v2-migration.md)); apply to downstream skills
+3. **Discover plugins** — scan installed cogni-x plugins, detect versions, compute env var names
+4. **Diagnose** workspace health — eight checks reported as seven status rows (foundation, env vars, plugin registry, themes, dependencies, optional Python packages, MCP servers) plus a plugin-level tier
+5. **Install MCP servers** — clone and build git-based MCP servers, detect native app MCPs, and write the server into your own MCP config (`~/.claude.json` for Claude Code, `claude_desktop_config.json` for Claude Desktop) so rendering plugins find their tools without manual JSON editing
+6. **Obsidian integration** — scaffold `.obsidian/` vault or incrementally update terminal profiles, handled as sub-steps of manage-workspace
 8. **Bundled reference wiki** — a vendor-curated insight-wave reference wiki ships at `wiki/`; read it directly, starting from its `wiki/index.md`, for grounded pages on plugins, skills, agents, architecture and conventions, plus the command cheatsheet (`ecosystem-command-reference`), the plugin-selection guide (`ecosystem-plugin-selection`) and the workflow walkthroughs (`workflow-*`)
 9. **File and track issues** — `cogni-issues` uses the authenticated GitHub CLI to consult, deduplicate, create, list, and inspect plugin issues with atomic labels
 10. **Troubleshoot plugin failures** — `workspace-status`'s plugin-level tier diagnoses plugin integrity, cross-plugin dependencies, stale state, and common setup errors; reachable through `/troubleshoot`
@@ -83,8 +82,7 @@ This plugin is part of the [insight-wave ecosystem](../docs/ecosystem-overview.m
 ```
 /manage-workspace  # initialize or update a workspace
 /workspace-status  # check health
-/pick-theme        # select a theme interactively
-/manage-themes     # import, create, audit, or apply themes
+/manage-themes     # select, import, create, audit, or apply themes
 /troubleshoot      # diagnose plugin and cross-plugin failures
 /cogni-workspace:cogni-issues  # file or inspect GitHub issues
 ```
@@ -124,15 +122,14 @@ cogni-workspace runs as the first link in every ecosystem session. The session-s
 
 Setup itself is a single ordered pass. `manage-workspace` runs `check-dependencies.sh` first (you can't configure tools that aren't installed), then `discover-plugins.sh` scans the marketplace cache to learn which cogni-x plugins are present and what env var names they expect. With the inventory known, `generate-settings.sh` writes the settings files, `install-mcp` clones and wires any MCP servers the discovered plugins need, and the Obsidian and theme steps follow. Each step backs up before it writes, so an interrupted or bad run is recoverable.
 
-State lives in two layers that other plugins consume. Configuration (env vars, the plugin registry, themes) is read at runtime — `pick-theme` is the single entry point visual plugins call for theme paths, and `get-market-config.py` merges the canonical supported-markets registry with each plugin's overlay so market data is never duplicated. Health is verified on demand: `workspace-status` re-runs its layered check (foundation, env vars, plugin registry, themes, dependencies, optional Python packages, MCP servers) so drift is located before a skill trips over it, not after. The ordering throughout is deliberate — discover before configure, configure before wire, back up before write.
+State lives in two layers that other plugins consume. Configuration (env vars, the plugin registry, themes) is read at runtime — `manage-themes` Operation 11 is the single entry point visual plugins call for theme paths, and `get-market-config.py` merges the canonical supported-markets registry with each plugin's overlay so market data is never duplicated. Health is verified on demand: `workspace-status` re-runs its layered check (foundation, env vars, plugin registry, themes, dependencies, optional Python packages, MCP servers) so drift is located before a skill trips over it, not after. The ordering throughout is deliberate — discover before configure, configure before wire, back up before write.
 
 ## Components
 
 | Component | Type | What it does |
 |-----------|------|--------------|
 | `manage-workspace` | skill | Initialize or update workspace — auto-detects mode, dependencies, discovery, preferences, settings, themes, backup and rollback |
-| `manage-themes` | skill | 8 theme operations: recommend, list, create from preset, audit (script-checked WCAG contrast), author deep theme system, generate showcase, apply, import from Claude Design bundle |
-| `pick-theme` | skill | Centralized theme picker — discovers themes, presents interactive selection, returns path |
+| `manage-themes` | skill | 9 theme operations: select (the centralized picker every visual plugin calls), recommend, list, create from preset, audit (script-checked WCAG contrast), author deep theme system, generate showcase, apply, import from Claude Design bundle |
 | `workspace-status` | skill | Layered diagnostic: foundation, env vars, plugin registry, themes, dependencies, Python packages, MCP servers, plus plugin-level faults |
 | `install-mcp` | skill | End-to-end MCP server installation — clone and build git-based MCPs, configure native app MCPs, and write the server into the user's own config (`~/.claude.json` or `claude_desktop_config.json`) |
 | `manage-market-registry` | skill | Single entry point for the canonical supported-markets registry — coverage and orphan-domain status across research/trends/portfolio, and adding markets (codes, locales, authorities) |
@@ -208,7 +205,7 @@ State lives in two layers that other plugins consume. Configuration (env vars, t
 ```
 cogni-workspace/
 ├── .claude-plugin/plugin.json    Plugin manifest
-├── skills/                       20 workspace and visual-rendering skills
+├── skills/                       19 workspace and visual-rendering skills
 │   ├── claim-entity/             Cross-plugin ClaimEntity data contract and store layout
 │   ├── claims/                   Claim-verification lifecycle (+ scripts/claims-store.sh)
 │   ├── cogni-issues/             File and track plugin issues through the GitHub CLI
@@ -218,7 +215,6 @@ cogni-workspace/
 │   ├── manage-themes/
 │   ├── manage-workspace/         Init or update workspace (includes Obsidian integration)
 │   ├── narrative-publish/        One invocation: narrative -> brief(s) -> optional render
-│   ├── pick-theme/
 │   ├── render-html-slides/       Presentation brief -> self-contained HTML slides
 │   ├── story-to-infographic/     Narrative -> single-page infographic brief
 │   ├── story-to-slides/          Narrative -> presentation brief

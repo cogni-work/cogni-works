@@ -119,7 +119,7 @@ Key integration patterns:
 - **Claims propagation**: Research agents auto-log claims with `entity_ref` provenance to `cogni-claims/claims.json`. After verification, corrections propagate back to entity files and cascade staleness downstream.
 - **Trends ↔ Portfolio bridge**: `trends-bridge` imports TIPS solution templates as portfolio features; portfolio anchors enrich solution relevance scoring.
 - **Narrative citation bridge**: `bridge-citations.py` converts `[Source: Publisher](URL)` inline citations into per-source markdown files before narrative Phase 1.
-- **Theme inheritance**: All visual plugins read theme from cogni-workspace via `pick-theme`. Design-variables pattern produces themed CSS custom properties.
+- **Theme inheritance**: All visual plugins read theme from cogni-workspace via `manage-themes` Operation 11 (Select Theme). Design-variables pattern produces themed CSS custom properties.
 
 ## Version Management
 

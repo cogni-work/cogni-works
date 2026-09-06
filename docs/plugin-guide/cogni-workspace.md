@@ -21,7 +21,7 @@ The plugin imposes no data model on the workspace. It writes three files during 
 | **Workspace** | A project directory initialized with cogni-workspace — has `.workspace-config.json` and the shared env file |
 | **Plugin discovery** | The process of scanning the marketplace cache for installed cogni-x plugins and registering them in the workspace config |
 | **Theme** | A markdown file containing color palettes, typography, and design principles, stored in `cogni-workspace/themes/` |
-| **Theme picker** | The `pick-theme` skill — the single entry point for theme selection used by all visual plugins |
+| **Theme picker** | Operation 11 (Select Theme) of the `manage-themes` skill — the single entry point for theme selection used by all visual plugins |
 | **Output style** | A language-neutral stance register shipped at the plugin root, discovered by Claude Code and selected in `/config` |
 | **Session hook** | `on-session-start.sh` — sources the workspace environment and validates plugin availability each time a session opens |
 | **Layered diagnostic** | The structure of `workspace-status` output: foundation → env vars → plugin registry → themes → dependencies → Python packages → MCP servers, then plugin-level faults |
@@ -130,17 +130,18 @@ Generates a self-contained HTML dashboard of the whole workspace configuration �
 
 Themes are markdown files that describe a visual identity — colors, typography, and design principles. Every rendering surface — this plugin's own `story-to-*` and `enrich-report` skills, cogni-website, and `document-skills` — reads from the same theme directory, so setting a theme here propagates to every plugin output.
 
-Eight operations are available:
+Nine operations are available:
 
 | Operation | What it does |
 |-----------|-------------|
+| `select theme` | Discovers themes across the bundled and workspace directories, presents an interactive picker, and returns the chosen theme's absolute path. This is the entry point every visual plugin calls |
 | `recommend` | Suggests themes based on your industry or audience description |
 | `list` | Shows all available themes in the workspace |
 | `create from preset` | Builds a theme from a named preset (e.g., corporate, minimal, vibrant) |
 | `audit` | Checks a theme for contrast ratios, color harmony, and completeness |
 | `author deep theme system` | Deepens a theme into a tiered Theme System v2 directory (tokens, primitives, assets) |
 | `generate showcase` | Renders a visual sample of how a theme looks applied to real content |
-| `apply` | Registers a theme as the workspace default |
+| `apply` | Reads a resolved theme and hands its contents to the downstream skill that produces the output |
 | `import from Claude Design bundle` | Materialises a Claude Design handoff bundle into a complete tiered theme |
 
 ```
@@ -153,19 +154,7 @@ Import the theme from this Claude Design bundle and apply it to the workspace
 
 The `import from Claude Design bundle` operation is the recommended authoring path: the bundle is the upstream truth and the local theme directory is its materialised mirror. Re-running the importer against the *same* bundle URL is a no-op; a re-export produces a new URL and re-materialises the theme, which needs `--allow-overwrite`. The `audit` operation reads its contrast verdicts out of `check-contrast.py` rather than estimating them, so an accessibility finding is always a measured ratio.
 
----
-
-### `pick-theme` — Centralized theme picker
-
-A thin coordination skill used internally by all visual plugins before generating output. When a skill needs a theme, it calls `pick-theme` rather than implementing its own discovery logic.
-
-You can also call it directly when you want to choose a theme before starting a visual workflow:
-
-```
-/pick-theme
-```
-
-The skill scans both the plugin's bundled theme directory and your workspace themes directory, presents the available options, and returns the path to your selection.
+The `select theme` operation is the one every other plugin reaches for. It scans both the plugin's bundled theme directory and your workspace themes directory, presents the available options, and returns the path to your selection — so no visual skill implements its own discovery logic. You can also call it directly when you want to choose a theme before starting a visual workflow.
 
 ---
 
@@ -311,7 +300,7 @@ Commands: `/narrative`, `/narrative-adapt`.
 
 ### `narrative-publish` — One invocation from sources to briefs
 
-A thin pipeline over the hops above and below: it runs `narrative`, then an optional `copywriter` polish (`--polish`, tone by default), resolves the theme once through `pick-theme`, and produces one or more `story-to-*` briefs for the targets named in `--to` (slides, web, storyboard, infographic). It owns no transformation logic of its own — every step dispatches an existing skill — and rendering is **opt-in**: nothing is rendered unless `--render` is given, and renders then run sequentially. The argument matrix, the per-hop parameter translation, the reject rule and the consolidated JSON envelope live in `cogni-workspace/skills/narrative-publish/references/pipeline-contract.md`.
+A thin pipeline over the hops above and below: it runs `narrative`, then an optional `copywriter` polish (`--polish`, tone by default), resolves the theme once through `manage-themes` Operation 11, and produces one or more `story-to-*` briefs for the targets named in `--to` (slides, web, storyboard, infographic). It owns no transformation logic of its own — every step dispatches an existing skill — and rendering is **opt-in**: nothing is rendered unless `--render` is given, and renders then run sequentially. The argument matrix, the per-hop parameter translation, the reject rule and the consolidated JSON envelope live in `cogni-workspace/skills/narrative-publish/references/pipeline-contract.md`.
 
 Commands: `/narrative-publish`.
 
@@ -380,8 +369,8 @@ cogni-workspace has no required plugin dependencies. Its scope is horizontal: th
 | Plugin / skill | What it reads from the workspace |
 |---------------|----------------------------------|
 | All cogni-x plugins | `.workspace-env.sh` — sourced at session start via the hook |
-| cogni-website | Themes via `pick-theme`; `design-variables.json` derived from the picked theme |
-| document-skills | Themes via `pick-theme` |
+| cogni-website | Themes via `manage-themes` Operation 11; `design-variables.json` derived from the picked theme |
+| document-skills | Themes via `manage-themes` Operation 11 |
 | cogni-consult | `discover-plugins.sh` results — to know which plugins are available for dispatch |
 
 ---
@@ -424,7 +413,7 @@ When you move a workspace to a different path, absolute paths stored in `.worksp
 |---------|-------------|-----|
 | A plugin cannot find `.workspace-env.sh` | The session hook did not run, or the workspace was not initialized | Run `/workspace-status`; if the foundation tier fails, re-run `/manage-workspace` |
 | `jq: command not found` in script output | `jq` is not installed | Install via your package manager: `brew install jq` (macOS), `apt install jq` (Debian/Ubuntu) |
-| Themes directory exists but visual plugin uses wrong colors | Plugin is reading a stale theme path | Run `/pick-theme` to re-select the theme; the selection updates the workspace default |
+| Themes directory exists but visual plugin uses wrong colors | Plugin is reading a stale theme path | Run `/manage-themes` and use Operation 11 to re-select the theme; hand the returned path to the plugin |
 | A workspace-infrastructure check passes but a plugin skill still fails | The failure is at plugin level, not workspace level | Run cogni-workspace's `/troubleshoot` for the plugin-level tier (check 7) |
 | Obsidian terminal profile shows a doubled path (WSL) | WSL path duplication in the profile arguments | Run `/manage-workspace` — the update flow fixes doubled paths and stale args |
 | `/manage-workspace` succeeds but a newly installed plugin is not discovered | The plugin was installed after initialization | Run `/manage-workspace` to re-scan and register the new plugin |

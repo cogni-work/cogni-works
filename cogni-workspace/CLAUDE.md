@@ -9,15 +9,15 @@ cogni-workspace is the horizontal layer: it owns shared workspace state and tool
 
 ## Theme Infrastructure
 
-- `pick-theme` is the entry point for theme selection across all plugins
+- `manage-themes` Operation 11 (Select Theme) is the entry point for theme selection across all plugins
 - Themes live in `themes/` as markdown files describing visual identity
 - See `references/design-variables-pattern.md` for the shared convention on producing themed HTML dashboards — any skill generating visual HTML output should follow this pattern
-- **Claude Design bundles are the recommended authoring path for tiered themes** (RFC #132 Phase 3): the user mocks the design system at `claude.ai/design`, exports a bundle URL, and `manage-themes` Operation 10 materialises it into the local `themes/<slug>/` directory in one re-syncable step. `scripts/import-claude-design-bundle.py` is the importer; `references/claude-design-bundle-mapping.md` is the mapping contract. The runtime contract through `pick-theme` is unchanged — consumers keep reading the local tier files.
+- **Claude Design bundles are the recommended authoring path for tiered themes** (RFC #132 Phase 3): the user mocks the design system at `claude.ai/design`, exports a bundle URL, and `manage-themes` Operation 10 materialises it into the local `themes/<slug>/` directory in one re-syncable step. `scripts/import-claude-design-bundle.py` is the importer; `references/claude-design-bundle-mapping.md` is the mapping contract. The runtime contract through Operation 11 is unchanged — consumers keep reading the local tier files.
 
 ### Pre-PR checks for theme-touching changes
 
 Run the umbrella backwards-compat harness before submitting any PR that
-touches `themes/`, `skills/pick-theme/`, `skills/manage-themes/`, or any
+touches `themes/`, `scripts/discover-themes.py`, `skills/manage-themes/`, or any
 consumer plugin's theme-reading surface:
 
 ```bash
@@ -192,7 +192,7 @@ Absorbed from cogni-narrative and cogni-copywriting when both were retired. Thes
 Adopted from cogni-visual across the absorption stages, and now the only copy: the retirement stage deleted the source tree, so the duplicate window this section used to warn about is closed and `check-skill-names.sh` reports no duplicates. The adopted trees are still graded by their own hygiene arm rather than by a name check — that arm outlived the duplicate window, because what it pins is the absence of a `cogni-visual:` dispatch token in a relocated file, not the uniqueness of a name. The six slash commands landed with the retirement rather than with the first stage, so a command definition never existed in two plugins at once.
 
 - `story-to-slides`, `story-to-web` (scrollable web narratives, and printed-poster storyboards in `mode=storyboard`), `story-to-infographic` turn a narrative with a story arc into a brief for one rendering target; `render-html-slides` and `enrich-report` render; the `brief-review-assessor` agent scores a brief from three stakeholder perspectives before rendering, dispatched in-pipeline by each of the three `story-to-*` skills rather than through a standalone skill. 19 agents came with them, from the per-format renderers (`render-infographic-pencil`, `render-infographic-sketchnote`, `render-infographic-whiteboard`, `storyboard`, `web`, `pptx`, `html-slides`) down to the workers (`concept-diagram-svg`, `editorial-sketch`, `report-html-writer`, `enriched-report-reviewer`)
-- `narrative-publish` is the thin pipeline over those hops: one invocation runs `narrative`, an optional `copywriter` polish, a single `pick-theme` resolution and one or more `story-to-*` briefs, with rendering opt-in. It owns no transformation logic of its own — every step dispatches an existing skill, and its argument and hop contract lives in `skills/narrative-publish/references/pipeline-contract.md`. `commands/narrative-publish.md` registers `/narrative-publish`
+- `narrative-publish` is the thin pipeline over those hops: one invocation runs `narrative`, an optional `copywriter` polish, a single Operation 11 theme resolution and one or more `story-to-*` briefs, with rendering opt-in. It owns no transformation logic of its own — every step dispatches an existing skill, and its argument and hop contract lives in `skills/narrative-publish/references/pipeline-contract.md`. `commands/narrative-publish.md` registers `/narrative-publish`
 - `libraries/` is a new tree in this plugin — 18 files of layout vocabulary, arc and CTA taxonomies, and worked example briefs that the rendering skills read at run time
 - `commands/` did **not** come across in this stage. A slash command has no host-side tiebreaker when two plugins declare the same name, and no guard catches the collision, so the command definitions land with the deletion instead
 

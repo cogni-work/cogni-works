@@ -30,7 +30,7 @@ Replace `{absolute_path_to_presentation_outline}` with the exporter's `data.outl
 
 ## Option 2 — claude.ai attachment (Anthropic PPTX skill)
 
-Resolve a theme **now**, and only now: use the brief's `theme_path` when the frontmatter carries one; otherwise invoke `cogni-workspace:pick-theme` via the Skill tool and take the absolute `theme_path` it returns. Then tell the user:
+Resolve a theme **now**, and only now: use the brief's `theme_path` when the frontmatter carries one; otherwise invoke `cogni-workspace:manage-themes` (Operation 11, Select Theme) via the Skill tool and take the absolute `theme_path` it returns. Then tell the user:
 
 1. **Open a new chat on claude.ai** — the PPTX skill handles attachments natively there
 2. **Attach two files:** `presentation-brief.md` and the resolved `theme.md`

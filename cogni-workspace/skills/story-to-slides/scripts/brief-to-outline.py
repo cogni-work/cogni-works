@@ -115,7 +115,7 @@ def emit(success: bool, data=None, error: str = "") -> int:
 def _walk_up(start, relpath):
     """Find `relpath` by walking up from `start`. Returns a path or None.
 
-    The same idiom `skills/pick-theme/scripts/discover-themes.py` uses to reach a
+    The same idiom `scripts/discover-themes.py` uses to reach a
     sibling module, so the exporter runs from any working directory.
     """
     current = os.path.abspath(start)

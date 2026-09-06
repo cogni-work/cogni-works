@@ -239,7 +239,7 @@ Each cogni-trends project is initialized with a market code stored in `tips-proj
 | Plugin | Skill | What is consumed |
 |--------|-------|-----------------|
 | cogni-portfolio | trends-bridge | Portfolio anchors that enrich solution relevance scoring |
-| cogni-workspace | trends-dashboard | Theme selection via pick-theme |
+| cogni-workspace | trends-dashboard | Theme selection via manage-themes Operation 11 |
 
 ### Downstream (what cogni-trends produces for others)
 

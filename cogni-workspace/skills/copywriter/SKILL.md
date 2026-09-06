@@ -25,7 +25,7 @@ Specifically: do not remove URLs from inline citations, change marker formats, r
 Documents may contain content destined for other processing tools. Preserve these exactly:
 
 - **Diagram placeholder blocks** — Complete `<diagram-placeholder>` XML structures
-- **Figure references and captions** — `Figure/Abbildung {N}` text and `**Figure N:** Title` lines
+- **Figure references and captions** — `Figure/Abbildung {N}` text and `**Figure N:** Title` lines. On a translation run (`TARGET_LANG` set) only the `Figure N` / `Abbildung N` numeric reference stays byte-identical; caption title prose is translated, per Step 5's validation bullet and `references/translation-principles.md` § "Translate (target language)".
 - **Obsidian embeds** — `![[assets/*.svg]]`
 - **Kanban tables** — Tables with `| Dimension | Act | Plan | Observe |` headers, wikilinks, legends, and `<!-- kanban-board -->` placeholders
 - **Assumption placeholders** — `{{asm:<slug>}}` tokens (e.g. cogni-consult assumption references) must stay **byte-identical**. These are resolver-critical: a reworded token no longer matches the strict resolver form and fails loud, and a fully prose-ified token is unrecoverable. Freeze them verbatim by default — never reword, expand, translate, or reflow a `{{asm:...}}` token.
@@ -106,7 +106,7 @@ These apply even in `--scope=tone` because they are readability essentials, not 
 1. Resolve `source_lang` via the existing detector in Step 3 (`--lang` → workspace config → content analysis).
 2. If `source_lang == TARGET_LANG`, log "source language already matches target — skipping translation pass" and fall through to standard polish. **Also unset the translation scope override below** so the user's explicit `--scope` is honoured (a user invoking `--scope=full` on a same-language doc expects Step 2 to run normally).
 3. **Arc-mode gate.** Determine the document's arc: use frontmatter `arc_id` if present; otherwise match the H2 headings against the arc contracts (per `arc-preservation.md` detection, which reads the `narrative` skill's registry and contracts at runtime, so every registered arc is detectable). If neither yields an arc, skip this gate (proceed as a non-arc translation). When an arc is identified, open its contract, `${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/story-arc/{arc_id}/arc-definition.md`, and read the column set of its `## Headings` table:
-   - If that table carries **no column for `TARGET_LANG`** → abort (coverage), **regardless of language pair**, with: "Arc-mode translation into `{TARGET_LANG}` is not supported for arc `{arc_id}`: its contract carries headings for {columns} only." Do not modify the file — an arc without upstream headings for the target language fails closed rather than inventing them. Today the contracts carrying all seven languages are `corporate-visions` and `jtbd-portfolio`; every other arc carries EN and DE.
+   - If that table carries **no column for `TARGET_LANG`** → abort (coverage), **regardless of language pair**, with: "Arc-mode translation into `{TARGET_LANG}` is not supported for arc `{arc_id}`: its contract carries headings for {columns} only." Do not modify the file — an arc without upstream headings for the target language fails closed rather than inventing them.
    - Else (the contract carries the target column) **and** at least one of `source_lang`/`TARGET_LANG` is in `{en, de}` → **allow**: set `arc_mode = true` and proceed. The arc-element and bridge headings will be **substituted** (not freely translated) in Step 2.5.
    - Else (the column exists but **neither** end is in `{en, de}` — e.g. a French source with `TARGET_LANG=it`) → do **not** abort here; fall through to pre-check #4 (accept-set) and #5 (pivot guard), which emits the correct direct-non-EN/DE message.
    - If `TARGET_LANG` is not in the accept-set at all → do **not** abort here; fall through to pre-check #4, which emits the correct "not a supported language" message.
@@ -418,8 +418,10 @@ EN or DE: `translation-de-to-en.md`, `translation-de-to-es.md`,
 **Arc mode** — `arc-preservation.md`; it names the upstream `narrative` files it depends
 on.
 
-**Workflow** — `step-by-step-guide.md`, the expanded sub-steps and validation
-checklists behind the five core steps above and the conditional Step 2.5.
+**Workflow** — `step-by-step-guide.md`, the detailed execution guide: sub-step
+procedures, decision logic and validation criteria. It is numbered as its own 8-step
+sequence (Parse Parameters & Load References .. Validate & Write Document) rather than
+against the five core steps above, and it carries no Step 2.5 translate material.
 
 **Scripts** — `scripts/calculate_readability.py` computes the metrics Step 5 gates on
 (invocation above). `scripts/readability.sh` is the wrapper the `narrative` skill's

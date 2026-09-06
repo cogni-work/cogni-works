@@ -38,6 +38,14 @@ Usage:
   check-market-orphans.py --registry PATH \\
       --overlay research=PATH --overlay trends=PATH    # explicit, for fixtures
 
+Two absences are reported differently, and the difference is the point. A
+sibling plugin that is not installed is legitimate degradation: its overlay is
+reported uncurated, success stays true, exit 0. `get-market-config.py` itself
+failing to import is a failure of the subject — nothing read an overlay, so
+"0 orphans" would be a clean audit over nothing — and exits 1 with an error.
+The import is lazy, so a run naming every overlay explicitly never needs the
+cascade and is unaffected by either.
+
 Output: JSON envelope on stdout — {"success": bool, "data": {...}, "error": str|null}
 Stdlib only: no pip dependency, no network.
 """
@@ -76,20 +84,28 @@ def _load(path):
 def _load_merge_utility():
     """Import get-market-config.py so overlay resolution has ONE owner.
 
-    The filename is not an importable module name (hyphens), so it is loaded
-    by path rather than by `import`. Returning None lets the caller degrade to
-    explicit --overlay paths instead of failing, which is what keeps the
-    fixture path independent of the live tree.
+    Returns `(module, error)` — exactly one of the two is set. The filename is
+    not an importable module name (hyphens), so it is loaded by path rather
+    than by `import`.
+
+    The error is returned rather than swallowed because of what this import
+    IS. A sibling plugin that is not installed is legitimate degradation, and
+    the caller reports it as an uncurated overlay. Our own merge utility
+    failing to load is not degradation — it is a failure of the subject, and
+    reporting it as "no overlay resolved" would render a clean audit over a
+    registry nothing actually read. The caller decides which of the two it is
+    holding, because only the caller knows whether the cascade was needed at
+    all; the fixture path supplies every overlay explicitly and never is.
     """
     try:
         spec = importlib.util.spec_from_file_location("_get_market_config", MERGE_UTILITY)
         if spec is None or spec.loader is None:
-            return None
+            return None, f"no import spec for {MERGE_UTILITY}"
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
-        return module
-    except Exception:
-        return None
+        return module, None
+    except Exception as exc:
+        return None, f"{type(exc).__name__}: {exc}"
 
 
 def _is_meta_key(key):
@@ -181,13 +197,21 @@ def curated_count(plugin, overlay_market):
     return None
 
 
-def build_matrix(registry, overlays):
+# Matrix cell for a plugin this run never scanned (`--plugin` narrowed it out).
+# Distinct from null on purpose: null means "scanned, curates nothing here",
+# and rendering an unscanned plugin the same way would state a fact about a
+# file that was never opened.
+NOT_SCANNED = "not-scanned"
+
+
+def build_matrix(registry, overlays, scanned):
     """One row per registry market, with a cell for each of the three plugins.
 
     cogni-portfolio has no overlay — it reads the registry directly — so its
     cell is the canonical domain count rather than a curated count. It is a
     column all the same: dropping it would misreport a plugin that consumes the
-    registry as one that does not consume markets at all.
+    registry as one that does not consume markets at all. Portfolio needs no
+    scan to be reported, so it is never NOT_SCANNED.
     """
     rows = []
     for code in sorted((registry.get("markets") or {}).keys()):
@@ -202,6 +226,9 @@ def build_matrix(registry, overlays):
             "output_language": market.get("default_output_language"),
         }
         for plugin in OVERLAY_READERS:
+            if plugin not in scanned:
+                row[plugin] = NOT_SCANNED
+                continue
             overlay = overlays.get(plugin)
             entry = (overlay or {}).get(code)
             row[plugin] = curated_count(plugin, entry)
@@ -210,20 +237,32 @@ def build_matrix(registry, overlays):
 
 
 def resolve_overlay_paths(plugins, explicit):
-    """Explicit --overlay wins; otherwise defer to the merge utility's cascade."""
+    """Explicit --overlay wins; otherwise defer to the merge utility's cascade.
+
+    Returns `(paths, import_error)`. `import_error` is non-None only when the
+    cascade was actually NEEDED — at least one scanned plugin supplied no
+    explicit overlay — and the merge utility could not be loaded. A run that
+    names every overlay explicitly never imports it, so a broken merge utility
+    cannot fail the fixture path, and the import stays lazy for that reason.
+    """
     paths = {}
     merge_utility = None
+    import_error = None
+    cascade_needed = False
+
     for plugin in plugins:
         if plugin in explicit:
             paths[plugin] = Path(explicit[plugin])
             continue
-        if merge_utility is None:
-            merge_utility = _load_merge_utility()
+        cascade_needed = True
+        if merge_utility is None and import_error is None:
+            merge_utility, import_error = _load_merge_utility()
         if merge_utility is None:
             paths[plugin] = None
             continue
         paths[plugin] = merge_utility._overlay_path(plugin)
-    return paths
+
+    return paths, (import_error if cascade_needed else None)
 
 
 def parse_overlay_arg(value):
@@ -259,7 +298,15 @@ def main():
 
     plugins = [args.plugin] if args.plugin else list(OVERLAY_READERS)
     explicit = dict(args.overlay)
-    overlay_paths = resolve_overlay_paths(plugins, explicit)
+    overlay_paths, import_error = resolve_overlay_paths(plugins, explicit)
+    if import_error is not None:
+        # Not degradation — the overlay cascade this script defers to could not
+        # be loaded, so no overlay was read and "0 orphans" would be a clean
+        # audit over nothing. Fail loudly instead.
+        print(json.dumps(_envelope(
+            False, None,
+            f"failed to load {MERGE_UTILITY.name}: {import_error}"), ensure_ascii=False))
+        sys.exit(1)
 
     overlays = {}
     per_plugin = {}
@@ -300,7 +347,8 @@ def main():
         "plugins": per_plugin,
         "orphans": orphans,
         "orphan_count": len(orphans),
-        "matrix": build_matrix(registry, overlays),
+        "scanned_plugins": list(plugins),
+        "matrix": build_matrix(registry, overlays, set(plugins)),
     }
     print(json.dumps(_envelope(True, data, None), ensure_ascii=False))
 

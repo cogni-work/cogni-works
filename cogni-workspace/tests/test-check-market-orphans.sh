@@ -48,6 +48,40 @@
 # stay green. mo08 is the only case that can see it. Verified: mutated red,
 # restored green.
 #
+# Third recipe, for the DEFAULT invocation path (the discriminator is
+# mo24-the-default-cascade-resolves-the-trends-overlay):
+#
+#   bash "$HOME/.claude/plugins/marketplaces/managed-service/cogni-service/scripts/mutation-check.sh" \
+#     --root . \
+#     --file cogni-workspace/scripts/check-market-orphans.py \
+#     --expr 's{^        return module, None$}{        return None, None}m' \
+#     --test 'bash cogni-workspace/tests/test-check-market-orphans.sh' \
+#     --case mo24-the-default-cascade-resolves-the-trends-overlay
+#
+# The mutant neutralises the cascade loader in its quietest possible form: no
+# module, no error, so every plugin reports "overlay not resolvable" under
+# success:true and the live report goes blind on both overlays while claiming a
+# clean registry. Sections B-G cannot see it — they all supply an explicit
+# --overlay and never enter the cascade at all — which is exactly why section H
+# exists. Verified: mutated red, restored green.
+#
+# Fourth recipe, for the crash arm (the discriminator is
+# mo26-a-crashed-merge-utility-reports-failure):
+#
+#   bash "$HOME/.claude/plugins/marketplaces/managed-service/cogni-service/scripts/mutation-check.sh" \
+#     --root . \
+#     --file cogni-workspace/scripts/check-market-orphans.py \
+#     --expr 's{^        return None, f"\{type\(exc\)\.__name__\}: \{exc\}"$}{        return None, None}m' \
+#     --test 'bash cogni-workspace/tests/test-check-market-orphans.sh' \
+#     --case mo26-a-crashed-merge-utility-reports-failure
+#
+# The mutant swallows the import error, collapsing "our own merge utility does
+# not load" back into "the sibling plugin is not installed" — the first is a
+# failure of the subject, the second is legitimate degradation, and reporting
+# the first as the second renders a clean audit over a registry nothing read.
+# mo18 stays GREEN under it, which is the point: that case asserts the
+# degradation half and must not move. Verified: mutated red, restored green.
+#
 # Fixtures are written rather than pointed at the live tree, except the three
 # cases in section G, which deliberately join the real registry with the real
 # in-repo trends overlay. mo23 is the one that turns red if someone hand-edits a
@@ -329,6 +363,99 @@ assert_eq "mo22-the-in-repo-trends-overlay-curates-markets" "True" "$LIVE_CURATE
 LIVE_ORPHANS="$(probe "data['orphan_count']" --registry "$LIVE_REGISTRY" \
   --plugin trends --overlay trends="$LIVE_TRENDS_OVERLAY")"
 assert_eq "mo23-the-in-repo-trends-overlay-carries-no-orphan" "0" "$LIVE_ORPHANS"
+
+echo "=== H. the DEFAULT invocation path — no --overlay, through the cascade ==="
+
+# Sections B-G all pass an explicit --overlay, which is what makes them
+# deterministic; the cost is that none of them touches _load_merge_utility() or
+# _overlay_path(). That is the path the skill actually runs (`python3 "$ORPHANS"`
+# with no arguments), so without this section a neutralised cascade loader leaves
+# every case green while the live report goes blind on both plugins.
+#
+# Layer 1 of the cascade — the {NAME}_PLUGIN_ROOT env var — is what makes this
+# deterministic in CI: layer 2 reads the author's plugin cache, which CI does not
+# have, and layer 3 depends on the checkout being a monorepo sibling.
+DEFAULT_PATH="$(TRENDS_PLUGIN_ROOT="$REPO_ROOT/cogni-trends" probe \
+  "(data['plugins']['trends']['overlay_path'], data['plugins']['trends']['curated'])" \
+  --registry "$LIVE_REGISTRY" --plugin trends)"
+assert_eq "mo24-the-default-cascade-resolves-the-trends-overlay" \
+  "('$LIVE_TRENDS_OVERLAY', True)" "$DEFAULT_PATH"
+
+# A plugin the run never scanned is not the same fact as a plugin that curates
+# nothing, and the matrix must not state the second when it means the first.
+assert_eq "mo25-an-unscanned-plugin-cell-is-marked-not-null" "'not-scanned'" \
+  "$(TRENDS_PLUGIN_ROOT="$REPO_ROOT/cogni-trends" probe "repr(data['matrix'][0]['research'])" \
+      --registry "$LIVE_REGISTRY" --plugin trends)"
+
+echo "=== I. a crashed merge utility is a failure, not a clean audit ==="
+
+# The subject of this arm is the difference between two absences. A sibling
+# plugin that is not installed is legitimate degradation (mo18). Our OWN merge
+# utility failing to import is a failure of the subject: nothing read an
+# overlay, so "0 orphans" would be a clean audit over nothing.
+#
+# It is exercised by relocating the script beside a broken copy of the helper it
+# imports, because the import path is derived from the script's own directory
+# and cannot be overridden by a flag. --registry keeps the real registry in play
+# so only the helper differs between this arm and its control.
+RELOC="$TMPROOT/relocated/scripts"
+mkdir -p "$RELOC"
+cp "$SCRIPT" "$RELOC/check-market-orphans.py"
+RELOC_SCRIPT="$RELOC/check-market-orphans.py"
+
+printf 'import argparse\nraise RuntimeError("boom")\n' > "$RELOC/get-market-config.py"
+
+CRASH_OUT="$(TRENDS_PLUGIN_ROOT="$REPO_ROOT/cogni-trends" \
+  python3 "$RELOC_SCRIPT" --registry "$LIVE_REGISTRY" --plugin trends 2>/dev/null)"
+CRASH_RC=$?
+CRASH_SUCCESS="$(printf '%s' "$CRASH_OUT" | python3 -c "
+import json, sys
+try:
+    print(json.load(sys.stdin).get('success'))
+except Exception:
+    print('PARSE_ERROR')
+" 2>/dev/null)"
+CRASH_ERROR="$(printf '%s' "$CRASH_OUT" | python3 -c "
+import json, sys
+try:
+    print('named' if 'get-market-config.py' in (json.load(sys.stdin).get('error') or '') else 'unnamed')
+except Exception:
+    print('PARSE_ERROR')
+" 2>/dev/null)"
+
+assert_eq "mo26-a-crashed-merge-utility-reports-failure" "False" "$CRASH_SUCCESS"
+assert_eq "mo27-a-crashed-merge-utility-exits-non-zero" "1" "$CRASH_RC"
+assert_eq "mo28-the-crash-error-names-the-utility-that-failed" "named" "$CRASH_ERROR"
+
+# The control. Same relocated tree, same flags, a WORKING helper — so a green
+# mo26/mo27 cannot be an artifact of the relocation itself.
+cp "$WS_ROOT/scripts/get-market-config.py" "$RELOC/get-market-config.py"
+assert_eq "mo29-the-same-relocated-tree-succeeds-with-a-working-utility" "(True, True)" \
+  "$(TRENDS_PLUGIN_ROOT="$REPO_ROOT/cogni-trends" python3 "$RELOC_SCRIPT" \
+      --registry "$LIVE_REGISTRY" --plugin trends 2>/dev/null | python3 -c "
+import json, sys
+try:
+    payload = json.load(sys.stdin)
+except Exception:
+    print('PARSE_ERROR'); raise SystemExit(0)
+print((payload.get('success'), ((payload.get('data') or {}).get('plugins') or {}).get('trends', {}).get('curated')))
+" 2>/dev/null)"
+
+# The import stays LAZY, and that is a property rather than an optimisation: a
+# run naming every overlay explicitly never needs the cascade, so a broken
+# helper must not fail it. Without this, the fix for mo26 would have taken the
+# whole fixture suite down with the helper.
+printf 'import argparse\nraise RuntimeError("boom")\n' > "$RELOC/get-market-config.py"
+assert_eq "mo30-an-explicit-overlay-run-survives-a-broken-utility" "(True, 0)" \
+  "$(python3 "$RELOC_SCRIPT" --registry "$LIVE_REGISTRY" --plugin trends \
+      --overlay trends="$LIVE_TRENDS_OVERLAY" 2>/dev/null | python3 -c "
+import json, sys
+try:
+    payload = json.load(sys.stdin)
+except Exception:
+    print('PARSE_ERROR'); raise SystemExit(0)
+print((payload.get('success'), (payload.get('data') or {}).get('orphan_count')))
+" 2>/dev/null)"
 
 echo
 if [ "$failures" -eq 0 ]; then

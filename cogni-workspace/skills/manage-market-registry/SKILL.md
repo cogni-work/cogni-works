@@ -80,6 +80,13 @@ is in `data`:
 - `data.markets_canonical` and `data.plugins.<name>.curated_markets[]` —
   the counts the summary line needs.
 
+If the script exits non-zero, do **not** render a report. A failure envelope
+here means the overlay cascade could not be loaded at all, so nothing read an
+overlay and a "0 orphans" report would be a clean audit over nothing. Show the
+`error` string instead. A plugin whose overlay merely does not resolve is a
+different and expected state: it comes back inside a successful envelope, as
+`curated: false`, and belongs in the report.
+
 #### Render the coverage matrix
 
 One row per registry market, with a column for each of the three
@@ -98,6 +105,11 @@ consuming plugins:
 A `null` research or trends cell renders `—`: that plugin does not curate
 this market today and its pipelines fall back to default behaviour. This
 is information, not drift.
+
+A cell reading `not-scanned` is a different statement and renders `n/a`:
+that plugin's overlay was never opened, so nothing is being claimed about
+what it curates. It cannot appear on this skill's path, which always scans
+every plugin — only a `--plugin`-narrowed run produces it.
 
 cogni-portfolio is a column even though it curates no overlay. It reads
 the registry directly through the merge utility, so its cell is the

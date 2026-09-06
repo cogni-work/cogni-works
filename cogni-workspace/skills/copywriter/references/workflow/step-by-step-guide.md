@@ -29,8 +29,8 @@ Step 2: Gather Content Requirements
 Step 3: Apply Structure & Framework
 Step 4: Apply Writing Principles
 Step 5: Apply Impact Techniques (optional)
-Step 6: Stakeholder Review (optional)
-Step 7: Synthesis & Refinement (optional)
+Step 6: Stakeholder Review (optional, delegated to copy-reader)
+Step 7: Synthesis & Refinement (owned by copy-reader)
 Step 8: Validate & Write Document
 ```
 
@@ -76,7 +76,7 @@ Parse the user's request to extract these parameters. Think through what the use
 | `output_path` | File path | Current working directory |
 | `tone` | formal, semi-formal, casual | semi-formal |
 | `length` | Word count or page count | Use deliverable default |
-| `review_mode` | reader, automated, skip | automated |
+| `review_mode` | reader, skip (`automated` = deprecated alias for reader) | reader |
 | `skip_review` | true, false | false |
 | `stakeholders` | List of perspective names | Use audience-based defaults from SKILL.md |
 
@@ -364,20 +364,16 @@ Before proceeding, verify:
 
 **Skip this step if:** `skip_review: true` OR `review_mode: skip` OR deliverable is informal (email, casual memo).
 
-### Option A: Interactive Review via Reader Skill (Recommended)
-
-If `review_mode: reader`:
+### 6A: Delegate to the Reader Skill
 
 ```text
 Delegate to: cogni-workspace:copy-reader
 Args: FILE_PATH={{output_path}} PERSONAS={{stakeholders}} AUTO_IMPROVE=true
 ```
 
-The reader skill handles parallel multi-persona Q&A and automatic improvement. After delegation, skip Step 7 (the reader skill handles its own synthesis).
+The reader skill handles parallel multi-persona Q&A, synthesis and automatic improvement against its own persona profiles and synthesis protocol. `review_mode` accepts `reader` (the default) and `skip`; `automated` is a deprecated alias for `reader`.
 
-### Option B: Automated Checklist Review (Default)
-
-If `review_mode: automated` (or default):
+### 6B: Resolve Stakeholders
 
 **Select stakeholders** based on audience parameter:
 
@@ -391,18 +387,9 @@ If `review_mode: automated` (or default):
 
 Override with explicit `stakeholders` parameter if provided.
 
-**For each stakeholder:**
+Pass the resolved list to the reader skill as `PERSONAS`. It loads each persona's criteria from its own `references/personas/`, scores each criterion PASS (100) / CONCERN (60) / FAIL (0), computes the weighted overall score, and returns structured feedback with priority labels.
 
-1. Load review criteria:
-   ```text
-   READ: references/10-stakeholder-review/{perspective}-review.md
-   ```
-2. Evaluate the document against the perspective's 5 weighted criteria
-3. Score each criterion: PASS (100), CONCERN (60), FAIL (0)
-4. Calculate weighted overall score (0-100)
-5. Generate structured feedback: strengths, concerns, recommendations (with priority labels)
-
-**Scoring thresholds:**
+**Scoring thresholds** (as returned by the reader skill):
 
 | Score | Assessment |
 |-------|-----------|
@@ -423,62 +410,19 @@ Before proceeding, verify:
 
 ---
 
-## Step 7: Synthesis & Refinement (Optional)
+## Step 7: Synthesis & Refinement (Owned by the reader skill)
 
-**Skip this step if:** Step 6 used reader skill (Option A) OR Step 6 was skipped.
-
-### 7A: Aggregate and Prioritize Feedback
-
-Load synthesis guidelines:
-```text
-READ: references/10-stakeholder-review/synthesis-guidelines.md
-```
-
-Priority determination:
-
-| Condition | Priority |
-|-----------|----------|
-| 3+ stakeholders mention same issue | CRITICAL |
-| Executive + 1 other stakeholder on same issue | CRITICAL |
-| 2 stakeholders mention same issue | HIGH |
-| High-weight criterion (>=20%) flagged | HIGH |
-| 1 stakeholder, low-weight criterion (<15%) | OPTIONAL |
-
-### 7B: Apply Improvements
-
-For each improvement by priority:
-
-- **CRITICAL**: Apply the change. Validate it improved the relevant section. Mark complete.
-- **HIGH**: Assess feasibility. Apply if feasible. Log if skipped with reason.
-- **OPTIONAL**: Log for manual review. Do NOT apply automatically.
-
-### 7C: Resolve Conflicts
-
-When stakeholders disagree, apply these resolution patterns:
-
-| Conflict | Resolution |
-|----------|-----------|
-| Executive wants brevity vs. Technical wants detail | Executive summary + technical appendix |
-| Marketing wants emotion vs. Executive wants data | Lead with data, use power words for emphasis |
-| End-user wants simple vs. Technical wants precision | Plain language with technical glossary |
-| Legal wants hedging vs. Marketing wants bold claims | Strong but hedged: "designed to deliver" |
-
-**Tiebreaker hierarchy:**
-1. Primary audience perspective (if specified)
-2. Deliverable requirements (framework, regulatory)
-3. Impact technique effectiveness
-4. User-specified preference
+There is no inline synthesis pass. The reader skill dispatched in Step 6 aggregates and prioritizes the persona feedback, resolves conflicts and applies improvements itself, using its own `references/synthesis-protocol.md` — the single copy of the priority-escalation ladder, the conflict-resolution table and the tiebreaker hierarchy.
 
 **Graceful degradation:**
-- Individual improvement fails -> Revert change, log failure, continue with remaining
-- Synthesis calculation fails -> Continue to Step 8 with original document, log `fallback_reason: "synthesis_failure"`
+- The reader skill validates its own output and reverts to its backup on failure.
+- Reader dispatch fails -> Continue to Step 8 with the document as written, log `fallback_reason: "review_failure"`.
 
 ### Step 7 Gate
 
 Before proceeding, verify:
-- All CRITICAL improvements are applied
-- HIGH improvements are applied or logged with skip reason
-- Conflict resolutions follow the hierarchy
+- The reader skill returned, or its failure is logged with a `fallback_reason`
+- Review never blocks delivery: an unavailable review means Step 8 proceeds on the unreviewed document
 
 ---
 

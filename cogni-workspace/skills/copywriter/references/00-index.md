@@ -218,13 +218,11 @@ IF user asks about markdown syntax:
 ### Stakeholder Review
 
 ```
-IF review_mode = reader:
+IF review not explicitly skipped:
   Delegate to cogni-workspace:copy-reader skill (handles its own reference loading)
-
-IF review_mode = automated OR review not explicitly skipped:
-  LOAD: 10-stakeholder-review/{perspective}-review.md (for each selected stakeholder)
-  LOAD: 10-stakeholder-review/synthesis-guidelines.md (after reviews complete)
 ```
+
+`review_mode` accepts `reader` (the default) and `skip`. `automated` is a deprecated alias for `reader` -- it no longer selects an inline review path.
 
 Stakeholder defaults by audience:
 
@@ -316,18 +314,10 @@ All reference files in this system, organized by directory. Use this as the sour
 
 ### Upstream (loaded from the `narrative` skill, not from this tree)
 - `${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/narrative-techniques/techniques-overview.md` -- the ecosystem's single copy of the impact techniques: Number Plays (6), Forcing Functions, Contrast Structure, You-Phrasing, Compound Impact Calculation, plus the per-arc-element application matrix
+- The `copy-reader` skill's own `references/personas/` and `references/synthesis-protocol.md` -- the ecosystem's single copy of the stakeholder personas and the synthesis protocol. Not loaded from here: Step 5 delegates the whole review to that skill, which loads them itself.
 
 ### 09-preservation-modes/
 - `arc-preservation.md` -- Arc detection, structure preservation, forbidden vs allowed modifications, translation-mode word band, validation checklist. Per-arc per-element technique rules are read at runtime from the `narrative` skill's arc contract (`story-arc/{arc_id}/arc-definition.md` `## Elements`) and `techniques-overview.md`
-
-### 10-stakeholder-review/
-- `00-index.md` -- Stakeholder review system overview
-- `executive-review.md` -- Decision-readiness, clarity, ROI
-- `technical-review.md` -- Accuracy, precision, logical consistency
-- `legal-review.md` -- Risk language, regulatory alignment
-- `marketing-review.md` -- Persuasiveness, audience resonance
-- `end-user-review.md` -- Accessibility, plain language, actionability
-- `synthesis-guidelines.md` -- Multi-stakeholder feedback aggregation and conflict resolution
 
 ### workflow/
 - `step-by-step-guide.md` -- Complete sub-steps, gate checks, validation procedures

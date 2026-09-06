@@ -34,11 +34,6 @@
     {
       "skill": "copywriter",
       "arm": "reference-depth",
-      "file": "cogni-workspace/skills/copywriter/references/10-stakeholder-review"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "reference-depth",
       "file": "cogni-workspace/skills/copywriter/references/workflow"
     },
     {
@@ -185,31 +180,6 @@
       "skill": "copywriter",
       "arm": "unreferenced-resource",
       "file": "cogni-workspace/skills/copywriter/references/08-sales-techniques/power-positions.md"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/copywriter/references/10-stakeholder-review/end-user-review.md"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/copywriter/references/10-stakeholder-review/executive-review.md"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/copywriter/references/10-stakeholder-review/legal-review.md"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/copywriter/references/10-stakeholder-review/marketing-review.md"
-    },
-    {
-      "skill": "copywriter",
-      "arm": "unreferenced-resource",
-      "file": "cogni-workspace/skills/copywriter/references/10-stakeholder-review/technical-review.md"
     },
     {
       "skill": "copywriter",

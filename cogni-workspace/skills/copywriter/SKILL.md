@@ -85,7 +85,7 @@ These apply even in `--scope=tone` because they are readability essentials, not 
 - `framework` (optional): bluf | pyramid | scqa | star | psb | fab | inverted-pyramid
 - `impact_level` (optional): standard | high
 - `MODE` (optional): standard | sales (default: standard)
-- `review_mode` (optional): reader | automated | skip (default: automated) — selects the Step 4 review path
+- `review_mode` (optional): reader | skip (default: reader) — Step 4 always delegates to `cogni-workspace:copy-reader`; `automated` is accepted as a deprecated alias for `reader`
 - `AUDIENCE` (optional): expert | mixed | lay (default: mixed) — tunes audience-aware disciplines such as acronym expansion depth
 - `TARGET_LANG` (optional): de | en | fr | it | pl | nl | es — when set, runs a translate-then-polish two-pass flow (see Step 2.5). When unset, the skill polishes in the source language only. Translation requires EN or DE on one end of the pair (the pivot); direct non-EN/DE pairs (e.g. fr↔it) are rejected — see pre-check #5.
 
@@ -257,22 +257,14 @@ Load `techniques-overview.md` from the `narrative` skill, as the reference index
 
 Skip if `skip_review: true`, or for informal deliverables (emails, casual memos).
 
-**Two modes available:**
-
-**Option A — Interactive Reader Skill (recommended for formal deliverables):**
-
 ```text
 Skill: cogni-workspace:copy-reader
 Args: FILE_PATH={{output_path}} PERSONAS={{stakeholders}} AUTO_IMPROVE=true
 ```
 
-The reader skill runs parallel multi-persona Q&A, synthesizes feedback, and applies one auto-improvement loop directly to the document. Use for reports, proposals, executive summaries, and briefs.
+The reader skill runs parallel multi-persona Q&A against its own persona profiles, synthesizes the feedback through its own synthesis protocol, and applies one auto-improvement loop directly to the document.
 
-Resolve `{{stakeholders}}` from the user's explicit persona list when one is given; otherwise take the audience defaults from the Option B table below.
-
-**Option B — Automated Checklist Review (lighter weight):**
-
-Load stakeholder review profiles from `references/10-stakeholder-review/`. Default stakeholders by audience:
+Resolve `{{stakeholders}}` from the user's explicit persona list when one is given; otherwise use the audience defaults:
 
 | Audience | Default Stakeholders |
 |----------|---------------------|
@@ -282,9 +274,7 @@ Load stakeholder review profiles from `references/10-stakeholder-review/`. Defau
 | legal | legal, executive, technical |
 | sales/marketing | marketing, executive, end-user |
 
-Evaluate against each stakeholder's 5 weighted criteria. Aggregate feedback, prioritize (3+ stakeholders = CRITICAL, 2 = HIGH, 1 = OPTIONAL), and apply CRITICAL/HIGH improvements. Load `references/10-stakeholder-review/synthesis-guidelines.md` for conflict resolution patterns.
-
-Which option runs is set by the `review_mode` parameter resolved in Step 1: `reader` selects Option A, `automated` (the default) selects Option B, and `skip` bypasses this step.
+Step 4 has one implementation: it delegates to `cogni-workspace:copy-reader`, which handles its own reference loading. `review_mode: skip` bypasses the step; `automated` is a deprecated alias for `reader`.
 
 Review enhances quality but never blocks delivery — if review fails, continue to Step 5 with the document as-is.
 
@@ -412,7 +402,7 @@ All references are organized in progressive disclosure tiers. Start with `refere
 
 **Arc Preservation** (09-preservation-modes/) — Arc detection and preservation rules, per-element technique map
 
-**Stakeholder Review** (10-stakeholder-review/) — Executive, technical, legal, marketing, end-user perspectives, synthesis guidelines
+**Stakeholder Review** — delegated to `cogni-workspace:copy-reader`; personas and synthesis protocol live in that skill's `references/`
 
 **Workflow** (workflow/) — Detailed sub-steps and validation checklists
 

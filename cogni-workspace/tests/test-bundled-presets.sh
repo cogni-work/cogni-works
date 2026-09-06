@@ -67,7 +67,14 @@
 #      Expect RED — with no palette block matched the extractor yields nothing,
 #      which the case reports rather than passing on an empty audit.
 #
-# Both were run at authoring time and returned `guard_verified`.
+#   3. The token scan fails closed when git cannot run:
+#      --file cogni-workspace/tests/test-bundled-presets.sh \
+#      --expr 's/git -C "\$PLUGIN_ROOT\/\.\." grep/git -C \/nonexistent-root grep/' \
+#      --test 'bash cogni-workspace/tests/test-bundled-presets.sh' \
+#      --case bp-06-no-external-preset-skill
+#      Expect RED — a git exiting 128 must not read as "no token found".
+#
+# All three were run at authoring time and returned `guard_verified`.
 
 set -uo pipefail
 
@@ -196,10 +203,24 @@ fi
 # reason CLAUDE.md records for it — a directory-level spec would fail on the
 # files where the literal is the needle rather than the offence.
 
-if git -C "$PLUGIN_ROOT/.." grep -qI 'theme-factory' -- cogni-workspace/skills cogni-workspace/agents 2>/dev/null; then
-  fail "bp-06-no-external-preset-skill a theme-factory token survives under cogni-workspace skills or agents"
+#
+# The exit status is read explicitly rather than through `if git grep`, because
+# git grep exits 1 both for "no match" and for a pathspec that names nothing,
+# and 128 when it cannot run at all — so a bare `if` reads a vanished directory
+# or a crashed git as "no token found". Both scanned directories are asserted
+# present first, and only a real exit 1 over present directories is the green
+# arm; anything above 1 is a failure to scan, never a clean scan.
+
+if [ ! -d "$PLUGIN_ROOT/skills" ] || [ ! -d "$PLUGIN_ROOT/agents" ]; then
+  fail "bp-06-no-external-preset-skill a scanned directory is missing under cogni-workspace, so the theme-factory token scan could not run"
 else
-  pass "bp-06-no-external-preset-skill no theme-factory token under cogni-workspace skills or agents"
+  git -C "$PLUGIN_ROOT/.." grep -qI 'theme-factory' -- cogni-workspace/skills cogni-workspace/agents 2>/dev/null
+  rc=$?
+  case "$rc" in
+    0) fail "bp-06-no-external-preset-skill a theme-factory token survives under cogni-workspace skills or agents" ;;
+    1) pass "bp-06-no-external-preset-skill no theme-factory token under cogni-workspace skills or agents" ;;
+    *) fail "bp-06-no-external-preset-skill git grep could not run (exit $rc), so no verdict was produced" ;;
+  esac
 fi
 
 # --------------------------------------------------------------------------

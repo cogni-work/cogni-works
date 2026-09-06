@@ -76,8 +76,9 @@ REQUIRED_SUBKEYS = {"intent": "role", "visual": "kind"}
 
 # Must equal check-brief.py's COLOR_KEYS_SLIDES. Pinned by a case rather than
 # imported, so this fixture stays standalone while a divergence still goes red:
-# that list has already grown twice (COLOR_KEYS_WEB, COLOR_KEYS_INFOGRAPHIC), and
-# a silently stale copy here would narrow this suite's own coverage.
+# check-brief.py derives every other profile's colour set from that tuple, so it
+# is edited under pressure from briefs this suite never grades, and a silently
+# stale copy here would narrow this suite's own coverage.
 COLOUR_FIELDS = {"Background", "Text-Color", "Icon-Color", "Role", "Intensity", "Mood"}
 
 

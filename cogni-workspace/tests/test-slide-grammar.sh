@@ -26,11 +26,17 @@
 # whereas a bash helper sitting directly at tests/ WOULD be swept in. For this
 # file the convention is the whole reason.
 #
-# Every case id has both a PASS and a FAIL arm, structurally: expect_green and
-# expect_red each take the id once and own both arms, so the two can never
-# drift apart. The sgNN-mutant-* cases corrupt a mktemp copy and assert the
-# matching check goes red. Mutants address their target through the parser's
-# `locate` op rather than by absolute line number; no mutant is ever committed.
+# Every case id reaches both a PASS and a FAIL arm, which is what makes it
+# addressable by `mutation-check.sh --case`. Most cases get that structurally:
+# every expect_* wrapper delegates to expect_rc, which owns both arms, so naming
+# the id once at the call site cannot leave the two out of step. sg18 is the
+# exception — it grades an equality between two files rather than one command's
+# exit code, so there is no argv for expect_rc to run and its arms are
+# hand-rolled below, spelling the id twice. Both shapes keep the two arms
+# reachable, the property scripts/check-case-id-pairing.py enforces repo-wide.
+# The sgNN-mutant-* cases corrupt a mktemp copy and assert the matching check
+# goes red. Mutants address their target through the parser's `locate` op rather
+# than by absolute line number; no mutant is ever committed.
 #
 # What keeps a red arm honest is the parser's exit code, not the arm's
 # structure: every case asserts an EXACT code, and 1 alone means "the check
@@ -310,10 +316,10 @@ expect_rc 1 sg17-mutant-missing-role-fails-closed \
   "a check with no document for its role did not report a finding" \
   python3 "$GRAM" references-slide-last "template=$TEMPLATE"
 
-# The forbidden set is copied here rather than imported, to keep the fixture
-# standalone. check-brief.py owns the live prohibition list and has already
-# grown it twice, so a silently stale copy would narrow sg07 without any case
-# going red — this is what makes the divergence visible instead.
+# The forbidden set is copied into the fixture rather than imported, to keep it
+# standalone; the rationale lives at slide_grammar.py's COLOUR_FIELDS. This case
+# is what makes a divergence visible — without it a stale copy would narrow sg07
+# with no case going red.
 if python3 - "$GRAM" "$CHECK_BRIEF" <<'PY'
 import importlib.util, json, subprocess, sys
 gram, check_brief = sys.argv[1], sys.argv[2]

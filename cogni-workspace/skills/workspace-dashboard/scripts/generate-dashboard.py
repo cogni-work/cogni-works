@@ -516,7 +516,7 @@ def mcp_install_status(server):
     The git-type probe resolves the install directory from the registry `name`,
     never `desktop_config_key`. Which key governs which artifact, and why the
     installer is authoritative for the directory, is stated once in
-    skills/workspace-status/SKILL.md section "6. MCP Servers".
+    skills/workspace-status/references/mcp-registry.md.
     """
     server_type = server.get("type", "")
     if server_type == "git":

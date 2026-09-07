@@ -136,7 +136,8 @@ bash "${CLAUDE_PLUGIN_ROOT}/scripts/install-mcp.sh" \
 `--name` becomes the directory the server is installed into, under `$CLAUDE_MCP_DIR`.
 Which registry key belongs here, how it differs from the one naming the host config
 entry, and what base `$CLAUDE_MCP_DIR` falls back to, are all stated once in
-`${CLAUDE_PLUGIN_ROOT}/skills/workspace-status/SKILL.md` section "6. MCP Servers".
+`${CLAUDE_PLUGIN_ROOT}/skills/workspace-status/references/mcp-registry.md` under
+"## Diagnosing a not-loaded install-mcp server".
 
 The script outputs JSON. On success, `data.action` is `installed` (fresh clone),
 `updated` (a `--force` refetch), `rebuilt` (already cloned but unbuilt, so the build
@@ -198,18 +199,11 @@ The same command covers every environment, because `MCP_TARGET` carries the dete
 `cli` writes the user-scope entry in `~/.claude.json`, `desktop` writes
 `claude_desktop_config.json`, and `both` writes each in turn.
 
-**Reading the result depends on the target.** A single-target run reports a flat
-`data.action` and `data.config_path`. `--target both` reports neither at the top level —
-it returns `data.targets[]`, one `{target, action, config_path, actions}` object per
-config. Branch on the target before reading the envelope, or a `both` run parses as
-though nothing happened.
-
-In both shapes the **per-server** detail is `actions[]`. Every entry carries `server` and
-`action` (`added`, `updated` or `skipped`); an `added` or `updated` entry also carries
-`config_key`, and only a `skipped` entry carries `reason` — so do not expect `reason` on
-every entry. The target-level `action` is `patched`, `noop` (nothing needed) or
-`dry_run`. Build the Summary rows below from `actions[]`, not from the target-level
-verb, or every server collapses into one row and a `noop` reads as a failure.
+**Branch on the target before reading the result**, then build the Summary rows below from
+the per-server `actions[]`. The envelope's full shape — the single-target vs `--target both`
+split, the `actions[]` entry fields, the target-level verbs, and the two shapes that yield
+no rows at all — is in
+`${CLAUDE_PLUGIN_ROOT}/skills/install-mcp/references/result-envelope.md`.
 
 The script:
 - Creates a timestamped backup before modifying an **existing** config. A first-ever write
@@ -295,10 +289,7 @@ When invoked that way:
 - If `patch-desktop-config.py` fails, show the error and suggest manual patching as fallback
 - If the config being written has invalid JSON, warn the user rather than corrupting it
   further. This applies to `~/.claude.json` as much as to `claude_desktop_config.json`.
-  **A `--target both` run stops at the first target it cannot write** (desktop is attempted
-  first) and exits non-zero with `data.target` naming it — the other target is left
-  unwritten. Do not read that as a completed run: re-invoke with `--target <the other one>`
-  so the healthy config is still written, and report the failed target separately
-- If a backup can't be created (permissions), the script exits without emitting a JSON
-  envelope at all — surface the raw error rather than waiting for a payload that never
-  comes, and re-invoke per-target as above
+- Two failure shapes return no per-server rows at all — a `--target both` run stopping at
+  its first unwritable target, and a backup that cannot be created. Both, and the
+  re-invoke-per-target recovery they share, are in
+  `${CLAUDE_PLUGIN_ROOT}/skills/install-mcp/references/result-envelope.md`.

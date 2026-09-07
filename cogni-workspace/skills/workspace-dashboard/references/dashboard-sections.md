@@ -44,7 +44,7 @@ Per-section reference for `workspace-dashboard`: data source, helper(s) reused, 
 
 **Data source**:
 - `<workspace-root>/cogni-workspace/references/mcp-git-registry.json` — declares each server (`type`, `repo`, `desktop_config_key`, `provides_tools[]`, `required_by[]`, platform-specific paths for native servers)
-- Install status check: for git-based servers, existence of `~/.claude/mcp-servers/<name>/start.sh` (base overridable via `$CLAUDE_MCP_DIR`); for native servers, existence of the platform-specific binary path. What `<name>` is, and why it rather than `desktop_config_key`, is stated once in `skills/workspace-status/SKILL.md` section "6. MCP Servers"
+- Install status check: for git-based servers, existence of `~/.claude/mcp-servers/<name>/start.sh` (base overridable via `$CLAUDE_MCP_DIR`); for native servers, existence of the platform-specific binary path. What `<name>` is, and why it rather than `desktop_config_key`, is stated once in `skills/workspace-status/references/mcp-registry.md`
 - Required shape: a top-level `servers` object whose values are themselves objects. A registry that parses but does not match it — root not an object, `servers` absent or not an object, or any entry not an object — is **unreadable**. This section then falls back to the same placeholder a missing registry gets, because either way there are no cards to draw; the Health Snapshot row is where the two are told apart.
 
 **Output**: card per server. Status pill (Installed / Missing / Manual). Type pill (git / native). Required-by chips (one per consuming plugin). For git-based: repo URL truncated. For native: platform path.

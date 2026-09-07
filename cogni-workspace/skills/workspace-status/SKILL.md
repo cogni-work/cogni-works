@@ -217,8 +217,7 @@ in the current session.
 Read `${CLAUDE_PLUGIN_ROOT}/skills/workspace-status/references/mcp-registry.md` for the full
 list of ecosystem MCPs and which plugins need them. Read
 `${CLAUDE_PLUGIN_ROOT}/references/mcp-git-registry.json` for any server's `desktop_config_key`
-and install metadata — only `excalidraw`'s key is spelled out inline below, so look `pencil`'s
-up there rather than assuming it.
+and install metadata — look a server's key up there rather than assuming it.
 
 **Detection approach**: Probe each known server's one representative tool with `ToolSearch`
 using the `select:` prefix — a returned tool definition means the MCP is loaded, no match
@@ -236,10 +235,9 @@ means it is not available. The **Install** column decides how a missing server i
 - **Not loaded**: An `install-mcp` server that is needed but not available. `ToolSearch`
   alone cannot say why — it returns the same no-match in every case — and the install is
   two independent steps, so read two pieces of state before advising:
-  - the **config entry** — the server's `desktop_config_key`, in the config of the host
+  - the **config entry** — the server's entry in the config of the host
     **this session runs in**
-  - the **install directory** — the `start.sh` under the MCP base, named for the registry
-    **server name**, not the config key
+  - the **install directory** — the `start.sh` under the MCP base
 
   Which key names which artifact, the four-row install-state matrix that turns those two
   readings into advice, and why a restart on its own is rarely the whole answer are all in

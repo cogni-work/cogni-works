@@ -169,8 +169,8 @@ that pairing is fixed here rather than read from the registry, since `claude-in-
 no registry entry to supply it.
 
 install-mcp does not always return per-server rows, and there is nothing to render when it
-does not — the two shapes that produce that are in
-`${CLAUDE_PLUGIN_ROOT}/skills/install-mcp/references/result-envelope.md`. In either case,
+does not — the shapes that produce that are enumerated in
+`${CLAUDE_PLUGIN_ROOT}/skills/install-mcp/references/result-envelope.md`. In every such case,
 render no rows rather than inventing them: report the affected servers as not configured,
 surface the raw error and the target it names when there is one, and send the user to
 `/cogni-workspace:install-mcp` to finish the write before treating workspace setup as

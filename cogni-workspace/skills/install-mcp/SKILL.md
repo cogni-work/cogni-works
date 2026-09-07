@@ -206,9 +206,9 @@ no rows at all — is in
 `${CLAUDE_PLUGIN_ROOT}/skills/install-mcp/references/result-envelope.md`.
 
 The script:
-- Creates a timestamped backup before modifying an **existing** config. A first-ever write
-  has nothing to back up and reports `backup: null` — omit the `Backup:` row in that case
-  rather than rendering `Backup: None`
+- Creates a timestamped backup before modifying an **existing** config — the first-ever-write
+  case and its `backup: null` are in
+  `${CLAUDE_PLUGIN_ROOT}/skills/install-mcp/references/result-envelope.md` under "## Backups"
 - Preserves every other key in the file — `~/.claude.json` holds unrelated user state
 - Skips servers that are already configured (use `--force` to overwrite)
 - Handles both git-installed servers (resolves wrapper path) and native apps (platform binary)
@@ -242,8 +242,8 @@ Present a compact result:
 
 Name the config actually written, and follow the target for the restart line — a CLI
 write needs a new Claude Code session, not a Claude Desktop restart. The Action cell is
-the `action` verb taken verbatim from that target's `actions[]` (`added`, `updated` or
-`skipped`), never a label composed here:
+the `action` verb taken verbatim from that target's `actions[]`, never a label composed
+here:
 
 ```
 MCP Installation Complete:

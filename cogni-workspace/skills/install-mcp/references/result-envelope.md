@@ -1,8 +1,8 @@
 # `patch-desktop-config.py` result envelope
 
 The output contract of the config writer. This file is the single home of the shape;
-`install-mcp/SKILL.md` and `manage-workspace/SKILL.md` Init step 5 both point here rather
-than restating it.
+`install-mcp/SKILL.md` and `manage-workspace/SKILL.md` step 5 (Init and Update) both point
+here rather than restating it.
 
 ## The shape depends on the target
 
@@ -24,8 +24,7 @@ The **target-level** `action` is `patched`, `noop` (nothing needed) or `dry_run`
 per-server summary rows from `actions[]`, never from the target-level verb: doing otherwise
 collapses every server into one row and makes a `noop` read as a failure.
 
-Take each row's action and status verbatim from this envelope. Never compose a label locally
-— composing one reports a write for a server the writer may have skipped.
+Take each row's action verbatim from this envelope.
 
 ## Two shapes that yield no rows at all
 

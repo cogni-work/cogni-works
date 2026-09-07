@@ -27,6 +27,11 @@
 #   --expr 's{if len\(points\) > c\["slide_points_max_lines"\]:}{if False:}' --case ttn-08-density-slides
 #   --expr 's{if token not in b.narrative_numbers:}{if False:}' --case ttn-09-copy-frozen-numbers
 #   --expr 's{for m in STYLING_KEY_RE.finditer\(b.body\):}{for m in []:}' --case ttn-12-no-styling-keys
+#   --expr 's{if t != "bluf":}{if False:}' --case ttn-19-slides-open-bluf
+#   --expr 's{if t != "sources":}{if False:}' --case ttn-20-slides-close-sources
+#   --expr 's{if f.get\("type"\) == "sources":}{if False:}' --case ttn-01-green-slides
+#     (the exemption's teeth: it reds ttn-01-green-slides AND ttn-01-green-slides-de,
+#      since the sources unit of each fixture carries no slide_points)
 #
 # CASE LABEL SHAPE: "PASS: <id>" / "FAIL: <id>", ids unique per emitted line.
 
@@ -73,6 +78,19 @@ has_fail() {
 import json, sys
 d = json.load(open(sys.argv[1]))
 hits = [f for f in d["data"].get("findings", []) if f["check"] == sys.argv[2] and f["severity"] == "fail"]
+sys.exit(0 if hits else 1)
+PY
+}
+
+# has_fail_unit <outfile> <check> <unit> — exit 0 when the check appears with
+# severity fail AND names that unit number (a null unit never satisfies it)
+has_fail_unit() {
+  python3 - "$1" "$2" "$3" <<'PY'
+import json, sys
+d = json.load(open(sys.argv[1]))
+want = int(sys.argv[3])
+hits = [f for f in d["data"].get("findings", [])
+        if f["check"] == sys.argv[2] and f["severity"] == "fail" and f.get("unit") == want]
 sys.exit(0 if hits else 1)
 PY
 }
@@ -132,6 +150,22 @@ red() {
   fi
 }
 
+# red_unit <id> <check> <unit> <fixture> <narrative> <transform> — as red, but the
+# finding must also carry the expected unit number
+red_unit() {
+  local id="$1" check="$2" unit="$3" fixture="$4" narrative="$5" transform="$6"
+  if ! mutate "$fixture" "$TMPROOT/$id.md" "$transform" 2>"$TMPROOT/$id.err"; then
+    fail "$id the mutant could not be built: $(tr '\n' ' ' < "$TMPROOT/$id.err")"
+    return
+  fi
+  run "$TMPROOT/$id.md" "$narrative" "$TMPROOT/$id.json"
+  if [ "$RC" -eq 1 ] && has_fail_unit "$TMPROOT/$id.json" "$check" "$unit"; then
+    pass "$id"
+  else
+    fail "$id expected exit 1 with a '$check' fail on unit $unit, got exit $RC"
+  fi
+}
+
 SL="$FIX/slides-en.md"
 red ttn-02-frontmatter-type frontmatter-type "$SL" "$EN_NARR" \
   'text = text.replace("type: design-brief", "type: presentation-brief", 1)'
@@ -166,7 +200,7 @@ red ttn-10-citations-resolve citations-resolve "$SL" "$EN_NARR" \
 red ttn-11-key-figures-src key-figures-src "$SL" "$EN_NARR" \
   'text = text.replace("\"13.0 million euros (src: [1])\"", "\"13.0 million euros\"", 1)'
 red ttn-12-no-styling-keys no-styling-keys "$SL" "$EN_NARR" \
-  'text = text.replace("type: cover\n", "type: cover\nBackground: dark\n", 1)'
+  'text = text.replace("type: bluf\n", "type: bluf\nBackground: dark\n", 1)'
 
 # --- ttn-08-max-units-*: the caller cap binds every unit-bearing target --------
 run "$FIX/infographic-en.md" "$EN_NARR" "$TMPROOT/mu-info.json" --max-units 2
@@ -264,6 +298,20 @@ if grep -q 'does-not-exist.md' "$TMPROOT/SKILL-mutant.md" && ! check_paths "$TMP
 else
   fail "ttn-18-mutant-path-detected a rewritten path in a copy of SKILL.md was not reported"
 fi
+
+# --- ttn-19 / ttn-20: the slides deck opens on bluf and closes on sources ------
+# Two separately-named checks, each naming its own unit, so a deck that loses its
+# answer-first opening and one that loses its source register are distinguishable.
+red_unit ttn-19-slides-open-bluf slides-open-bluf 1 "$SL" "$EN_NARR" \
+  'text = text.replace("\ntype: bluf\n", "\ntype: two-column\n", 1)'
+red_unit ttn-20-slides-close-sources slides-close-sources 8 "$SL" "$EN_NARR" \
+  'text = text.replace("\ntype: sources\n", "\ntype: metric\n", 1)'
+
+# The slide_points exemption is scoped to `sources`, not granted to every unit: the
+# green fixture's sources unit carries none and stays clean (ttn-01-green-slides),
+# while a non-sources unit stripped of its list is still reported.
+red ttn-20-slides-points-still-required density-slides "$SL" "$EN_NARR" \
+  'import re; i = text.index("## Slide 2:"); j = text.index("## Slide 3:"); blk = text[i:j]; nb = re.sub(r"slide_points:\n(?:- .*\n)+", "", blk, count=1); assert nb != blk; text = text[:i] + nb + text[j:]'
 
 # --- ttn-21: the vendored validator is a gate against the flat contracts ------
 VAL="$SKILL/scripts/validate-narrative.py"

@@ -22,11 +22,15 @@ no rows, an unreadable brief or narrative, and an empty brief are all exit 2:
 the brief cannot be graded, which is a different outcome from a brief that fails.
 
 Checks (name — what fails it):
-  frontmatter-type       type is not `design-brief` or version is not "1.0"
+  frontmatter-type       type is not `design-brief` or version is not "1.1"
   target-enum            target not in slides|document|infographic|web, language not en|de
   contract-present       no localized `# Rendering Contract` between the title and unit 1
   contract-clauses       fewer than five `- ` clauses under the contract heading
   unit-numbering         units not `## <Kind> N:` from 1 without gaps, kind wrong for target
+  slides-open-bluf       slides only: unit 1 is not `type: bluf` (the deck must open on
+                         the Executive TL;DR, never a standalone cover)
+  slides-close-sources   slides only: the last unit is not `type: sources` (the deck must
+                         close on the source register built from the Sources block)
   density-frontmatter    density.ceilings differs from the reference row for the target
   density-<target>       a unit or preamble field exceeds the target's ceilings
   copy-frozen-numbers    a number on the brief — units, preamble, title, subtitle,
@@ -52,11 +56,11 @@ import sys
 TARGETS = ("slides", "document", "infographic", "web")
 LANGUAGES = ("en", "de")
 BRIEF_TYPE = "design-brief"
-BRIEF_VERSION = "1.0"
+BRIEF_VERSION = "1.1"
 UNIT_KIND = {"slides": "Slide", "document": "Section", "infographic": "Block", "web": "Section"}
 CONTRACT_HEADINGS = {"en": "# Rendering Contract", "de": "# Rendering-Vertrag"}
 CONTRACT_MIN_CLAUSES = 5
-TYPE_ENUM = ("cover", "bluf", "two-column", "table", "timeline", "quote", "metric", "roles")
+TYPE_ENUM = ("cover", "bluf", "two-column", "table", "timeline", "quote", "metric", "roles", "sources")
 PROFILES = ("standard", "dense")
 
 UNIT_RE = re.compile(r"^## (Slide|Section|Block) (\d+): (.*)$", re.M)
@@ -420,6 +424,32 @@ def check_unit_numbering(b: Brief) -> None:
         b.fail("unit-numbering", None, f"climax {climax!r} does not name a unit between 1 and {len(b.units)}")
 
 
+def check_slides_open_bluf(b: Brief) -> None:
+    """Slides open on the answer: unit 1 is the Executive TL;DR as `bluf`, never a
+    standalone `cover`. Silent on every other target, which still uses `cover`."""
+    if b.target != "slides" or not b.units:
+        return
+    first = b.units[0]
+    t = first["fields"].get("type")
+    if t != "bluf":
+        b.fail("slides-open-bluf", first["number"],
+               f"slide 1 is type {t!r}; the deck opens on the Executive TL;DR as 'bluf'")
+
+
+def check_slides_close_sources(b: Brief) -> None:
+    """Slides close on the source register: the last unit is `sources`, so the sources
+    slide the Rendering Contract mandates is addressable by the brief and cannot be
+    pruned silently by `--max-units`."""
+    if b.target != "slides" or not b.units:
+        return
+    last = b.units[-1]
+    t = last["fields"].get("type")
+    if t != "sources":
+        b.fail("slides-close-sources", last["number"],
+               f"the last slide is type {t!r}; the deck closes on a 'sources' unit "
+               "built from the Sources block")
+
+
 def check_density_frontmatter(b: Brief) -> None:
     if not b.ceilings:
         return
@@ -455,7 +485,12 @@ def check_density_slides(b: Brief) -> None:
         if len(u["headline"]) > c["headline_chars_max"]:
             b.fail(chk, n, f"headline is {len(u['headline'])} characters, ceiling {c['headline_chars_max']}")
         points = f.get("slide_points")
-        if not isinstance(points, list) or not points:
+        if f.get("type") == "sources":
+            # The sources unit is built by the renderer from the trailing **Sources**
+            # block; it carries no authored bullets, so the slide_points floor does not
+            # apply to it. Every other slides unit still owes one.
+            points = points if isinstance(points, list) else []
+        elif not isinstance(points, list) or not points:
             b.fail(chk, n, "slide_points list missing")
             points = []
         if len(points) > c["slide_points_max_lines"]:
@@ -641,6 +676,8 @@ CHECKS = (
     ("contract-present", check_contract_present),
     ("contract-clauses", check_contract_clauses),
     ("unit-numbering", check_unit_numbering),
+    ("slides-open-bluf", check_slides_open_bluf),
+    ("slides-close-sources", check_slides_close_sources),
     ("density-frontmatter", check_density_frontmatter),
     ("density-<target>", check_density_target),
     ("copy-frozen-numbers", check_copy_frozen_numbers),

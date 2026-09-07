@@ -59,7 +59,7 @@ Polish markdown documents into executive-ready content through the copywriter ag
   - `fr` | `it` | `pl` | `nl` | `es` — translate to French / Italian / Polish / Dutch / Spanish, then apply that language's clarity discipline and Flesch-family readability
   - Requires source language ≠ target. Source language is detected automatically (or set via `--lang`).
   - **Pivots on EN or DE.** Every direction must include English or German on one end (e.g. `en→fr`, `fr→de`). Direct non-EN/DE pairs (e.g. `fr→it`) are rejected — pivot via EN or DE, or follow #255 (Phase 3).
-  - **Arc mode (all 7 languages, EN/DE-pivot)** — when the document has `arc_id`, arc-element and bridge headings are **substituted** from the narrative skill's canonical set (not freely translated). Supported for `corporate-visions` and `jtbd-portfolio` across de/en/fr/it/pl/nl/es (each direction pivoting on EN/DE); the other 9 arcs (any language) and direct non-EN/DE arc pairs abort.
+  - **Arc mode (all 7 languages, EN/DE-pivot)** — when the document has `arc_id`, arc-element and bridge headings are **substituted** from the text-to-narrative skill's canonical set (not freely translated). Supported for `corporate-visions` and `jtbd-portfolio` across de/en/fr/it/pl/nl/es (each direction pivoting on EN/DE); every other arc (any language) and direct non-EN/DE arc pairs abort.
   - When set, scope is overridden to ensure a full translate-and-polish cycle (Step 2 framework restructure is skipped; Steps 3 + 5 always run).
 
 - **--dry-run** - Show before/after diff without modifying the file (JSON only)
@@ -554,4 +554,4 @@ IF copywriter agent fails:
 - JSON files get an automatic backup (`.pre-copy-json.json`) before modification
 - JSON polishing preserves original file indentation
 - Use `--dry-run` with JSON to preview changes before committing them
-- `--translate` creates the same `.{filename}` backup as a regular polish (no separate translation backup naming); supports `de|en|fr|it|pl|nl|es` (pivoting on EN or DE), rejects direct non-EN/DE pairs, and for `arc_id` documents substitutes arc headings from the canonical set across all 7 languages (`corporate-visions`, `jtbd-portfolio`; the other 9 arcs and direct non-EN/DE arc pairs abort)
+- `--translate` creates the same `.{filename}` backup as a regular polish (no separate translation backup naming); supports `de|en|fr|it|pl|nl|es` (pivoting on EN or DE), rejects direct non-EN/DE pairs, and for `arc_id` documents substitutes arc headings from the canonical set across all 7 languages (`corporate-visions`, `jtbd-portfolio`; every other arc and direct non-EN/DE arc pairs abort)

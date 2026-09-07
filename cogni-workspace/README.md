@@ -37,6 +37,7 @@ cogni-workspace is the ecosystem's infrastructure-as-plugin layer: a dedicated p
 10. **Verify claims against their cited sources** — `claims` runs the six-mode claim-verification lifecycle (submit, verify, dashboard, inspect, resolve, cobrowse) that cogni-trends, cogni-portfolio, cogni-consult and cogni-knowledge submit sourced assertions to; `claim-entity` is the cross-plugin data contract those plugins write against
 11. **Shape content into an executive narrative** — `narrative` transforms structured input using one of 15 story arc frameworks and, with `--format`, condenses an existing narrative into executive briefs, talking points or one-pagers
 12. **Polish documents for executive readability** — `copywriter` applies seven messaging frameworks (BLUF, Pyramid, SCQA, STAR, PSB, FAB, Inverted Pyramid) with arc-aware preservation and EN/DE-pivot translation across seven languages; `copy-reader` runs parallel stakeholder personas over a document; `copy-json` polishes text fields inside JSON
+13. **Turn text into a narrative and a Claude Design brief in one run** — `text-to-narrative` runs the arc pipeline from its own bundled copy of the narrative assets, then cuts the narrative into one `design-brief.md` for slides, a document, an infographic or a web page: density-capped units, the Rendering Contract, the presentation-intent layer and the Sources block, with copy frozen from the narrative
 
 ## What it means for you
 
@@ -140,6 +141,7 @@ State lives in two layers that other plugins consume. Configuration (env vars, t
 | `claim-verifier` | agent | Fetches one source URL and verifies every claim against it, returning deviation analysis as strict JSON |
 | `source-inspector` | agent | Opens a source URL via claude-in-chrome and walks the user to the relevant passage (cobrowse / inspect) |
 | `narrative` | skill | Transform structured input into an executive narrative using one of 15 story arc frameworks; with `--format`, condense one into an executive brief, talking points or a one-pager |
+| `text-to-narrative` | skill | Turn text into an arc-driven narrative from a bundled, flattened copy of the narrative assets, then into one Claude Design brief for slides, document, infographic or web — density-capped, contract-bearing, copy frozen; `scripts/check-design-brief.py` grades the brief |
 | `copywriter` | skill | Polish, rewrite or create business documents with 7 messaging frameworks, arc-aware preservation, and EN/DE-pivot translation |
 | `copy-reader` | skill | Review a document through parallel stakeholder persona Q&A, then synthesize the feedback |
 | `copy-json` | skill | Adapter that polishes text fields inside JSON — extracts, polishes via `copywriter`, writes back |
@@ -150,6 +152,7 @@ State lives in two layers that other plugins consume. Configuration (env vars, t
 | `commands/claims.md` | command | Registers `/claims` as the entry point to the verification lifecycle |
 | `commands/narrative.md` | command | Registers `/narrative`, with `/narrative-adapt` alongside it |
 | `commands/narrative-publish.md` | command | Registers `/narrative-publish`, the one-invocation pipeline entry point |
+| `commands/text-to-narrative.md` | command | Registers `/text-to-narrative`, text to narrative to Claude Design brief |
 | `commands/copywrite.md` | command | Registers `/copywrite`, with `/review-doc` alongside it |
 | `commands/render-infographic.md` | command | Registers `/render-infographic`, the style-agnostic renderer entry point that auto-routes on the brief's `style_preset` |
 | `commands/render-infographic-handdrawn.md` | command | Registers `/render-infographic-handdrawn` for direct sketchnote / whiteboard dispatch |
@@ -205,7 +208,7 @@ State lives in two layers that other plugins consume. Configuration (env vars, t
 ```
 cogni-workspace/
 ├── .claude-plugin/plugin.json    Plugin manifest
-├── skills/                       19 workspace and visual-rendering skills
+├── skills/                       20 workspace and visual-rendering skills
 │   ├── claim-entity/             Cross-plugin ClaimEntity data contract and store layout
 │   ├── claims/                   Claim-verification lifecycle (+ scripts/claims-store.sh)
 │   ├── cogni-issues/             File and track plugin issues through the GitHub CLI
@@ -219,6 +222,7 @@ cogni-workspace/
 │   ├── story-to-infographic/     Narrative -> single-page infographic brief
 │   ├── story-to-slides/          Narrative -> presentation brief
 │   ├── story-to-web/             Narrative -> scrollable web-narrative or printed-poster brief
+│   ├── text-to-narrative/        Text -> arc narrative -> design-brief.md for Claude Design (bundled arcs, flat)
 │   ├── workspace-dashboard/      Interactive HTML workspace status dashboard
 │   └── workspace-status/
 │                                  narrative, copywriter,
@@ -230,9 +234,10 @@ cogni-workspace/
 │   ├── render-infographic-*.md   Three infographic renderers (pencil, sketchnote, whiteboard)
 │   └── concept-diagram*.md       Diagram workers (Excalidraw and inline-SVG variants)
 ├── libraries/                    18 layout, taxonomy and worked-example files read at render time
-├── commands/                     12 slash commands
+├── commands/                     13 slash commands
 │   ├── claims.md                 Registers /claims
 │   ├── narrative*.md             Registers /narrative, /narrative-adapt, /narrative-publish
+│   ├── text-to-narrative.md      Registers /text-to-narrative
 │   ├── copywrite.md              Registers /copywrite and /review-doc
 │   ├── render-infographic*.md    Registers /render-infographic and its two direct-dispatch variants
 │   ├── render-html-slides.md     Registers /render-html-slides

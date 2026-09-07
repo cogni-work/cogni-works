@@ -304,6 +304,14 @@ A thin pipeline over the hops above and below: it runs `narrative`, then an opti
 
 Commands: `/narrative-publish`.
 
+### `text-to-narrative` — From text to a Claude Design brief
+
+The narrative skill's successor, built to stand alone once `narrative` and the `story-to-*` skills retire. It runs the same pipeline — execution brief, citation bridge, arc selection from the registry, the arc contract, four drafting passes, deterministic and judged validation — from its own bundled, flattened copy of every narrative asset, so it needs no other skill installed. It then adds a seventh phase: the finished narrative is cut into one `design-brief.md` for a Claude Design generator named by `--target` — `slides` (default), `document`, `infographic` or `web`.
+
+The brief is self-contained. It carries the units cut to the target's density ceilings (every ceiling is stated once in `references/density-ceilings.md` and written into the brief's own frontmatter), the five-clause Rendering Contract in the brief's language, the presentation-intent layer (`design`, `key_figures`, `climax`, four `note:` lines) and the narrative's Sources block verbatim, so citations resolve to URLs without a second file. Copy is frozen: every line is a verbatim selection from the narrative, never a rewrite, and `scripts/check-design-brief.py` grades the brief before the handoff — contract placement, unit numbering, every ceiling, every number against the narrative, every citation against Sources. A finished narrative can be passed as the source to build only the brief. The skill prints one attachment box for claude.ai/design; the organization design system applies, so a theme is attached only when none is configured.
+
+Commands: `/text-to-narrative`.
+
 ### `copywriter` — Polish documents for executive readability
 
 Absorbed from the retired cogni-copywriting plugin. Applies seven messaging frameworks — BLUF, McKinsey Pyramid, SCQA, STAR, PSB, FAB, Inverted Pyramid — plus persuasion techniques (number plays, power words, rhetorical devices) to memos, briefs, reports, proposals, one-pagers and blog posts.

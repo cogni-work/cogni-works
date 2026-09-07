@@ -8,7 +8,7 @@ description: >
   directory, and a caller that already resolved the theme and wants only the HTML built.
   Handles theme selection, enrichment planning, chart generation, inline SVG concept
   diagrams, and HTML assembly. See "When to invoke" in the agent body for worked scenarios.
-tools: Read, Write, Edit, Bash, Grep, Glob, AskUserQuestion, Agent, Skill
+tools: Read, Write, Bash, Glob, AskUserQuestion, Agent, Skill
 model: sonnet
 ---
 

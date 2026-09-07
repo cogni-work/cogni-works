@@ -145,9 +145,11 @@ themselves. Show a row only
 for a registry server whose `required_by` intersects the plugin list confirmed in step 2 —
 install-mcp installs nothing for an absent plugin — and take each row's action and status
 verbatim from install-mcp's returned summary rather than from the registry. The Action
-cell is the per-server `action` verb exactly as `actions[]` carries it — `added`,
-`updated` or `skipped` — never a label composed here; composing one reports a write for a
-server the writer may have skipped. Label each row
+cell is the per-server verb exactly as that summary carries it (install-mcp reads it from
+the config writer's per-server `actions[]`), never a label composed here — composing one
+reports a write for a server the writer may have skipped; the verb set and where to read
+it from live in
+`${CLAUDE_PLUGIN_ROOT}/skills/install-mcp/references/result-envelope.md`. Label each row
 with the entry's `desktop_config_key` as the registry gives it (the server
 `mcp_excalidraw` labels as `excalidraw`, for example), because that key is what lands in
 the user's config and what the `mcp__<key>__*` tool names derive from; do not label the
@@ -168,13 +170,12 @@ that pairing is fixed here rather than read from the registry, since `claude-in-
 no registry entry to supply it.
 
 install-mcp does not always return per-server rows, and there is nothing to render when it
-does not. Two shapes produce that: a `--target both` run that fails on its first target
-returns `success: false` carrying `error` and `target` but no `targets[]`/`actions[]`, and
-a config whose backup cannot be created exits with no JSON envelope at all. In either
-case, render no rows rather than inventing them: report the affected servers as not
-configured, surface the raw error and the target it names when there is one, and send the
-user to `/cogni-workspace:install-mcp` to finish the write before treating workspace setup
-as complete.
+does not — the shapes that produce that are enumerated in
+`${CLAUDE_PLUGIN_ROOT}/skills/install-mcp/references/result-envelope.md`. In every such case,
+render no rows rather than inventing them: report the affected servers as not configured,
+surface the raw error and the target it names when there is one, and send the user to
+`/cogni-workspace:install-mcp` to finish the write before treating workspace setup as
+complete.
 
 Newly written servers load only after a session restart — relay install-mcp's restart
 reminder in the summary rather than presenting "config written" as a finished state.

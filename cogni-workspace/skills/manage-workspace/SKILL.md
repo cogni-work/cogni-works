@@ -145,9 +145,10 @@ themselves. Show a row only
 for a registry server whose `required_by` intersects the plugin list confirmed in step 2 —
 install-mcp installs nothing for an absent plugin — and take each row's action and status
 verbatim from install-mcp's returned summary rather than from the registry. The Action
-cell is the per-server verb exactly as the envelope carries it, never a label composed
-here — composing one reports a write for a server the writer may have skipped; the verb
-set and where to read it from live in
+cell is the per-server verb exactly as that summary carries it (install-mcp reads it from
+the config writer's per-server `actions[]`), never a label composed here — composing one
+reports a write for a server the writer may have skipped; the verb set and where to read
+it from live in
 `${CLAUDE_PLUGIN_ROOT}/skills/install-mcp/references/result-envelope.md`. Label each row
 with the entry's `desktop_config_key` as the registry gives it (the server
 `mcp_excalidraw` labels as `excalidraw`, for example), because that key is what lands in

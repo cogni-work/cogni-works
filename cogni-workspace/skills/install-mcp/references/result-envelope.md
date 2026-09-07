@@ -28,17 +28,19 @@ Take each row's action verbatim from this envelope.
 
 ## Shapes that yield no rows at all
 
-Neither of these returns a usable `actions[]`, and both are ordinary outcomes rather than
-crashes. Render no rows rather than inventing them:
+None of these returns a usable `actions[]`. Render no rows rather than inventing them:
 
 - **A `--target both` run stops at the first target whose existing config will not parse**
-  (desktop is attempted first) and exits non-zero with `data.target` naming it — the other
-  target is left unwritten. Do not read that as a completed run: re-invoke with
-  `--target <the other one>` so the healthy config is still written, and report the failed
-  target separately.
+  and exits non-zero with `data.target` naming it. Read the direction from that field:
+  desktop is attempted first, so a desktop failure leaves cli unwritten, while a cli failure
+  means desktop was **already written** — its per-server actions and its backup path are
+  dropped, because the exit precedes the success envelope. Either way, re-invoke with
+  `--target <the failed one>` once its config parses, and treat a cli-failure run's desktop
+  result as unreported rather than as unwritten.
 - **A backup, or the config write itself, that fails on permissions** exits with **no JSON
-  envelope at all**. Surface the raw error rather than waiting for a payload that never
-  comes, and re-invoke per-target as above.
+  envelope at all** — both raise outside the only handled error class, so the run ends in a
+  traceback. Surface the raw error rather than waiting for a payload that never comes, and
+  re-invoke per-target as above.
 
 ## Backups
 

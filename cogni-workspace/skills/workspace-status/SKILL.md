@@ -237,7 +237,7 @@ means it is not available. The **Install** column decides how a missing server i
   two independent steps, so read two pieces of state before advising:
   - the **config entry** — the server's entry in the config of the host
     **this session runs in**
-  - the **install directory** — the `start.sh` under the MCP base
+  - the **install directory** — the `start.sh` under the MCP server install base
 
   Which key names which artifact, the four-row install-state matrix that turns those two
   readings into advice, and why a restart on its own is rarely the whole answer are all in

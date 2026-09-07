@@ -71,7 +71,7 @@ portfolio_path: "{portfolio_path}"
 
 **IS semantics:** IS must describe YOUR SOLUTION or capability, never the customer's problem. The customer's problem informs which capability to highlight, but IS always positions the solution.
 
-**MEANS downstream note:** When this narrative is rendered as slides (via the `story-to-slides` skill), MEANS is transformed from competitive moat to technology/methodology proof — the technical architecture, certifications, or methodology that makes the DOES claims credible. This is by design: slide audiences need proof of HOW, not why competitors can't copy.
+**MEANS downstream note:** When this narrative is cut into a slides brief (via `text-to-narrative --target slides`), MEANS is transformed from competitive moat to technology/methodology proof — the technical architecture, certifications, or methodology that makes the DOES claims credible. This is by design: slide audiences need proof of HOW, not why competitors can't copy.
 
 ### Competitive Differentiation
 

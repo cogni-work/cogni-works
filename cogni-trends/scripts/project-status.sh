@@ -865,8 +865,7 @@ case "$PHASE" in
     if [ "$HAS_ENRICHED_REPORT" = "false" ]; then
       add_action "cogni-workspace:enrich-report" "Generate themed HTML with charts and diagrams"
     fi
-    add_action "cogni-workspace:story-to-slides" "Create a PowerPoint presentation from the report"
-    add_action "cogni-workspace:story-to-web" "Create a scrollable landing page from the report — or a multi-poster print storyboard with mode=storyboard"
+    add_action "cogni-workspace:text-to-narrative" "Turn the report into an arc narrative and a Claude Design brief (slides, document, infographic or web)"
     add_action "cogni-trends:trends-catalog" "Import to industry catalog for cross-pursuit reuse"
     if [ "$HAS_DASHBOARD" = "false" ]; then
       add_action "cogni-trends:trends-dashboard" "Generate interactive TIPS project dashboard"

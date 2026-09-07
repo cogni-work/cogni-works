@@ -1,6 +1,6 @@
 # Templates: Pitch Narrative
 
-Output templates for the `pitch` use case. Transforms portfolio entities into arc-structured presentation narratives that the `narrative` skill downstream tools (story-to-slides, story-to-web — including its `mode=storyboard` print storyboard) can consume directly.
+Output templates for the `pitch` use case. Transforms portfolio entities into arc-structured presentation narratives that `text-to-narrative` consumes directly as a finished narrative, building only the Claude Design brief (slides, document, infographic or web).
 
 **Use case**: `pitch`
 **Audience**: Executives, decision-makers, conference audiences, board members
@@ -51,7 +51,7 @@ Other arcs (`technology-futures`, `strategic-foresight`, `trend-panorama`, `them
 
 ## YAML Frontmatter
 
-The frontmatter must match the `narrative` skill's output format exactly so downstream tools auto-discover it.
+The frontmatter must match the narrative output format of `text-to-narrative` exactly, so the file is recognised as a finished narrative (both `arc_id` and `word_count` present) and only the brief is built from it.
 
 ```yaml
 ---
@@ -79,7 +79,7 @@ personas:
 - Match the language from `portfolio.json`
 
 **Critical fields for downstream compatibility**:
-- `arc_id` — story-to-slides uses this to map to visual `arc_type` via `arc-taxonomy.md`
+- `arc_id` — `text-to-narrative` selects the arc contract from it; the render chain maps it to a visual `arc_type` via `cogni-workspace/libraries/arc-taxonomy.md`
 - `title` + `subtitle` — extracted for the title slide
 - `language` — controls localized headers and IS/DOES/MEANS labels
 - `word_count` + `target_length` — used for slide count estimation
@@ -406,6 +406,6 @@ After generating a pitch narrative, suggest:
 1. **Stakeholder review**: `/review-doc` — scores the pitch from parallel stakeholder personas and synthesizes their feedback
 2. **Polish prose**: `/copywrite` — applies executive readability standards while preserving arc structure
 3. **Visualize**:
-   - `story-to-slides` → PowerPoint presentation via PPTX skill
-   - `story-to-web` → scrollable landing page via Pencil MCP, or multi-poster print storyboard with `mode=storyboard`
+   - `/text-to-narrative <pitch> --target slides` → Claude Design slides brief
+   - `/text-to-narrative <pitch> --target web` → Claude Design web brief
 4. **Deepen** (if needed): `/why-change` — adds web research, customer-specific context, and TIPS enrichment for a deal-ready version

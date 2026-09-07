@@ -128,7 +128,7 @@ Generates a self-contained HTML dashboard of the whole workspace configuration �
 
 ### `manage-themes` — Theme creation and management
 
-Themes are markdown files that describe a visual identity — colors, typography, and design principles. Every rendering surface — this plugin's own `story-to-*` and `enrich-report` skills, cogni-website, and `document-skills` — reads from the same theme directory, so setting a theme here propagates to every plugin output.
+Themes are markdown files that describe a visual identity — colors, typography, and design principles. Every rendering surface — this plugin's own render chain (`render-html-slides`, `/render-infographic`, `enrich-report`), cogni-website, and `document-skills` — reads from the same theme directory, so setting a theme here propagates to every plugin output.
 
 Nine operations are available:
 
@@ -266,11 +266,11 @@ The store lives under the working directory:
 
 The directory keeps the name `cogni-claims/` because it holds accumulated per-project user state: renaming it would orphan every claim store already on disk. Read and write it under that name regardless of which plugin ships the skill.
 
-### `narrative` — Shape content into an executive narrative
+### `text-to-narrative` — From text to an executive narrative and a Claude Design brief
 
-Absorbed from the retired cogni-narrative plugin. Takes structured input — research syntheses, portfolio entities, plain markdown — and writes `insight-summary.md`: an arc-driven executive narrative with YAML frontmatter carrying `arc_id`, `arc_display_name` and element metadata, opening with an answer-first Executive TL;DR and running exactly four arc-element sections.
+The successor to the retired `narrative` skill (itself absorbed from the retired cogni-narrative plugin), to the retired `narrative-publish` pipeline, and to the retired `story-to-*` brief producers. Takes structured input — research syntheses, portfolio entities, plain markdown — and writes `insight-summary.md`: an arc-driven executive narrative with YAML frontmatter carrying `arc_id`, `arc_display_name` and element metadata, opening with an answer-first Executive TL;DR and running exactly four arc-element sections. It then adds a seventh phase that cuts the finished narrative into one `design-brief.md` for Claude Design.
 
-Each arc is one contract file (`references/story-arc/{arc}/arc-definition.md`) that fixes its headings per language, its composition, its four elements and its own validation rules; the arc registry chooses between arcs and confirms the choice as a two-to-three arc shortlist; the universal gates live once in `references/validation.md`, with the deterministic half run by a script; and the language rules — English executive prose, German sentence craft — are loaded late, at the language pass. A Phase 0 execution brief (`--audience`, `--purpose`, `--perspective`, `--geography`) steers the drafting passes, and a banded release review reports `qa_verdict` in the result.
+Each arc is one contract file (`references/arc-{arc}.md`, bundled flat with the skill) that fixes its headings per language, its composition, its four elements and its own validation rules; the arc registry chooses between arcs and confirms the choice as a two-to-three arc shortlist; the universal gates live once in `references/validation.md`, with the deterministic half run by a script; and the language rules — English executive prose, German sentence craft — are loaded late, at the language pass. A Phase 0 execution brief (`--audience`, `--purpose`, `--perspective`, `--geography`) steers the drafting passes, and a banded release review reports `qa_verdict` in the result.
 
 Fifteen arc frameworks are available, each a fixed sequence of four named elements with defined rhetorical intent:
 
@@ -292,21 +292,11 @@ Fifteen arc frameworks are available, each a fixed sequence of four named elemen
 | `customer-transformation` | Before → Struggle → Change → Outcome | Case studies, reference stories |
 | `category-creation` | Status Quo → Shift → New Frame → Leadership | Market reframes, category design |
 
-The skill analyses the input's structure and proposes a best-fit arc; `--arc {arc-id}` overrides it. Target length defaults to ~1,675 words, with section proportions preserved rather than sections cut.
+The skill analyses the input's structure and proposes a best-fit arc; `--arc-id {arc-id}` overrides it. Target length defaults to ~1,675 words, with section proportions preserved rather than sections cut. A single source file whose frontmatter already carries `arc_id` and `word_count` is a finished narrative: the drafting phases are skipped and only the brief is built from it.
 
-With `--format`, `narrative` also condenses an existing narrative into an executive brief, talking points, or a one-pager, condensing proportionally so the arc survives the reduction.
+The `--format` derivative mode the `narrative` skill carried — executive brief, talking points, one-pager — retired with it and has no successor; its trigger phrases are ledgered in `references/retired-trigger-phrases.tsv`. The `narrative-writer` and `narrative-adapter` agents and the `/narrative`, `/narrative-adapt` and `/narrative-publish` commands retired at the same time.
 
-Commands: `/narrative`, `/narrative-adapt`.
-
-### `narrative-publish` — One invocation from sources to briefs
-
-A thin pipeline over the hops above and below: it runs `narrative`, then an optional `copywriter` polish (`--polish`, tone by default), resolves the theme once through `manage-themes` Operation 11, and produces one or more `story-to-*` briefs for the targets named in `--to` (slides, web, storyboard, infographic). It owns no transformation logic of its own — every step dispatches an existing skill — and rendering is **opt-in**: nothing is rendered unless `--render` is given, and renders then run sequentially. The argument matrix, the per-hop parameter translation, the reject rule and the consolidated JSON envelope live in `cogni-workspace/skills/narrative-publish/references/pipeline-contract.md`.
-
-Commands: `/narrative-publish`.
-
-### `text-to-narrative` — From text to a Claude Design brief
-
-The narrative skill's successor, built to stand alone once `narrative` and the `story-to-*` skills retire. It runs the same pipeline — execution brief, citation bridge, arc selection from the registry, the arc contract, four drafting passes, deterministic and judged validation — from its own bundled, flattened copy of every narrative asset, so it needs no other plugin installed (its one cross-skill call is the copywriter's readability script, as in `narrative`). It then adds a seventh phase: the finished narrative is cut into one `design-brief.md` for a Claude Design generator named by `--target` — `slides` (default), `document`, `infographic` or `web`.
+The pipeline — execution brief, citation bridge, arc selection from the registry, the arc contract, four drafting passes, deterministic and judged validation — runs from the skill's own bundled, flattened copy of every narrative asset, so it needs no other plugin installed (its one cross-skill call is the copywriter's readability script). Phase 7 then cuts the finished narrative into one `design-brief.md` for a Claude Design generator named by `--target` — `slides` (default), `document`, `infographic` or `web`.
 
 The brief is self-contained. It carries the units cut to the target's density ceilings (every ceiling is stated once in `references/density-ceilings.md` and written into the brief's own frontmatter), the five-clause Rendering Contract in the brief's language, the presentation-intent layer (`design`, `key_figures`, `climax`, four `note:` lines) and the narrative's Sources block verbatim, so citations resolve to URLs without a second file. Copy is frozen: every line is a verbatim selection from the narrative, never a rewrite, and `scripts/check-design-brief.py` grades the brief before the handoff — contract placement, unit numbering, every ceiling, every number against the narrative, every citation against Sources. A finished narrative can be passed as the source to build only the brief. The skill prints one attachment box for claude.ai/design; the organization design system applies, so a theme is attached only when none is configured.
 
@@ -318,43 +308,33 @@ Absorbed from the retired cogni-copywriting plugin. Applies seven messaging fram
 
 Two modes matter beyond ordinary polish:
 
-- **Arc-aware preservation.** When the document carries an `arc_id` in frontmatter, the polish strengthens writing *within* each arc element without altering the skeleton — the title, subtitle, four elements in sequence, and bridge section stay intact. The arc contract it polishes against is read at runtime from `skills/narrative/references/story-arc/{arc}/arc-definition.md` — headings, per-element techniques and validation — so every registered arc activates arc mode; `tests/test-arc-reference-sync.sh` pins that every upstream path the copywriter cites resolves.
+- **Arc-aware preservation.** When the document carries an `arc_id` in frontmatter, the polish strengthens writing *within* each arc element without altering the skeleton — the title, subtitle, four elements in sequence, and bridge section stay intact. The arc contract it polishes against is read at runtime from `skills/text-to-narrative/references/arc-{arc}.md` — headings, per-element techniques and validation — so every registered arc activates arc mode; `tests/test-arc-reference-sync.sh` pins that every upstream path the copywriter cites resolves.
 - **Translate-then-polish.** A two-pass flow across seven languages (de/en/fr/it/pl/nl/es), every direction pivoting on English or German. Arc-element and bridge headings are *substituted* from the arc contract's `## Headings` rather than freely translated, for every language that contract carries — all seven for `corporate-visions` and `jtbd-portfolio`, EN and DE for the rest — and an arc with no column for the target language fails closed.
 
 `copy-reader` reviews a document through five parallel stakeholder personas and synthesises their feedback. `copy-json` is the adapter for structured data — it extracts text fields from a JSON file, polishes them through `copywriter`, and writes them back in place.
 
 Commands: `/copywrite`, `/review-doc`.
 
-### `story-to-slides` — Turn a narrative into a presentation brief
+### The retired `story-to-*` brief producers
 
-Absorbed from the retired cogni-visual plugin. Reads a narrative that already carries a story arc and re-architects its argument into slide-level messages: pyramid communication, one message per slide, assertion headlines, and speaker notes. The output is `presentation-brief.md`, written by default to `{source_dir}/cogni-visual/presentation-brief.md` and capped at `max_slides` (default 15), so a long narrative is consolidated rather than transcribed. The density rule is that the slide carries the anchor and the speaker notes carry the detail — content that exceeds a layout's physical capacity moves to the notes instead of being force-fit on the slide.
-
-The skill *creates* the brief; it does not render PowerPoint. Rendering is a separate step — the Render checkpoint at the end of the run — that offers four paths: hand the exported `presentation-outline.md` to Claude Design at claude.ai/design, attach the brief and a theme file in a claude.ai chat with the Anthropic PPTX skill, render inside Claude Code through cogni-workspace's `pptx` *agent* (which dispatches `anthropic-skills:pptx`, or `document-skills:pptx` from the marketplace, and then round-trips the deck against the brief with `brief-render-qa.py` so dropped text or speaker notes are reported rather than silently shipped), or render a self-contained HTML deck with `render-html-slides`. The theme is a render-time choice: the skill records a caller-supplied `theme_path` but never prompts for one, and the path that needs a theme resolves it at the checkpoint. There is no `pptx` skill in this plugin. Briefs carry no color fields — the renderer reads the theme directly.
-
-No slash command of its own — ask for a deck from a narrative, or invoke the skill by name.
+`story-to-slides`, `story-to-web` (with its `mode=storyboard` printed-poster mode) and `story-to-infographic` — absorbed from the retired cogni-visual plugin — turned an arc narrative into a `presentation-brief.md`, `web-brief.md`, `storyboard-brief.md` or `infographic-brief.md` for the renderers below, each graded in-pipeline by the `brief-review-assessor` agent. They and their four driver agents retired in favour of `text-to-narrative`, which hands one `design-brief.md` to Claude Design instead of producing a per-target brief for local rendering. The render chain survived that retirement unchanged and still consumes those brief shapes (`libraries/brief-pipeline.md` states them), but nothing in this plugin produces them from a narrative any more: an existing brief is hand-authored against the `libraries/` templates (`presentation-brief-template.md`, `web-section-architecture.md`, `infographic-brief-validation.md`) or supplied by a caller. Briefs carry no color fields — the theme is a render-time choice, read directly by the renderer.
 
 ### `render-html-slides` — Render a presentation brief as HTML slides
 
-The no-PowerPoint rendering path for any `presentation-brief.md` that `story-to-slides` produced. Turns the brief into a **self-contained HTML deck** — one file, themed from the workspace theme, with keyboard navigation, a speaker-notes toggle, and Mermaid diagram support. After the first render it opens an interactive refinement loop: a text-only correction is edited straight into the HTML, while a structural change re-renders just the affected slide instead of the whole deck.
+The no-PowerPoint rendering path for an existing `presentation-brief.md`. Turns the brief into a **self-contained HTML deck** — one file, themed from the workspace theme, with keyboard navigation, a speaker-notes toggle, and Mermaid diagram support. After the first render it opens an interactive refinement loop: a text-only correction is edited straight into the HTML, while a structural change re-renders just the affected slide instead of the whole deck.
 
-Reach for this instead of the PPTX path when the deck will be presented from a browser, shared as a single file, or iterated on quickly. The `html-slides` agent wraps the same skill for autonomous callers.
+Reach for this instead of the PPTX path when the deck will be presented from a browser, shared as a single file, or iterated on quickly. The `html-slides` agent wraps the same skill for autonomous callers. The PPTX path for the same brief is the `pptx` *agent*, which dispatches `anthropic-skills:pptx` (or `document-skills:pptx` from the marketplace) and then round-trips the deck against the brief with `brief-render-qa.py` so dropped text or speaker notes are reported rather than silently shipped; there is no `pptx` skill in this plugin.
 
-### `story-to-web` — Turn a narrative into a scrollable web brief
+### `/render-infographic` — Render an infographic brief
 
-Absorbed from the retired cogni-visual plugin. Decomposes a narrative into a scroll-driven section architecture and writes `web-brief.md`, by default to `{source_dir}/cogni-visual/web-brief.md`: one message per section, assertion headlines, scroll-optimized copy, image prompts, and a CTA proposal (`conversion_goal` defaults to `consultation`, `max_sections` to 10). Sections alternate light and dark so each message lands before the next begins.
-
-As with `story-to-slides`, this is the briefing half only: the `web` agent renders the brief via Pencil MCP into a `.pen` file and then exports a self-contained HTML page from it, and the brief itself contains no color fields. It also produces print storyboard posters: `mode=storyboard` paginates the same narrative into 3-5 DIN A posters and writes `storyboard-brief.md`, which the `storyboard` agent renders. It does not produce slides (`story-to-slides`) or polished prose (`copywriter`).
-
-No slash command of its own — ask for a web narrative or a landing page built from a narrative document.
-
-### `story-to-infographic` — Distill a narrative into a single-page infographic
-
-Absorbed from the retired cogni-visual plugin. Extracts the three to five most impactful data points from a narrative, selects a layout, and writes `infographic-brief.md` (default `{source_dir}/cogni-visual/infographic-brief.md`) with content blocks under strict word limits plus icon prompts. The brief routes to one of two rendering families, picked by `style_preset`:
+An existing `infographic-brief.md` — content blocks under strict word limits plus icon prompts — routes to one of two rendering families, picked by its `style_preset`:
 
 - **Hand-drawn** — the `sketchnote` and `whiteboard` presets, rendered through `/render-infographic-handdrawn` into an `.excalidraw` scene.
 - **Editorial** — the `economist`, `editorial`, `data-viz` and `corporate` presets, rendered through `/render-infographic-editorial` into a `.pen` file.
 
-`/render-infographic` is the universal entry point: it reads the brief's `style_preset` and routes to the right family. Unlike the two skills above, this one renders by default — after writing the brief it auto-dispatches `/render-infographic` (pass `render: false` to produce the brief only). One constraint to respect: both hand-drawn render agents share a single Excalidraw MCP canvas, so hand-drawn renders must be serialized and never dispatched in parallel. Pencil-rendered editorial briefs are file-backed and can run alongside one Excalidraw render safely.
+`/render-infographic` is the universal entry point: it reads the brief's `style_preset` and routes to the right family. One constraint to respect: both hand-drawn render agents share a single Excalidraw MCP canvas, so hand-drawn renders must be serialized and never dispatched in parallel. Pencil-rendered editorial briefs are file-backed and can run alongside one Excalidraw render safely.
+
+The two remaining brief shapes render through agents rather than commands: the `web` agent renders an existing `web-brief.md` via Pencil MCP into a `.pen` file and exports a self-contained HTML page from it, and the `storyboard` agent renders an existing `storyboard-brief.md` into a multi-poster `.pen` file for print.
 
 ### `enrich-report` — Turn a finished report into a visual deliverable
 

@@ -482,26 +482,34 @@ EOF
 
   # Row hygiene. A malformed row is reported, never skipped — skipping one
   # would let a typo silently drop a phrase out of both directions.
-  # The key check is ASCII-gated on purpose. awk's tolower is byte-wise, while
-  # the extractor normalizes in python, whose lower() folds non-ASCII too — so
-  # on a non-ASCII key the two disagree, this check would call it already-normal,
-  # and the row would then never join the live set. That loses a direction
-  # SILENTLY, which is the failure class C10 exists to close. Rejecting the
-  # non-ASCII key outright keeps one normal form without a second parser.
+  # The shape checks are awk; the key check is python, and deliberately so.
+  # awk's tolower is byte-wise, while the extractor normalizes in python, whose
+  # lower() folds non-ASCII too — so an awk normal-form check would call an
+  # uppercase umlaut key already-normal, and the row would then never join the
+  # live set. That loses a direction SILENTLY, which is the failure class C10
+  # exists to close. An earlier form rejected any non-ASCII key outright to
+  # avoid a second normal form; a retired German phrase with an umlaut is a
+  # real row this file has to carry, so the key check now applies the
+  # extractor's own normal form (whitespace-collapsed, python lower()) — the
+  # same parser, not a second one.
   c10_bad=$(awk -F'\t' '
     NF != 4                                  { print "  field-count " NF " (want 4): " $0; next }
     $2 != "claimed" && $2 != "retired"        { print "  unknown status \"" $2 "\": " $0; next }
     $2 == "retired" && $3 != "-"              { print "  retired row must have owner \"-\", got \"" $3 "\": " $0; next }
     { r = $4; gsub(/^[ \t]+|[ \t]+$/, "", r) }
-    r == ""                                   { print "  empty reason: " $0; next }
-    $1 ~ /[^\x20-\x7e]/                       { print "  key has a non-ASCII byte, so awk and the extractor would normalize it differently: " $0; next }
-    {
-      k = tolower($1)
-      gsub(/^[ \t]+|[ \t]+$/, "", k)
-      gsub(/[ \t]+/, " ", k)
-      if (k != $1) print "  key not in normal form (want \"" k "\"): " $0
-    }
-  ' "$TMPROOT/c10/rows")
+    r == ""                                   { print "  empty reason: " $0 }
+  ' "$TMPROOT/c10/rows"
+  python3 - "$TMPROOT/c10/rows" <<'PY'
+import sys
+with open(sys.argv[1], encoding="utf-8") as fh:
+    for line in fh:
+        line = line.rstrip("\n")
+        key = line.split("\t", 1)[0]
+        normal = " ".join(key.split()).lower()
+        if key != normal:
+            print('  key not in normal form (want "%s"): %s' % (normal, line))
+PY
+  )
   if [ -n "$c10_bad" ]; then
     echo "     malformed record rows:"
     echo "$c10_bad"

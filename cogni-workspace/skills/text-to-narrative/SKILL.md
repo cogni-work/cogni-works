@@ -6,12 +6,13 @@ description: >-
   from its own bundled copy of the narrative assets, then writes design-brief.md for one
   target (slides, document, infographic or web): density-capped units, the Rendering
   Contract, the presentation-intent layer and a Sources block, with copy frozen from the
-  narrative. Use this skill whenever the user asks to "turn text into a narrative",
-  "text to narrative", "write a design brief", "brief for Claude Design",
-  "narrative for Claude Design", "hand this to Claude Design",
+  narrative. Use this skill whenever the user asks to "create a narrative",
+  "write a narrative", "transform content into a story arc", "generate an insight summary",
+  "turn text into a narrative", "text to narrative", "write a design brief",
+  "brief for Claude Design", "narrative for Claude Design", "hand this to Claude Design",
   "Text in ein Narrativ verwandeln" or "Design-Brief für Claude Design erstellen".
-  Not for polishing prose (copywriter), rendering a deck (story-to-slides,
-  render-html-slides) or the whole publish pipeline (narrative-publish).
+  Not for polishing prose (copywriter) or rendering a finished brief (render-html-slides,
+  enrich-report).
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion
 ---
 
@@ -21,7 +22,7 @@ Transform input markdown into a structured executive narrative using one of the 
 
 **Use this for:** research syntheses, analyses or structured findings that need to become an executive narrative and a Claude Design handoff in one run; a finished arc narrative that needs only the brief.
 
-**Not for:** polishing arbitrary business documents (use `copywriter`); an executive brief, talking points or a one-pager (the `narrative` skill's `--format`); rendering a deck or page inside Claude Code (`story-to-slides`, `render-html-slides`); raw research (the cogni-knowledge pipeline).
+**Not for:** polishing arbitrary business documents (use `copywriter`); rendering a finished brief inside Claude Code (`render-html-slides`, `enrich-report`); raw research (the cogni-knowledge pipeline).
 
 ## Architectural model
 
@@ -86,7 +87,7 @@ Audience knowledge level (`expert` / `informed` / `general`, default `informed`)
 
 ## Output
 
-Two files. The narrative (`insight-summary.md` by default) is the same artifact the `narrative` skill writes, so every downstream consumer of that shape still reads it. The design brief (`design-brief.md` by default) is the Claude Design handoff — its shape is owned by Phase 7 and `references/design-brief-template.md`.
+Two files. The narrative (`insight-summary.md` by default) is the same artifact the retired `narrative` skill wrote, so every downstream consumer of that shape still reads it. The design brief (`design-brief.md` by default) is the Claude Design handoff — its shape is owned by Phase 7 and `references/design-brief-template.md`.
 
 ```markdown
 ---

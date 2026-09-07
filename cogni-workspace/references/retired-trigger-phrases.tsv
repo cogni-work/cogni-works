@@ -180,3 +180,12 @@ visual facilitation	retired	-	Retired with story-to-infographic: brief productio
 visual one-pager	retired	-	Retired with story-to-infographic: brief production moved to text-to-narrative Phase 7 (target infographic). Rendering an existing infographic brief remains /render-infographic and its three renderer agents, whose own entry points claim the style-tradition phrases.
 visual summary	retired	-	Retired with story-to-infographic: brief production moved to text-to-narrative Phase 7 (target infographic). Rendering an existing infographic brief remains /render-infographic and its three renderer agents, whose own entry points claim the style-tradition phrases.
 visuelle zusammenfassung	retired	-	Retired with story-to-infographic: brief production moved to text-to-narrative Phase 7 (target infographic). Rendering an existing infographic brief remains /render-infographic and its three renderer agents, whose own entry points claim the style-tradition phrases.
+#
+# Provenance: the copy-json retirement. That adapter skill advertised four phrases and had exactly
+# one caller — the .json branch of /copywrite, removed in the same change. Unlike the story-to-*
+# folds above, no surviving skill re-claims these: this was a capability deletion, so every phrase
+# below is intentionally claimed by nothing.
+polish json	retired	-	Retired with copy-json: the JSON-polishing capability was deleted outright, not absorbed. Nothing in cogni-workspace polishes JSON afterwards and /copywrite is markdown-only, so this phrase is deliberately unclaimed rather than re-homed.
+copywrite marketplace.json	retired	-	Retired with copy-json: the JSON-polishing capability was deleted outright, not absorbed. Nothing in cogni-workspace polishes JSON afterwards and /copywrite is markdown-only, so this phrase is deliberately unclaimed rather than re-homed.
+improve descriptions in plugin.json	retired	-	Retired with copy-json: the JSON-polishing capability was deleted outright, not absorbed. Nothing in cogni-workspace polishes JSON afterwards and /copywrite is markdown-only, so this phrase is deliberately unclaimed rather than re-homed.
+polish fields in json	retired	-	Retired with copy-json: the JSON-polishing capability was deleted outright, not absorbed. Nothing in cogni-workspace polishes JSON afterwards and /copywrite is markdown-only, so this phrase is deliberately unclaimed rather than re-homed.

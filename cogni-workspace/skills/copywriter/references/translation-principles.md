@@ -112,7 +112,7 @@ See `SKILL.md` § Step 5 "Translation-specific validation" → "Readability rela
 
 ## Per-Language Charset Rules
 
-Each target language has a required diacritic set. The translate pass must produce these characters at write time — never ASCII substitutes — and Step 5 validation rejects output that violates the rule. This table is the single source of truth; `SKILL.md` Step 5 and `copy-json` Step 3 both point here.
+Each target language has a required diacritic set. The translate pass must produce these characters at write time — never ASCII substitutes — and Step 5 validation rejects output that violates the rule. This table is the single source of truth; `SKILL.md` Step 5 points here.
 
 | Target | Required diacritics | ASCII substitutes (forbidden) |
 |---|---|---|

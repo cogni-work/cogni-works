@@ -35,7 +35,7 @@ cogni-workspace is the ecosystem's infrastructure-as-plugin layer: a dedicated p
 8. **File and track issues** — `cogni-issues` uses the authenticated GitHub CLI to consult, deduplicate, create, list, and inspect plugin issues with atomic labels
 9. **Troubleshoot plugin failures** — `workspace-status`'s plugin-level tier diagnoses plugin integrity, cross-plugin dependencies, stale state, and common setup errors; reachable through `/troubleshoot`
 10. **Verify claims against their cited sources** — `claims` runs the six-mode claim-verification lifecycle (submit, verify, dashboard, inspect, resolve, cobrowse) that cogni-trends, cogni-portfolio, cogni-consult and cogni-knowledge submit sourced assertions to; `claim-entity` is the cross-plugin data contract those plugins write against
-11. **Polish documents for executive readability** — `copywriter` applies seven messaging frameworks (BLUF, Pyramid, SCQA, STAR, PSB, FAB, Inverted Pyramid) with arc-aware preservation and EN/DE-pivot translation across seven languages; `copy-reader` runs parallel stakeholder personas over a document; `copy-json` polishes text fields inside JSON
+11. **Polish documents for executive readability** — `copywriter` applies seven messaging frameworks (BLUF, Pyramid, SCQA, STAR, PSB, FAB, Inverted Pyramid) with arc-aware preservation and EN/DE-pivot translation across seven languages; `copy-reader` runs parallel stakeholder personas over a document
 12. **Turn text into a narrative and a Claude Design brief in one run** — `text-to-narrative` runs the arc pipeline from its own bundled copy of the narrative assets, then cuts the narrative into one `design-brief.md` for slides, a document, an infographic or a web page: density-capped units, the Rendering Contract, the presentation-intent layer and the Sources block, with copy frozen from the narrative
 
 ## What it means for you
@@ -142,7 +142,6 @@ State lives in two layers that other plugins consume. Configuration (env vars, t
 | `text-to-narrative` | skill | Turn text into an arc-driven narrative from a bundled, flattened copy of the narrative assets, then into one Claude Design brief for slides, document, infographic or web — density-capped, contract-bearing, copy frozen; `scripts/check-design-brief.py` grades the brief |
 | `copywriter` | skill | Polish, rewrite or create business documents with 7 messaging frameworks, arc-aware preservation, and EN/DE-pivot translation |
 | `copy-reader` | skill | Review a document through parallel stakeholder persona Q&A, then synthesize the feedback |
-| `copy-json` | skill | Adapter that polishes text fields inside JSON — extracts, polishes via `copywriter`, writes back |
 | `copywriter` | agent | Delegation wrapper for the `copywriter` skill |
 | `reader` | agent | Delegation wrapper for the `copy-reader` skill |
 | `commands/claims.md` | command | Registers `/claims` as the entry point to the verification lifecycle |
@@ -208,7 +207,7 @@ cogni-workspace/
 │   ├── workspace-dashboard/      Interactive HTML workspace status dashboard
 │   └── workspace-status/
 │                                  copywriter,
-│                                  copy-json and copy-reader are omitted here for brevity
+│                                  copy-reader is omitted here for brevity
 ├── agents/                       19 subagents (claim verification, copywriting, visual rendering)
 │   ├── claim-verifier.md         Verify claims against one source URL (JSON out)
 │   ├── source-inspector.md       Open a source via claude-in-chrome for cobrowse/inspect

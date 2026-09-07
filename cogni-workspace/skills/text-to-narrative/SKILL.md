@@ -56,7 +56,7 @@ One responsibility per file. Read a file when its phase runs, not before. Every 
 | Theme Thesis | `references/arc-theme-thesis.md` |
 | Trend Panorama | `references/arc-trend-panorama.md` |
 
-The bundled set is derived from the `narrative` skill's tree by `cogni-workspace/scripts/flatten-narrative-assets.py` while that skill still exists, and `cogni-workspace/tests/test-text-to-narrative-brief.sh` fails when a vendored file drifts from that derivation. Add an arc upstream and re-derive; never hand-edit a vendored file.
+The bundled set is the only copy of these assets: the narrative skill they were flattened from has retired. `cogni-workspace/tests/test-arc-contract-shape.sh` keeps every arc contract on the one-file shape, so add an arc here directly, following the registration steps at the end of `references/arc-registry.md`.
 
 ## Parameters
 
@@ -231,7 +231,7 @@ Read two files, in full, before writing anything:
 1. `references/arc-{arc_id}.md` — the arc contract, all seven sections: Intent, Selection, Headings, Composition, Elements, Validation, See Also. The drafting passes lean on Headings, Composition, Elements and Validation; Intent and Selection are what tell you whether the arc fits the brief at all.
 2. `references/techniques-overview.md` — the eight techniques and the application matrix.
 
-Every arc carries `contract: 2` and the same seven sections — the vendored copy is derived from a tree whose shape is guarded upstream, and the identity case in `cogni-workspace/tests/test-text-to-narrative-brief.sh` keeps the copy on that derivation — so there is no other file to read for an arc. The language references are not loaded here — Pass 3 loads them.
+Every arc carries `contract: 2` and the same seven sections — `cogni-workspace/tests/test-arc-contract-shape.sh` keeps every bundled contract on that shape — so there is no other file to read for an arc. The language references are not loaded here — Pass 3 loads them.
 
 **After reading,** name the four elements in order with their proportions, and say which techniques the matrix assigns to each. Re-read until both come without looking.
 

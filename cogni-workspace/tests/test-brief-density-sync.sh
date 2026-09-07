@@ -1,32 +1,35 @@
 #!/usr/bin/env bash
 #
 # test-brief-density-sync.sh — every density ceiling the text-to-narrative skill
-# states was carried faithfully from the place the ecosystem stated it first.
+# states still agrees with the surviving home it was carried from.
 #
 # skills/text-to-narrative/references/density-ceilings.md is the one home the
-# design-brief checker reads. Its numbers were consolidated from five older homes
-# that are slated for retirement:
+# design-brief checker reads. Its numbers were consolidated from older homes in
+# the story-to-* brief producers and the narrative validator. The producers and
+# the narrative skill have retired; what survives, and what this suite compares
+# the reference against, is:
 #   1. scripts/check-brief.py constants (slides)
-#   2. skills/story-to-slides/scripts/brief-to-outline.py MAX_SLIDE_POINTS
-#   3. skills/story-to-slides/SKILL.md Step 7.5 table
-#   4. skills/text-to-narrative/scripts/validate-narrative.py constants and the C1 band,
-#      plus one arc contract's four `### N.` element sections
-#   5. the story-to-web and story-to-infographic reference tables
-# This suite is the TRANSFER PROOF: while a home exists, a value in the reference
-# and in that home must agree. It is deleted arm by arm as each home retires —
-# the reference outlives them and keeps its `Home` column as provenance.
+#   2. skills/text-to-narrative/scripts/validate-narrative.py constants and the
+#      C1 band, plus one arc contract's four `### N.` element sections (document)
+#   3. libraries/web-section-copywriting.md and web-section-architecture.md (web)
+#   4. libraries/infographic-style-presets.md and
+#      infographic-block-copywriting.md (infographic)
+# A key whose only home retired with its producer is a SOLE-HOME key: the
+# reference is now its only statement, and bds-07 lists such keys explicitly in
+# both directions — an untracked key must be listed, and a listed key must be
+# untracked — so the list cannot go stale in either direction. Retire this suite
+# only when the render chain retires and check-brief.py goes with it.
 #
 # Every home's path can be overridden so a mutant copy can be graded without
 # editing the tree:
-#   BRIEF_DENSITY_REFERENCE   BRIEF_DENSITY_CHECKER    BRIEF_DENSITY_OUTLINE
-#   BRIEF_DENSITY_SLIDES_SKILL BRIEF_DENSITY_VALIDATOR BRIEF_DENSITY_ARC_CONTRACT
-#   BRIEF_DENSITY_WEB_COPY    BRIEF_DENSITY_WEB_ARCH   BRIEF_DENSITY_INFO_PRESETS
-#   BRIEF_DENSITY_INFO_DISTILL BRIEF_DENSITY_INFO_BLOCKS
+#   BRIEF_DENSITY_REFERENCE   BRIEF_DENSITY_CHECKER    BRIEF_DENSITY_VALIDATOR
+#   BRIEF_DENSITY_ARC_CONTRACT BRIEF_DENSITY_WEB_COPY  BRIEF_DENSITY_WEB_ARCH
+#   BRIEF_DENSITY_INFO_PRESETS BRIEF_DENSITY_INFO_BLOCKS
 #
 # Mutation recipe (the discriminator is bds-03-slides-matches-homes):
 #
 #   cp cogni-workspace/skills/text-to-narrative/references/density-ceilings.md "$T/dc.md"
-#   sed -i '' 's/| `slide_points_max_lines` | 4 |/| `slide_points_max_lines` | 9 |/' "$T/dc.md"
+#   sed -i '' 's/| `slide_point_words_max` | 10 |/| `slide_point_words_max` | 99 |/' "$T/dc.md"
 #   BRIEF_DENSITY_REFERENCE="$T/dc.md" bash cogni-workspace/tests/test-brief-density-sync.sh
 #
 # must print `FAIL: bds-03-slides-matches-homes`. bds-08 runs that very mutant
@@ -34,7 +37,7 @@
 #
 # Generic harness: ~/GitHub/dev/managed-service/cogni-service/scripts/mutation-check.sh
 #   --file cogni-workspace/skills/text-to-narrative/references/density-ceilings.md \
-#   --expr 's{\| `slide_points_max_lines` \| 4 \|}{| `slide_points_max_lines` | 9 |}' \
+#   --expr 's{\| `slide_point_words_max` \| 10 \|}{| `slide_point_words_max` | 99 |}' \
 #   --test 'bash cogni-workspace/tests/test-brief-density-sync.sh' --case bds-03-slides-matches-homes
 
 set -u
@@ -48,14 +51,11 @@ ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 WS="$ROOT/cogni-workspace"
 REFERENCE="${BRIEF_DENSITY_REFERENCE:-$WS/skills/text-to-narrative/references/density-ceilings.md}"
 CHECKER="${BRIEF_DENSITY_CHECKER:-$WS/scripts/check-brief.py}"
-OUTLINE="${BRIEF_DENSITY_OUTLINE:-$WS/skills/story-to-slides/scripts/brief-to-outline.py}"
-SLIDES_SKILL="${BRIEF_DENSITY_SLIDES_SKILL:-$WS/skills/story-to-slides/SKILL.md}"
 VALIDATOR="${BRIEF_DENSITY_VALIDATOR:-$WS/skills/text-to-narrative/scripts/validate-narrative.py}"
 ARC_CONTRACT="${BRIEF_DENSITY_ARC_CONTRACT:-$WS/skills/text-to-narrative/references/arc-corporate-visions.md}"
 WEB_COPY="${BRIEF_DENSITY_WEB_COPY:-$WS/libraries/web-section-copywriting.md}"
 WEB_ARCH="${BRIEF_DENSITY_WEB_ARCH:-$WS/libraries/web-section-architecture.md}"
 INFO_PRESETS="${BRIEF_DENSITY_INFO_PRESETS:-$WS/libraries/infographic-style-presets.md}"
-INFO_DISTILL="${BRIEF_DENSITY_INFO_DISTILL:-$WS/skills/story-to-infographic/references/01-content-distillation.md}"
 INFO_BLOCKS="${BRIEF_DENSITY_INFO_BLOCKS:-$WS/libraries/infographic-block-copywriting.md}"
 
 pass() { printf '%s\n' "PASS: $1"; }
@@ -69,8 +69,8 @@ never compare equal to anything.
 """
 import importlib.util, json, re, sys
 
-(reference, checker, outline, slides_skill, validator, arc_contract,
- web_copy, web_arch, info_presets, info_distill, info_blocks) = sys.argv[1:12]
+(reference, checker, validator, arc_contract,
+ web_copy, web_arch, info_presets, info_blocks) = sys.argv[1:9]
 
 
 def read(path):
@@ -144,14 +144,6 @@ put("slides", "talk_track_words_min", "check-brief", cb.NOTES_WORDS_MIN)
 put("slides", "talk_track_words_max", "check-brief", cb.NOTES_WORDS_MAX)
 put("slides", "units_min", "check-brief", cb.DECK_MIN_CONTENT)
 put("slides", "units_max_default", "check-brief", cb.DECK_MAX_DEFAULT)
-put("slides", "slide_points_max_lines", "brief-to-outline",
-    num(must(r"^MAX_SLIDE_POINTS = (\d+)", read(outline), re.M)))
-
-skill = read(slides_skill)
-put("slides", "slide_point_words_max_table", "slides-skill",
-    num(must(r"^\| is-does-means \| DOES-Box \| (\d+) \|", skill, re.M)))
-put("slides", "slide_point_words_max", "slides-skill",
-    num(must(r"^\| four-quadrants \| Bullets \(each\) \| (\d+) \|", skill, re.M)))
 
 vn = load(validator, "_validate_narrative")
 put("document", "target_length_default", "validate-narrative", vn.DEFAULT_TARGET)
@@ -193,10 +185,6 @@ put("infographic", "words_max", "info-presets", num(standard[2]))
 put("infographic", "blocks_max_dense", "info-presets", num(dense[1]))
 put("infographic", "words_max_dense", "info-presets", num(dense[2]))
 put("infographic", "blocks_min", "info-presets", num(must(r"fewer than\s+(\d+) content blocks", presets)))
-distill = read(info_distill)
-put("infographic", "hero_numbers_min", "info-distill", num(must(r"Select Hero Numbers \((\d+)-(\d+) maximum\)", distill, 0, 1)))
-put("infographic", "hero_numbers_max", "info-distill", num(must(r"Select Hero Numbers \((\d+)-(\d+) maximum\)", distill, 0, 2)))
-put("infographic", "point_words_max", "info-distill", num(must(r"Keep bullets to max (\d+) words", distill)))
 blocks = read(info_blocks)
 title = {r[0]: r[1] for r in table_rows(blocks, "### title")}
 put("infographic", "headline_words_max", "info-blocks", num(title["Headline"]))
@@ -208,8 +196,8 @@ print(json.dumps({"reference": ref, "upstream": up}))
 PY
 
 run_homes() {
-  python3 "$TMPROOT/homes.py" "$1" "$CHECKER" "$OUTLINE" "$SLIDES_SKILL" "$VALIDATOR" "$ARC_CONTRACT" \
-    "$WEB_COPY" "$WEB_ARCH" "$INFO_PRESETS" "$INFO_DISTILL" "$INFO_BLOCKS"
+  python3 "$TMPROOT/homes.py" "$1" "$CHECKER" "$VALIDATOR" "$ARC_CONTRACT" \
+    "$WEB_COPY" "$WEB_ARCH" "$INFO_PRESETS" "$INFO_BLOCKS"
 }
 
 run_homes "$REFERENCE" > "$TMPROOT/homes.json" 2>/dev/null
@@ -260,24 +248,33 @@ for target in slides document infographic web; do
   n=$((n + 1))
 done
 
-# --- bds-07: no reference key without a home reading -------------------------
-if python3 - "$TMPROOT/homes.json" <<'PY'
+# --- bds-07: untracked keys are exactly the declared sole-home keys ----------
+# A key whose only home retired with its producer has no reading to compare
+# against; the reference is its sole statement. The list is pinned in both
+# directions: a key with no reading must be listed here, and a listed key must
+# have no reading — so re-homing a key without removing it from the list, or
+# dropping a home without adding its keys, is red either way.
+SOLE_HOME_KEYS="slides.slide_points_max_lines infographic.hero_numbers_min infographic.hero_numbers_max infographic.point_words_max"
+if python3 - "$TMPROOT/homes.json" "$SOLE_HOME_KEYS" <<'PY'
 import json, sys
 homes = json.load(open(sys.argv[1]))
-untracked = [f"{t}.{k}" for t, keys in homes["reference"].items() for k in keys if k not in homes["upstream"].get(t, {})]
-for u in untracked:
-    print("untracked:", u)
-sys.exit(0 if not untracked else 1)
+declared = set(sys.argv[2].split())
+untracked = {f"{t}.{k}" for t, keys in homes["reference"].items() for k in keys if k not in homes["upstream"].get(t, {})}
+for u in sorted(untracked - declared):
+    print("untracked but not declared sole-home:", u)
+for d in sorted(declared - untracked):
+    print("declared sole-home but has a reading (or is absent from the reference):", d)
+sys.exit(0 if untracked == declared else 1)
 PY
 then
-  pass "bds-07-no-untracked-key"
+  pass "bds-07-sole-home-keys-exact"
 else
-  fail "bds-07-no-untracked-key the reference states a ceiling no home was read for"
+  fail "bds-07-sole-home-keys-exact the untracked key set and SOLE_HOME_KEYS differ"
 fi
 
 # --- bds-08: self-hosted mutant — one changed value in a COPY is detected ----
-sed 's/| `slide_points_max_lines` | 4 |/| `slide_points_max_lines` | 9 |/' "$REFERENCE" > "$TMPROOT/dc-mutant.md"
-if ! grep -q '`slide_points_max_lines` | 9 |' "$TMPROOT/dc-mutant.md"; then
+sed 's/| `slide_point_words_max` | 10 |/| `slide_point_words_max` | 99 |/' "$REFERENCE" > "$TMPROOT/dc-mutant.md"
+if ! grep -q '`slide_point_words_max` | 99 |' "$TMPROOT/dc-mutant.md"; then
   fail "bds-08-mutant-drift-detected the mutant could not be built (anchor row missing)"
 else
   run_homes "$TMPROOT/dc-mutant.md" > "$TMPROOT/mutant.json" 2>/dev/null

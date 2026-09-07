@@ -9,11 +9,11 @@
 #      check — for one mutant per check; unreadable inputs are exit 2, never 0.
 #   2. SKILL.md's local `references/...` and `scripts/...` paths resolve inside
 #      the skill (templated `{arc_id}` / `${ARC_ID}` / `{language}` segments are
-#      expanded), and its Phase 0-6 headings equal the narrative skill's — the
-#      orchestration was copied, and this is what keeps the copy honest.
-#   3. Every vendored file equals its derivation from the narrative skill's tree
-#      (scripts/flatten-narrative-assets.py without --write), and the vendored
-#      validate-narrative.py is still a gate against the flat contracts.
+#      expanded).
+#   3. The bundled validate-narrative.py is a gate against the flat contracts.
+#      The identity and phase-parity cases that once compared the bundle against
+#      the narrative skill retired with that skill: the bundle is the only copy,
+#      and test-arc-contract-shape.sh grades its shape directly.
 #
 # Fixtures: tests/fixtures/design-brief/{slides-en,document-en,infographic-en,
 # web-en,slides-de}.md, cut from tests/fixtures/narrative-output/. Mutants are
@@ -27,8 +27,6 @@
 #   --expr 's{if len\(points\) > c\["slide_points_max_lines"\]:}{if False:}' --case ttn-08-density-slides
 #   --expr 's{if token not in b.narrative_numbers:}{if False:}' --case ttn-09-copy-frozen-numbers
 #   --expr 's{for m in STYLING_KEY_RE.finditer\(b.body\):}{for m in []:}' --case ttn-12-no-styling-keys
-#   --file cogni-workspace/skills/text-to-narrative/references/arc-corporate-visions.md \
-#     --expr 's{contract: 2}{contract: 3}' --case ttn-20-vendored-identity
 #
 # CASE LABEL SHAPE: "PASS: <id>" / "FAIL: <id>", ids unique per emitted line.
 
@@ -44,8 +42,6 @@ WS="$ROOT/cogni-workspace"
 SKILL="$WS/skills/text-to-narrative"
 CHECKER="$SKILL/scripts/check-design-brief.py"
 CEILINGS="$SKILL/references/density-ceilings.md"
-FLATTEN="$WS/scripts/flatten-narrative-assets.py"
-NARRATIVE_SKILL="$WS/skills/narrative"
 FIX="$WS/tests/fixtures/design-brief"
 NARR="$WS/tests/fixtures/narrative-output"
 EN_NARR="$NARR/corporate-visions-en.md"
@@ -96,7 +92,7 @@ PY
 
 # --- ttn-00: inputs readable --------------------------------------------------
 missing=""
-for f in "$CHECKER" "$CEILINGS" "$FLATTEN" "$SKILL/SKILL.md" "$NARRATIVE_SKILL/SKILL.md" "$EN_NARR" "$DE_NARR" \
+for f in "$CHECKER" "$CEILINGS" "$SKILL/SKILL.md" "$EN_NARR" "$DE_NARR" \
          "$FIX/slides-en.md" "$FIX/document-en.md" "$FIX/infographic-en.md" "$FIX/web-en.md" "$FIX/slides-de.md"; do
   [ -f "$f" ] || missing="$missing $f"
 done
@@ -267,26 +263,6 @@ if grep -q 'does-not-exist.md' "$TMPROOT/SKILL-mutant.md" && ! check_paths "$TMP
   pass "ttn-18-mutant-path-detected"
 else
   fail "ttn-18-mutant-path-detected a rewritten path in a copy of SKILL.md was not reported"
-fi
-
-# --- ttn-19: Phase 0-6 headings equal the narrative skill's -------------------
-grep -E '^### Phase [0-6]' "$SKILL/SKILL.md" > "$TMPROOT/phases-ttn.txt"
-grep -E '^### Phase [0-6]' "$NARRATIVE_SKILL/SKILL.md" > "$TMPROOT/phases-narr.txt"
-if [ -s "$TMPROOT/phases-narr.txt" ] && cmp -s "$TMPROOT/phases-ttn.txt" "$TMPROOT/phases-narr.txt"; then
-  pass "ttn-19-phase-parity"
-else
-  fail "ttn-19-phase-parity the Phase 0-6 heading lists differ between text-to-narrative and narrative"
-fi
-
-# --- ttn-20: every vendored file equals its derivation ------------------------
-python3 "$FLATTEN" --source "$NARRATIVE_SKILL" --target "$SKILL" --json > "$TMPROOT/flatten.json" 2>/dev/null
-frc=$?
-if [ "$frc" -eq 0 ] && python3 -c "
-import json,sys; d=json.load(open('$TMPROOT/flatten.json')); sys.exit(0 if d['success'] and d['data']['matched'] > 0 and not d['data']['findings'] else 1)"; then
-  pass "ttn-20-vendored-identity"
-else
-  fail "ttn-20-vendored-identity a vendored file drifts from its derivation (flatten exit $frc): $(python3 -c "
-import json; d=json.load(open('$TMPROOT/flatten.json')); print(d.get('error') or d['data'].get('findings'))" 2>/dev/null)"
 fi
 
 # --- ttn-21: the vendored validator is a gate against the flat contracts ------

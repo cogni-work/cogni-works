@@ -125,7 +125,7 @@ Phases:
      - tiered cogni-work surfaces tiers.tokens with tokens.css
   B. workspace-internal consumers (manage-themes)
   C. visual consumers contract checks
-     - cogni-workspace: render-html-slides, enrich-report, story-to-* siblings
+     - cogni-workspace: render-html-slides, enrich-report
      - cogni-portfolio: portfolio-dashboard
      - cogni-website: website-build, website-setup
   D. voice consumers (soft) — narrative, sales, research, copywriting
@@ -418,15 +418,9 @@ phase "Phase C — visual consumers"
 VISUAL_CONSUMERS=(
   "cogni-workspace:render-html-slides"
   "cogni-workspace:enrich-report"
-  "cogni-workspace:story-to-infographic"
-  # story-to-slides is a PASS-THROUGH consumer, kept here by decision: the skill
-  # never reads a theme itself — it records a caller-supplied theme_path verbatim
-  # and the renderer resolves a theme at its Render checkpoint. Its SKILL.md
-  # carries a contract sentence naming theme.md for exactly that reason, so the
-  # tbc20 grep still asserts the contract reference. Deleting the entry silently
-  # would remove the only guard on that sentence.
-  "cogni-workspace:story-to-slides"
-  "cogni-workspace:story-to-web"
+  # The three story-to-* brief producers were consumers here until they retired
+  # in favour of text-to-narrative, which hands a design brief to Claude Design
+  # and reads no theme; the renderers above are the surviving theme readers.
   "cogni-portfolio:portfolio-dashboard"
   "cogni-website:website-build"
   "cogni-website:website-setup"

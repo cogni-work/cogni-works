@@ -53,7 +53,7 @@ only once it is actually installed.
 
 ## Manual Install
 
-These MCPs are not written by install-mcp and require user action.
+These MCPs require user action to install — install-mcp does not fetch the app or extension itself.
 
 ### claude-in-chrome
 
@@ -72,6 +72,7 @@ These MCPs are not written by install-mcp and require user action.
 - **Needed by:** cogni-website, cogni-workspace
 - **Type:** Desktop app with bundled MCP server
 - **Install:** Download from https://pencil.dev, open the app — MCP auto-starts
+- **Config entry:** `install-mcp` does write pencil's config entry — it is a registry `native` server with `desktop_config_key: pencil`. Only the desktop-app install is manual.
 - **Probe tool:** `mcp__pencil__get_editor_state`
 - **Skills and agents:** the `web` and `storyboard` agents (web narrative and printed-poster rendering), `render-infographic-pencil` (editorial infographics), website-build (homepage hero rendering)
 - **Note:** Skills that use Pencil tell the user "open Pencil" if the MCP is unavailable.

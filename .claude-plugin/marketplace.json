@@ -35,7 +35,7 @@
     {
       "name": "cogni-consult",
       "source": "./cogni-consult",
-      "version": "0.1.125",
+      "version": "0.1.126",
       "maturity": "preview",
       "description": "Consulting engagement orchestrator where action fields are the work-breakdown-structure containers for every deliverable: each deliverable runs its own design-thinking loop (empathize→define→ideate→prototype→test), acting stakeholder personas challenge the work in their own voice, and one cogni-knowledge base per engagement is the central research tool that compounds across all deliverables.",
       "keywords": [
@@ -54,7 +54,7 @@
     {
       "name": "cogni-workspace",
       "source": "./cogni-workspace",
-      "version": "0.6.156",
+      "version": "0.6.157",
       "maturity": "preview",
       "description": "The horizontal layer of the insight-wave marketplace — it owns the shared workspace state the vertical business plugins consume. Manages shared infrastructure (env vars, settings), MCP server installation and Desktop config patching, theme management, theme picker, plugin discovery, workspace health, an interactive workspace-configuration dashboard, Obsidian vault integration, a bundled vendor-curated insight-wave reference wiki read directly from its bundled wiki/index.md, cross-plugin claim verification — submitting sourced assertions, verifying them against their cited URLs, and guiding deviation resolution — story-arc narrative composition handed to Claude Design as one design brief, and executive copywriting with seven messaging frameworks, arc-aware polish and EN/DE-pivot translation.",
       "keywords": [
@@ -68,7 +68,7 @@
     {
       "name": "cogni-trends",
       "source": "./cogni-trends",
-      "version": "0.6.32",
+      "version": "0.6.33",
       "maturity": "preview",
       "description": "Strategic trend scouting and TIPS reporting pipeline. Combines the Smarter Service Trendradar (4 dimensions) with TIPS (Trends, Implications, Possibilities, Solutions): trend-scout → value-modeler → trend-research → trend-synthesis and/or trend-booklet → verify-trend-report. Evidence-backed CxO reports and reusable industry catalogs across DE/FR/IT/PL/NL/ES + US/UK.",
       "keywords": [
@@ -92,7 +92,7 @@
     {
       "name": "cogni-portfolio",
       "source": "./cogni-portfolio",
-      "version": "0.9.97",
+      "version": "0.9.98",
       "maturity": "preview",
       "description": "Portfolio messaging and proposition planning for SMEs using the IS/DOES/MEANS (FAB) framework — market-specific value propositions with competitive analysis, customer profiling, and export-ready deliverables across eight pluggable industry taxonomies and first-class market coverage spanning DACH/EU, UK/US, LATAM (MX/BR), and China (CN).",
       "keywords": [
@@ -109,7 +109,7 @@
     {
       "name": "cogni-marketing",
       "source": "./cogni-marketing",
-      "version": "0.0.10",
+      "version": "0.0.11",
       "maturity": "incubating",
       "description": "B2B marketing content engine bridging cogni-trends strategic themes (GTM paths) and cogni-portfolio propositions into channel-ready content. Supports thought leadership, demand generation, lead generation, sales enablement, and ABM across markets with configurable brand voice. Bilingual DE/EN.",
       "keywords": [
@@ -129,7 +129,7 @@
     {
       "name": "cogni-sales",
       "source": "./cogni-sales",
-      "version": "0.4.10",
+      "version": "0.4.11",
       "maturity": "preview",
       "description": "B2B sales pitch generation using Corporate Visions Why Change methodology. Creates sales presentations and proposals for named customers (deal-specific) or market segments (reusable). Builds on cogni-portfolio data with optional TIPS strategic enrichment. Multilingual EN / DE / PT-BR.",
       "keywords": [
@@ -148,7 +148,7 @@
     {
       "name": "cogni-website",
       "source": "./cogni-website",
-      "version": "0.0.16",
+      "version": "0.0.17",
       "maturity": "incubating",
       "description": "Assembles multi-page customer websites from portfolio, marketing, trend, and research content produced by other insight-wave plugins — outputting a deployable static site with shared navigation, theming, and responsive HTML.",
       "keywords": [

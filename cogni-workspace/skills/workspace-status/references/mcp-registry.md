@@ -97,7 +97,11 @@ An install is two independent artifacts, and they are keyed differently:
   below. An entry present solely in the *other* host's config leaves this one unconfigured,
   and counting it lands on the restart row for a write that never happened here.
 - **The install directory** is `$HOME/.claude/mcp-servers/<registry server name>/start.sh` —
-  named for the registry **server name** (`mcp_excalidraw`), not the config key.
+  named for the registry **server name** (`mcp_excalidraw`), not the config key, because
+  `install-mcp.sh` is what creates it: it builds the directory as `$MCP_BASE_DIR/$NAME`
+  from the `--name` it is handed, and `install-mcp` hands it the registry server name. The
+  config key is never passed to the installer at all, so a probe that resolves the
+  directory from `desktop_config_key` looks in a path nothing creates.
 - `$CLAUDE_MCP_DIR`, when set to a non-empty value, replaces the
   `$HOME/.claude/mcp-servers` base.
 

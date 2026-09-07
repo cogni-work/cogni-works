@@ -35,7 +35,7 @@ Translate the prose. Preserve the scaffolding. The list below is exhaustive — 
 ### Translate (target language)
 
 - Body paragraphs, sentences, clauses
-- Heading text (H1, H2, H3) — **except arc-element and bridge headings in `arc_mode`**, which are **substituted** (not freely translated) from the canonical target-language set in `09-preservation-modes/arc-preservation.md` (see SKILL.md Step 2.5). EN/DE-pivot arc-mode translation (de/en/fr/it/pl/nl/es, with EN or DE on one end) ships for `corporate-visions` and `jtbd-portfolio`; the other 9 arcs (any language) and direct non-EN/DE pairs stay blocked.
+- Heading text (H1, H2, H3) — **except arc-element and bridge headings in `arc_mode`**, which are **substituted** (not freely translated) from the canonical target-language set in `arc-preservation.md` (see SKILL.md Step 2.5). EN/DE-pivot arc-mode translation (de/en/fr/it/pl/nl/es, with EN or DE on one end) ships for `corporate-visions` and `jtbd-portfolio`; the other 9 arcs (any language) and direct non-EN/DE pairs stay blocked.
 - Image captions, table cell prose, list item prose
 - Block-quote prose
 - Bold and italic phrase content (preserve the formatting markers, translate the text inside)
@@ -47,11 +47,13 @@ Translate the prose. Preserve the scaffolding. The list below is exhaustive — 
 - **Code blocks** — fenced (```` ``` ````) and inline (`` ` ``) — never translated, even if they contain natural-language strings (those are likely identifiers).
 - **Technical IDs** — `arc_id`, `entity_ref`, `source_url`, schema keys, filenames, paths.
 - **Frontmatter** — the entire YAML block. Add `target_language:` if not already set, but do not translate existing values.
-- **Protected content** (the four categories listed under `SKILL.md` § "Protected Content"):
+- **Protected content** (every item enumerated under `SKILL.md` § "Protected Content"):
   - `<diagram-placeholder>` XML blocks (full structure including child elements)
   - `Figure N` / `Abbildung N` numeric references — but `Figure` ↔ `Abbildung` itself stays in the source-language form if it appears in inline prose; the numeric identifier never changes
   - `![[assets/*.svg]]` Obsidian embeds
   - Kanban tables with `| Dimension | Act | Plan | Observe |` headers, wikilinks, legends, and `<!-- kanban-board -->` placeholders
+  - Every `{{asm:<slug>}}` assumption placeholder — byte-identical; a reworded resolver token no longer matches and a prose-ified one is unrecoverable
+  - The `## Persona Challenges` heading and every row of its table
 - **Power Position structure markers** — `**IS**:`, `**DOES**:`, `**MEANS**:` and standalone `IS` / `DOES` / `MEANS` arc-element labels. These are structural, not vocabulary.
 - **Proper nouns and brand names** — `BSI`, `KRITIS-Dachgesetz`, `Magenta Security`, `Open Telekom Cloud`, `SAP S/4HANA`. Regulation acronyms (`NIS2`, `DSGVO`, `DORA`) stay in their original form. The audience-tuned acronym expansion that runs in Step 3 will handle any first-mention parentheticals on the target-language output.
 - **Number values inside data points** — keep numeric magnitudes (`5.6`, `40`, `2026`) and currency symbols/codes (`$`, `€`, `EUR`) faithful to the source. Apply target-language *formatting conventions* (thin-space vs no-space before `%`, comma vs period as decimal/thousands separator, currency-symbol position) per the direction guide (`translation-en-to-de.md` / `translation-de-to-en.md`). The acronym/expansion discipline still runs in Step 3.
@@ -129,7 +131,7 @@ When translating **into** EN, the charset rule is *absence*: the only umlauts/ac
 There is exactly one direction file per valid pair, named `translation-{source}-to-{target}.md`. After loading this `translation-principles.md` hub, construct the filename from the resolved `source_lang` and `TARGET_LANG` and load it:
 
 ```
-LOAD: references/01-core-principles/translation-{source_lang}-to-{TARGET_LANG}.md
+LOAD: references/translation-{source_lang}-to-{TARGET_LANG}.md
 ```
 
 These files contain the linguistic specifics (register, diacritic traps, compound handling, clause-splitting, number/date conventions, worked example) that the generic principles above do not cover.

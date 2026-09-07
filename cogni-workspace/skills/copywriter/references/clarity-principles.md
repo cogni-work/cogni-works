@@ -15,7 +15,7 @@ last_updated: 2026-02-25
 # Clarity Principles (Wolf-Schneider)
 
 <context>
-You are applying Wolf-Schneider's clarity principles to business writing. These principles govern sentence structure, word choice, and information placement. They apply to every deliverable type and are loaded as Tier 1 for every copywriting task.
+You are applying Wolf-Schneider's clarity principles to business writing. These principles govern sentence structure, word choice, and information placement. They apply to every deliverable type and are loaded for every copywriting task.
 
 Your goal: Make every sentence immediately comprehensible on first reading. The reader should never need to re-read a sentence to understand it.
 </context>

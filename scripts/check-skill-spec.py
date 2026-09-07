@@ -48,10 +48,10 @@ SIX ARMS, in two classes.
   the admitted skills are each tracked as their own restructure, and a
   per-entry number would go stale on every edit to a file the guard is not
   gating yet. The baseline captured
-  at adoption admits two populations: the deep reference trees of four
-  cogni-workspace skills (copywriter, narrative, copy-reader, story-to-web)
-  plus copywriter's CHANGELOG, whose flattening is tracked as its own
-  restructure; and the length, depth and orphan findings in six other
+  at adoption admits two populations: the deep reference trees of three
+  cogni-workspace skills (narrative, copy-reader, story-to-web), whose
+  flattening is tracked as its own restructure; and the length, depth and
+  orphan findings in six other
   plugins, each of which is that plugin's own piece of work. No cogni-workspace
   skill is admitted on the length arm.
 

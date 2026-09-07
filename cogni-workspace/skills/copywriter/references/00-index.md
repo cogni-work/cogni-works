@@ -22,13 +22,13 @@ CHECK 0 -- TRANSLATION MODE (orthogonal to mode below)
 If `TARGET_LANG` is set and resolves to a different value from the detected source language, **additionally** load the translation references on top of whatever mode CHECK 1/2/3 selects:
 
 ```
-LOAD: 01-core-principles/translation-principles.md
-LOAD: 01-core-principles/translation-{source_lang}-to-{TARGET_LANG}.md
+LOAD: translation-principles.md
+LOAD: translation-{source_lang}-to-{TARGET_LANG}.md
 ```
 
 Construct the direction filename deterministically from the resolved `source_lang` and `TARGET_LANG` (e.g. `en`→`fr` → `translation-en-to-fr.md`; `pl`→`de` → `translation-pl-to-de.md`). The Step 1 pre-checks (accept-set + pivot guard) guarantee a valid pair, so the file always exists. The 22 supported directions are the 7×7 validity matrix in `translation-principles.md` (any pair with EN or DE on one end; diagonal is a no-op; direct non-EN/DE pairs are rejected upstream).
 
-When `TARGET_LANG` is set **and** the document has `arc_id` **and** the pair pivots on EN/DE (one end ∈ {en,de}) **and** `arc_id` is in scope (`corporate-visions`, `jtbd-portfolio`), CHECK 1 (Arc) **does** trigger: load **both** the translation references above **and** the Arc Loading Block references (`09-preservation-modes/arc-preservation.md` plus the upstream narrative files it names). The arc contract's `## Headings` table supplies the canonical target-language headings the skill substitutes in Step 2.5; an arc whose contract has no column for `TARGET_LANG` is aborted upstream in SKILL.md Step 1 pre-check #3. Out-of-scope arcs (any language) and direct non-EN/DE-pivot arc pairs are aborted upstream in SKILL.md Step 1 pre-check #3, so they never reach mode detection. When `TARGET_LANG` is unset, the arc references load exactly as before.
+When `TARGET_LANG` is set **and** the document has `arc_id` **and** the pair pivots on EN/DE (one end ∈ {en,de}) **and** `arc_id` is in scope (`corporate-visions`, `jtbd-portfolio`), CHECK 1 (Arc) **does** trigger: load **both** the translation references above **and** the Arc Loading Block references (`arc-preservation.md` plus the upstream narrative files it names). The arc contract's `## Headings` table supplies the canonical target-language headings the skill substitutes in Step 2.5; an arc whose contract has no column for `TARGET_LANG` is aborted upstream in SKILL.md Step 1 pre-check #3. Out-of-scope arcs (any language) and direct non-EN/DE-pivot arc pairs are aborted upstream in SKILL.md Step 1 pre-check #3, so they never reach mode detection. When `TARGET_LANG` is unset, the arc references load exactly as before.
 
 After loading the translation references, continue with normal mode detection below.
 
@@ -36,7 +36,7 @@ CHECK 0.5 -- COMPRESS SCOPE (orthogonal to mode below)
 If `--scope=compress` is set, **additionally** load the compression reference on top of whatever mode CHECK 1/2/3 selects:
 
 ```
-LOAD: 01-core-principles/compression-principles.md
+LOAD: compression-principles.md
 ```
 
 Compress is a scope override, not a mode: Step 2 (Structure) is skipped, Step 3 runs as a compression pass (word-count minimization, decorative formatting relaxed), and Step 5 adds the precision-preservation gate. Compress is incompatible with `arc_mode` (abort) and must not be fused with `TARGET_LANG` (reject — translate first, then compress). After loading the compression reference, continue with normal mode detection below.
@@ -45,7 +45,7 @@ CHECK 1 -- ARC PRESERVATION MODE
 Trigger conditions (any one is sufficient):
 - Document YAML frontmatter contains `arc_id`
 - User says "polish this arc" or "arc preservation" or similar
-- Document H2 headings match a known arc pattern (corporate-visions, technology-futures, competitive-intelligence, strategic-foresight, industry-transformation)
+- Document H2 headings match a registered arc's element headings — `arc-preservation.md` § "Arc Detection Reference", Step 2 is the authority for the registry read and the match threshold
 
 If triggered, set `mode = arc` and go to the Arc Loading Block below.
 
@@ -69,17 +69,17 @@ No special mode detected. Set `mode = standard` and go to the Standard Loading B
 When `mode = arc`, the arc IS the document structure. Do NOT apply a messaging framework or a deliverable-type convention.
 
 ```
-LOAD: 09-preservation-modes/arc-preservation.md
+LOAD: arc-preservation.md
 LOAD: ${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/story-arc/{arc_id}/arc-definition.md
 LOAD: ${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/narrative-techniques/techniques-overview.md
-LOAD: 01-core-principles/clarity-principles.md
-LOAD: 01-core-principles/conciseness-principles.md
-LOAD: 01-core-principles/active-voice-principles.md
-LOAD: 01-core-principles/acronym-handling-principles.md
+LOAD: clarity-principles.md
+LOAD: conciseness-principles.md
+LOAD: active-voice-principles.md
+LOAD: acronym-handling-principles.md
 
 IF document language is German:
-  LOAD: 01-core-principles/german-style-principles.md
-  LOAD: 01-core-principles/german-hook-principles.md
+  LOAD: german-style-principles.md
+  LOAD: german-hook-principles.md
 ```
 
 Impact techniques for arc mode come from `techniques-overview.md`, already loaded above: `## 4. Number Plays (6 Techniques)` for quantification, and `## 5. Forcing Functions` through `## 8. Compound Impact Calculation` for urgency, contrast framing, you-phrasing and compound-impact arithmetic. Apply them per-element via that file's application matrix, not generically across the document. Power words and rhetorical devices are NOT in that file, and no reference arc mode loads carries them -- apply them from your own knowledge, at the densities Step 5 states.
@@ -93,11 +93,11 @@ After loading, SKIP Steps 3-4 below. Proceed directly to skill workflow Step 3 (
 When `mode = sales`, load Power Positions plus supporting impact techniques. Sales mode still uses a deliverable type and framework, so continue to Standard Loading Block after loading these.
 
 ```
-LOAD: 08-sales-techniques/power-positions.md
+LOAD: power-positions.md
 LOAD: ${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/narrative-techniques/techniques-overview.md
 ```
 
-In `techniques-overview.md`, sales mode uses `## 4. Number Plays (6 Techniques)` for the DOES layer and `## 5. Forcing Functions` through `## 8. Compound Impact Calculation` for the urgency and framing behind the MEANS layer. Power words are NOT in that file: the MEANS-layer vocabulary sales mode uses is the `MEANS layer Power Word categories` table inside `08-sales-techniques/power-positions.md`, already loaded above.
+In `techniques-overview.md`, sales mode uses `## 4. Number Plays (6 Techniques)` for the DOES layer and `## 5. Forcing Functions` through `## 8. Compound Impact Calculation` for the urgency and framing behind the MEANS layer. Power words are NOT in that file: the MEANS-layer vocabulary sales mode uses is the `MEANS layer Power Word categories` table inside `power-positions.md`, already loaded above.
 
 Then continue to the Standard Loading Block for deliverable + framework selection.
 
@@ -110,28 +110,28 @@ This is the normal path for all non-arc tasks (including sales mode, which adds 
 #### 2a. Core Principles (always load these four)
 
 ```
-LOAD: 01-core-principles/clarity-principles.md
-LOAD: 01-core-principles/conciseness-principles.md
-LOAD: 01-core-principles/active-voice-principles.md
-LOAD: 01-core-principles/acronym-handling-principles.md
+LOAD: clarity-principles.md
+LOAD: conciseness-principles.md
+LOAD: active-voice-principles.md
+LOAD: acronym-handling-principles.md
 ```
 
 #### 2b. Language-Conditional Principles
 
 ```
 IF document language is German:
-  LOAD: 01-core-principles/german-style-principles.md
-  LOAD: 01-core-principles/german-hook-principles.md
+  LOAD: german-style-principles.md
+  LOAD: german-hook-principles.md
 ```
 
 #### 2c. Optional Core Principles (load only when relevant)
 
 ```
 IF content is technical and needs accessibility:
-  LOAD: 01-core-principles/plain-language-principles.md
+  LOAD: plain-language-principles.md
 
 IF visual hierarchy and scannability are priorities:
-  LOAD: 01-core-principles/readability-principles.md
+  LOAD: readability-principles.md
 ```
 
 ---
@@ -199,7 +199,7 @@ IF impact_level = high OR audience is executive/C-suite OR deliverable is execut
 
 What that file carries: `## 4. Number Plays (6 Techniques)` for quantification, `## 5. Forcing Functions` for urgency stacking, `## 6. Contrast Structure` for cognitive-dissonance framing, `## 7. You-Phrasing` for reader-centred phrasing, and `## 8. Compound Impact Calculation` for the compound-impact arithmetic.
 
-What it does NOT carry. No reference file carries these either, except sales mode's `08-sales-techniques/power-positions.md`, which has its own MEANS-layer power-word categories. Apply each from your own knowledge of the craft, at the house densities below:
+What it does NOT carry. No reference file carries these either, except sales mode's `power-positions.md`, which has its own MEANS-layer power-word categories. Apply each from your own knowledge of the craft, at the house densities below:
 
 ```
 Power words        -- 3-5 per page, in headlines and CTAs; match category to context
@@ -211,16 +211,16 @@ Executive framing  -- lead with the ask, quantify everything, one page max, deci
 
 ```
 IF deliverable needs visual elements (one-pager, report, blog, proposal):
-  LOAD: 03-formatting-standards/visual-elements.md
+  LOAD: visual-elements.md
 
 IF document has multi-section structure:
-  LOAD: 03-formatting-standards/heading-hierarchy.md
+  LOAD: heading-hierarchy.md
 
 IF document contains inline citations:
-  LOAD: 03-formatting-standards/citation-formatting.md
+  LOAD: citation-formatting.md
 
 IF user asks about markdown syntax:
-  LOAD: 03-formatting-standards/markdown-basics.md
+  LOAD: markdown-basics.md
 ```
 
 ### Stakeholder Review
@@ -250,7 +250,7 @@ There are no example or template reference files. When the user asks for a worke
 
 ```
 IF task is complex (multi-step, dependencies, first-time user):
-  LOAD: workflow/step-by-step-guide.md
+  LOAD: step-by-step-guide.md
 ```
 
 ---
@@ -275,9 +275,11 @@ Use this table to confirm you have the right references for common tasks. Each r
 
 ## File Inventory
 
-All reference files in this system, organized by directory. Use this as the source of truth for valid file paths.
+All reference files in this system, grouped by topic. Every basename below is also its path relative
+to `references/` — the groups are a reading aid, not directories. Use this as the source of truth for
+valid file paths.
 
-### 01-core-principles/
+### Core principles and translation
 - `clarity-principles.md` -- 15-20 word sentences, concrete language, simple words
 - `conciseness-principles.md` -- 3-5 sentence paragraphs, eliminate filler, strong verbs
 - `compression-principles.md` -- `--scope=compress`: word-count minimization as the primary objective, zero precision loss, the Step 5 precision-preservation gate
@@ -311,19 +313,19 @@ All reference files in this system, organized by directory. Use this as the sour
 - `translation-nl-to-de.md` -- NL→DE: u→Sie, re-spell compounds + add umlauts, cognate false friends (German production → en-to-de)
 - `translation-pl-to-de.md` -- PL→DE: Pan/Pani→Sie, add articles, recompose compounds (German production → en-to-de)
 
-### 03-formatting-standards/
+### Formatting standards
 - `visual-elements.md` -- Tables, callouts, lists, emphasis (~1 visual per 2 paragraphs)
 - `heading-hierarchy.md` -- Max 3 levels, front-loaded keywords, parallel structure
 - `citation-formatting.md` -- Citation placement, superscript commas, preservation rules
 - `markdown-basics.md` -- Standard markdown syntax reference
 
-### 08-sales-techniques/
+### Sales techniques
 - `power-positions.md` -- IS-DOES-MEANS structure, enhancement by layer, Value Wedge
 
-### 09-preservation-modes/
+### Arc preservation
 - `arc-preservation.md` -- Arc detection, structure preservation, forbidden vs allowed modifications, translation-mode word band, validation checklist. Per-arc per-element technique rules are read at runtime from the `narrative` skill's arc contract (`story-arc/{arc_id}/arc-definition.md` `## Elements`) and `techniques-overview.md`
 
-### workflow/
+### Workflow
 - `step-by-step-guide.md` -- Complete sub-steps, gate checks, validation procedures
 
 ### Outside this tree

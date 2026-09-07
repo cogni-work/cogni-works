@@ -59,7 +59,7 @@ The citation form is `Claim text<sup>[N](source-file.md)</sup>`, placed at the e
 
 Readability measures locate passages worth reviewing. They are not acceptance criteria. Warning signs: several consecutive sentences need rereading; the main clause repeatedly arrives after long setup; nominalizations dominate a paragraph; four or more abstract nouns appear where actors or objects could be named; sentence length barely varies across a paragraph; adjacent paragraphs open with the same syntax; rhetorical questions or contrast templates repeat; the prose could serve another topic by changing only the nouns.
 
-Do not enforce hard limits — a fixed maximum sentence length, a fixed Flesch score, an active-voice share, a required device count. Pass 4 runs the copywriter's readability script and revises once on a miss against the language target in `skills/copywriter/contracts/readability.yml`; that single bounded gate is the only numeric check, and its sub-metrics (clause length, floskel count, sentence-length variance) are diagnostics that point at passages, never verdicts on the narrative.
+Do not enforce hard limits — a fixed maximum sentence length, a fixed Flesch score, an active-voice share, a required device count. Pass 4 runs the copywriter's readability script and revises once on a miss against the language target in `cogni-workspace/tests/fixtures/copywriter/readability.yml`; that single bounded gate is the only numeric check, and its sub-metrics (clause length, floskel count, sentence-length variance) are diagnostics that point at passages, never verdicts on the narrative.
 
 ## Final editorial pass
 

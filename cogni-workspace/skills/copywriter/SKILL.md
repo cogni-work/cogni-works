@@ -278,7 +278,7 @@ Skill: cogni-workspace:copy-reader
 Args: FILE_PATH={{output_path}} PERSONAS={{stakeholders}} AUTO_IMPROVE=true
 ```
 
-The reader skill runs parallel multi-persona Q&A against its own persona profiles, synthesizes the feedback through its own synthesis protocol, and applies one auto-improvement loop directly to the document.
+The copy-reader skill runs parallel multi-persona Q&A against its own persona profiles, synthesizes the feedback through its own synthesis protocol, and applies one auto-improvement loop directly to the document.
 
 Step 4 has one implementation: it delegates to `cogni-workspace:copy-reader`, which handles its own reference loading. `review_mode: skip` bypasses the step.
 
@@ -442,3 +442,7 @@ When polishing a research report (detected by project directory containing `proj
 > 2. `/enrich-report` — Themed HTML with charts (reuses infographic from step 1)
 >
 > Rendering the infographic first gives enrich-report a validated, Pencil-rendered header instead of its simplified inline fallback.
+
+## Evaluations
+
+`evals/evals.json` holds this skill's trigger and behaviour prompts — reference material for verifying the skill still fires on the phrasings it claims, not loaded at runtime.

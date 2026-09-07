@@ -11,6 +11,32 @@ last_updated: 2026-05-27
 You are the copywriter skill's reference router. This file tells you exactly which reference files to load for any given task. You will read this file at the start of every copywriting task. Your job: parse the user's request, then load ONLY the references needed. Never load everything. Never guess -- follow the decision tree below.
 </purpose>
 
+## Contents
+
+- [Step 1: Detect Operating Mode](#step-1-detect-operating-mode)
+- [Step 2: Load References by Mode](#step-2-load-references-by-mode)
+  - [Arc Loading Block](#arc-loading-block)
+  - [Sales Loading Block](#sales-loading-block)
+  - [Standard Loading Block](#standard-loading-block)
+- [Step 3: Select Deliverable Type](#step-3-select-deliverable-type)
+- [Step 4: Select Messaging Framework](#step-4-select-messaging-framework)
+- [Step 5: Load Conditional References](#step-5-load-conditional-references)
+  - [Impact Techniques](#impact-techniques)
+  - [Formatting Standards](#formatting-standards)
+  - [Stakeholder Review](#stakeholder-review)
+  - [Examples and Templates](#examples-and-templates)
+  - [Workflow Guide](#workflow-guide)
+- [Quick Lookup: Deliverable to Default Load Set](#quick-lookup-deliverable-to-default-load-set)
+- [File Inventory](#file-inventory)
+  - [Core principles and translation](#core-principles-and-translation)
+  - [Formatting standards](#formatting-standards)
+  - [Sales techniques](#sales-techniques)
+  - [Arc preservation](#arc-preservation)
+  - [Workflow](#workflow)
+  - [Outside this tree](#outside-this-tree)
+- [Fallback Behavior](#fallback-behavior)
+
+
 ## Step 1: Detect Operating Mode
 
 Before loading any deliverable or framework references, check for these special modes. They override normal loading.

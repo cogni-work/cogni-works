@@ -218,6 +218,20 @@ Return ONLY valid JSON (no markdown fencing, no explanation before or after):
 
 ### Scoring Rules
 
+**What these figures are, and what they are not.** Every number below is a weighted
+roll-up of the three-valued per-criterion judgement `pass` / `warn` / `fail` — it
+carries no more resolution than those judgements do, and two briefs a point apart are
+not distinguishable. State that wherever a figure is surfaced to a user: quote the
+band and the verdict, never the bare integer on its own.
+
+The judgements themselves are made from the brief's own text. This agent holds only
+`Read` and `Glob`, is never given a rendered artefact, and so **never sees a render**.
+Criteria that name a visual property — Visual Rhythm, Layout Variety, Mobile
+Consideration and their siblings — are therefore inferred from what the brief
+*declares* (layout types, block counts, ordering, density fields), not observed. A
+brief that declares good rhythm and renders badly scores well here; that gap is a
+limit of the method, not a defect in the brief.
+
 Per-criterion score: pass=100, warn=60, fail=0.
 Per-perspective score: sum of (criterion_score * criterion_weight) for all 5 criteria. Range: 0-100.
 
@@ -227,7 +241,9 @@ Per-perspective overall:
 - **fail**: Two or more fails (score < 60)
 
 Overall verdict: see [Verdict Logic](#verdict-logic).
-Overall score: average of three perspective scores.
+Overall score: average of three perspective scores — an average of three roll-ups of
+three-valued judgements, and the figure with the least resolution of any emitted here.
+The verdict, not `overall_score`, is the reportable result.
 
 Only include `note` when the score is warn or fail — empty string for pass.
 

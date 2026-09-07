@@ -12,6 +12,52 @@ updated: 2026-02-25
 This is the detailed execution guide for the copywriter skill's 8-step workflow. It supplements SKILL.md by providing sub-step procedures, decision logic, and validation criteria for each phase. SKILL.md is the authoritative source for the workflow definition. This guide is the authoritative source for how to execute each step.
 </context>
 
+## Contents
+
+- [Workflow Overview](#workflow-overview)
+  - [Scope Handling (Polish Mode)](#scope-handling-polish-mode)
+- [Step 1: Parse Parameters & Load References](#step-1-parse-parameters-load-references)
+  - [1A: Extract Parameters from User Request](#1a-extract-parameters-from-user-request)
+  - [1B: Detect Mode -- Arc-Aware vs. Standard](#1b-detect-mode----arc-aware-vs-standard)
+  - [1C: Load References (Standard Mode)](#1c-load-references-standard-mode)
+  - [Step 1 Gate](#step-1-gate)
+- [Step 2: Gather Content Requirements](#step-2-gather-content-requirements)
+  - [2A: Ask Clarifying Questions](#2a-ask-clarifying-questions)
+  - [2B: Identify Visual Element Needs](#2b-identify-visual-element-needs)
+  - [Step 2 Gate](#step-2-gate)
+- [Step 3: Apply Structure & Framework](#step-3-apply-structure-framework)
+  - [3A: Apply Deliverable Structure](#3a-apply-deliverable-structure)
+  - [3B: Integrate Framework Pattern](#3b-integrate-framework-pattern)
+  - [3C: Map Content to Structure](#3c-map-content-to-structure)
+  - [Step 3 Gate](#step-3-gate)
+- [Step 4: Apply Writing Principles](#step-4-apply-writing-principles)
+  - [4A: Detect Document Language](#4a-detect-document-language)
+  - [4B: Draft the Document](#4b-draft-the-document)
+  - [4C: Apply Paragraph Separation and Bold Anchoring](#4c-apply-paragraph-separation-and-bold-anchoring)
+  - [Step 4 Gate](#step-4-gate)
+- [Step 5: Apply Impact Techniques (Optional)](#step-5-apply-impact-techniques-optional)
+  - [Step 5 Gate](#step-5-gate)
+- [Step 6: Stakeholder Review (Optional)](#step-6-stakeholder-review-optional)
+  - [6A: Resolve Stakeholders](#6a-resolve-stakeholders)
+  - [6B: Delegate to the copy-reader Skill](#6b-delegate-to-the-copy-reader-skill)
+  - [Step 6 Gate](#step-6-gate)
+- [Step 7: Synthesis & Refinement (Owned by the copy-reader skill)](#step-7-synthesis-refinement-owned-by-the-copy-reader-skill)
+  - [Step 7 Gate](#step-7-gate)
+- [Step 8: Validate & Write Document](#step-8-validate-write-document)
+  - [8A: Run Validation Checks](#8a-run-validation-checks)
+  - [8B: Run Readability Script (if available)](#8b-run-readability-script-if-available)
+  - [8C: Backup Original Document](#8c-backup-original-document)
+  - [8D: Apply Citation Formatting (if document contains citations)](#8d-apply-citation-formatting-if-document-contains-citations)
+  - [8E: Write Final Document](#8e-write-final-document)
+  - [8F: Present Summary to User](#8f-present-summary-to-user)
+  - [Step 8 Gate (Final)](#step-8-gate-final)
+- [Decision Trees](#decision-trees)
+  - [Framework Selection (when not specified by user)](#framework-selection-when-not-specified-by-user)
+  - [When to Load Additional References](#when-to-load-additional-references)
+  - [Handling Insufficient Information](#handling-insufficient-information)
+  - [Handling Ambiguous Deliverable Type](#handling-ambiguous-deliverable-type)
+
+
 <critical_rules>
 - Initialize TodoWrite at the start with all 8 workflow steps. Mark each step as you complete it.
 - Load references progressively: only load what the current step requires.
@@ -369,7 +415,7 @@ Before proceeding, verify:
 
 ### 6A: Resolve Stakeholders
 
-Resolve `{{stakeholders}}` before dispatching -- it is the reader skill's `PERSONAS` argument.
+Resolve `{{stakeholders}}` before dispatching -- it is the copy-reader skill's `PERSONAS` argument.
 
 Use the explicit `stakeholders` parameter when one is given. Otherwise take the defaults for the audience parameter:
 
@@ -381,18 +427,18 @@ Use the explicit `stakeholders` parameter when one is given. Otherwise take the 
 | legal | legal, executive, technical |
 | sales/marketing | marketing, executive, end-user |
 
-### 6B: Delegate to the Reader Skill
+### 6B: Delegate to the copy-reader Skill
 
 ```text
 Delegate to: cogni-workspace:copy-reader
 Args: FILE_PATH={{output_path}} PERSONAS={{stakeholders}} AUTO_IMPROVE=true
 ```
 
-The reader skill handles parallel multi-persona Q&A, synthesis and automatic improvement against its own persona profiles and synthesis protocol. It loads each persona's criteria from its own `references/persona-*.md` profiles, scores each criterion PASS (100) / CONCERN (60) / FAIL (0), computes the weighted overall score, and returns structured feedback with priority labels.
+The copy-reader skill handles parallel multi-persona Q&A, synthesis and automatic improvement against its own persona profiles and synthesis protocol. It loads each persona's criteria from its own `references/persona-*.md` profiles, scores each criterion PASS (100) / CONCERN (60) / FAIL (0), computes the weighted overall score, and returns structured feedback with priority labels.
 
 `review_mode` accepts `reader` (the default) and `skip`; `automated` is a deprecated alias for `reader`.
 
-**Scoring thresholds** (as returned by the reader skill):
+**Scoring thresholds** (as returned by the copy-reader skill):
 
 | Score | Assessment |
 |-------|-----------|
@@ -413,18 +459,18 @@ Before proceeding, verify:
 
 ---
 
-## Step 7: Synthesis & Refinement (Owned by the reader skill)
+## Step 7: Synthesis & Refinement (Owned by the copy-reader skill)
 
-There is no inline synthesis pass. The reader skill dispatched in Step 6 aggregates and prioritizes the persona feedback, resolves conflicts and applies improvements itself, using its own `references/synthesis-protocol.md` — the single copy of the priority-escalation ladder, the conflict-resolution table and the tiebreaker hierarchy.
+There is no inline synthesis pass. The copy-reader skill dispatched in Step 6 aggregates and prioritizes the persona feedback, resolves conflicts and applies improvements itself, using its own `references/synthesis-protocol.md` — the single copy of the priority-escalation ladder, the conflict-resolution table and the tiebreaker hierarchy.
 
 **Graceful degradation:**
-- The reader skill validates its own output and reverts to its backup on failure.
-- Reader dispatch fails -> Continue to Step 8 with the document as written, log `fallback_reason: "review_failure"`.
+- The copy-reader skill validates its own output and reverts to its backup on failure.
+- copy-reader dispatch fails -> Continue to Step 8 with the document as written, log `fallback_reason: "review_failure"`.
 
 ### Step 7 Gate
 
 Before proceeding, verify:
-- The reader skill returned, or its failure is logged with a `fallback_reason`
+- The copy-reader skill returned, or its failure is logged with a `fallback_reason`
 - Review never blocks delivery: an unavailable review means Step 8 proceeds on the unreviewed document
 
 ---

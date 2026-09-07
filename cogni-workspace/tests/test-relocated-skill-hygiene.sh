@@ -2,7 +2,7 @@
 # Relocated-skill hygiene guard for the skills and agents cogni-workspace adopted
 # from retired plugins: cogni-issues (from cogni-help), the troubleshoot material
 # cogni-help contributed, now carried by workspace-status as its plugin-level tier, claims
-# and claim-entity (from cogni-claims), copywriter / copy-json / copy-reader plus two
+# and claim-entity (from cogni-claims), copywriter / copy-reader plus two
 # agents (from cogni-copywriting), and the render chain (from cogni-visual). The
 # narrative skill, its agents and commands adopted from cogni-narrative, and the
 # story-to-* brief producers adopted from cogni-visual, have since retired in favour
@@ -94,7 +94,6 @@ $WS_ROOT/skills/claim-entity|cogni-claims:
 $WS_ROOT/agents/claim-verifier.md|cogni-claims:
 $WS_ROOT/agents/source-inspector.md|cogni-claims:
 $WS_ROOT/skills/copywriter|cogni-copywriting:
-$WS_ROOT/skills/copy-json|cogni-copywriting:
 $WS_ROOT/skills/copy-reader|cogni-copywriting:
 $WS_ROOT/agents/copywriter.md|cogni-copywriting:
 $WS_ROOT/agents/reader.md|cogni-copywriting:

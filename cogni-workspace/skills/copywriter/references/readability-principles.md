@@ -15,6 +15,38 @@ last_updated: 2026-02-25
 
 # Readability and Scannability Principles
 
+## Contents
+
+- [Quick Reference](#quick-reference)
+- [Purpose](#purpose)
+- [Decision Logic](#decision-logic)
+- [Principles](#principles)
+  - [1. Front-Load Important Information](#1-front-load-important-information)
+  - [2. Create Clear Visual Hierarchy](#2-create-clear-visual-hierarchy)
+- [Introduction](#introduction)
+- [Background](#background)
+- [Analysis](#analysis)
+- [Recommendations](#recommendations)
+- [Conclusion](#conclusion)
+- [Recommendation: Migrate to Cloud Infrastructure by Q3](#recommendation-migrate-to-cloud-infrastructure-by-q3)
+- [Current On-Premise Costs Are Unsustainable](#current-on-premise-costs-are-unsustainable)
+- [Cloud Migration Saves 40% and Improves Uptime](#cloud-migration-saves-40-and-improves-uptime)
+- [Three-Phase Migration Plan](#three-phase-migration-plan)
+- [Next Steps: Approve Budget by March 15](#next-steps-approve-budget-by-march-15)
+  - [3. Keep Paragraphs Short and Focused](#3-keep-paragraphs-short-and-focused)
+  - [4. Use Lists for Scannable Groups](#4-use-lists-for-scannable-groups)
+  - [5. Use Tables for Comparisons and Structured Data](#5-use-tables-for-comparisons-and-structured-data)
+  - [6. Apply Emphasis Sparingly and Consistently](#6-apply-emphasis-sparingly-and-consistently)
+  - [7. Use White Space to Separate Ideas](#7-use-white-space-to-separate-ideas)
+  - [8. Structure Documents with Progressive Disclosure](#8-structure-documents-with-progressive-disclosure)
+- [Readability Metrics](#readability-metrics)
+  - [Sentence and Paragraph Targets](#sentence-and-paragraph-targets)
+  - [Flesch Reading Ease (English)](#flesch-reading-ease-english)
+  - [Flesch Reading Ease -- German (Amstad, 1978)](#flesch-reading-ease----german-amstad-1978)
+- [Document Type Quick Reference](#document-type-quick-reference)
+- [Revision Checklist](#revision-checklist)
+
+
 ## Quick Reference
 **Use when:** All deliverable types
 **Core principle:** Enable fast comprehension through visual structure

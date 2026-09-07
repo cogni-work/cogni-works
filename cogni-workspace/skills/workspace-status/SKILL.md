@@ -383,3 +383,7 @@ different things.
 - `${CLAUDE_PLUGIN_ROOT}/skills/workspace-status/references/plugin-diagnostics.md` — the procedures behind check 7's six probes
 - `${CLAUDE_PLUGIN_ROOT}/skills/workspace-status/references/known-issues.md` — a maintained catalogue of known symptoms and their fixes
 - `${CLAUDE_PLUGIN_ROOT}/skills/workspace-status/references/mcp-registry.md` — the ecosystem MCP list read by check 6
+
+## Evaluations
+
+`evals/evals.json` holds this skill's trigger and behaviour prompts — reference material for verifying the skill still fires on the phrasings it claims, not loaded at runtime.

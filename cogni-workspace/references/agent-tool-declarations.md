@@ -25,6 +25,7 @@ interactive-bearing skill and pins the flag at its dispatch site.
 
 `tools:` carries `skills/enrich-report/SKILL.md`'s `allowed-tools` under the mirror rule, including
 `AskUserQuestion`, which that skill exercises at its Review checkpoint in this agent's context; the
-agent pins `interactive=false` on the dispatch line, so the prompt is never reached. The grant also
-names `Edit` and `Grep`, which neither the body nor the skill's `allowed-tools` exercises; that
-surplus is tracked as its own change request rather than trimmed here.
+agent pins `interactive=false` on the dispatch line, so the prompt is never reached. The grant mirrors that
+`allowed-tools` line exactly. It previously also named `Edit` and `Grep`; neither the agent body nor
+anything under `skills/enrich-report/` exercised either, so the mirror rule's capability argument did
+not reach them and both were dropped rather than given a rationale.

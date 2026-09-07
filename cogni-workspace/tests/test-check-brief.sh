@@ -30,8 +30,9 @@
 set -u
 
 # The checker imports parse-brief.py via importlib; without this CPython writes
-# a __pycache__/ into the plugin tree, which test-relocated-skill-hygiene.sh P2
-# then flags as an unresolvable ${CLAUDE_PLUGIN_ROOT} path.
+# a __pycache__/ into the plugin tree. That directory is an interpreter artifact
+# this repo keeps out of the tree by policy — it is gitignored, and
+# scripts/check-skill-spec.py prunes it from its own walk.
 export PYTHONDONTWRITEBYTECODE=1
 
 failures=0

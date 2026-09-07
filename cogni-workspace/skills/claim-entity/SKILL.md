@@ -94,3 +94,7 @@ These constraints exist because claim verification involves LLM-based judgment, 
 - **`references/schema.md`** — Full JSON schema, field tables, deviation type definitions, severity criteria, batch submission format, query interfaces
 - **`references/workspace-conventions.md`** — Directory structure, file formats, initialization, caching rules
 - **`examples/claim-lifecycle.json`** — End-to-end example showing a claim progressing through unverified, deviated, and resolved states with all three record types populated
+
+## Evaluations
+
+`evals/evals.json` holds this skill's trigger and behaviour prompts — reference material for verifying the skill still fires on the phrasings it claims, not loaded at runtime.

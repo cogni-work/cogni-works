@@ -292,3 +292,7 @@ When invoked that way:
 - `patch-desktop-config.py` does not always return per-server rows. The shapes that produce
   that, and the recovery each one calls for, are in
   `${CLAUDE_PLUGIN_ROOT}/skills/install-mcp/references/result-envelope.md`.
+
+## Evaluations
+
+`evals/evals.json` holds this skill's trigger and behaviour prompts — reference material for verifying the skill still fires on the phrasings it claims, not loaded at runtime.

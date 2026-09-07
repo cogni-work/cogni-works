@@ -13,6 +13,33 @@ last_updated: 2026-02-25
 
 # Visual Elements for Scannability
 
+## Contents
+
+- [Purpose](#purpose)
+- [Core Principle: Every Visual Element Must Earn Its Place](#core-principle-every-visual-element-must-earn-its-place)
+- [Decision Logic](#decision-logic)
+- [Element Reference](#element-reference)
+  - [1. Callout Boxes](#1-callout-boxes)
+  - [2. Tables](#2-tables)
+  - [3. Lists](#3-lists)
+  - [4. Bold Emphasis](#4-bold-emphasis)
+  - [5. Horizontal Rules (Section Dividers)](#5-horizontal-rules-section-dividers)
+  - [6. Code Blocks](#6-code-blocks)
+  - [7. Block Quotes](#7-block-quotes)
+- [Target Density by Deliverable](#target-density-by-deliverable)
+- [Combination Patterns](#combination-patterns)
+  - [Pattern A: Key Finding with Evidence](#pattern-a-key-finding-with-evidence)
+  - [Pattern B: Options Comparison with Recommendation](#pattern-b-options-comparison-with-recommendation)
+  - [Pattern C: Process with Milestones](#pattern-c-process-with-milestones)
+- [Quality Checks](#quality-checks)
+- [Common Mistakes](#common-mistakes)
+  - [Mistake: Bullet-point documents](#mistake-bullet-point-documents)
+  - [Mistake: Decorative tables](#mistake-decorative-tables)
+  - [Mistake: Callout inflation](#mistake-callout-inflation)
+  - [Mistake: Bold saturation](#mistake-bold-saturation)
+- [See Also](#see-also)
+
+
 ## Purpose
 
 Visual elements (callouts, tables, lists, bold emphasis, dividers, block quotes, code blocks) break continuous prose into scannable units. They direct the reader's eye to what matters and compress complex information into digestible structures.

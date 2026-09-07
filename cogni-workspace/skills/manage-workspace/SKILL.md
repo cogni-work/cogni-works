@@ -336,3 +336,7 @@ cp .backups/{timestamp}/.workspace-env.sh . 2>/dev/null
 If any script returns `"success": false` in its JSON output, read the `data.error` field and relay it to the user. Don't continue past a failed step — the workspace would be in an incomplete state.
 
 If `generate-settings.sh` fails partway through, clean up by removing any partially created files before reporting the error.
+
+## Evaluations
+
+`evals/evals.json` holds this skill's trigger and behaviour prompts — reference material for verifying the skill still fires on the phrasings it claims, not loaded at runtime.

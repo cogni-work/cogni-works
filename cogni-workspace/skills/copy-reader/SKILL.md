@@ -129,18 +129,14 @@ READ: references/synthesis-protocol.md
 **Synthesis process:**
 
 1. **Collect all persona results** into a single array
-2. **Identify cross-persona themes:**
-   - Same issue raised by 3+ personas → CRITICAL
-   - Same issue raised by 2 personas → HIGH
-   - Same issue raised by 1 persona → keep original priority
-   - Executive + 1 other on same issue → CRITICAL
-3. **Resolve conflicts** using tiebreaker hierarchy:
-   1. Primary audience perspective (infer from document type/content)
-   2. Safety/compliance (legal concerns override style preferences)
-   3. Clarity (end-user accessibility concerns override sophistication)
-   4. Impact (executive/marketing persuasiveness)
-4. **Deduplicate recommendations** - merge similar actions, keep highest priority
-5. **Rank final recommendations** by priority then by number of personas who raised the issue
+2. **Identify cross-persona themes**, then **resolve conflicts** — apply the
+   `### Priority Escalation` table and the tiebreaker hierarchy from
+   `references/synthesis-protocol.md`, loaded above. That file is the single
+   copy of both: its escalation rows are ordered and applied first-match-wins,
+   and its tiebreaker ranking puts safety/compliance above style. Do not
+   restate either here — a second copy is what drifts.
+3. **Deduplicate recommendations** - merge similar actions, keep highest priority
+4. **Rank final recommendations** by priority then by number of personas who raised the issue
 
 **Synthesis output:**
 

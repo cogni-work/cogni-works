@@ -388,7 +388,7 @@ Delegate to: cogni-workspace:copy-reader
 Args: FILE_PATH={{output_path}} PERSONAS={{stakeholders}} AUTO_IMPROVE=true
 ```
 
-The reader skill handles parallel multi-persona Q&A, synthesis and automatic improvement against its own persona profiles and synthesis protocol. It loads each persona's criteria from its own `references/personas/`, scores each criterion PASS (100) / CONCERN (60) / FAIL (0), computes the weighted overall score, and returns structured feedback with priority labels.
+The reader skill handles parallel multi-persona Q&A, synthesis and automatic improvement against its own persona profiles and synthesis protocol. It loads each persona's criteria from its own `references/persona-*.md` profiles, scores each criterion PASS (100) / CONCERN (60) / FAIL (0), computes the weighted overall score, and returns structured feedback with priority labels.
 
 `review_mode` accepts `reader` (the default) and `skip`; `automated` is a deprecated alias for `reader`.
 

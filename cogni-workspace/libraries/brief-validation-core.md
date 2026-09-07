@@ -7,7 +7,7 @@ updated: 2026-09-05
 
 # Brief Validation Core — the reasoning layers
 
-The validation every brief type shares, stated once. Each producer's checklist — `story-to-slides/references/09-validation-checklist.md`, `story-to-web/references/05-validation.md`, `story-to-web/references/print/04-validation.md`, `story-to-infographic/references/05-validation-checklist.md` — runs `scripts/check-brief.py` as its Layer 1 and points here for the layers a model has to reason through; it keeps only the rules that are specific to its type. Nothing in this file is mechanizable: a scripted proxy for "is this an assertion" would produce false fails and erode trust in the checker, so these stay judgment.
+The validation every brief type shares, stated once. Each producer's checklist — `story-to-slides/references/09-validation-checklist.md`, `story-to-web/references/05-validation.md`, `story-to-web/references/10-print-validation.md`, `story-to-infographic/references/05-validation-checklist.md` — runs `scripts/check-brief.py` as its Layer 1 and points here for the layers a model has to reason through; it keeps only the rules that are specific to its type. Nothing in this file is mechanizable: a scripted proxy for "is this an assertion" would produce false fails and erode trust in the checker, so these stay judgment.
 
 ## Core principle
 

@@ -46,7 +46,7 @@ F40="$ROOT/cogni-workspace/tests/fixtures/brief/unfenced-slides-4.0.md"
 CHECKLISTS=(
   "$ROOT/cogni-workspace/skills/story-to-slides/references/09-validation-checklist.md"
   "$ROOT/cogni-workspace/skills/story-to-web/references/05-validation.md"
-  "$ROOT/cogni-workspace/skills/story-to-web/references/print/04-validation.md"
+  "$ROOT/cogni-workspace/skills/story-to-web/references/10-print-validation.md"
   "$ROOT/cogni-workspace/skills/story-to-infographic/references/05-validation-checklist.md"
 )
 

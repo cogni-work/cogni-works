@@ -369,7 +369,7 @@ Before proceeding, verify:
 
 ### 6A: Resolve Stakeholders
 
-Resolve `{{stakeholders}}` before dispatching -- it is the reader skill's `PERSONAS` argument.
+Resolve `{{stakeholders}}` before dispatching -- it is the copy-reader skill's `PERSONAS` argument.
 
 Use the explicit `stakeholders` parameter when one is given. Otherwise take the defaults for the audience parameter:
 
@@ -381,18 +381,18 @@ Use the explicit `stakeholders` parameter when one is given. Otherwise take the 
 | legal | legal, executive, technical |
 | sales/marketing | marketing, executive, end-user |
 
-### 6B: Delegate to the Reader Skill
+### 6B: Delegate to the copy-reader Skill
 
 ```text
 Delegate to: cogni-workspace:copy-reader
 Args: FILE_PATH={{output_path}} PERSONAS={{stakeholders}} AUTO_IMPROVE=true
 ```
 
-The reader skill handles parallel multi-persona Q&A, synthesis and automatic improvement against its own persona profiles and synthesis protocol. It loads each persona's criteria from its own `references/persona-*.md` profiles, scores each criterion PASS (100) / CONCERN (60) / FAIL (0), computes the weighted overall score, and returns structured feedback with priority labels.
+The copy-reader skill handles parallel multi-persona Q&A, synthesis and automatic improvement against its own persona profiles and synthesis protocol. It loads each persona's criteria from its own `references/persona-*.md` profiles, scores each criterion PASS (100) / CONCERN (60) / FAIL (0), computes the weighted overall score, and returns structured feedback with priority labels.
 
 `review_mode` accepts `reader` (the default) and `skip`; `automated` is a deprecated alias for `reader`.
 
-**Scoring thresholds** (as returned by the reader skill):
+**Scoring thresholds** (as returned by the copy-reader skill):
 
 | Score | Assessment |
 |-------|-----------|
@@ -413,18 +413,18 @@ Before proceeding, verify:
 
 ---
 
-## Step 7: Synthesis & Refinement (Owned by the reader skill)
+## Step 7: Synthesis & Refinement (Owned by the copy-reader skill)
 
-There is no inline synthesis pass. The reader skill dispatched in Step 6 aggregates and prioritizes the persona feedback, resolves conflicts and applies improvements itself, using its own `references/synthesis-protocol.md` — the single copy of the priority-escalation ladder, the conflict-resolution table and the tiebreaker hierarchy.
+There is no inline synthesis pass. The copy-reader skill dispatched in Step 6 aggregates and prioritizes the persona feedback, resolves conflicts and applies improvements itself, using its own `references/synthesis-protocol.md` — the single copy of the priority-escalation ladder, the conflict-resolution table and the tiebreaker hierarchy.
 
 **Graceful degradation:**
-- The reader skill validates its own output and reverts to its backup on failure.
-- Reader dispatch fails -> Continue to Step 8 with the document as written, log `fallback_reason: "review_failure"`.
+- The copy-reader skill validates its own output and reverts to its backup on failure.
+- copy-reader dispatch fails -> Continue to Step 8 with the document as written, log `fallback_reason: "review_failure"`.
 
 ### Step 7 Gate
 
 Before proceeding, verify:
-- The reader skill returned, or its failure is logged with a `fallback_reason`
+- The copy-reader skill returned, or its failure is logged with a `fallback_reason`
 - Review never blocks delivery: an unavailable review means Step 8 proceeds on the unreviewed document
 
 ---

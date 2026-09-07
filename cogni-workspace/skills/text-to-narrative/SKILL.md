@@ -34,6 +34,7 @@ One responsibility per file. Read a file when its phase runs, not before. Every 
 - **Language expresses** — `references/language-shared.md` plus `language-en.md` or `language-de.md`: executive prose rules and, for German, sentence craft. Loaded at Pass 3 only.
 - **Validation checks** — `references/validation.md`: every universal gate, run by `scripts/validate-narrative.py` and then by the writer.
 - **Citations bridge** — `scripts/bridge-citations.py` explodes upstream inline citations into per-source files before Phase 1.
+- **Density caps** — `references/density-ceilings.md`: the one home of every text-length ceiling the design brief applies, one table per target.
 
 ### Bundled arcs
 

@@ -353,6 +353,19 @@ assert_grep_f '([Author, Year](url))' "$REVISOR" "verify-contract-110-revisor-co
 # unreachable and the assertion would prove nothing.
 assert_grep 'Read the citation format' "$REVISOR" "verify-contract-111-revisor-reads-citation-format revisor: resolves the citation family by reading plan.json under the PROJECT_PATH it already receives — no dispatch parameter carries it"
 
+# --- wiki-verifier: author-date grounding normalization (#1877) -----------
+# Phase 1 step 3's grounding normalization stripped `[N]`/`<sup>` only, so an
+# author-date marker survived into the compared string and the
+# `excerpt_quote` containment test failed on a citation that was in fact
+# grounded — depressing the headline grounding rate `verify-store.py merge`
+# aggregates. Reuses the $VERIFIER bind above rather than adding a second one.
+assert_grep_f '([Author, Year](url))' "$VERIFIER" "verify-contract-112-verifier-strips-author-date-markers wiki-verifier: the grounding normalization strips markers of the draft's own family, including the author-date shapes"
+# That strip needs a reachable source for the family. The Task(wiki-verifier, ...)
+# dispatch threads no CITATION_FORMAT, so the plan read under the PROJECT_PATH
+# it already receives is the only channel — without it the branch above is
+# unreachable and the assertion would prove nothing.
+assert_grep 'Read the citation format' "$VERIFIER" "verify-contract-113-verifier-reads-citation-format wiki-verifier: resolves the citation family by reading plan.json under the PROJECT_PATH it already receives — no dispatch parameter carries it"
+
 if [ $errors -eq 0 ]; then
   green ""
   green "ALL PASS"

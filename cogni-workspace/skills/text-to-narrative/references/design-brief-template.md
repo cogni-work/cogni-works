@@ -34,7 +34,7 @@ Units are `## Slide N:` (slides), `## Section N:` (document, web) or `## Block N
 | Key | Targets | Value |
 |-----|---------|-------|
 | `type` | all | `design-brief` |
-| `version` | all | `"1.0"`, quoted |
+| `version` | all | `"1.1"`, quoted |
 | `target` | all | `slides` \| `document` \| `infographic` \| `web` |
 | `language` | all | `en` \| `de`, the narrative's |
 | `arc_id`, `arc_display_name` | all | from the narrative's frontmatter |
@@ -67,7 +67,7 @@ Five `- ` clauses under the localized heading, placed after the subtitle and bef
 
 ## The `type` enum
 
-Every unit on the slides, infographic and web targets carries `type:`, one of `cover`, `bluf`, `two-column`, `table`, `timeline`, `quote`, `metric`, `roles` — the presentation-intent tags, reused for every target because Claude Design reads a content shape, not a layout name. Pick by content: the title unit is `cover`; the TL;DR and the close are `bluf`; a list of parallel positions is `roles`; stacked costs or a comparison is `table`; a sequence of dated forces is `timeline`; a contrast is `two-column`; a hero-number moment is `metric`; a verbatim voice is `quote`. The document target carries no `type:` — its four sections are the arc's elements and the renderer's document structure follows them.
+Every unit on the slides, infographic and web targets carries `type:`, one of `cover`, `bluf`, `two-column`, `table`, `timeline`, `quote`, `metric`, `roles`, `sources` — the presentation-intent tags, reused for every target because Claude Design reads a content shape, not a layout name. Pick by content: the title unit is `cover`; the TL;DR and the close are `bluf`; a list of parallel positions is `roles`; stacked costs or a comparison is `table`; a sequence of dated forces is `timeline`; a contrast is `two-column`; a hero-number moment is `metric`; a verbatim voice is `quote`. The trailing source register is `sources`: the renderer builds it from the narrative's `**Sources**` block verbatim, so it carries no invented bullets and is the one unit exempt from the `slide_points` requirement. `cover` stays available to the infographic and web targets; only the slides derivation stops emitting it. The document target carries no `type:` — its four sections are the arc's elements and the renderer's document structure follows them.
 
 ## Unit grammar per target
 
@@ -86,7 +86,7 @@ talk_track:
 {prose; ≤450 words; ≥150 on an element unit}
 ```
 
-Derivation: `cover` (the title; the subtitle goes to `talk_track`) → `bluf` from the TL;DR → one unit per element in arc order, or two when the element exceeds 300 words and each half keeps at least 150 words of `talk_track` → a `metric` unit when `key_figures` carries three or more entries → a closing `bluf` carrying the decision implication. That is seven to twelve units. When the count exceeds `--max-units`, re-merge split elements starting with the smallest `## Composition` share; never drop the cover, the BLUF or the close. An element unit's `talk_track` is the element's prose, verbatim and complete unless it exceeds 450 words, in which case the unit is split. `climax` defaults to the `metric` unit when present, else the last element unit.
+Derivation: `bluf` carrying the Executive TL;DR, with the narrative title as its headline or kicker and the subtitle integrated there → one unit per element in arc order, or two when the element exceeds 300 words and each half keeps at least 150 words of `talk_track` → a `metric` unit when `key_figures` carries three or more entries → a closing `bluf` carrying the decision implication → a `sources` unit built from the `**Sources**` block verbatim. That is seven to twelve units. The deck opens on the answer, not on a title card: no standalone `cover` unit is emitted for slides. When the count exceeds `--max-units`, re-merge split elements starting with the smallest `## Composition` share, then drop the optional `metric` unit; never drop slide 1, an arc element, the decision close where it adds distinct content, or the final `sources` unit. An element unit's `talk_track` is the element's prose, verbatim and complete unless it exceeds 450 words, in which case the unit is split. `climax` defaults to the decision close, else the `metric` unit when present, else the last element unit — never the `sources` unit.
 
 ### document
 
@@ -148,4 +148,4 @@ Then the narrative's `**Sources**` block, copied verbatim — every `[N] ` entry
 
 ## What the checker proves and what it does not
 
-`check-design-brief.py` proves: the frontmatter type and version; the target and language enums; the contract heading in the brief's language, before unit 1, with five clauses; unit kind and numbering; `density.ceilings` equal to the reference row; every ceiling of the target against the units and preamble; every number on the brief present in the narrative; every `[N]` resolving in Sources and no `<sup>` surviving; every `key_figures` / `hero_numbers` entry carrying a resolvable `(src: [N])`; no styling key. It does not prove that a line is a substring of the narrative, that a headline is an assertion, that the `type` fits the content, or that the selection kept the arc's argument — those are the writer's four judgments, and the reviewer reads for them.
+`check-design-brief.py` proves: the frontmatter type and version; the target and language enums; the contract heading in the brief's language, before unit 1, with five clauses; unit kind and numbering; on slides, that unit 1 is `bluf` and the last unit is `sources`, each named with its unit number; `density.ceilings` equal to the reference row; every ceiling of the target against the units and preamble; every number on the brief present in the narrative; every `[N]` resolving in Sources and no `<sup>` surviving; every `key_figures` / `hero_numbers` entry carrying a resolvable `(src: [N])`; no styling key. It does not prove that a line is a substring of the narrative, that a headline is an assertion, that the `type` fits the content, or that the selection kept the arc's argument — those are the writer's four judgments, and the reviewer reads for them.

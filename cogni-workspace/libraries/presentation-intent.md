@@ -117,3 +117,12 @@ apply to that slide.
 **`quote` has no layout mapping, deliberately.** It is one of the eight tags, but
 no layout in the closed set renders as a pull quote. A symmetric "every tag
 appears in this table" check would therefore be wrong, and none is written.
+
+**`sources` is deliberately not in the list above.** The design brief's slides target
+closes on a `sources` unit (`skills/text-to-narrative/references/design-brief-template.md`),
+so the two vocabularies differ by one tag. That is intended, not drift: this chain has no
+`sources` *type* because the trailing source register is not a content shape here — it is
+the references slide, distinguished by the per-slide key `Slide-Kind: references` and given
+the `table` tag treatment in the mapping above. The list is also byte-synchronized with
+`cogni-consult/references/publish-routing.md`, so it describes what both consumers render,
+not what the brief grammar emits.

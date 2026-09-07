@@ -1,6 +1,6 @@
 ---
 type: design-brief
-version: "1.0"
+version: "1.1"
 target: document
 language: en
 arc_id: corporate-visions

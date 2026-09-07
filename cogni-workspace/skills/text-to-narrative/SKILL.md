@@ -276,6 +276,39 @@ Then read `references/validation.md` and check its judged gates plus the contrac
 2. Verify the file exists and re-read it once, end to end.
 3. Continue to Phase 7; the JSON summary is returned once the brief is written.
 
+### Phase 7: Design brief
+
+**Read first:** `references/design-brief-template.md` in full — the frontmatter schema, the five contract clauses in both languages, the unit grammar per target and the derivation rules. Then:
+
+1. Read `references/density-ceilings.md` and take the `## {target}` table. A missing table halts with error JSON `phase: "7"` naming the path. Every key and value of that table is written into the brief's `density.ceilings` unchanged — the brief carries its own numbers.
+2. Reload the finished narrative from `OUTPUT_PATH` (or from `--source-path` on the finished-narrative entry) and split it as the validator does: the Executive TL;DR above the first `##`, the four `##` elements in order, the `**Sources**` block after the fourth.
+3. Derive the units for `--target` by the template's rule — slides: cover, BLUF, one or two per element, a metric unit, a close; document: the summary lead and exactly four sections; infographic: headline, subline, three to five hero numbers, three to eight blocks, a CTA; web: hero, six to ten sections, a CTA. **Copy is frozen:** every line on the brief is a verbatim selection from the narrative with `<sup>[N](file)</sup>` reduced to `[N]`; compress by selecting a shorter sentence, clause or phrase, never by rewriting; on the slides target, overflow goes to `talk_track`; elsewhere it is dropped. Numbers stay exactly as the narrative wrote them.
+4. Promote three to six `key_figures`, each verbatim and ending `(src: [N])`; pick `climax`; fill `design:` from a caller override or the template's defaults (slides and web only); record `--theme-path` verbatim when given.
+5. Write the brief to `--brief-path` (default `design-brief.md` beside the narrative): frontmatter, title and subtitle, the localized `# Rendering Contract` / `# Rendering-Vertrag` with its five clauses, the target's preamble keys, the units, the CTA where the target has one, the four `note:` lines, and the narrative's `**Sources**` block verbatim.
+6. Validate:
+
+   ```bash
+   python3 "${CLAUDE_PLUGIN_ROOT}/skills/text-to-narrative/scripts/check-design-brief.py" \
+     --brief "${BRIEF_PATH}" --narrative "${OUTPUT_PATH}" --json
+   ```
+
+   Pass `--max-units` through when the caller set it. Fix every `fail` finding by re-selecting, never by rewriting, and re-run — a fix can break a check that passed. **Attempt bound:** at most three fix-and-re-run cycles; if a check is still red after the third, keep the brief on disk, report `brief_qa: "fail"` and the error JSON with `phase: "7"` naming the check. Exit 2 means the brief could not be graded — the ceilings reference or the narrative is unreadable — and halts with the script's `error`, never as a finding.
+7. Print the handoff. Every path printed here is absolute — never `~`, `$HOME`, `$CLAUDE_PLUGIN_ROOT` or relative:
+
+   ```
+   ─── File to attach in claude.ai/design ───
+
+   Design brief ({target}): {absolute_brief_path}
+
+   Hand the brief to Claude Design at claude.ai/design — the organization
+   design system applies, so attach theme.md only when none is configured.
+   ──────────────────────────────────────────
+   ```
+
+8. Return the JSON summary: the narrative fields from Phases 1-6, plus `target`, `brief_path`, `unit_count` and `brief_word_count` as the checker reported them, `density_profile`, and `brief_qa`.
+
+Phase 7 asks nothing in either interactive mode: every choice it makes is a selection from a finished narrative, and a selection the user wants changed is a re-run with a different `--target`, `--max-units` or narrative.
+
 ## Error Handling
 
 On any unrecoverable failure, return `{"success": false, "error": "...", "phase": "..."}`.
@@ -288,3 +321,6 @@ On any unrecoverable failure, return `{"success": false, "error": "...", "phase"
 | 3 | Arc contract or techniques file missing | Halt with the missing path |
 | 4 | Transformation fails | Halt with error JSON |
 | 5 | A gate fails | Report, fix, re-validate all gates — at most three cycles, then abandon with `qa_verdict: "fail"` |
+| 7 | The ceilings reference carries no table for `--target`, or the template is missing | Halt with the missing path |
+| 7 | The checker exits 2 | Halt with the checker's `error` — the brief could not be graded |
+| 7 | A check is still red after three cycles | Keep the brief, report `brief_qa: "fail"` and the error JSON naming the check |

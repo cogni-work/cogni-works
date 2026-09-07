@@ -201,7 +201,7 @@ The same command covers every environment, because `MCP_TARGET` carries the dete
 
 **Branch on the target before reading the result**, then build the Summary rows below from
 the per-server `actions[]`. The envelope's full shape — the single-target vs `--target both`
-split, the `actions[]` entry fields, the target-level verbs, and the two shapes that yield
+split, the `actions[]` entry fields, the target-level verbs, and the shapes that yield
 no rows at all — is in
 `${CLAUDE_PLUGIN_ROOT}/skills/install-mcp/references/result-envelope.md`.
 
@@ -289,7 +289,6 @@ When invoked that way:
 - If `patch-desktop-config.py` fails, show the error and suggest manual patching as fallback
 - If the config being written has invalid JSON, warn the user rather than corrupting it
   further. This applies to `~/.claude.json` as much as to `claude_desktop_config.json`.
-- Two failure shapes return no per-server rows at all — a `--target both` run stopping at
-  its first unwritable target, and a backup that cannot be created. Both, and the
-  re-invoke-per-target recovery they share, are in
+- `patch-desktop-config.py` does not always return per-server rows. The shapes that produce
+  that, and the re-invoke-per-target recovery they share, are in
   `${CLAUDE_PLUGIN_ROOT}/skills/install-mcp/references/result-envelope.md`.

@@ -76,7 +76,7 @@ The bundled set is the only copy of these assets: the narrative skill they were 
 | `--target-length` | No | Target total word count of the narrative (e.g., `2500`). The acceptable range is ±15%. Default: `1675` (1,424-1,926 words). Recommended: 800-4,000 — outside that range the arc's proportions stop scaling well |
 | `--content-map` | No | YAML map of content category keys to file/directory paths for additional context |
 | `--audience` | No | Who the narrative is for. Default: senior business decision-makers. Feeds Pass 3 (vocabulary, acronym expansion, explanation depth) together with the inferred knowledge level |
-| `--purpose` | No | The decision the narrative must serve. Default: understand the evidence and its strategic implications. Feeds Pass 2 (TL;DR, emphasis, close) |
+| `--purpose` | No | The decision the narrative must serve. Default: understand the evidence and its strategic implications. Feeds Pass 2 (emphasis, close) and the Phase 5 TL;DR synthesis |
 | `--perspective` | No | Whose voice the narrative speaks in. Default: neutral analyst. Feeds Pass 2 (pronouns, ownership) |
 | `--geography` | No | Market codes from `cogni-workspace/references/supported-markets-registry.json` (`code` values such as `dach`, `de`, `fr`, `eu`), comma-separated, never free text or a country name. Default: source-defined scope. Feeds Pass 1 (evidence priority when sources span markets) |
 | `--interactive` | No | Whether the skill may pause for user input. `true` or `false`. Default: `true`. When `false`, skip all AskUserQuestion calls — there are two sites: the Phase 0 materiality clarification (takes the default instead) and the Phase 2 arc confirmation (keeps its top-ranked arc and its `detection_reason` and continues straight into Phase 3 with no prompt). Phase 7 has no prompt in either mode. Any value other than `false` is treated as `true`, so a malformed value fails safe toward the interactive default |
@@ -157,7 +157,7 @@ Exactly four `##` headings, byte-equal to the contract's `## Headings` cells for
 }
 ```
 
-`readability_score` is reported when Pass 4 computes it and `null` otherwise. `qa_verdict` is the release review's rollup — exactly one of `pass`, `needs_revision`, `fail`. `brief_qa` is the Phase 7 checker's rollup — `pass` or `fail`. On the finished-narrative entry, `detection_reason` is `"finished narrative"` and `readability_score` is `null`.
+`readability_score` is reported when Pass 4 computes it and `null` otherwise; it is measured at Pass 4 on the body, before the Executive TL;DR exists. `qa_verdict` is the release review's rollup — exactly one of `pass`, `needs_revision`, `fail`. `brief_qa` is the Phase 7 checker's rollup — `pass` or `fail`. On the finished-narrative entry, `detection_reason` is `"finished narrative"` and `readability_score` is `null`.
 
 ## Core Workflow
 
@@ -168,7 +168,7 @@ brief        bridge         & load      selection    contract     passes        
              (conditional)
 ```
 
-When `--source-path` is a finished narrative (single `.md` with `arc_id` and `word_count` in its frontmatter), Phases 0-6 do not run; validate it once with the Phase 5 command and jump to Phase 7. Phases 3 and 4 read the contract and the techniques before any drafting — those two files are what separate a persuasive narrative from a summary under headings.
+When `--source-path` is a finished narrative (single `.md` with `arc_id` and `word_count` in its frontmatter), Phases 0-6 do not run; validate it once with the Phase 5 final-stage command — it already carries a TL;DR — and jump to Phase 7. Phases 3 and 4 read the contract and the techniques before any drafting — those two files are what separate a persuasive narrative from a summary under headings.
 
 ### Phase 0: Execution brief
 
@@ -242,7 +242,7 @@ Draft in four passes. Each pass has one job; doing two at once is how a narrativ
 
 **Pass 1 — evidence draft.** For each element in order: map the loaded content to the element using its `Evidence sought`; when the sources span markets, weight the evidence by the brief's `--geography`; draft the body from that evidence, every quantitative claim carrying `<sup>[N](source-file.md)</sup>`, numbers assigned by first appearance in the body and reused for a reused source; hold the element's word range. Write the four elements only — no title, no opening yet — to `OUTPUT_PATH`.
 
-**Pass 2 — argument edit.** Apply each element's `Argument move` and `Techniques`; enforce its `Hard rules`; build the transitions from `## Composition`; write the closing per the closing pattern, so that emphasis, implications and close serve the brief's `--purpose` and pronouns and ownership follow its `--perspective`. Then — last, from the finished elements — write the title (arc-specific, never "Insight Summary") and the Executive TL;DR, weighting it as the contract's TL;DR-emphasis line says. Writing the TL;DR after the elements is what makes "synthesizes all four" enforceable rather than aspirational. Finally assemble the `**Sources**` block from the provenance map: one entry per cited `[N]`, in number order, carrying the per-source file and its preserved metadata.
+**Pass 2 — argument edit.** Apply each element's `Argument move` and `Techniques`; enforce its `Hard rules`; build the transitions from `## Composition`; write the closing per the closing pattern, so that emphasis, implications and close serve the brief's `--purpose` and pronouns and ownership follow its `--perspective`. Then — last, from the finished elements — write the title (arc-specific, never "Insight Summary"). Finally assemble the `**Sources**` block from the provenance map: one entry per cited `[N]`, in number order, carrying the per-source file and its preserved metadata. Pass 2 ends with the body stable and **no Executive TL;DR written**: the TL;DR is synthesized in Phase 5 from a body that has already cleared body-stage validation, and gate T0 is what makes that order enforceable rather than aspirational.
 
 **Pass 3 — language edit.** Now, and not earlier, read `references/language-shared.md` and `references/language-{language}.md` (`language-en.md` or `language-de.md`). Localize the four headings from `## Headings` for the output language and make the prose read as executive prose per those two files: one idea per sentence, concrete actors and verbs, specificity over intensifiers, no corporate fog; for `de`, the sentence craft in `language-de.md` — Satzklammer, Mittelfeld, Funktionsverbgefüge, Nominalstil, anglicisms — and proper umlauts and ß throughout. Tune vocabulary, acronym expansion and explanation depth to the brief's `--audience` and inferred knowledge level.
 
@@ -260,14 +260,27 @@ The output uses exactly four `##` headings matching the arc's element names. Pha
 
 ### Phase 5: Validation
 
-Run the deterministic gates first:
+The deterministic gates run in two stages, because the Executive TL;DR is synthesized from a body that has already been graded.
+
+**Stage 1 — the body.** Grade the four elements before any TL;DR exists:
+
+```bash
+python3 "${CLAUDE_PLUGIN_ROOT}/skills/text-to-narrative/scripts/validate-narrative.py" \
+  --narrative "${OUTPUT_PATH}" --stage body --contract "${CLAUDE_PLUGIN_ROOT}/skills/text-to-narrative/references/arc-${ARC_ID}.md" --json
+```
+
+This adds gate T0 (no TL;DR prose above the first `##`), counts E1's citation markers in the body alone — so the floor of 15 is met by the elements' own evidence, never by TL;DR repeats — and withholds T1 and T2, which have nothing to grade yet.
+
+**Stage 2 — synthesize the TL;DR, then run the whole contract.** Once stage 1 is green, write the Executive TL;DR as a synthesis pass over the validated body, per the generation rule in `references/validation.md`, applying to it the same `references/language-shared.md` / `references/language-{language}.md` rules Pass 3 applied to the body — for `de`, that includes the opening-sentence rules `language-de.md` names for the TL;DR's first sentence — and Pass 4's rhythm pass over the result. Then run the final stage, which adds T1 and T2 and counts TL;DR markers in E1:
 
 ```bash
 python3 "${CLAUDE_PLUGIN_ROOT}/skills/text-to-narrative/scripts/validate-narrative.py" \
   --narrative "${OUTPUT_PATH}" --contract "${CLAUDE_PLUGIN_ROOT}/skills/text-to-narrative/references/arc-${ARC_ID}.md" --json
 ```
 
-Then read `references/validation.md` and check its judged gates plus the contract's `## Validation` section. Fix any failure and re-run everything — a fix can break a gate that passed. A structural failure is fixed by rewriting against `## Composition`, never by renaming headings. **Attempt bound:** at most three fix-and-re-validate cycles. If a deterministic gate is still red after the third, abandon the run — report `qa_verdict: "fail"` and the error JSON with `phase: "5"` naming the gate — rather than looping.
+When a fix changes the body after the TL;DR exists, discard the TL;DR and re-synthesize it from the changed body rather than patching it, then re-run the final stage.
+
+Then read `references/validation.md` and check its judged gates plus the contract's `## Validation` section. Fix any failure and re-run everything — a fix can break a gate that passed. A structural failure is fixed by rewriting against `## Composition`, never by renaming headings. **Attempt bound:** at most three fix-and-re-validate cycles, spanning both stages rather than three per stage. If a deterministic gate is still red after the third, abandon the run — report `qa_verdict: "fail"` and the error JSON with `phase: "5"` naming the gate — rather than looping.
 
 **Release review (after the gates are green).** Run the banded self-review defined in `references/validation.md`: five dimensions — strategic reasoning, arc integrity, executive language, decision usefulness, execution fit — each `strong` / `adequate` / `weak`, rolled up to `pass`, `needs_revision` (revise once, review once more, then report) or `fail` (a gate could not be cleared and the run was abandoned). The review diagnoses and never rewrites the draft; the revision step acts on its findings. Its rollup is the JSON summary's `qa_verdict`.
 

@@ -6,11 +6,33 @@ Two kinds of check live here. The **deterministic gates** are mechanical and are
 
 ## Deterministic gates (run `validate-narrative.py` first)
 
+The script runs in **two stages**, because the Executive TL;DR is written last, from the finished elements. Run the body stage while the four elements are being stabilized and no TL;DR exists yet; run the final stage once the TL;DR has been synthesized from the validated body.
+
+**Body stage** — grades the four-element argument before a TL;DR exists. It adds T0, counts E1's citation markers in the body alone, and omits T1 and T2:
+
+```bash
+python3 "${CLAUDE_PLUGIN_ROOT}/skills/text-to-narrative/scripts/validate-narrative.py" \
+  --narrative "${OUTPUT_PATH}" --stage body \
+  --contract "${CLAUDE_PLUGIN_ROOT}/skills/text-to-narrative/references/arc-${ARC_ID}.md" --json
+```
+
+**Final stage** — the whole contract, and the default, so an invocation that names no stage keeps the meaning it has always had:
+
 ```bash
 python3 "${CLAUDE_PLUGIN_ROOT}/skills/text-to-narrative/scripts/validate-narrative.py" \
   --narrative "${OUTPUT_PATH}" \
   --contract "${CLAUDE_PLUGIN_ROOT}/skills/text-to-narrative/references/arc-${ARC_ID}.md" --json
 ```
+
+The stage may also be named explicitly; the two forms are identical:
+
+```bash
+python3 "${CLAUDE_PLUGIN_ROOT}/skills/text-to-narrative/scripts/validate-narrative.py" \
+  --narrative "${OUTPUT_PATH}" --stage final \
+  --contract "${CLAUDE_PLUGIN_ROOT}/skills/text-to-narrative/references/arc-${ARC_ID}.md" --json
+```
+
+The stage that ran is reported as `data.stage`. A gate a stage withholds is **absent** from `data.gates`, never reported as passing — a green verdict on a TL;DR that does not exist yet would be unfalsifiable.
 
 **Structural (check first):**
 
@@ -29,11 +51,11 @@ If S1 or S2 fails, rewrite against the arc's `## Composition` rather than renami
 
 **Evidence:**
 
-- E1 — 15-25 citations at the default length, in the form `Claim text<sup>[N](source-file.md)</sup>`, counted as markers in the TL;DR and the body. The floor of 15 holds at every length; the ceiling of 25 applies at or below the default target, and a longer narrative may carry more.
+- E1 — 15-25 citations at the default length, in the form `Claim text<sup>[N](source-file.md)</sup>`, counted as markers. **The final stage counts the TL;DR and the body; the body stage counts the body alone**, so the floor is met by evidence the four elements actually carry rather than by TL;DR repeats of a number the body already has. The floor of 15 holds at every length; the ceiling of 25 applies at or below the default target, and a longer narrative may carry more.
 - E2 — citation numbers run sequentially from 1 in order of first appearance **in the body**; a reused source reuses its number, so a narrative built on five sources carries five numbers and many markers. The TL;DR is written last and reuses the body's numbers, so its own order is free — a TL;DR opening on `[3]` is correct when `[3]` is the third source the body introduces.
 - E3 — one number per source file and one source file per number: the same source never carries two numbers, and a number never points at two files.
 - E4 — every element carries at least one citation marker.
-- X1 — the `**Sources**` block is present after the fourth element and mutually complete with the body: every `[N]` in the body has exactly one entry, every entry is cited at least once, and no number appears twice. A narrative with no block fails, because the block is what makes the narrative self-verifying.
+- X1 — the `**Sources**` block is present after the fourth element and mutually complete with the body: every `[N]` in the body has exactly one entry, every entry is cited at least once, and no number appears twice. The cited set is the **body's** numbers at both stages, so a number carried only by the TL;DR never keeps a Sources entry alive. A narrative with no block fails, because the block is what makes the narrative self-verifying.
 
 **Language (when `language: de`):**
 
@@ -41,8 +63,11 @@ If S1 or S2 fails, rewrite against the arc's `## Composition` rather than renami
 
 **Executive TL;DR:**
 
-- T1 — the prose between the subtitle and the first `##` is 2-4 sentences and 60-100 words. The band is absolute: it does not scale with `--target-length`, because a summary a reader skims does not get longer when the report does.
-- T2 — every `[N]` marker in the TL;DR also appears below the first `##`, with the same source and the same number.
+- T0 — **body stage only:** no TL;DR prose sits between the `*{Subtitle}*` line and the first `##`. T0 is what makes the documented write order enforceable rather than aspirational — the body is graded on its own evidence before any summary of it exists.
+- T1 — **final stage only:** the prose between the subtitle and the first `##` is 2-4 sentences and 60-100 words. The band is absolute: it does not scale with `--target-length`, because a summary a reader skims does not get longer when the report does.
+- T2 — **final stage only:** every `[N]` marker in the TL;DR also appears below the first `##`, with the same source and the same number.
+
+At the body stage T1 and T2 are absent from `data.gates`; at the final stage T0 is.
 
 ## Executive TL;DR contract
 
@@ -58,7 +83,7 @@ The narrative opens with an answer, not a tension. Between the `*{Subtitle}*` li
 - It introduces no fact, number or recommendation absent from the body.
 - Every material number it carries reuses the body's citation — same source, same `[N]`.
 - It reads as complete if the reader stops there.
-- It is written last, from the finished elements (SKILL.md Pass 2).
+- **Generation rule.** It is written only after the body has cleared body-stage validation, and it is an LLM synthesis pass over that validated body — never a deterministic extraction, and never a concatenation of the elements' opening sentences. If the body changes after the TL;DR exists, discard the TL;DR and re-synthesize it from the changed body rather than patching it, then re-run the final stage (SKILL.md Phase 5).
 
 **Rejected and rewritten when it:** reads as a teaser with no decision implication; summarizes only the first section; mechanically summarizes all four topics one after another; introduces evidence the body lacks; restates the title; or grows its own heading.
 
@@ -79,7 +104,7 @@ Gate X1 above checks mutual completeness mechanically.
 **Content:**
 
 - J1 — the title is arc-specific and could not head a different narrative. "Insight Summary" and any generic label fail.
-- J2 — the Executive TL;DR follows the answer-first sequence, emphasizes what the arc's `## Composition` TL;DR line says, and none of the rejection modes above applies.
+- J2 — **final stage only:** the Executive TL;DR follows the answer-first sequence, emphasizes what the arc's `## Composition` TL;DR line says, and none of the rejection modes above applies.
 - J3 — the arc's own `## Validation` assertions hold, and the techniques the arc names for each element are visibly applied.
 - J4 — transitions between elements follow the arc's transition patterns and read as consequences, not topic labels.
 
@@ -87,7 +112,7 @@ Gate X1 above checks mutual completeness mechanically.
 
 - F1 — the narrative is recognizably written for the target audience.
 - F2 — terminology and explanation depth match the inferred knowledge level.
-- F3 — the Executive TL;DR, the emphasis across elements, the implications and the close serve the decision purpose.
+- F3 — the emphasis across elements, the implications and the close serve the decision purpose. Its Executive TL;DR half is **final stage only**, since there is no TL;DR to read at the body stage.
 - F4 — perspective and pronouns are consistent with the stated voice throughout.
 - F5 — geographic emphasis matches the scope: evidence from the named markets leads.
 - F6 — where the brief asked for evidence and interpretation to be kept apart, the separation is visible in the prose.

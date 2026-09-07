@@ -19,6 +19,20 @@
 #
 # Contract: runs as `bash <path>` with no arguments, from any cwd, touches no network,
 # needs bash + coreutils + python3, and exits non-zero on failure.
+#
+# Mutation recipes (generic harness:
+# ~/GitHub/dev/managed-service/cogni-service/scripts/mutation-check.sh):
+#   --file cogni-workspace/skills/text-to-narrative/scripts/validate-narrative.py \
+#     --expr 's{cites = body_cites if stage == "body" else opening_cites \+ body_cites}{cites = opening_cites + body_cites}' \
+#     --test 'bash cogni-workspace/tests/test-narrative-validate.sh' --case NV21
+#   --file cogni-workspace/skills/text-to-narrative/scripts/validate-narrative.py \
+#     --expr 's{gate\("T0", not opening,}{gate\("T0", True,}' \
+#     --test 'bash cogni-workspace/tests/test-narrative-validate.sh' --case NV19
+#
+# The first reverts the body-stage E1 restriction so it counts TL;DR markers again: the
+# 14-body-marker narrative then clears the floor of 15 on 2 TL;DR repeats, NV21 goes RED
+# and every other case stays green. The second defeats T0's absence assertion, so NV19
+# (T0 red while TL;DR prose is still present) goes RED while NV20 stays green.
 
 set -u
 
@@ -44,10 +58,16 @@ for f in "$VALIDATOR" "$FIXTURE" "$CONTRACT"; do
 done
 pass "NV0 inputs readable"
 
-# run <narrative> -> sets OUT (json) and RC
+# run <narrative> [stage] -> sets OUT (json) and RC. An empty or absent stage invokes the
+# validator with no --stage flag at all, so every pre-existing call site is unchanged.
 run() {
-  OUT="$(python3 "$VALIDATOR" --narrative "$1" --contract "$CONTRACT" --json 2>&1)"
-  RC=$?
+  if [ -n "${2:-}" ]; then
+    OUT="$(python3 "$VALIDATOR" --narrative "$1" --contract "$CONTRACT" --stage "$2" --json 2>&1)"
+    RC=$?
+  else
+    OUT="$(python3 "$VALIDATOR" --narrative "$1" --contract "$CONTRACT" --json 2>&1)"
+    RC=$?
+  fi
 }
 
 # gate_status <json> <gate id> -> pass|fail|absent
@@ -75,9 +95,10 @@ else
   fail "NV1 the conforming fixture passes every gate (exit $RC)"
 fi
 
-# expect_red <id> <gate> <mutant path> — the mutant must exit non-zero AND name the gate red
+# expect_red <id> <gate> <mutant path> [stage] — the mutant must exit non-zero AND name
+# the gate red
 expect_red() {
-  run "$3"
+  run "$3" "${4:-}"
   status="$(gate_status "$OUT" "$2")"
   if [ "$RC" -ne 0 ] && [ "$status" = "fail" ]; then
     pass "$1 mutant turns $2 red"
@@ -234,6 +255,117 @@ filler = " ".join("Filler word number %d keeps the element growing." % i for i i
 open(dst, "w", encoding="utf-8").write(head.rstrip("\n") + "\n\n" + filler + "\n" + sep + tail)
 PY5
 expect_red NV18 C2 "$TMPROOT/fatelement.md"
+
+# expect_gate <id> <gate> <narrative> <want status> [stage] — assert one gate's status by
+# name. Used where the discriminating signal is a single gate and the exit code is not: a
+# body-stage mutant reddens several gates at once, and `absent` has no exit code at all.
+expect_gate() {
+  run "$3" "${5:-}"
+  status="$(gate_status "$OUT" "$2")"
+  if [ "$status" = "$4" ]; then
+    pass "$1 $2 is $4 on $(basename "$3")${5:+ at the $5 stage}"
+  else
+    printf '%s\n' "    gate=$2 want=$4 got=$status exit=$RC"
+    fail "$1 $2 is $4 on $(basename "$3")${5:+ at the $5 stage}"
+  fi
+}
+
+# ---------------------------------------------------------------- NV19 / NV20 T0 both ways
+# T0 is the body stage's whole point: the four-element argument is graded BEFORE the
+# Executive TL;DR exists. The tracked fixture carries a TL;DR, so it must go red; the same
+# narrative with only that prose removed must go green. A T0 that cannot do both is not a
+# gate. The mutant keeps the H1, the italic subtitle and the `---` rule — only the TL;DR
+# paragraph between the subtitle and the first `##` is dropped.
+python3 - "$FIXTURE" "$TMPROOT/notldr.md" <<'PY6'
+import sys
+src, dst = sys.argv[1], sys.argv[2]
+lines = open(src, encoding="utf-8").read().splitlines()
+idx = 1
+while idx < len(lines) and lines[idx].strip() != "---":
+    idx += 1
+fm_end = idx
+h2 = [k for k, l in enumerate(lines) if l.startswith("## ")]
+if not h2:
+    sys.exit(1)
+first_h2 = h2[0]
+out = []
+for k, line in enumerate(lines):
+    if fm_end < k < first_h2:
+        s = line.strip()
+        keep = (s == "" or s == "---" or s.startswith("# ")
+                or (s.startswith("*") and s.endswith("*") and s.count("*") == 2))
+        if not keep:
+            continue
+    out.append(line)
+open(dst, "w", encoding="utf-8").write("\n".join(out) + "\n")
+PY6
+expect_gate NV19 T0 "$FIXTURE" fail body
+expect_gate NV20 T0 "$TMPROOT/notldr.md" pass body
+
+# ---------------------------------------------------------------- NV21 / NV22 the E1 discriminator
+# The defect the two stages exist to separate: a narrative whose BODY is under-evidenced,
+# padded over the floor of 15 by TL;DR repeats. The tracked fixture carries 19 body markers
+# and 2 TL;DR repeats of [1]; dropping the last 5 body markers leaves 14 + 2 = 16. The body
+# stage must fail E1 on the body's 14, the final stage must pass on the total of 16. The
+# assertion is per gate id, never on the exit code: deleting markers also reddens E4 and X1.
+python3 - "$FIXTURE" "$TMPROOT/fourteen.md" <<'PY7'
+import sys, re
+src, dst = sys.argv[1], sys.argv[2]
+t = open(src, encoding="utf-8").read()
+marker = "\n## "
+if marker not in t:
+    sys.exit(1)
+cut = t.index(marker)
+head, body = t[:cut], t[cut:]
+cit = re.compile(r"<sup>\[(\d+)\]\(([^)]+)\)</sup>")
+found = list(cit.finditer(body))
+if len(found) != 19:
+    sys.exit(1)
+for m in reversed(found[-5:]):
+    body = body[:m.start()] + body[m.end():]
+open(dst, "w", encoding="utf-8").write(head + body)
+PY7
+expect_gate NV21 E1 "$TMPROOT/fourteen.md" fail body
+expect_gate NV22 E1 "$TMPROOT/fourteen.md" pass
+
+# ---------------------------------------------------------------- NV23 / NV24 T1 and T2 withheld
+# At the body stage T1 and T2 are ABSENT from data.gates, not reported as passing — a gate
+# that green-lights a TL;DR which does not exist yet is an unfalsifiable pass.
+expect_gate NV23 T1 "$FIXTURE" absent body
+expect_gate NV24 T2 "$FIXTURE" absent body
+
+# ---------------------------------------------------------------- NV25 / NV26 data.stage
+# stage_value <json> -> the reported stage, or `missing`
+stage_value() {
+  printf '%s' "$1" | python3 -c '
+import json, sys
+try:
+    data = json.load(sys.stdin)
+except Exception:
+    print("unparseable"); sys.exit(0)
+print(data.get("data", {}).get("stage", "missing"))
+'
+}
+for pair in ":final:NV25" "body:body:NV26"; do
+  st="${pair%%:*}"; rest="${pair#*:}"; want="${rest%%:*}"; cid="${rest#*:}"
+  run "$FIXTURE" "$st"
+  got="$(stage_value "$OUT")"
+  if [ "$got" = "$want" ]; then
+    pass "$cid data.stage is $want${st:+ under --stage $st}"
+  else
+    printf '%s\n' "    want=$want got=$got"
+    fail "$cid data.stage is $want${st:+ under --stage $st}"
+  fi
+done
+
+# ---------------------------------------------------------------- NV27 --help documents the flag
+HELP_OUT="$(python3 "$VALIDATOR" --help 2>&1)"
+if printf '%s' "$HELP_OUT" | grep -q -- "--stage" && printf '%s' "$HELP_OUT" | grep -q "final"; then
+  pass "NV27 --help documents --stage and names final as the default"
+else
+  printf '%s\n' "$HELP_OUT" | sed 's/^/    /'
+  fail "NV27 --help documents --stage and names final as the default"
+fi
 
 # ---------------------------------------------------------------- NV14 / NV15 the two end-to-end fixtures pass
 for pair in "strategic-choice-en.md:strategic-choice:NV14" "consulting-problem-solving-de.md:consulting-problem-solving:NV15"; do

@@ -16,9 +16,10 @@ Gates:
   C2  each element within [proportion*lower, proportion*upper]
   C3  required frontmatter fields present; arc_id matches the contract;
       frontmatter word_count equals the measured body word count
-  E1  citation markers (TL;DR and body) >= 15, and <= 25 when the target is
-      at or below the default; a reused source reuses its number, so markers
-      are counted, not distinct numbers
+  E1  citation markers >= 15, and <= 25 when the target is at or below the
+      default; a reused source reuses its number, so markers are counted, not
+      distinct numbers. The final stage counts the TL;DR and the body; the body
+      stage counts the body alone, so the floor cannot be met by TL;DR repeats
   E2  citation numbers sequential from 1 by first appearance IN THE BODY; the
       TL;DR is written last and reuses body numbers, so its own order is free
   E3  one number per source file and one file per number (dedup by identity)
@@ -26,15 +27,26 @@ Gates:
   L1  (de only) no ASCII umlaut fallback anywhere below the frontmatter —
       title, subtitle, TL;DR, headings and body; fenced code, code spans,
       citation markers and the Sources block (ASCII file names) are excluded
-  T1  the opening TL;DR is 2-4 sentences and 60-100 words
-  T2  every citation number in the TL;DR also appears below the first `##`
+  T0  (body stage only) no TL;DR prose sits between the subtitle and the first
+      `##` — the body is graded before the TL;DR is written
+  T1  (final stage only) the opening TL;DR is 2-4 sentences and 60-100 words
+  T2  (final stage only) every citation number in the TL;DR also appears below
+      the first `##`
   X1  a `**Sources**` block is present after the fourth element, every body
       citation number has exactly one entry and every entry is cited at least
       once
 
 Usage:
   validate-narrative.py --narrative FILE --contract ARC_DEFINITION.md
-                        [--language en|de] [--target-length N] [--json]
+                        [--language en|de] [--target-length N]
+                        [--stage body|final] [--json]
+
+Two stages, because the Executive TL;DR is written last, from the finished
+elements. `--stage body` grades the four-element argument before a TL;DR exists:
+it adds T0, counts E1's markers in the body alone, and omits T1 and T2 from the
+reported gates entirely. `--stage final` is the default and the whole contract:
+T1 and T2 run and E1 counts the TL;DR and the body. The stage that ran is
+reported as `data.stage`.
 
 Exit 0 when every gate passes, 1 when any gate fails, 2 on a usage or read
 error. Output is the repo's script envelope:
@@ -202,6 +214,13 @@ def main(argv):
     ap.add_argument("--language")
     ap.add_argument("--target-length", type=int)
     ap.add_argument("--json", action="store_true")
+    ap.add_argument(
+        "--stage", choices=("body", "final"), default="final",
+        help="validation stage: `body` grades the four-element argument before a "
+             "TL;DR exists (adds T0, counts E1 markers in the body alone, omits "
+             "T1 and T2); `final` is the default and also runs T1 and T2 and "
+             "counts TL;DR markers in E1",
+    )
     args = ap.parse_args(argv)
 
     try:
@@ -214,6 +233,7 @@ def main(argv):
     fm, raw_body = split_frontmatter(narrative)
     body = strip_fences(raw_body)
     cfm, sections = contract_sections(contract)
+    stage = args.stage
     language = (args.language or fm.get("language") or "en").lower()
     try:
         target = int(args.target_length or fm.get("target_length") or DEFAULT_TARGET)
@@ -279,12 +299,16 @@ def main(argv):
          "missing %s; arc_id %s vs contract %s; word_count %s vs measured body %d"
          % (missing, fm.get("arc_id"), cfm.get("arc_id"), fm.get("word_count"), band_total))
 
-    # E1 counts markers in the TL;DR and the body; E2 orders by first appearance in the
-    # body alone, because the TL;DR is written last and reuses whatever numbers the body
-    # already carries.
+    # E1's operand is stage-dependent: the final stage counts markers in the TL;DR and
+    # the body, the body stage in the body alone, so the floor of 15 cannot be met by
+    # TL;DR repeats of a number the body already carries. E2 orders by first appearance
+    # in the body at both stages, because the TL;DR is written last and reuses whatever
+    # numbers the body already carries.
     body_for_cites = "\n".join(t for _, t in elements)
     body_cites = CITATION_RE.findall(body_for_cites)
-    cites = CITATION_RE.findall(opening) + body_cites
+    body_nums = {int(n) for n, _ in body_cites}
+    opening_cites = CITATION_RE.findall(opening)
+    cites = body_cites if stage == "body" else opening_cites + body_cites
     distinct = []
     for n, _ in body_cites:
         if int(n) not in distinct:
@@ -321,14 +345,20 @@ def main(argv):
         hits = sorted({w for w in DE_ASCII_FALLBACKS if re.search(r"\b%s" % w, scan)})
         gate("L1", not hits, "ASCII fallbacks found: %s" % hits)
 
-    # T1 / T2 — the Executive TL;DR
-    sentences = [s for s in re.split(r"(?<=[.!?])\s+", opening.strip()) if s.strip()]
-    t1_ok = TLDR_WORDS[0] <= opening_words <= TLDR_WORDS[1] and TLDR_SENTENCES[0] <= len(sentences) <= TLDR_SENTENCES[1]
-    gate("T1", t1_ok, "TL;DR %d words, %d sentences (want %d-%d words, %d-%d sentences)"
-         % (opening_words, len(sentences), TLDR_WORDS[0], TLDR_WORDS[1], TLDR_SENTENCES[0], TLDR_SENTENCES[1]))
-    tldr_nums = {int(n) for n, _ in CITATION_RE.findall(opening)}
-    body_nums = {int(n) for n, _ in body_cites}
-    gate("T2", tldr_nums <= body_nums, "TL;DR citations %s not in body: %s" % (sorted(tldr_nums), sorted(tldr_nums - body_nums)))
+    # T0 / T1 / T2 — the Executive TL;DR. T0 asserts the TL;DR is not written yet, so it
+    # is emitted at the body stage alone; T1 and T2 grade a TL;DR that exists, so at the
+    # body stage they are omitted from `gates` entirely rather than reported as passing.
+    if stage == "body":
+        gate("T0", not opening,
+             "TL;DR prose above the first `##`: %d words (want none at the body stage)"
+             % opening_words)
+    if stage == "final":
+        sentences = [s for s in re.split(r"(?<=[.!?])\s+", opening.strip()) if s.strip()]
+        t1_ok = TLDR_WORDS[0] <= opening_words <= TLDR_WORDS[1] and TLDR_SENTENCES[0] <= len(sentences) <= TLDR_SENTENCES[1]
+        gate("T1", t1_ok, "TL;DR %d words, %d sentences (want %d-%d words, %d-%d sentences)"
+             % (opening_words, len(sentences), TLDR_WORDS[0], TLDR_WORDS[1], TLDR_SENTENCES[0], TLDR_SENTENCES[1]))
+        tldr_nums = {int(n) for n, _ in opening_cites}
+        gate("T2", tldr_nums <= body_nums, "TL;DR citations %s not in body: %s" % (sorted(tldr_nums), sorted(tldr_nums - body_nums)))
 
     # X1 — the Sources block is mandatory and mutually complete with the body
     if sources_block is None:
@@ -336,7 +366,7 @@ def main(argv):
     else:
         entries = [int(m.group(1)) for m in (SOURCES_ENTRY_RE.match(l) for l in sources_block.splitlines()) if m]
         dup = sorted({n for n in entries if entries.count(n) > 1})
-        cited = set(all_numbers)
+        cited = set(body_nums)
         uncited = sorted(set(entries) - cited)
         dangling = sorted(cited - set(entries))
         gate("X1", not dup and not uncited and not dangling,
@@ -345,6 +375,7 @@ def main(argv):
     failed = [g["id"] for g in gates if g["status"] == "fail"]
     data = {
         "gates": gates,
+        "stage": stage,
         "word_count": band_total,
         "citation_count": marker_count,
         "source_count": len(all_numbers),

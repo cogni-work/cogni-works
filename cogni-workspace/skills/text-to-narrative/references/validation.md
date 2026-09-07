@@ -24,6 +24,14 @@ python3 "${CLAUDE_PLUGIN_ROOT}/skills/text-to-narrative/scripts/validate-narrati
   --contract "${CLAUDE_PLUGIN_ROOT}/skills/text-to-narrative/references/arc-${ARC_ID}.md" --json
 ```
 
+The stage may also be named explicitly; the two forms are identical:
+
+```bash
+python3 "${CLAUDE_PLUGIN_ROOT}/skills/text-to-narrative/scripts/validate-narrative.py" \
+  --narrative "${OUTPUT_PATH}" --stage final \
+  --contract "${CLAUDE_PLUGIN_ROOT}/skills/text-to-narrative/references/arc-${ARC_ID}.md" --json
+```
+
 The stage that ran is reported as `data.stage`. A gate a stage withholds is **absent** from `data.gates`, never reported as passing — a green verdict on a TL;DR that does not exist yet would be unfalsifiable.
 
 **Structural (check first):**
@@ -75,7 +83,7 @@ The narrative opens with an answer, not a tension. Between the `*{Subtitle}*` li
 - It introduces no fact, number or recommendation absent from the body.
 - Every material number it carries reuses the body's citation — same source, same `[N]`.
 - It reads as complete if the reader stops there.
-- **Generation rule.** It is written only after the body has cleared body-stage validation, and it is an LLM synthesis pass over that validated body — never a deterministic extraction, and never a concatenation of the elements' opening sentences. If the body changes after the TL;DR exists, discard the TL;DR and re-synthesize it from the changed body rather than patching it, then re-run the final stage (SKILL.md Pass 2 and Phase 5).
+- **Generation rule.** It is written only after the body has cleared body-stage validation, and it is an LLM synthesis pass over that validated body — never a deterministic extraction, and never a concatenation of the elements' opening sentences. If the body changes after the TL;DR exists, discard the TL;DR and re-synthesize it from the changed body rather than patching it, then re-run the final stage (SKILL.md Phase 5).
 
 **Rejected and rewritten when it:** reads as a teaser with no decision implication; summarizes only the first section; mechanically summarizes all four topics one after another; introduces evidence the body lacks; restates the title; or grows its own heading.
 

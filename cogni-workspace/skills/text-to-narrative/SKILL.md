@@ -157,7 +157,7 @@ Exactly four `##` headings, byte-equal to the contract's `## Headings` cells for
 }
 ```
 
-`readability_score` is reported when Pass 4 computes it and `null` otherwise. `qa_verdict` is the release review's rollup — exactly one of `pass`, `needs_revision`, `fail`. `brief_qa` is the Phase 7 checker's rollup — `pass` or `fail`. On the finished-narrative entry, `detection_reason` is `"finished narrative"` and `readability_score` is `null`.
+`readability_score` is reported when Pass 4 computes it and `null` otherwise; it is measured at Pass 4 on the body, before the Executive TL;DR exists. `qa_verdict` is the release review's rollup — exactly one of `pass`, `needs_revision`, `fail`. `brief_qa` is the Phase 7 checker's rollup — `pass` or `fail`. On the finished-narrative entry, `detection_reason` is `"finished narrative"` and `readability_score` is `null`.
 
 ## Core Workflow
 
@@ -271,7 +271,7 @@ python3 "${CLAUDE_PLUGIN_ROOT}/skills/text-to-narrative/scripts/validate-narrati
 
 This adds gate T0 (no TL;DR prose above the first `##`), counts E1's citation markers in the body alone — so the floor of 15 is met by the elements' own evidence, never by TL;DR repeats — and withholds T1 and T2, which have nothing to grade yet.
 
-**Stage 2 — synthesize the TL;DR, then run the whole contract.** Once stage 1 is green, write the Executive TL;DR as a synthesis pass over the validated body, per the generation rule in `references/validation.md`. Then run the final stage, which adds T1 and T2 and counts TL;DR markers in E1:
+**Stage 2 — synthesize the TL;DR, then run the whole contract.** Once stage 1 is green, write the Executive TL;DR as a synthesis pass over the validated body, per the generation rule in `references/validation.md`, applying to it the same `references/language-shared.md` / `references/language-{language}.md` rules Pass 3 applied to the body — for `de`, that includes the opening-sentence rules `language-de.md` names for the TL;DR's first sentence — and Pass 4's rhythm pass over the result. Then run the final stage, which adds T1 and T2 and counts TL;DR markers in E1:
 
 ```bash
 python3 "${CLAUDE_PLUGIN_ROOT}/skills/text-to-narrative/scripts/validate-narrative.py" \

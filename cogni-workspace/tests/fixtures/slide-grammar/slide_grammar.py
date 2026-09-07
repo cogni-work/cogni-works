@@ -69,7 +69,7 @@ TOPLEVEL_KEY_RE = re.compile(r"^([A-Za-z][A-Za-z0-9_-]*):")
 ANY_DEPTH_KEY_RE = re.compile(r"^\s*([A-Za-z][A-Za-z0-9_-]*)\s*:")
 SLIDE_KIND_ENUM = {"content", "internal-prep", "references"}
 
-# 07-output-template.md:185 — "Three top-level keys are new in 4.1 and appear on
+# presentation-brief-template.md:185 — "Three top-level keys are new in 4.1 and appear on
 # every slide: Slide-Kind, intent and visual." Slide-Kind is graded on its own
 # (it carries an enum); these two are the nested sub-keys of the other two.
 REQUIRED_SUBKEYS = {"intent": "role", "visual": "kind"}
@@ -200,7 +200,7 @@ def colour_hits(slide):
     """Colour keys at any depth inside the slide's yaml body.
 
     Scoped to fenced body content, never whole-document text: EXAMPLE_BRIEF.md
-    and 07-output-template.md both NAME these fields in prose, documenting that
+    and presentation-brief-template.md both NAME these fields in prose, documenting that
     they are forbidden, so a whole-file grep goes red on a correct tree.
     Depth and spacing tolerance come from any_depth_key.
     """
@@ -330,7 +330,7 @@ def _refs_kind(docs):
     """The refslide surface's single slide must carry Slide-Kind: references.
 
     references-slide-last is require(docs, "brief")-scoped, so it never reads
-    08b-references-slide.md at all. Without this check the one file whose entire
+    references-slide.md at all. Without this check the one file whose entire
     purpose is to document the references slide contributes only "one slide,
     well-formed" to the binding, and demoting its Slide-Kind to `content` leaves
     the whole suite green.
@@ -357,7 +357,7 @@ def _no_colour(docs):
 def _required_subkeys(docs):
     """Every slide carries intent.role and visual.kind, each exactly once.
 
-    07-output-template.md:185 names Slide-Kind, intent and visual as the three
+    presentation-brief-template.md:185 names Slide-Kind, intent and visual as the three
     top-level keys new in 4.1 that appear on every slide. Slide-Kind is graded
     by slide-kind-single/-enum; this is the other two. Grading all three is what
     keeps the required-key set a grammar rule rather than a single carve-out.

@@ -35,9 +35,8 @@ cogni-workspace is the ecosystem's infrastructure-as-plugin layer: a dedicated p
 8. **File and track issues** — `cogni-issues` uses the authenticated GitHub CLI to consult, deduplicate, create, list, and inspect plugin issues with atomic labels
 9. **Troubleshoot plugin failures** — `workspace-status`'s plugin-level tier diagnoses plugin integrity, cross-plugin dependencies, stale state, and common setup errors; reachable through `/troubleshoot`
 10. **Verify claims against their cited sources** — `claims` runs the six-mode claim-verification lifecycle (submit, verify, dashboard, inspect, resolve, cobrowse) that cogni-trends, cogni-portfolio, cogni-consult and cogni-knowledge submit sourced assertions to; `claim-entity` is the cross-plugin data contract those plugins write against
-11. **Shape content into an executive narrative** — `narrative` transforms structured input using one of 15 story arc frameworks and, with `--format`, condenses an existing narrative into executive briefs, talking points or one-pagers
-12. **Polish documents for executive readability** — `copywriter` applies seven messaging frameworks (BLUF, Pyramid, SCQA, STAR, PSB, FAB, Inverted Pyramid) with arc-aware preservation and EN/DE-pivot translation across seven languages; `copy-reader` runs parallel stakeholder personas over a document; `copy-json` polishes text fields inside JSON
-13. **Turn text into a narrative and a Claude Design brief in one run** — `text-to-narrative` runs the arc pipeline from its own bundled copy of the narrative assets, then cuts the narrative into one `design-brief.md` for slides, a document, an infographic or a web page: density-capped units, the Rendering Contract, the presentation-intent layer and the Sources block, with copy frozen from the narrative
+11. **Polish documents for executive readability** — `copywriter` applies seven messaging frameworks (BLUF, Pyramid, SCQA, STAR, PSB, FAB, Inverted Pyramid) with arc-aware preservation and EN/DE-pivot translation across seven languages; `copy-reader` runs parallel stakeholder personas over a document; `copy-json` polishes text fields inside JSON
+12. **Turn text into a narrative and a Claude Design brief in one run** — `text-to-narrative` runs the arc pipeline from its own bundled copy of the narrative assets, then cuts the narrative into one `design-brief.md` for slides, a document, an infographic or a web page: density-capped units, the Rendering Contract, the presentation-intent layer and the Sources block, with copy frozen from the narrative
 
 ## What it means for you
 
@@ -140,18 +139,13 @@ State lives in two layers that other plugins consume. Configuration (env vars, t
 | `claim-entity` | skill | Cross-plugin ClaimEntity data contract — record shapes, claim types, severity levels, on-disk `cogni-claims/` store layout |
 | `claim-verifier` | agent | Fetches one source URL and verifies every claim against it, returning deviation analysis as strict JSON |
 | `source-inspector` | agent | Opens a source URL via claude-in-chrome and walks the user to the relevant passage (cobrowse / inspect) |
-| `narrative` | skill | Transform structured input into an executive narrative using one of 15 story arc frameworks; with `--format`, condense one into an executive brief, talking points or a one-pager |
 | `text-to-narrative` | skill | Turn text into an arc-driven narrative from a bundled, flattened copy of the narrative assets, then into one Claude Design brief for slides, document, infographic or web — density-capped, contract-bearing, copy frozen; `scripts/check-design-brief.py` grades the brief |
 | `copywriter` | skill | Polish, rewrite or create business documents with 7 messaging frameworks, arc-aware preservation, and EN/DE-pivot translation |
 | `copy-reader` | skill | Review a document through parallel stakeholder persona Q&A, then synthesize the feedback |
 | `copy-json` | skill | Adapter that polishes text fields inside JSON — extracts, polishes via `copywriter`, writes back |
-| `narrative-writer` | agent | Parallel narrative generation across content sets |
-| `narrative-adapter` | agent | Parallel format adaptation across narratives |
 | `copywriter` | agent | Delegation wrapper for the `copywriter` skill |
 | `reader` | agent | Delegation wrapper for the `copy-reader` skill |
 | `commands/claims.md` | command | Registers `/claims` as the entry point to the verification lifecycle |
-| `commands/narrative.md` | command | Registers `/narrative`, with `/narrative-adapt` alongside it |
-| `commands/narrative-publish.md` | command | Registers `/narrative-publish`, the one-invocation pipeline entry point |
 | `commands/text-to-narrative.md` | command | Registers `/text-to-narrative`, text to narrative to Claude Design brief |
 | `commands/copywrite.md` | command | Registers `/copywrite`, with `/review-doc` alongside it |
 | `commands/render-infographic.md` | command | Registers `/render-infographic`, the style-agnostic renderer entry point that auto-routes on the brief's `style_preset` |
@@ -174,16 +168,8 @@ State lives in two layers that other plugins consume. Configuration (env vars, t
 | `setup-obsidian.sh` | script | Copies vault templates, downloads Terminal plugin, substitutes path placeholders |
 | `update-obsidian.sh` | script | Merges profiles, fixes WSL paths, removes deprecated profiles, copies scripts |
 | `portability-utils.sh` | script | Cross-platform utilities (macOS, Linux, WSL, Git Bash) |
-| `story-to-slides` | skill | Turn a narrative with a story arc into a presentation brief |
-| `story-to-web` | skill | Turn a narrative with a story arc into a scrollable web-narrative brief, or a printed-poster storyboard brief in `mode=storyboard` |
-| `story-to-infographic` | skill | Distil a narrative into a single-page infographic brief |
 | `render-html-slides` | skill | Render a presentation brief into self-contained HTML slides with speaker notes |
 | `enrich-report` | skill | Turn a markdown report into a themed HTML deliverable with charts and inline SVG diagrams |
-| `narrative-publish` | skill | Sequence narrative, optional polish, theme and brief generation in one invocation; render is opt-in |
-| `story-to-slides` | agent | Drive the story-to-slides skill as an autonomous subprocess |
-| `story-to-web` | agent | Drive the story-to-web skill as an autonomous subprocess |
-| `story-to-storyboard` | agent | Drive story-to-web's storyboard mode as an autonomous subprocess |
-| `story-to-infographic` | agent | Drive the story-to-infographic skill as an autonomous subprocess |
 | `html-slides` | agent | Render a presentation brief into HTML slides, returning statistics |
 | `pptx` | agent | Create, edit and analyse PowerPoint presentations |
 | `web` | agent | Render a web brief into a .pen file and self-contained HTML page |
@@ -217,26 +203,20 @@ cogni-workspace/
 │   ├── manage-market-registry/   Read and write path for the canonical supported-markets registry
 │   ├── manage-themes/
 │   ├── manage-workspace/         Init or update workspace (includes Obsidian integration)
-│   ├── narrative-publish/        One invocation: narrative -> brief(s) -> optional render
 │   ├── render-html-slides/       Presentation brief -> self-contained HTML slides
-│   ├── story-to-infographic/     Narrative -> single-page infographic brief
-│   ├── story-to-slides/          Narrative -> presentation brief
-│   ├── story-to-web/             Narrative -> scrollable web-narrative or printed-poster brief
 │   ├── text-to-narrative/        Text -> arc narrative -> design-brief.md for Claude Design (bundled arcs, flat)
 │   ├── workspace-dashboard/      Interactive HTML workspace status dashboard
 │   └── workspace-status/
-│                                  narrative, copywriter,
+│                                  copywriter,
 │                                  copy-json and copy-reader are omitted here for brevity
-├── agents/                       25 subagents (claim verification, narrative, copywriting, visual rendering)
+├── agents/                       19 subagents (claim verification, copywriting, visual rendering)
 │   ├── claim-verifier.md         Verify claims against one source URL (JSON out)
 │   ├── source-inspector.md       Open a source via claude-in-chrome for cobrowse/inspect
-│   ├── story-to-*.md             Four narrative -> brief drivers (slides, web, storyboard, infographic)
 │   ├── render-infographic-*.md   Three infographic renderers (pencil, sketchnote, whiteboard)
 │   └── concept-diagram*.md       Diagram workers (Excalidraw and inline-SVG variants)
-├── libraries/                    18 layout, taxonomy and worked-example files read at render time
-├── commands/                     13 slash commands
+├── libraries/                    35 layout, taxonomy, worked-example and relocated brief-producer files read at render time
+├── commands/                     10 slash commands
 │   ├── claims.md                 Registers /claims
-│   ├── narrative*.md             Registers /narrative, /narrative-adapt, /narrative-publish
 │   ├── text-to-narrative.md      Registers /text-to-narrative
 │   ├── copywrite.md              Registers /copywrite and /review-doc
 │   ├── render-infographic*.md    Registers /render-infographic and its two direct-dispatch variants

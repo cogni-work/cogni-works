@@ -6,12 +6,13 @@ description: >-
   from its own bundled copy of the narrative assets, then writes design-brief.md for one
   target (slides, document, infographic or web): density-capped units, the Rendering
   Contract, the presentation-intent layer and a Sources block, with copy frozen from the
-  narrative. Use this skill whenever the user asks to "turn text into a narrative",
-  "text to narrative", "write a design brief", "brief for Claude Design",
-  "narrative for Claude Design", "hand this to Claude Design",
+  narrative. Use this skill whenever the user asks to "create a narrative",
+  "write a narrative", "transform content into a story arc", "generate an insight summary",
+  "turn text into a narrative", "text to narrative", "write a design brief",
+  "brief for Claude Design", "narrative for Claude Design", "hand this to Claude Design",
   "Text in ein Narrativ verwandeln" or "Design-Brief für Claude Design erstellen".
-  Not for polishing prose (copywriter), rendering a deck (story-to-slides,
-  render-html-slides) or the whole publish pipeline (narrative-publish).
+  Not for polishing prose (copywriter) or rendering a finished brief (render-html-slides,
+  enrich-report).
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion
 ---
 
@@ -21,11 +22,11 @@ Transform input markdown into a structured executive narrative using one of the 
 
 **Use this for:** research syntheses, analyses or structured findings that need to become an executive narrative and a Claude Design handoff in one run; a finished arc narrative that needs only the brief.
 
-**Not for:** polishing arbitrary business documents (use `copywriter`); an executive brief, talking points or a one-pager (the `narrative` skill's `--format`); rendering a deck or page inside Claude Code (`story-to-slides`, `render-html-slides`); raw research (the cogni-knowledge pipeline).
+**Not for:** polishing arbitrary business documents (use `copywriter`); rendering a finished brief inside Claude Code (`render-html-slides`, `enrich-report`); raw research (the cogni-knowledge pipeline).
 
 ## Architectural model
 
-One responsibility per file. Read a file when its phase runs, not before. Every narrative asset is bundled under this skill — flat, one file per responsibility — so the skill runs with no other plugin installed. Its one cross-skill call is Pass 4's readability measurement, `${CLAUDE_PLUGIN_ROOT}/skills/copywriter/scripts/readability.sh` with the band in `cogni-workspace/tests/fixtures/copywriter/readability.yml`, exactly as the narrative skill calls it; the copywriter skill is not on the retirement list.
+One responsibility per file. Read a file when its phase runs, not before. Every narrative asset is bundled under this skill — flat, one file per responsibility — so the skill runs with no other plugin installed. Its one cross-skill call is Pass 4's readability measurement, `${CLAUDE_PLUGIN_ROOT}/skills/copywriter/scripts/readability.sh` with the band in `cogni-workspace/tests/fixtures/copywriter/readability.yml`, exactly as the skill it succeeded called it; the copywriter skill did not retire.
 
 - **SKILL.md orchestrates** — phases, parameters, output contract, JSON envelope.
 - **The registry chooses** — `references/arc-registry.md`: detection algorithm, one declarative block per arc, confirmation format.
@@ -56,7 +57,7 @@ One responsibility per file. Read a file when its phase runs, not before. Every 
 | Theme Thesis | `references/arc-theme-thesis.md` |
 | Trend Panorama | `references/arc-trend-panorama.md` |
 
-The bundled set is derived from the `narrative` skill's tree by `cogni-workspace/scripts/flatten-narrative-assets.py` while that skill still exists, and `cogni-workspace/tests/test-text-to-narrative-brief.sh` fails when a vendored file drifts from that derivation. Add an arc upstream and re-derive; never hand-edit a vendored file.
+The bundled set is the only copy of these assets: the narrative skill they were flattened from has retired. `cogni-workspace/tests/test-arc-contract-shape.sh` keeps every arc contract on the one-file shape, so add an arc here directly, following the registration steps at the end of `references/arc-registry.md`.
 
 ## Parameters
 
@@ -86,7 +87,7 @@ Audience knowledge level (`expert` / `informed` / `general`, default `informed`)
 
 ## Output
 
-Two files. The narrative (`insight-summary.md` by default) is the same artifact the `narrative` skill writes, so every downstream consumer of that shape still reads it. The design brief (`design-brief.md` by default) is the Claude Design handoff — its shape is owned by Phase 7 and `references/design-brief-template.md`.
+Two files. The narrative (`insight-summary.md` by default) is the same artifact the retired `narrative` skill wrote, so every downstream consumer of that shape still reads it. The design brief (`design-brief.md` by default) is the Claude Design handoff — its shape is owned by Phase 7 and `references/design-brief-template.md`.
 
 ```markdown
 ---
@@ -231,7 +232,7 @@ Read two files, in full, before writing anything:
 1. `references/arc-{arc_id}.md` — the arc contract, all seven sections: Intent, Selection, Headings, Composition, Elements, Validation, See Also. The drafting passes lean on Headings, Composition, Elements and Validation; Intent and Selection are what tell you whether the arc fits the brief at all.
 2. `references/techniques-overview.md` — the eight techniques and the application matrix.
 
-Every arc carries `contract: 2` and the same seven sections — the vendored copy is derived from a tree whose shape is guarded upstream, and the identity case in `cogni-workspace/tests/test-text-to-narrative-brief.sh` keeps the copy on that derivation — so there is no other file to read for an arc. The language references are not loaded here — Pass 3 loads them.
+Every arc carries `contract: 2` and the same seven sections — `cogni-workspace/tests/test-arc-contract-shape.sh` keeps every bundled contract on that shape — so there is no other file to read for an arc. The language references are not loaded here — Pass 3 loads them.
 
 **After reading,** name the four elements in order with their proportions, and say which techniques the matrix assigns to each. Re-read until both come without looking.
 

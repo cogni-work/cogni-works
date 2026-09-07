@@ -5,7 +5,7 @@ category: preservation-modes
 tags: [arc-preservation, story-arc, narrative-structure, polish, narrative]
 audience: [copywriter-skill]
 related:
-  - narrative arc contracts (skills/narrative/references/story-arc/{arc}/arc-definition.md)
+  - narrative arc contracts (skills/text-to-narrative/references/arc-{arc}.md)
 version: 2.2
 last_updated: 2026-05-27
 ---
@@ -13,7 +13,7 @@ last_updated: 2026-05-27
 # Arc-Aware Preservation Mode
 
 <context>
-You are polishing a narrative that uses a story arc structure created by the `narrative` skill. The arc defines the document's skeleton: a title, subtitle, four arc elements in a fixed sequence, and a bridge section. Your job is to strengthen the writing within each element without altering the skeleton.
+You are polishing a narrative that uses a story arc structure created by the `text-to-narrative` skill. The arc defines the document's skeleton: a title, subtitle, four arc elements in a fixed sequence, and a bridge section. Your job is to strengthen the writing within each element without altering the skeleton.
 
 Think of it this way: the arc is a building's load-bearing frame. You are repainting walls and upgrading fixtures. You never move a wall, remove a beam, or change the floor plan.
 </context>
@@ -32,12 +32,12 @@ Does the document YAML frontmatter contain an `arc_id` field?
                       Fewer than 3 match --> Do NOT activate. Polish normally.
 ```
 
-When arc-aware mode is active, load the upstream files before doing any work — the `narrative` skill's own contract is the authority, read at runtime and never mirrored here:
+When arc-aware mode is active, load the upstream files before doing any work — the `text-to-narrative` skill's own contract is the authority, read at runtime and never mirrored here:
 
 ```
-READ: ${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/story-arc/{arc_id}/arc-definition.md
-READ: ${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/narrative-techniques/techniques-overview.md
-READ: ${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/language/shared.md   (bridge heading forms only)
+READ: ${CLAUDE_PLUGIN_ROOT}/skills/text-to-narrative/references/arc-{arc_id}.md
+READ: ${CLAUDE_PLUGIN_ROOT}/skills/text-to-narrative/references/techniques-overview.md
+READ: ${CLAUDE_PLUGIN_ROOT}/skills/text-to-narrative/references/language-shared.md   (bridge heading forms only)
 ```
 
 ## Arc Detection Reference
@@ -54,11 +54,11 @@ subtitle: "..."
 
 **Step 2: If no frontmatter arc_id, match H2 headings against the registered arcs.**
 
-Read the arc registry at `${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/story-arc/arc-registry.md`: every `### {arc-id}` block under Arc Blocks is a registered arc, and its contract at `story-arc/{arc-id}/arc-definition.md` carries the arc's headings in `## Headings` (one row per element, one column per language). Compare the document's H2 headings against each contract's heading rows for the document's language. A partial match on the segment before the colon is sufficient ("Why Change" matches "Why Change: Unconsidered Needs"; "Job Landscape" matches "Job Landscape: Functional Jobs"). If 3 or more of the 4 elements match a single arc, activate arc-aware mode with that arc_id. Because detection reads the registry, every arc the narrative skill registers is detectable here with no copywriter-side edit.
+Read the arc registry at `${CLAUDE_PLUGIN_ROOT}/skills/text-to-narrative/references/arc-registry.md`: every `### {arc-id}` block under Arc Blocks is a registered arc, and its contract at `references/arc-{arc-id}.md`, beside the registry, carries the arc's headings in `## Headings` (one row per element, one column per language). Compare the document's H2 headings against each contract's heading rows for the document's language. A partial match on the segment before the colon is sufficient ("Why Change" matches "Why Change: Unconsidered Needs"; "Job Landscape" matches "Job Landscape: Functional Jobs"). If 3 or more of the 4 elements match a single arc, activate arc-aware mode with that arc_id. Because detection reads the registry, every arc it declares is detectable here with no copywriter-side edit.
 
 **Canonical headings live upstream.** The contract's `## Headings` table is the one authority for an arc's full element headings in every language it supports — EN and DE for every arc, plus FR, IT, PL, NL and ES where the arc carries them (`corporate-visions` and `jtbd-portfolio` today). Read the row for element *i* and the column for the language; never keep a copy here. `cogni-workspace/tests/test-arc-reference-sync.sh` pins that every upstream path this file and SKILL.md cite resolves.
 
-The bridge heading ("Further Reading" and its six localized forms) lives in `${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/language/shared.md` § Bridge heading. A narrative generated on the current contract carries a `**Sources**` block instead of a bridge; older arc documents may still carry one, and it is preserved or substituted exactly like an element heading.
+The bridge heading ("Further Reading" and its six localized forms) lives in `${CLAUDE_PLUGIN_ROOT}/skills/text-to-narrative/references/language-shared.md` § Bridge heading. A narrative generated on the current contract carries a `**Sources**` block instead of a bridge; older arc documents may still carry one, and it is preserved or substituted exactly like an element heading.
 
 **Native vs. translation mode.** In native arc polish (no `TARGET_LANG`), every heading is **preserved exactly** as it appears in the source — never substituted. In **arc-translation mode** (`TARGET_LANG` set, EN/DE-pivot — one end of the pair is EN or DE), the copywriter **substitutes** each arc-element heading positionally (the Nth arc-element H2 maps to row N of the contract's `## Headings`, `TARGET_LANG` column) and the bridge heading with the `TARGET_LANG` form from `language/shared.md`. If the contract carries no `TARGET_LANG` column, SKILL.md Step 1 pre-check #3 has already aborted the run — an arc without upstream headings for a language fails closed. See SKILL.md Step 2.5.
 
@@ -261,7 +261,7 @@ Each element has a word target range in the arc contract. Polishing should not i
 
 ## Integration Pattern
 
-When the `narrative` skill invokes the copywriter with arc preservation, the task prompt will contain a constraints block like this:
+When a caller invokes the copywriter with arc preservation, the task prompt will contain a constraints block like this:
 
 ```text
 CRITICAL PRESERVATION REQUIREMENTS:
@@ -282,7 +282,7 @@ When you see this pattern, activate arc-aware mode immediately. Do not re-run th
 
 ## Related Documentation
 
-- Arc contracts (headings, elements, validation): `skills/narrative/references/story-arc/{arc}/arc-definition.md`
-- Narrative techniques: `skills/narrative/references/narrative-techniques/techniques-overview.md`
-- Story arc definitions: `skills/narrative/references/story-arc/` — the arcs this mode polishes, now a sibling skill in this same plugin
+- Arc contracts (headings, elements, validation): `skills/text-to-narrative/references/arc-{arc}.md`
+- Narrative techniques: `skills/text-to-narrative/references/techniques-overview.md`
+- Story arc contracts: `skills/text-to-narrative/references/arc-*.md` — the arcs this mode polishes, bundled flat in the sibling text-to-narrative skill
 - cogni-trends: May invoke copywriter with arc preservation constraints via trend-report

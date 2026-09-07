@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# Guard: the narrative skill's citation bridge works on both input shapes SKILL.md allows.
+# Guard: the text-to-narrative skill's citation bridge works on both input shapes SKILL.md allows.
 #
 # WHAT THIS PINS
-#   skills/narrative/scripts/bridge-citations.py explodes `[Source: Publisher](URL)` markers
+#   skills/text-to-narrative/scripts/bridge-citations.py explodes `[Source: Publisher](URL)` markers
 #   into per-source files with `source_index` / `publisher` / `url` frontmatter and rewrites
 #   the report with `[source-NN-slug.md]` markers. SKILL.md Phase 0.5 names those per-source
 #   files as the citation target and their `url` as the preserved provenance, so this is the
@@ -23,7 +23,7 @@ set -u
 
 HERE="$(cd "$(dirname "$0")" && pwd)"
 PLUGIN_DIR="$(cd "$HERE/.." && pwd)"
-SCRIPT="$PLUGIN_DIR/skills/narrative/scripts/bridge-citations.py"
+SCRIPT="$PLUGIN_DIR/skills/text-to-narrative/scripts/bridge-citations.py"
 FIXTURE_DIR="$PLUGIN_DIR/tests/fixtures/narrative-source"
 
 TMPROOT="$(mktemp -d)"

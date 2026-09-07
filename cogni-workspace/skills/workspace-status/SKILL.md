@@ -324,7 +324,7 @@ Language: EN | Last updated: 2026-03-04
 
 ```
 Plugins:      WARNING  | 5 registered, 6 installed
-  New: the `narrative` skill (installed but not registered)
+  New: cogni-consult (installed but not registered)
   -> Run manage-workspace to register it
 
 Environment:  WARNING  | 12 vars set, 2 broken

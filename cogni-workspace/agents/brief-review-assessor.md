@@ -2,9 +2,9 @@
 name: brief-review-assessor
 description: >
   Use this agent when a drafted visual brief needs a quality score from three stakeholder
-  perspectives before it is rendered. Typical triggers include story-to-slides, story-to-web or
-  story-to-infographic dispatching a stakeholder review right after drafting their brief; and
-  re-scoring a revised brief in a second round. The brief_type input —
+  perspectives before it is rendered. Typical triggers include whoever authors or supplies a
+  presentation, web, storyboard or infographic brief dispatching a stakeholder review before
+  rendering it; and re-scoring a revised brief in a second round. The brief_type input —
   slides, web, storyboard or infographic — selects which three perspectives apply. See "When to Use"
   in the agent body for the full scenario list.
 model: haiku
@@ -32,9 +32,9 @@ verdict with prioritized revision guidance.
 
 ## When to Use
 
-- story-to-slides has drafted a `presentation-brief.md` and `stakeholder_review` is true
-- story-to-web has drafted a `web-brief.md` or a `storyboard-brief.md`
-- story-to-infographic has drafted an `infographic-brief.md`
+- A hand-authored or caller-supplied `presentation-brief.md` awaits review and `stakeholder_review` is true
+- A `web-brief.md` or a `storyboard-brief.md` awaits review before the `web` or `storyboard` agent renders it
+- An `infographic-brief.md` awaits review before `/render-infographic` routes it
 - A revised brief needs re-scoring in a second review round
 
 ## Input
@@ -50,7 +50,7 @@ Read:
 1. The brief file (YAML frontmatter + markdown body)
 2. `libraries/brief-review-perspectives.md` — load the section matching your brief_type
 3. The source narrative (if path provided) — for verifying the brief captures key messages
-4. When brief_type is `infographic`: `skills/story-to-infographic/references/03-style-presets.md` — resolve the content-density ceiling for the `style_preset` in the brief's frontmatter
+4. When brief_type is `infographic`: `libraries/infographic-style-presets.md` — resolve the content-density ceiling for the `style_preset` in the brief's frontmatter
 
 ## Perspective Selection
 
@@ -236,7 +236,7 @@ Only include `note` when the score is warn or fail — empty string for pass.
 1. Read the brief file (parse YAML frontmatter for metadata, read markdown body for content)
 2. Determine brief_type from input parameter or frontmatter `type:` field
 3. Read `libraries/brief-review-perspectives.md` — load the matching perspective set
-3a. When brief_type is `infographic`: read `skills/story-to-infographic/references/03-style-presets.md` and resolve the content-density ceiling for the brief's `style_preset` — the Block Density criterion is judged against that resolved ceiling, not a fixed number
+3a. When brief_type is `infographic`: read `libraries/infographic-style-presets.md` and resolve the content-density ceiling for the brief's `style_preset` — the Block Density criterion is judged against that resolved ceiling, not a fixed number
 4. Read source narrative if path provided (for completeness/fidelity checks)
 5. Evaluate Perspective A (Designer/Architect) — technical/craft quality
 7. Evaluate Perspective B (Audience/Decision-Maker) — audience experience quality

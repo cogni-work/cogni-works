@@ -64,7 +64,7 @@ The narrative opens with an answer, not a tension. Between the `*{Subtitle}*` li
 
 ## Sources block contract
 
-The narrative ends on its source register. After the fourth `##` section — never as a fifth `##`, so the four-header contract the story-to-* renderers parse is unchanged — a bold `**Sources**` paragraph lists the underlying sources actually cited:
+The narrative ends on its source register. After the fourth `##` section — never as a fifth `##`, so the four-header contract the render chain parses is unchanged — a bold `**Sources**` paragraph lists the underlying sources actually cited:
 
 - One entry per distinct `[N]` in the body, in number order, in the form `[N] source-NN-slug.md — Publisher, "Title", date, URL`.
 - Each entry names the per-source file the inline marker points at (the citation bridge's `narrative-input/sources/` file) plus the fields that file's frontmatter preserved — today the bridge writes `publisher` and `url`; title and date appear only when the source or the provenance map supplied them. A field nothing supplied stays absent; nothing is invented.

@@ -2,8 +2,8 @@
 """
 bridge-citations.py
 Version: 1.1.0
-Purpose: Bridge citation formats from upstream research tools into the `narrative` skill's
-         per-source-file structure.
+Purpose: Bridge citation formats from upstream research tools into the `text-to-narrative`
+         skill's per-source-file structure.
 Category: core
 
 Usage:
@@ -17,7 +17,7 @@ Creates an output directory with:
   - report-for-narrative.md — content with [source-NN-slug.md] markers
   - sources/source-NN-publisher-slug.md — per-source files with YAML frontmatter
 
-the `narrative` skill then cites these source files as <sup>[N](source-NN-slug.md)</sup>,
+the `text-to-narrative` skill then cites these source files as <sup>[N](source-NN-slug.md)</sup>,
 preserving the full audit trail back to original URLs.
 
 Output:
@@ -89,7 +89,7 @@ def bridge_report(report_text: str, citations: List[Dict[str, str]],
                   source_filenames: Dict[str, str]) -> str:
     """Replace [Source: Publisher](URL) citations with [source-NN-slug.md] markers.
 
-    The markers serve as breadcrumbs for the `narrative` skill's citation system.
+    The markers serve as breadcrumbs for the `text-to-narrative` skill's citation system.
     """
     def replace_citation(match):
         url = match.group(2).strip()

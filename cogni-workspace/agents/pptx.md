@@ -2,9 +2,10 @@
 name: pptx
 description: >
   Use this agent when a finished presentation-brief.md must be rendered into a .pptx deliverable
-  inside Claude Code. Typical triggers include the story-to-slides Render checkpoint's "pptx inside
-  Claude Code" option; converting an existing brief and theme pair into a deck at a given
-  OUTPUT_PATH; and rendering locally rather than through the claude.ai attachment path. Delegates to
+  inside Claude Code. Typical triggers include a hand-authored or caller-supplied brief that has
+  passed check-brief.py and must become a deck; converting an existing brief and theme pair into a
+  deck at a given OUTPUT_PATH; and rendering locally rather than through the claude.ai attachment
+  path. Delegates to
   the installed Anthropic pptx skill (anthropic-skills:pptx, or document-skills:pptx from the
   marketplace) to build a pptxgenjs deck from the brief's Rendering Contract and the render recipe,
   then round-trips the result against the brief. Not for HTML slide output — use html-slides. See
@@ -25,14 +26,14 @@ Produce a `.pptx` at `OUTPUT_PATH` that says exactly what the brief says — cop
 **Input:**
 
 - `PRESENTATION_BRIEF`: absolute path to the `presentation-brief.md` (required)
-- `THEME_FILE`: absolute path to the `theme.md` the deck is styled from (required — the Render checkpoint resolves one before dispatching)
+- `THEME_FILE`: absolute path to the `theme.md` the deck is styled from (required — the caller resolves one before dispatching, through `manage-themes` Operation 11 when the brief carries no `theme_path`)
 - `OUTPUT_PATH`: absolute path where the finished `.pptx` must land (required; parent directory must exist)
 
 **Output:** JSON only (no prose)
 
 ## When to Use
 
-- The story-to-slides Render checkpoint's "pptx inside Claude Code" option was chosen
+- A finished `presentation-brief.md` — hand-authored or caller-supplied — is to be rendered inside Claude Code
 - An existing brief and theme pair must become a `.pptx` at a given `OUTPUT_PATH`
 - Rendering happens inside Claude Code rather than through the claude.ai attachment path
 

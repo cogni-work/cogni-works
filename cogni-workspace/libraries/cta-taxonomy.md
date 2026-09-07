@@ -1,6 +1,6 @@
 # CTA Taxonomy
 
-Shared reference for Call-to-Action extraction, generation, and classification across all story-to-* skills.
+Shared reference for Call-to-Action extraction, generation, and classification across all four brief types.
 
 ## CTA Types
 

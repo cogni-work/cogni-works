@@ -2,10 +2,11 @@
 # Relocated-skill hygiene guard for the skills and agents cogni-workspace adopted
 # from retired plugins: cogni-issues (from cogni-help), the troubleshoot material
 # cogni-help contributed, now carried by workspace-status as its plugin-level tier, claims
-# and claim-entity (from cogni-claims), narrative and narrative-review plus three
-# agents (from cogni-narrative; the adopted narrative-adapt skill was later folded
-# into narrative, leaving its command and agent as the surviving entry points), and
-# copywriter / copy-json / copy-reader plus two agents (from cogni-copywriting).
+# and claim-entity (from cogni-claims), copywriter / copy-json / copy-reader plus two
+# agents (from cogni-copywriting), and the render chain (from cogni-visual). The
+# narrative skill, its agents and commands adopted from cogni-narrative, and the
+# story-to-* brief producers adopted from cogni-visual, have since retired in favour
+# of text-to-narrative, so their rows are gone rather than pointed at missing trees.
 #
 # A spec's tree may be a DIRECTORY or a single FILE. Adopted agents land as bare
 # files under agents/, and the earlier directory-only form silently left every
@@ -76,10 +77,10 @@ REPO_ROOT="$(cd "$HERE/../.." && pwd)"
 # those trees hold cogni-workspace's own long-standing files, and some of them carry
 # a retired plugin's colon-form token legitimately — this file's own spec table most
 # of all, where the literal is the guard's matching data rather than a dispatch.
-# (The consumer surfaces that used to sit on that list — verify-theme-backcompat.sh,
-# skills/manage-themes and skills/narrative — were repointed at
-# the consumer stage of the cogni-visual absorption; the file-level specs stand on
-# the shared-destination argument alone, not on those files.)
+# (The consumer surfaces that used to sit on that list — verify-theme-backcompat.sh
+# and skills/manage-themes — were repointed at the consumer stage of the cogni-visual
+# absorption; the file-level specs stand on the shared-destination argument alone,
+# not on those files.)
 # commands/ qualifies as directory-level: every file in it arrived by adoption
 # (none is a long-standing cogni-workspace command), so the directory spec is
 # green and additionally covers the commands adopted in earlier retirements,
@@ -92,10 +93,6 @@ $WS_ROOT/skills/claims|cogni-claims:
 $WS_ROOT/skills/claim-entity|cogni-claims:
 $WS_ROOT/agents/claim-verifier.md|cogni-claims:
 $WS_ROOT/agents/source-inspector.md|cogni-claims:
-$WS_ROOT/skills/narrative|cogni-narrative:
-$WS_ROOT/commands/narrative-adapt.md|cogni-narrative:
-$WS_ROOT/agents/narrative-writer.md|cogni-narrative:
-$WS_ROOT/agents/narrative-adapter.md|cogni-narrative:
 $WS_ROOT/skills/copywriter|cogni-copywriting:
 $WS_ROOT/skills/copy-json|cogni-copywriting:
 $WS_ROOT/skills/copy-reader|cogni-copywriting:
@@ -103,9 +100,6 @@ $WS_ROOT/agents/copywriter.md|cogni-copywriting:
 $WS_ROOT/agents/reader.md|cogni-copywriting:
 $WS_ROOT/skills/enrich-report|cogni-visual:
 $WS_ROOT/skills/render-html-slides|cogni-visual:
-$WS_ROOT/skills/story-to-infographic|cogni-visual:
-$WS_ROOT/skills/story-to-slides|cogni-visual:
-$WS_ROOT/skills/story-to-web|cogni-visual:
 $WS_ROOT/libraries|cogni-visual:
 $WS_ROOT/references/cartographic-data|cogni-visual:
 $WS_ROOT/agents/brief-review-assessor.md|cogni-visual:
@@ -121,10 +115,6 @@ $WS_ROOT/agents/render-infographic-sketchnote.md|cogni-visual:
 $WS_ROOT/agents/render-infographic-whiteboard.md|cogni-visual:
 $WS_ROOT/agents/report-html-writer.md|cogni-visual:
 $WS_ROOT/agents/slides-enrichment-artist.md|cogni-visual:
-$WS_ROOT/agents/story-to-infographic.md|cogni-visual:
-$WS_ROOT/agents/story-to-slides.md|cogni-visual:
-$WS_ROOT/agents/story-to-storyboard.md|cogni-visual:
-$WS_ROOT/agents/story-to-web.md|cogni-visual:
 $WS_ROOT/agents/storyboard.md|cogni-visual:
 $WS_ROOT/agents/web.md|cogni-visual:
 $WS_ROOT/references/agent-tool-declarations.md|cogni-visual:
@@ -215,6 +205,12 @@ fi
 # defensive: cogni-issues/SKILL.md documents the scripts directory itself as
 # `${CLAUDE_PLUGIN_ROOT}/skills/cogni-issues/scripts/`, so a file-only check would
 # be red on arrival.
+#
+# A reference carrying a `{placeholder}` segment is a template over a family of
+# files and resolves as the directory enclosing the template. The extractor
+# admits `{` and `}` on purpose: a character class without them cuts the
+# copywriter's flat `.../references/arc-{arc_id}.md` down to `.../references/arc-`,
+# which no file matches, so the arm would be red on a correct cite.
 # ---------------------------------------------------------------------------
 p2_bad=""
 p2_scanned=0
@@ -231,6 +227,19 @@ for spec in $TREE_SPECS; do
     [ -n "$rel" ] || continue
     target="$WS_ROOT$rel"
     case "$ref" in
+      *\{*)
+        # A templated reference names a family of files, so it resolves as the
+        # directory that encloses the template: the prefix before the first `{`
+        # when it ends in `/`, else that prefix's dirname. Both shapes the
+        # copywriter has cited are covered — `.../story-arc/{arc_id}/...` and
+        # the flat `.../references/arc-{arc_id}.md`.
+        prefix="${target%%\{*}"
+        case "$prefix" in
+          */) enclosing="$prefix" ;;
+          *)  enclosing="$(dirname "$prefix")" ;;
+        esac
+        [ -d "$enclosing" ] || p2_bad="$p2_bad $ref"
+        ;;
       */)
         [ -d "$target" ] || p2_bad="$p2_bad $ref"
         ;;
@@ -239,7 +248,7 @@ for spec in $TREE_SPECS; do
         ;;
     esac
   done <<EOF
-$(grep -rhoE '\$\{CLAUDE_PLUGIN_ROOT\}[A-Za-z0-9_./-]*|\$CLAUDE_PLUGIN_ROOT[A-Za-z0-9_./-]*' "$tree" 2>/dev/null | sort -u)
+$(grep -rhoE '\$\{CLAUDE_PLUGIN_ROOT\}[A-Za-z0-9_./{}-]*|\$CLAUDE_PLUGIN_ROOT[A-Za-z0-9_./{}-]*' "$tree" 2>/dev/null | sort -u)
 EOF
 done
 

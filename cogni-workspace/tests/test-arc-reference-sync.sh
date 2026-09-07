@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-# Guard: the copywriter skill's arc mode reads the narrative skill's files at runtime, and
+# Guard: the copywriter skill's arc mode reads the text-to-narrative skill's bundled arc files at runtime, and
 # every upstream path it cites resolves.
 #
 # WHAT THIS REPLACED
-#   An earlier version of this suite kept a copywriter-side MIRROR of the narrative skill's
+#   An earlier version of this suite kept a copywriter-side MIRROR of the narrative
 #   arc headings and technique rules in sync with the upstream definitions (cases A1-A5, with
 #   a shrink-only ratchet naming five arcs the mirror never carried). The mirror
 #   is gone: copywriter arc mode now reads each arc's contract
-#   (skills/narrative/references/story-arc/{arc}/arc-definition.md), the arc registry and
+#   (skills/text-to-narrative/references/arc-{arc}.md), the arc registry and
 #   the narrative techniques overview directly, so there is nothing to keep in sync and the
 #   five-arc detection gap closed by construction. What can still break is the READ: a cited
 #   upstream path that no longer resolves fails silently at runtime — the copywriter polishes
@@ -15,11 +15,11 @@
 #
 # CASES
 #   X0  the copywriter surfaces that cite upstream paths are readable
-#   X1  every upstream `skills/narrative/...` path cited by copywriter's SKILL.md, 00-index.md
+#   X1  every upstream `skills/text-to-narrative/...` path cited by copywriter's SKILL.md, 00-index.md
 #       and arc-preservation.md resolves on disk (templated `{arc_id}` segments are expanded
 #       over every arc directory found at run time). Fails when the extraction is EMPTY, so a
 #       rewording that hides every path cannot turn the suite green by vacuity.
-#   X2  every arc directory upstream has a `### {arc}` block in the narrative registry, so
+#   X2  every arc contract upstream has a `### {arc}` block in the narrative registry, so
 #       copywriter detection — which reads the registry — can activate arc mode for it.
 #   X3  the copywriter no longer carries a mirror: no `arc-technique-map.md`, no canonical
 #       heading table inside arc-preservation.md, no do-not-read-at-runtime rule.
@@ -36,7 +36,7 @@ set -u
 HERE="$(cd "$(dirname "$0")" && pwd)"
 WS_ROOT="$(cd "$HERE/.." && pwd)"
 
-ARC_DIR="$WS_ROOT/skills/narrative/references/story-arc"
+ARC_DIR="$WS_ROOT/skills/text-to-narrative/references"
 REGISTRY="$ARC_DIR/arc-registry.md"
 CW_SKILL="${ARC_SYNC_CW_SKILL:-$WS_ROOT/skills/copywriter/SKILL.md}"
 CW_INDEX="$WS_ROOT/skills/copywriter/references/00-index.md"
@@ -72,14 +72,14 @@ if [ -n "$missing" ]; then
 fi
 pass "X0 inputs readable"
 
-arcs="$(find "$ARC_DIR" -mindepth 1 -maxdepth 1 -type d -exec basename {} \; | sort)"
+arcs="$(ls "$ARC_DIR"/arc-*.md | xargs -n1 basename | sed 's/^arc-//; s/\.md$//' | grep -vx registry | sort)"
 
 # ---------------------------------------------------------------------------- X1
-# Extract every `skills/narrative/...` path the three copywriter surfaces cite. Both the
-# `${CLAUDE_PLUGIN_ROOT}/skills/narrative/...` form and the bare `skills/narrative/...` form
-# count; a `{arc_id}` or `{arc}` segment expands over every arc directory found upstream.
+# Extract every `skills/text-to-narrative/...` path the three copywriter surfaces cite. Both the
+# `${CLAUDE_PLUGIN_ROOT}/skills/text-to-narrative/...` form and the bare `skills/text-to-narrative/...` form
+# count; a `{arc_id}` or `{arc}` segment expands over every `arc-*.md` contract found upstream.
 cited="$(cat "$CW_SKILL" "$CW_INDEX" "$CW_PRESERVATION" \
-  | grep -oE '(\$\{CLAUDE_PLUGIN_ROOT\}/)?skills/narrative/references/[A-Za-z0-9_./{}-]+\.md' \
+  | grep -oE '(\$\{CLAUDE_PLUGIN_ROOT\}/)?skills/text-to-narrative/references/[A-Za-z0-9_./{}-]+\.md' \
   | sed 's#^\${CLAUDE_PLUGIN_ROOT}/##' | sort -u)"
 if [ -z "$cited" ]; then
   fail "X1 every cited upstream narrative path resolves (extracted zero paths — the extractor stopped matching)"
@@ -115,11 +115,11 @@ for arc in $arcs; do
   grep -qx "### $arc" "$REGISTRY" || x2_bad="$x2_bad $arc"
 done
 if [ -z "$arcs" ]; then
-  fail "X2 every arc directory has a registry block (found no arc directory)"
+  fail "X2 every arc contract has a registry block (found no arc contract)"
 elif [ -n "$x2_bad" ]; then
-  fail "X2 every arc directory has a registry block — missing:$x2_bad"
+  fail "X2 every arc contract has a registry block — missing:$x2_bad"
 else
-  pass "X2 every arc directory has a registry block, so copywriter detection covers it"
+  pass "X2 every arc contract has a registry block, so copywriter detection covers it"
 fi
 
 # ---------------------------------------------------------------------------- X3
@@ -141,13 +141,13 @@ fi
 # The victim is drawn from SKILL.md alone, because SKILL.md is the only surface the copy
 # rewrites: a path cited only by 00-index.md or arc-preservation.md would still resolve in
 # the child run and the mutant would be green for the wrong reason.
-victim="$(grep -oE '(\$\{CLAUDE_PLUGIN_ROOT\}/)?skills/narrative/references/[A-Za-z0-9_./{}-]+\.md' "$CW_SKILL" \
+victim="$(grep -oE '(\$\{CLAUDE_PLUGIN_ROOT\}/)?skills/text-to-narrative/references/[A-Za-z0-9_./{}-]+\.md' "$CW_SKILL" \
   | sed 's#^\${CLAUDE_PLUGIN_ROOT}/##' | grep -v '{' | sort -u | head -n 1)"
 if [ -z "$victim" ]; then
   fail "M1 no concrete cited path available to mutate in SKILL.md"
   finish
 fi
-sed "s#$victim#skills/narrative/references/does-not-exist.md#g" "$CW_SKILL" > "$TMPROOT/SKILL.md"
+sed "s#$victim#skills/text-to-narrative/references/does-not-exist.md#g" "$CW_SKILL" > "$TMPROOT/SKILL.md"
 if ! grep -q 'does-not-exist.md' "$TMPROOT/SKILL.md"; then
   fail "M1 could not rewrite '$victim' in the copy of SKILL.md"
   finish

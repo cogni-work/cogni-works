@@ -1,35 +1,30 @@
 #!/usr/bin/env bash
-# Guard: every story arc the narrative skill ships is one v2 contract file of a fixed
-# shape, and nothing else.
+# Guard: every story arc the text-to-narrative skill bundles is one v2 contract file of a
+# fixed shape, and nothing else.
 #
 # WHAT THIS PINS
-#   skills/narrative/references/story-arc/{arc}/arc-definition.md is the single authority
-#   for an arc: its headings, its composition, its four elements and its own validation
-#   rules. Before this contract existed the same facts lived in three layers that
-#   disagreed with each other — the arc definition, a phase-4b workflow file and four
-#   pattern files no workflow ever read. This suite is what keeps the authority single:
-#   it asserts the contract's frontmatter, its heading set AND order, the four element
-#   sections with their six subfields, and that no second layer has grown back beside it.
+#   skills/text-to-narrative/references/arc-{arc}.md is the single authority for an arc:
+#   its headings, its composition, its four elements and its own validation rules.
+#   Before this contract existed the same facts lived in three layers that disagreed
+#   with each other — the arc definition, a phase-4b workflow file and four pattern
+#   files no workflow ever read; and until the narrative skill retired, a nested copy of
+#   every contract lived beside this flat one, kept identical by a derivation script.
+#   This suite is what keeps the authority single now that the flat tree is the only
+#   copy: it asserts the contract's frontmatter, its heading set AND order, the four
+#   element sections with their six subfields, and that no second layer has grown back
+#   beside it — no nested arc directory, no pattern file, no phase-4b file.
 #
-# THE RATCHET
-#   Migration is incremental. UNMIGRATED lists the arcs still on the old three-layer
-#   shape; for those, SKILL.md Phase 3 follows the phase-4b file instead of the contract's
-#   ## Elements. The list is shrink-only in both directions (U1): an entry naming an arc
-#   that is no longer upstream turns the suite red, and so does an entry naming an arc
-#   whose contract now carries `contract: 2`. A migrated arc must also carry no pattern
-#   file and no phase-4b file (C4). Adding an arc to UNMIGRATED to silence C1-C4 inverts
-#   the guard's purpose.
+# THE ARC COUNT IS NEVER PINNED. The contract set is enumerated at run time from
+#   `arc-*.md` minus the registry. Every contract must carry `contract: 2` (C0): the
+#   migration that the old UNMIGRATED ratchet tracked is complete, so a contract without
+#   the marker is a regression, not a pending migration.
 #
-# THE ARC COUNT IS NEVER PINNED. The directory set and the `contract: 2` subset are both
-#   enumerated at run time. The one written-down list is UNMIGRATED, sanctioned only
-#   because U1 asserts it shrink-only.
-#
-# NON-VACUITY. V1 fails when the story-arc root holds no arc directory, so a moved or
+# NON-VACUITY. V1 fails when the references root holds no arc contract, so a moved or
 #   renamed root cannot yield an all-green empty pass. The root is overridable by env var
-#   solely so V1 and M1 can be exercised against a copy under mktemp -d.
+#   solely so V1, M1 and M2 can be exercised against a copy under mktemp -d.
 #
-# THE NEGATIVE CASE IS SELF-HOSTED (M1). It copies the whole story-arc tree into this
-#   run's own mktemp -d, deletes the `## Headings` heading from a runtime-selected migrated
+# THE NEGATIVE CASE IS SELF-HOSTED (M1). It copies the whole references tree into this
+#   run's own mktemp -d, deletes the `## Headings` heading from a runtime-selected
 #   contract, re-invokes this same file against the mutant behind a recursion guard, and
 #   asserts both a non-zero exit and a `FAIL: C1` line naming that arc. It never writes to
 #   a tracked path. M1 also pins ALL_CASES against the ids the child run emitted, both
@@ -44,18 +39,14 @@ export LC_ALL=C
 
 HERE="$(cd "$(dirname "$0")" && pwd)"
 PLUGIN_DIR="$(cd "$HERE/.." && pwd)"
-ARC_DIR="${ARC_CONTRACT_STORY_ARC_DIR:-$PLUGIN_DIR/skills/narrative/references/story-arc}"
-PHASE_DIR="${ARC_CONTRACT_PHASE_DIR:-$PLUGIN_DIR/skills/narrative/references/phase-workflows}"
+ARC_DIR="${ARC_CONTRACT_STORY_ARC_DIR:-$PLUGIN_DIR/skills/text-to-narrative/references}"
 REGISTRY="${ARC_CONTRACT_REGISTRY:-$ARC_DIR/arc-registry.md}"
-
-# Arcs still on the three-layer shape. Shrink-only — see THE RATCHET above.
-UNMIGRATED=""
 
 # The contract shape, stated once. Order matters for C1; the six subfields for C2.
 HEADINGS="Intent Selection Headings Composition Elements Validation See_Also"
 SUBFIELDS="Purpose|Evidence sought|Argument move|Techniques|Hard rules|Failure modes"
 
-ALL_CASES="V1 C1 C2 C3 C4 C5 U1 M1 M2"
+ALL_CASES="V1 C0 C1 C2 C3 C4 C5 M1 M2"
 
 TMPROOT="$(mktemp -d)"
 trap 'rm -rf "$TMPROOT"' EXIT
@@ -74,32 +65,38 @@ finish() {
   exit 0
 }
 
-in_list() { case " $2 " in *" $1 "*) return 0 ;; *) return 1 ;; esac; }
+contract_path() { printf '%s/arc-%s.md' "$ARC_DIR" "$1"; }
 
 # ---------------------------------------------------------------------------- V1
-arcs="$(find "$ARC_DIR" -mindepth 1 -maxdepth 1 -type d -exec basename {} \; 2>/dev/null | sort)"
+arcs="$(ls "$ARC_DIR"/arc-*.md 2>/dev/null | xargs -n1 basename 2>/dev/null | sed 's/^arc-//; s/\.md$//' | grep -vx registry | sort)"
 if [ -z "$arcs" ]; then
-  fail "V1 story-arc root yielded no arc directory at $ARC_DIR"
-  for c in C1 C2 C3 C4 C5 U1; do fail "$c not evaluated — non-vacuity guard failed"; done
+  fail "V1 references root yielded no arc contract at $ARC_DIR"
+  for c in C0 C1 C2 C3 C4 C5; do fail "$c not evaluated — non-vacuity guard failed"; done
   finish
 fi
-pass "V1 story-arc root yielded $(printf '%s\n' "$arcs" | wc -l | tr -d ' ') arc directory/ies"
+pass "V1 references root yielded $(printf '%s\n' "$arcs" | wc -l | tr -d ' ') arc contract(s)"
 
-# Which arcs are migrated: frontmatter carries `contract: 2`.
-migrated=""
+# ---------------------------------------------------------------------------- C0
+# Every contract carries `contract: 2` in its frontmatter. The set graded by C1-C4 is the
+# whole set, so a contract that drops the marker is a shape failure here, never a silent
+# exemption from the cases below.
+c0_bad=""
 for arc in $arcs; do
-  f="$ARC_DIR/$arc/arc-definition.md"
-  [ -f "$f" ] || continue
-  if awk 'NR==1 && $0!="---" {exit 1} NR>1 && $0=="---" {exit 0} /^contract: *2 *$/ {found=1} END {exit found?0:1}' "$f"; then
-    migrated="$migrated $arc"
+  f="$(contract_path "$arc")"
+  if ! awk 'NR==1 && $0!="---" {exit 1} NR>1 && $0=="---" {exit 0} /^contract: *2 *$/ {found=1} END {exit found?0:1}' "$f"; then
+    c0_bad="$c0_bad $arc"
   fi
 done
-migrated="${migrated# }"
+if [ -z "$c0_bad" ]; then
+  pass "C0 every arc contract carries contract: 2 in its frontmatter"
+else
+  fail "C0 contract marker missing in:$c0_bad"
+fi
 
 # ---------------------------------------------------------------------------- C1 / C2 / C3
 c1_bad="" c2_bad="" c3_bad=""
-for arc in $migrated; do
-  f="$ARC_DIR/$arc/arc-definition.md"
+for arc in $arcs; do
+  f="$(contract_path "$arc")"
   # C1: the seven H2s, exactly, in order.
   got="$(grep -E '^## ' "$f" | sed 's/^## //; s/ /_/g' | tr '\n' ' ' | sed 's/ *$//')"
   [ "$got" = "$HEADINGS" ] || c1_bad="$c1_bad $arc"
@@ -158,11 +155,15 @@ PY
   then c3_bad="$c3_bad $arc"; fi
 done
 
-# C5: the registry carries one declarative block per arc directory, with all six fields.
+[ -z "$c1_bad" ] && pass "C1 every contract carries the seven headings in order" || fail "C1 heading set or order wrong in:$c1_bad"
+[ -z "$c2_bad" ] && pass "C2 every contract carries four ### N. elements with six subfields" || fail "C2 element sections incomplete in:$c2_bad"
+[ -z "$c3_bad" ] && pass "C3 every contract's ## Headings has EN and DE columns, four rows, real umlauts" || fail "C3 headings table wrong in:$c3_bad"
+
+# ---------------------------------------------------------------------------- C5
+# The registry carries one declarative block per arc contract, with all six fields.
 c5_bad=""
 if [ -f "$REGISTRY" ]; then
   for arc in $arcs; do
-    [ -f "$ARC_DIR/$arc/arc-definition.md" ] || continue
     block="$(awk -v a="### $arc" '$0==a{f=1; next} /^### |^## /{f=0} f' "$REGISTRY")"
     [ -n "$block" ] || { c5_bad="$c5_bad $arc(no-block)"; continue; }
     for field in question best_for signals anti_signals distinguish_from fallback_priority; do
@@ -172,52 +173,31 @@ if [ -f "$REGISTRY" ]; then
 else
   c5_bad=" registry-missing"
 fi
-
-if [ -z "$migrated" ]; then
-  fail "C1 no migrated contract found — nothing carries contract: 2"
-  fail "C2 no migrated contract found — nothing carries contract: 2"
-  fail "C3 no migrated contract found — nothing carries contract: 2"
-else
-  [ -z "$c1_bad" ] && pass "C1 every migrated contract carries the seven headings in order" || fail "C1 heading set or order wrong in:$c1_bad"
-  [ -z "$c2_bad" ] && pass "C2 every migrated contract carries four ### N. elements with six subfields" || fail "C2 element sections incomplete in:$c2_bad"
-  [ -z "$c3_bad" ] && pass "C3 every migrated contract's ## Headings has EN and DE columns, four rows, real umlauts" || fail "C3 headings table wrong in:$c3_bad"
-fi
 if [ -z "$c5_bad" ]; then
-  pass "C5 the registry carries a six-field declarative block for every arc directory"
+  pass "C5 the registry carries a six-field declarative block for every arc contract"
 else
   fail "C5 registry block missing or incomplete:$c5_bad"
 fi
 
 # ---------------------------------------------------------------------------- C4
+# No second layer beside the flat contracts: no nested arc directory or story-arc tree
+# (the shape the retired narrative skill carried), no pattern file, no phase-4b file, and
+# no arc-definition.md anywhere beneath the references root.
 c4_bad=""
-for arc in $migrated; do
-  if ls "$ARC_DIR/$arc"/*-patterns.md >/dev/null 2>&1; then c4_bad="$c4_bad $arc(patterns)"; fi
-  if [ -f "$PHASE_DIR/phase-4b-synthesis-$arc.md" ]; then c4_bad="$c4_bad $arc(phase-4b)"; fi
-  extra="$(ls "$ARC_DIR/$arc" | grep -v '^arc-definition.md$' | tr '\n' ',' | sed 's/,$//')"
-  [ -z "$extra" ] || c4_bad="$c4_bad $arc(stray:$extra)"
+for d in "$ARC_DIR"/*/; do
+  [ -d "$d" ] || continue
+  name="$(basename "$d")"
+  case "$name" in
+    arc-*|story-arc|phase-workflows) c4_bad="$c4_bad dir:$name" ;;
+  esac
 done
-if [ -z "$migrated" ]; then
-  fail "C4 no migrated contract found — nothing carries contract: 2"
-elif [ -z "$c4_bad" ]; then
-  pass "C4 no migrated arc carries a second layer (pattern file, phase-4b file or stray file)"
+if ls "$ARC_DIR"/*-patterns.md >/dev/null 2>&1; then c4_bad="$c4_bad patterns"; fi
+if ls "$ARC_DIR"/phase-4b-*.md >/dev/null 2>&1; then c4_bad="$c4_bad phase-4b"; fi
+if find "$ARC_DIR" -name 'arc-definition.md' -print -quit 2>/dev/null | grep -q .; then c4_bad="$c4_bad arc-definition.md"; fi
+if [ -z "$c4_bad" ]; then
+  pass "C4 no second layer beside the flat contracts (nested arc directory, pattern, phase-4b or arc-definition file)"
 else
-  fail "C4 second layer found beside a migrated contract:$c4_bad"
-fi
-
-# ---------------------------------------------------------------------------- U1
-u1_bad=""
-for arc in $UNMIGRATED; do
-  in_list "$arc" "$(printf '%s' "$arcs" | tr '\n' ' ')" || u1_bad="$u1_bad $arc(not-upstream)"
-  in_list "$arc" "$migrated" && u1_bad="$u1_bad $arc(now-migrated)"
-done
-for arc in $arcs; do
-  in_list "$arc" "$migrated" && continue
-  in_list "$arc" "$UNMIGRATED" || u1_bad="$u1_bad $arc(unmigrated-but-unlisted)"
-done
-if [ -z "$u1_bad" ]; then
-  pass "U1 UNMIGRATED lists exactly the arcs without contract: 2, all of them upstream"
-else
-  fail "U1 UNMIGRATED ratchet out of step:$u1_bad"
+  fail "C4 second layer found beside the flat contracts:$c4_bad"
 fi
 
 # ---------------------------------------------------------------------------- M1
@@ -225,14 +205,11 @@ if [ "${ARC_CONTRACT_SHAPE_MUTANT:-0}" = "1" ]; then
   finish
 fi
 
-victim="$(printf '%s' "$migrated" | tr ' ' '\n' | head -n 1)"
-if [ -z "$victim" ]; then
-  fail "M1 no migrated contract available to mutate"
-  finish
-fi
-cp -R "$ARC_DIR" "$TMPROOT/story-arc"
-sed 's/^## Headings$/## Headlines/' "$ARC_DIR/$victim/arc-definition.md" > "$TMPROOT/story-arc/$victim/arc-definition.md"
-mutant_out="$(ARC_CONTRACT_SHAPE_MUTANT=1 ARC_CONTRACT_STORY_ARC_DIR="$TMPROOT/story-arc" bash "$HERE/$(basename "$0")" 2>&1)"
+victim="$(printf '%s\n' "$arcs" | head -n 1)"
+rm -rf "$TMPROOT/references"
+cp -R "$ARC_DIR" "$TMPROOT/references"
+sed 's/^## Headings$/## Headlines/' "$(contract_path "$victim")" > "$TMPROOT/references/arc-$victim.md"
+mutant_out="$(ARC_CONTRACT_SHAPE_MUTANT=1 ARC_CONTRACT_STORY_ARC_DIR="$TMPROOT/references" bash "$HERE/$(basename "$0")" 2>&1)"
 mutant_rc=$?
 
 printf '%s\n' "$mutant_out" | grep -E '^(PASS|FAIL): ' | awk '{print $2}' | sort -u > "$TMPROOT/emitted.txt"
@@ -254,13 +231,13 @@ else
 fi
 
 # ---------------------------------------------------------------------------- M2
-# Second negative: transliterate the WHOLE DE column of the last migrated contract to ASCII
+# Second negative: transliterate the WHOLE DE column of the last contract to ASCII
 # digraphs (ä→ae, ö→oe, ü→ue, ß→ss) in a copy and require C3 to go red naming that arc. This
 # is the exact corruption a prefix-anchored vocabulary has to catch on inflected headings.
-m2_victim="$(printf '%s' "$migrated" | tr ' ' '\n' | tail -n 1)"
-rm -rf "$TMPROOT/story-arc-m2"
-cp -R "$ARC_DIR" "$TMPROOT/story-arc-m2"
-python3 - "$ARC_DIR/$m2_victim/arc-definition.md" "$TMPROOT/story-arc-m2/$m2_victim/arc-definition.md" <<'PYM2'
+m2_victim="$(printf '%s\n' "$arcs" | tail -n 1)"
+rm -rf "$TMPROOT/references-m2"
+cp -R "$ARC_DIR" "$TMPROOT/references-m2"
+python3 - "$(contract_path "$m2_victim")" "$TMPROOT/references-m2/arc-$m2_victim.md" <<'PYM2'
 import re, sys
 src, dst = sys.argv[1], sys.argv[2]
 text = open(src, encoding="utf-8").read()
@@ -288,7 +265,7 @@ m2_prep=$?
 if [ "$m2_prep" -ne 0 ]; then
   fail "M2 could not transliterate the DE headings of '$m2_victim' (prep exit $m2_prep)"
 else
-  m2_out="$(ARC_CONTRACT_SHAPE_MUTANT=1 ARC_CONTRACT_STORY_ARC_DIR="$TMPROOT/story-arc-m2" bash "$HERE/$(basename "$0")" 2>&1)"
+  m2_out="$(ARC_CONTRACT_SHAPE_MUTANT=1 ARC_CONTRACT_STORY_ARC_DIR="$TMPROOT/references-m2" bash "$HERE/$(basename "$0")" 2>&1)"
   m2_rc=$?
   if [ "$m2_rc" -ne 0 ] && printf '%s\n' "$m2_out" | grep '^FAIL: C3 ' | grep -q "$m2_victim"; then
     pass "M2 transliterating the DE headings of '$m2_victim' to ASCII digraphs turns C3 red naming it (child exit $m2_rc)"

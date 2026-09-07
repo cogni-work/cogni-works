@@ -260,7 +260,7 @@ references/
 └── arc-{arc-id}.md            # v2 contract: Intent, Selection, Headings, Composition, Elements, Validation, See Also
 ```
 
-A contract carries `contract: 2` in its frontmatter and the seven `##` sections in that order; `## Elements` holds exactly four `### N.` sections, each with Purpose, Evidence sought, Argument move, Techniques, Hard rules and Failure modes. The tree is flat on purpose: a directory nested under `references/` is a skill-spec finding, and the narrative skill's nested tree is what this copy flattened. While the narrative skill still exists, `cogni-workspace/scripts/flatten-narrative-assets.py` derives every file here from its origin and `cogni-workspace/tests/test-text-to-narrative-brief.sh` fails when a vendored file drifts from that derivation.
+A contract carries `contract: 2` in its frontmatter and the seven `##` sections in that order; `## Elements` holds exactly four `### N.` sections, each with Purpose, Evidence sought, Argument move, Techniques, Hard rules and Failure modes. The tree is flat on purpose: a directory nested under `references/` is a skill-spec finding, and the retired narrative skill's nested tree is what this copy flattened. These files are now the only copies; `cogni-workspace/tests/test-arc-contract-shape.sh` keeps every contract on this shape and fails when a nested layer grows back.
 
 ## Interactive Selection Format
 
@@ -291,7 +291,7 @@ Rules: 2-3 candidates, never padded to three when only two fit; when only one ar
 ### Adding an arc
 
 1. Choose a unique `arc_id` (lowercase, hyphens, descriptive).
-2. Create `arc-{arc-id}.md` on the v2 contract shape — copy a contract such as `arc-corporate-visions.md` and replace every section. While the narrative skill exists, add the arc there first and re-run `cogni-workspace/scripts/flatten-narrative-assets.py --write`; the vendored copy is derived, never hand-edited. Headings carry real characters per language, never ASCII substitutes.
+2. Create `arc-{arc-id}.md` on the v2 contract shape — copy a contract such as `arc-corporate-visions.md` and replace every section. This directory is the arc's only home, so the contract is authored here directly. Headings carry real characters per language, never ASCII substitutes.
 3. Add the arc's block under Arc Blocks above with all six fields, a `distinguish_from` naming at least one existing arc, and the reciprocal mention in each neighbour's block; add a Quick Reference row; add its `content_type` mapping to Step 3 and its threshold to Step 5, and a structural signal to Step 2 if the arc has a unique file signature.
 4. Add a column to the application matrix in `techniques-overview.md`.
 5. Add a mapping row and an element block to `cogni-workspace/libraries/arc-taxonomy.md` — short names are the pre-colon segments of the contract's headings.

@@ -13,11 +13,10 @@
 # stalls the subagent rather than returning an error, so the failure is a hang,
 # not a traceback, and it surfaces far from its cause.
 #
-# #1773 closed one instance of this class by adding `--interactive` to the
-# narrative skill, and pinned it with test-narrative-interactive-flag.sh. That
-# guard is narrative-specific: it names one skill and one agent as literals, so
-# it cannot see a new agent, a new interactive-bearing skill, or the two
-# instances (#1836) it never covered. This suite is the general form.
+# An earlier, narrative-specific guard closed one instance of this class by
+# naming one skill and one agent as literals; it retired with that skill. A
+# literal-named guard cannot see a new agent or a new interactive-bearing skill,
+# which is why this suite is the general form and discovers its population.
 #
 # The population is DISCOVERED, not enumerated. A1 finds the interactive-bearing
 # skills by reading their own parameter tables; A2 finds the agents that name one
@@ -28,11 +27,11 @@
 # asserted non-vacuous by A5.
 #
 # A3 binds PER AGENT -- at least one dispatch site per agent carries the pin --
-# and deliberately not "every args line carries it". agents/story-to-slides.md
-# carries a second `<parameter name="args">` line under "Example with actual
-# values" that does not contain the pin, so the every-line reading would be red
-# at head on a file this change does not touch, and the cheapest reaction to
-# that redness would be to weaken the case rather than fix anything.
+# and deliberately not "every args line carries it". An agent may legitimately
+# carry a second dispatch example without the pin (the retired story-to-slides
+# driver did), so the every-line reading would be red on a correct file, and the
+# cheapest reaction to that redness would be to weaken the case rather than fix
+# anything.
 #
 # Mutation recipe (proves A3 has teeth). Every flag value is a literal — the
 # handoff preflight rejects a variable-bearing recipe, and a
@@ -42,23 +41,24 @@
 #
 #   bash "$HOME/.claude/plugins/marketplaces/managed-service/cogni-service/scripts/mutation-check.sh" \
 #     --root . \
-#     --file cogni-workspace/agents/story-to-infographic.md \
-#     --expr 's/args: interactive=false/args:/' \
+#     --file cogni-workspace/agents/enrich-report.md \
+#     --expr 's/interactive=false/interactive=true/' \
 #     --test 'bash cogni-workspace/tests/test-agent-interactive-flag.sh' \
 #     --case A3
 #
-# The search literal occurs exactly once at head and zero times at base, so the
+# The search literal occurs exactly once in that file (on the dispatch line;
+# the parameter table spells the flag and its value in separate cells), so the
 # expr cannot report expr_no_op; it is a plain non-global s/// with no capture
-# groups, so it is valid for `perl -0pi`; and the replacement drops the value
-# while keeping the key, so the mutant cannot re-satisfy A3 — story-to-infographic
-# loses its dispatch-site pin and A3 goes red naming that file. A1, A2, A4 and A5
-# are untouched, so the redness is attributable to A3 alone.
+# groups, so it is valid for `perl -0pi`; and the replacement flips the value
+# while keeping the key, so the mutant cannot re-satisfy A3 — enrich-report
+# loses its dispatch-site pin and A3 goes red naming that file. A1, A2, A4 and
+# A5 are untouched, so the redness is attributable to A3 alone.
 #
 # The expr carries no shell metacharacter -- no backtick, no $, no parenthesis.
-# The enrich-report mutant is the more obvious one to reach for (delete ", always
-# with `interactive=false`"), and it does redden A3, but its search literal
-# contains backticks and the handoff preflight rejects the whole recipe as not
-# replayable as written. A recipe that cannot be replayed is not evidence.
+# Deleting the whole ", always with `interactive=false`" clause also reddens A3,
+# but that literal contains backticks and the handoff preflight rejects the
+# recipe as not replayable as written. A recipe that cannot be replayed is not
+# evidence.
 
 # set -u but deliberately NOT set -e: a red arm must print its FAIL line and let
 # the run reach the summary, not abort the script at the first failing check.
@@ -79,14 +79,13 @@ fail() { echo "FAIL: $1"; failures=$((failures + 1)); }
 # and A5 asserts every entry's stated escape route still holds, so an exemption
 # cannot outlive the property that justified it.
 #
-# narrative-adapter: delegates to `narrative` only in `--format` derivative
-# mode. narrative/SKILL.md states that when `--format` is set the generation
-# pipeline (Phases 0.5-6) is skipped entirely, and the skill's sole
-# AskUserQuestion site is the Phase 2 arc confirmation inside that range. The
-# agent also holds no AskUserQuestion grant. Pinning the flag here would be
-# harmless but would assert a coupling that does not exist.
+# Empty today. The one entry this list carried — narrative-adapter, which
+# delegated to the narrative skill only in a mode that skipped every prompt
+# site — retired with that skill. An empty list is safe: A3 skips nothing and
+# A5 polices nothing, and both are still exercised by the discovered
+# population. Add an entry only with its reason on the same line.
 # ---------------------------------------------------------------------------
-EXEMPT="narrative-adapter"
+EXEMPT=""
 
 # ---------------------------------------------------------------------------
 # A0 -- the two directories this suite reasons over must exist. Without this,
@@ -197,8 +196,8 @@ for agent_name in $scoped_agents; do
   # the recorded mutation below returned `vacuous_guard`: the agents also
   # document the parameter in prose and in a table row, so deleting the pin from
   # the actual dispatch left two other copies behind and the case stayed green.
-  # It is the same by-site discipline test-narrative-interactive-flag.sh P3
-  # states, arrived at the same way.
+  # It is the same by-site discipline the retired narrative-specific guard
+  # stated, arrived at the same way.
   #
   # The pin must share a line with the invocation itself. Four dispatch spellings
   # are in use and all four satisfy this: the `<parameter name="args">` line, the
@@ -234,17 +233,16 @@ fi
 # An earlier draft of this case asserted the opposite of the grant conjunct --
 # that no in-scope AGENT may hold an `AskUserQuestion` grant. That was wrong on
 # base facts: `references/agent-tool-declarations.md` records, per agent, why a
-# `tools:` line carries what it does -- `story-to-infographic` mirrors its
-# skill's `allowed-tools`, `narrative-adapter` covers what that skill needs --
-# the common reason being that the Skill tool runs the skill in the agent's own
-# context, and that a least-privilege trim of exactly this kind was raised and
-# declined on PR #1672. The grant is
+# `tools:` line carries what it does -- `enrich-report` carries its skill's
+# `allowed-tools` -- the common reason being that the Skill tool runs the skill
+# in the agent's own context, and that a least-privilege trim of exactly this
+# kind was raised and declined on review. The grant is
 # capability the skill exercises, not privilege the agent uses; the pin, not the
 # grant, is what stops the prompt.
 #
-# Asserted by SITE, never by a total occurrence count --
-# test-narrative-interactive-flag.sh P3 records why a pinned total goes red on
-# the legitimate direction of travel (a skill gaining a second gated prompt).
+# Asserted by SITE, never by a total occurrence count -- a pinned total goes
+# red on the legitimate direction of travel (a skill gaining a second gated
+# prompt), which is what the retired narrative-specific guard recorded.
 # ---------------------------------------------------------------------------
 skill_regressions=""
 for s in $interactive_skills; do

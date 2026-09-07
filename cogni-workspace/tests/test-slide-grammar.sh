@@ -4,8 +4,8 @@
 # to the three surfaces that carry live grammar samples:
 #
 #   cogni-workspace/libraries/EXAMPLE_BRIEF.md                          (13 slides)
-#   cogni-workspace/skills/story-to-slides/references/07-output-template.md  (8)
-#   cogni-workspace/skills/story-to-slides/references/08b-references-slide.md (1)
+#   cogni-workspace/libraries/presentation-brief-template.md  (8)
+#   cogni-workspace/libraries/references-slide.md (1)
 #
 # Why this exists alongside test-check-brief.sh: check-brief.py already enforces
 # no-color-fields and deck-references-last, and cb01 / cb04 / pb05 already run it
@@ -112,7 +112,7 @@
 #
 #   bash ~/GitHub/dev/managed-service/cogni-service/scripts/mutation-check.sh \
 #     --root . \
-#     --file cogni-workspace/skills/story-to-slides/references/07-output-template.md \
+#     --file cogni-workspace/libraries/presentation-brief-template.md \
 #     --expr 's{## Slide N\+1: }{## Slidez N+1: }' \
 #     --test 'bash cogni-workspace/tests/test-slide-grammar.sh' \
 #     --case sg03-heading-counts
@@ -129,7 +129,7 @@
 #
 #   bash ~/GitHub/dev/managed-service/cogni-service/scripts/mutation-check.sh \
 #     --root . \
-#     --file cogni-workspace/skills/story-to-slides/references/08b-references-slide.md \
+#     --file cogni-workspace/libraries/references-slide.md \
 #     --expr 's{Slide-Kind: references}{Slide-Kind: content}' \
 #     --test 'bash cogni-workspace/tests/test-slide-grammar.sh' \
 #     --case sg20-refslide-kind-is-references
@@ -155,8 +155,8 @@ ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 GRAM="$ROOT/cogni-workspace/tests/fixtures/slide-grammar/slide_grammar.py"
 
 BRIEF="$ROOT/cogni-workspace/libraries/EXAMPLE_BRIEF.md"
-TEMPLATE="$ROOT/cogni-workspace/skills/story-to-slides/references/07-output-template.md"
-REFSLIDE="$ROOT/cogni-workspace/skills/story-to-slides/references/08b-references-slide.md"
+TEMPLATE="$ROOT/cogni-workspace/libraries/presentation-brief-template.md"
+REFSLIDE="$ROOT/cogni-workspace/libraries/references-slide.md"
 CHECK_BRIEF="$ROOT/cogni-workspace/scripts/check-brief.py"
 
 failures=0
@@ -265,7 +265,7 @@ expect_green sg08-required-41-subkeys required-4.1-subkeys \
 expect_green sg09-non-numeric-slide-labels-graded non-numeric-slide-labels-graded \
   "the N / N+1 / N+2 headings were not graded"
 expect_green sg20-refslide-kind-is-references references-slide-kind \
-  "08b-references-slide.md's slide does not carry Slide-Kind: references"
+  "references-slide.md's slide does not carry Slide-Kind: references"
 
 # --------------------------------------------------------------------- mutants
 

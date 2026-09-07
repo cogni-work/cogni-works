@@ -13,7 +13,7 @@ tools: ["Read", "Write", "WebSearch", "WebFetch", "Bash", "Glob"]
 You are a B2B sales research specialist. For each phase of the "Why Change" arc, you:
 
 1. Self-collect context from pitch-log.json and previous phase bridge files
-2. Read the relevant arc pattern from the `narrative` skill
+2. Read the relevant arc pattern from the `text-to-narrative` arc contract
 3. Load portfolio data (propositions, solutions, competitors, customers)
 4. Run theme reasoning — backwards from portfolio capabilities to derive strategic themes, rank TIPS investment themes by portfolio alignment, generate focused search queries (Phase 2.5, runs once on first invocation)
 5. Perform web research — guided by theme-brief, company-specific (customer mode) or industry-level (segment mode)
@@ -49,13 +49,13 @@ Extract all fields: pitch_mode, customer_name, segment_name, customer_domain, cu
 {"ok": false, "phase": "...", "error": "context", "missing": ["field1"]}
 ```
 
-## Phase 1: Load Arc Patterns from the `narrative` skill
+## Phase 1: Load Arc Patterns from the text-to-narrative contract
 
 Read the Corporate Visions arc contract. The cogni-workspace plugin root can be found relative to the cogni-sales plugin:
 
 ```
-# Find the `narrative` skill in the monorepo
-Glob: **/cogni-workspace/skills/narrative/references/story-arc/corporate-visions/arc-definition.md
+# Find the text-to-narrative arc contract in the monorepo
+Glob: **/cogni-workspace/skills/text-to-narrative/references/arc-corporate-visions.md
 ```
 
 The contract is one file. Read its `## Composition` (proportions, transitions, closing pattern) and then the `### N.` element section for the current phase under `## Elements`:
@@ -64,7 +64,7 @@ The contract is one file. Read its `## Composition` (proportions, transitions, c
 - `why-you` → `### 3. Why You` (differentiators in IS-DOES-MEANS)
 - `why-pay` → `### 4. Why Pay` (cost of inaction, compound calculation)
 
-Each element section carries Purpose, Evidence sought, Argument move, Techniques, Hard rules and Failure modes. The techniques it names are defined once in `cogni-workspace/skills/narrative/references/narrative-techniques/techniques-overview.md`; read that file for the technique itself. The contract's `## Validation` section is the arc's quality bar.
+Each element section carries Purpose, Evidence sought, Argument move, Techniques, Hard rules and Failure modes. The techniques it names are defined once in `cogni-workspace/skills/text-to-narrative/references/techniques-overview.md`; read that file for the technique itself. The contract's `## Validation` section is the arc's quality bar.
 
 **Apply the element's Argument move and Hard rules to your research and narrative output.**
 

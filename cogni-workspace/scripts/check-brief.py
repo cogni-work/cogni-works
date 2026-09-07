@@ -26,7 +26,7 @@ suite pins that) and the neither-citations-nor-references arm of
 `deck-references-last`. Those are `warn`; `--strict` promotes them.
 
 ONE PARSER. Every read goes through `parse-brief.py`, loaded here the way
-`brief-to-outline.py` loads it: `parse_document` for the type-agnostic units
+`brief-render-qa.py` loads it: `parse_document` for the type-agnostic units
 every profile checks, and for slides additionally `parse_brief` for the slides
 model. The slides profile therefore reads the file twice, through one parser —
 the checker reads exactly what the renderers read and cannot drift from them on

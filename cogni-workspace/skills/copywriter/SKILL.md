@@ -105,7 +105,7 @@ These apply even in `--scope=tone` because they are readability essentials, not 
 
 1. Resolve `source_lang` via the existing detector in Step 3 (`--lang` → workspace config → content analysis).
 2. If `source_lang == TARGET_LANG`, log "source language already matches target — skipping translation pass" and fall through to standard polish. **Also unset the translation scope override below** so the user's explicit `--scope` is honoured (a user invoking `--scope=full` on a same-language doc expects Step 2 to run normally).
-3. **Arc-mode gate.** Determine the document's arc: use frontmatter `arc_id` if present; otherwise match the H2 headings against the arc contracts (per `arc-preservation.md` detection, which reads the `narrative` skill's registry and contracts at runtime, so every registered arc is detectable). If neither yields an arc, skip this gate (proceed as a non-arc translation). When an arc is identified, open its contract, `${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/story-arc/{arc_id}/arc-definition.md`, and read the column set of its `## Headings` table:
+3. **Arc-mode gate.** Determine the document's arc: use frontmatter `arc_id` if present; otherwise match the H2 headings against the arc contracts (per `arc-preservation.md` detection, which reads the `text-to-narrative` skill's registry and contracts at runtime, so every registered arc is detectable). If neither yields an arc, skip this gate (proceed as a non-arc translation). When an arc is identified, open its contract, `${CLAUDE_PLUGIN_ROOT}/skills/text-to-narrative/references/arc-{arc_id}.md`, and read the column set of its `## Headings` table:
    - If that table carries **no column for `TARGET_LANG`** → abort (coverage), **regardless of language pair**, with: "Arc-mode translation into `{TARGET_LANG}` is not supported for arc `{arc_id}`: its contract carries headings for {columns} only." Do not modify the file — an arc without upstream headings for the target language fails closed rather than inventing them.
    - Else (the contract carries the target column) **and** at least one of `source_lang`/`TARGET_LANG` is in `{en, de}` → **allow**: set `arc_mode = true` and proceed. The arc-element and bridge headings will be **substituted** (not freely translated) in Step 2.5.
    - Else (the column exists but **neither** end is in `{en, de}` — e.g. a French source with `TARGET_LANG=it`) → do **not** abort here; fall through to pre-check #4 (accept-set) and #5 (pivot guard), which emits the correct direct-non-EN/DE message.
@@ -171,10 +171,10 @@ When `arc_mode` is active, `references/arc-preservation.md` and the upstream fil
 
 | Upstream file | Read at | What it supplies |
 |---|---|---|
-| `${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/story-arc/arc-registry.md` | Step 1 pre-check 3, Step 1 mode detection | The registered arcs (one `### {arc-id}` block each) for heading-pattern detection |
-| `${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/story-arc/{arc_id}/arc-definition.md` | Step 2.5, Step 5 | `## Headings` — the canonical element headings per language, substituted positionally and validated byte-for-byte; `## Elements` — per-element Techniques and Hard rules the polish must keep intact; `## Validation` — the arc's own assertions |
-| `${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/narrative-techniques/techniques-overview.md` | Step 3 | The technique definitions and the application matrix (which technique each element carries) |
-| `${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/language/shared.md` | Step 2.5 | The bridge heading ("Further Reading") in all seven languages |
+| `${CLAUDE_PLUGIN_ROOT}/skills/text-to-narrative/references/arc-registry.md` | Step 1 pre-check 3, Step 1 mode detection | The registered arcs (one `### {arc-id}` block each) for heading-pattern detection |
+| `${CLAUDE_PLUGIN_ROOT}/skills/text-to-narrative/references/arc-{arc_id}.md` | Step 2.5, Step 5 | `## Headings` — the canonical element headings per language, substituted positionally and validated byte-for-byte; `## Elements` — per-element Techniques and Hard rules the polish must keep intact; `## Validation` — the arc's own assertions |
+| `${CLAUDE_PLUGIN_ROOT}/skills/text-to-narrative/references/techniques-overview.md` | Step 3 | The technique definitions and the application matrix (which technique each element carries) |
+| `${CLAUDE_PLUGIN_ROOT}/skills/text-to-narrative/references/language-shared.md` | Step 2.5 | The bridge heading ("Further Reading") in all seven languages |
 
 **Perform the translation (Pass A):**
 
@@ -190,7 +190,7 @@ Translate the entire document to `TARGET_LANG`, holding to these invariants:
 
 **Arc-heading substitution (runs only when `arc_mode` is active):**
 
-Arc-element and bridge headings are NOT freely translated — they are **substituted** from the upstream authority read at runtime: the arc contract's `## Headings` table for the four element headings, and `${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/language/shared.md` § Bridge heading for the bridge:
+Arc-element and bridge headings are NOT freely translated — they are **substituted** from the upstream authority read at runtime: the arc contract's `## Headings` table for the four element headings, and `${CLAUDE_PLUGIN_ROOT}/skills/text-to-narrative/references/language-shared.md` § Bridge heading for the bridge:
 
 1. Read `arc_id` from frontmatter and load that arc's contract; take the four element headings (rows 1–4) from the `TARGET_LANG` column of `## Headings`, and the bridge heading from the bridge table in `language/shared.md` (a separate file, because a generated narrative carries a `**Sources**` block rather than a bridge; the bridge survives for older arc documents).
 2. Identify the document's headings **positionally**:
@@ -242,7 +242,7 @@ Key targets: max 12 words per clause, Satzklammer breaking, Mittelfeld shortenin
 
 **Impact techniques** (when `impact_level: high` or executive audience):
 
-Load `techniques-overview.md` from the `narrative` skill, as the reference index routes you. It carries the decision processes and checklists for:
+Load `techniques-overview.md` from the `text-to-narrative` skill, as the reference index routes you. It carries the decision processes and checklists for:
 
 - **Number plays** (`## 4`) — Transform vague claims into concrete data (ratio framing, specific quantification, comparative anchoring, before/after contrast, compound impact, hero number isolation)
 - **Forcing functions, contrast structure, you-phrasing and compound impact calculation** (`## 5`–`## 8`) — Urgency stacking, cognitive-dissonance framing, reader-centred phrasing, and the compound-impact arithmetic
@@ -424,7 +424,7 @@ sequence (Parse Parameters & Load References .. Validate & Write Document) rathe
 against the five core steps above, and it carries no Step 2.5 translate material.
 
 **Scripts** — `scripts/calculate_readability.py` computes the metrics Step 5 gates on
-(invocation above). `scripts/readability.sh` is the wrapper the `narrative` skill's
+(invocation above). `scripts/readability.sh` is the wrapper the `text-to-narrative` skill's
 Pass 4 calls; that skill owns which band it measures against.
 
 The messaging frameworks and the deliverable-type conventions have no reference file
@@ -438,7 +438,7 @@ tree" names both.
 When polishing a research report (detected by project directory containing `project-config.json` or `00-sub-questions/`), include this guidance after the quality metrics:
 
 > **Next: Visual pipeline**
-> 1. `story-to-infographic` + `/render-infographic` — Infographic header (Pencil, 10-step validated)
+> 1. Author an `infographic-brief.md` against `${CLAUDE_PLUGIN_ROOT}/libraries/EXAMPLE_ECONOMIST_BRIEF.md`, then `/render-infographic` — Infographic header (Pencil, validated by `check-brief.py`)
 > 2. `/enrich-report` — Themed HTML with charts (reuses infographic from step 1)
 >
-> Running story-to-infographic first gives enrich-report a validated, Pencil-rendered header instead of its simplified inline fallback.
+> Rendering the infographic first gives enrich-report a validated, Pencil-rendered header instead of its simplified inline fallback.

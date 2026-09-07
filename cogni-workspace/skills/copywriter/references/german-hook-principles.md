@@ -270,4 +270,4 @@ Minimum passing: Tests 1-5 must all pass. Tests 6-7 should pass for excellent ho
 
 - `german-style-principles.md` (Satzklammer, Mittelfeld, Floskeln -- sentence-level rules)
 - `arc-preservation.md` (When and how to restructure arc hooks)
-- `skills/narrative/references/story-arc/{arc}/arc-definition.md` (each arc's `## Composition` — what its opening emphasizes)
+- `skills/text-to-narrative/references/arc-{arc}.md` (each arc's `## Composition` — what its opening emphasizes)

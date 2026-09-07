@@ -146,9 +146,10 @@
 
 set -u
 
-# Keep CPython from dropping a __pycache__/ into the plugin tree —
-# test-relocated-skill-hygiene.sh P2 flags it as an unresolvable
-# ${CLAUDE_PLUGIN_ROOT} path.
+# Keep CPython from dropping a __pycache__/ into the plugin tree — that
+# directory is an interpreter artifact this repo keeps out of the tree by
+# policy: it is gitignored, and scripts/check-skill-spec.py prunes it from its
+# own walk.
 export PYTHONDONTWRITEBYTECODE=1
 
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"

@@ -14,6 +14,24 @@ last_updated: 2026-02-25
 
 # Plain Language Principles
 
+## Contents
+
+- [Purpose](#purpose)
+- [Decision Framework](#decision-framework)
+- [Core Principles](#core-principles)
+  - [1. Use Common Words](#1-use-common-words)
+  - [2. Write Short Sentences](#2-write-short-sentences)
+  - [3. Use Active Voice](#3-use-active-voice)
+  - [4. Address the Reader Directly](#4-address-the-reader-directly)
+  - [5. Use Strong Verbs Instead of Nominalizations](#5-use-strong-verbs-instead-of-nominalizations)
+  - [6. Remove Redundancies and Filler](#6-remove-redundancies-and-filler)
+  - [7. Put the Main Point First](#7-put-the-main-point-first)
+  - [8. Define Technical Terms When Required](#8-define-technical-terms-when-required)
+- [Quality Targets](#quality-targets)
+- [Full Before/After: Business Letter](#full-beforeafter-business-letter)
+- [Edge Cases and Judgment Calls](#edge-cases-and-judgment-calls)
+
+
 ## Purpose
 
 This reference teaches you how to apply plain language when writing or polishing business documents. Plain language means the reader understands the text on first reading without re-reading any sentence.

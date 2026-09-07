@@ -17,6 +17,39 @@ last_updated: 2026-02-25
 You are formatting business documents (memos, briefs, reports, proposals, emails, one-pagers, executive summaries, blog posts). Your markdown output must be syntactically correct, visually clean, and optimized for readability in rendered environments (Obsidian, GitHub, web previews). This reference defines the exact formatting rules to follow. When in doubt, favor the simpler construction.
 </context>
 
+## Contents
+
+- [Syntax Conventions](#syntax-conventions)
+- [Headings](#headings)
+- [Emphasis](#emphasis)
+- [Lists](#lists)
+  - [When to Use Each Type](#when-to-use-each-type)
+  - [Unordered Lists](#unordered-lists)
+  - [Ordered Lists](#ordered-lists)
+  - [Nested Lists](#nested-lists)
+  - [List Formatting Rules](#list-formatting-rules)
+- [Tables](#tables)
+  - [Basic Table](#basic-table)
+  - [Column Alignment](#column-alignment)
+  - [Table Rules](#table-rules)
+- [Links](#links)
+- [Block Quotes](#block-quotes)
+- [Code](#code)
+  - [Inline Code](#inline-code)
+  - [Code Blocks](#code-blocks)
+- [Horizontal Rules](#horizontal-rules)
+- [Spacing Rules](#spacing-rules)
+  - [Correct Spacing](#correct-spacing)
+  - [Incorrect Spacing (Common Failure Modes)](#incorrect-spacing-common-failure-modes)
+- [Less Common Elements](#less-common-elements)
+  - [Footnotes](#footnotes)
+  - [Task Lists](#task-lists)
+  - [Strikethrough](#strikethrough)
+- [Decision Guide](#decision-guide)
+- [Validation Checklist](#validation-checklist)
+- [See Also](#see-also)
+
+
 ## Syntax Conventions
 
 Use CommonMark-compliant markdown exclusively. Use these exact markers -- no alternatives.

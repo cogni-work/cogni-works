@@ -15,6 +15,36 @@ last_updated: 2026-02-25
 
 This reference defines the rules for structuring headings in business documents. Correct heading hierarchy makes documents scannable, navigable, and professional. Apply these rules every time you create or revise a document.
 
+## Contents
+
+- [Core Rules](#core-rules)
+- [How Each Level Works](#how-each-level-works)
+  - [H1: Document Title (exactly one)](#h1-document-title-exactly-one)
+  - [H2: Major Sections (primary divisions)](#h2-major-sections-primary-divisions)
+  - [H3: Subsections (breakdowns within a section)](#h3-subsections-breakdowns-within-a-section)
+  - [H4: Detail Level (use sparingly)](#h4-detail-level-use-sparingly)
+- [Parallel Structure](#parallel-structure)
+  - [Step-by-step: choosing and applying a form](#step-by-step-choosing-and-applying-a-form)
+  - [Before/after examples](#beforeafter-examples)
+- [Keyword Front-Loading](#keyword-front-loading)
+- [Heading Patterns by Document Type](#heading-patterns-by-document-type)
+  - [Memos (short, action-oriented)](#memos-short-action-oriented)
+  - [Briefs (analytical, focused)](#briefs-analytical-focused)
+  - [Reports (comprehensive, structured)](#reports-comprehensive-structured)
+  - [Proposals (persuasive, answer-first)](#proposals-persuasive-answer-first)
+- [Structural Patterns](#structural-patterns)
+  - [Answer-First (Pyramid)](#answer-first-pyramid)
+  - [SCQA (Situation-Complication-Question-Answer)](#scqa-situation-complication-question-answer)
+  - [Chronological/Process](#chronologicalprocess)
+- [Common Mistakes and Corrections](#common-mistakes-and-corrections)
+  - [Mistake: Exceeding three levels of depth](#mistake-exceeding-three-levels-of-depth)
+  - [Mistake: Generic headings](#mistake-generic-headings)
+  - [Mistake: Headings that are too long](#mistake-headings-that-are-too-long)
+  - [Mistake: Skipping heading levels](#mistake-skipping-heading-levels)
+- [Validation Checklist](#validation-checklist)
+- [See Also](#see-also)
+
+
 ## Core Rules
 
 <rules>

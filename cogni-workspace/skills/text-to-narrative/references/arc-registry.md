@@ -2,6 +2,40 @@
 
 The selection contract for the `text-to-narrative` skill: which arc a run should follow, and how that is decided. Each arc's structure — headings, composition, elements, validation — lives in its own contract at `arc-{arc-id}.md`; this file carries only what selection needs, as one declarative block per arc, and the algorithm that reads those blocks.
 
+## Contents
+
+- [Quick Reference](#quick-reference)
+- [Arc Selection Logic](#arc-selection-logic)
+- [Arc Blocks](#arc-blocks)
+  - [corporate-visions](#corporate-visions)
+  - [technology-futures](#technology-futures)
+  - [competitive-intelligence](#competitive-intelligence)
+  - [strategic-foresight](#strategic-foresight)
+  - [industry-transformation](#industry-transformation)
+  - [trend-panorama](#trend-panorama)
+  - [smarter-service](#smarter-service)
+  - [theme-thesis](#theme-thesis)
+  - [jtbd-portfolio](#jtbd-portfolio)
+  - [company-credo](#company-credo)
+  - [engagement-model](#engagement-model)
+  - [consulting-problem-solving](#consulting-problem-solving)
+  - [strategic-choice](#strategic-choice)
+  - [customer-transformation](#customer-transformation)
+  - [category-creation](#category-creation)
+- [Arc Detection Algorithm](#arc-detection-algorithm)
+  - [Step 1: Explicit selection](#step-1-explicit-selection)
+  - [Step 2: Structural detection (trend-panorama / smarter-service)](#step-2-structural-detection-trend-panorama-smarter-service)
+  - [Step 3: Content-type mapping](#step-3-content-type-mapping)
+  - [Step 4: Execution-fit ranking](#step-4-execution-fit-ranking)
+  - [Step 5: Content analysis](#step-5-content-analysis)
+  - [Step 6: Fallback](#step-6-fallback)
+- [Arc Directory Structure](#arc-directory-structure)
+- [Interactive Selection Format](#interactive-selection-format)
+- [Extension Guidelines](#extension-guidelines)
+  - [Adding an arc](#adding-an-arc)
+  - [Quality standards](#quality-standards)
+
+
 ## Quick Reference
 
 | Arc ID | Elements | Governing question (short) | Primary signal |

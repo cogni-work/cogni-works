@@ -15,6 +15,43 @@ last_updated: 2026-02-25
 
 # German Style Principles (Wolf Schneider)
 
+## Contents
+
+- [Quick Reference](#quick-reference)
+- [Why German Needs Its Own Rules](#why-german-needs-its-own-rules)
+- [Decision Logic: When and How to Apply These Rules](#decision-logic-when-and-how-to-apply-these-rules)
+- [Section 1: Satzklammer — Six Strategies to Break the Bracket](#section-1-satzklammer-six-strategies-to-break-the-bracket)
+  - [Strategy A: Replace split verbs with single verbs](#strategy-a-replace-split-verbs-with-single-verbs)
+  - [Strategy B: Split into multiple Hauptsätze](#strategy-b-split-into-multiple-hauptsätze)
+  - [Strategy C: Pull adverbials into the Vorfeld](#strategy-c-pull-adverbials-into-the-vorfeld)
+  - [Strategy D: Shift material to the Nachfeld](#strategy-d-shift-material-to-the-nachfeld)
+  - [Strategy E: Append Nebensätze for detail](#strategy-e-append-nebensätze-for-detail)
+  - [Strategy F: Append details with Doppelpunkt, nämlich, besonders, das heißt](#strategy-f-append-details-with-doppelpunkt-nämlich-besonders-das-heißt)
+- [Section 2: Subjekt-Verb-Nähe](#section-2-subjekt-verb-nähe)
+- [Section 3: Attribute und Nebensätze](#section-3-attribute-und-nebensätze)
+  - [Attributketten auflösen](#attributketten-auflösen)
+  - [Hauptsätze ausreizen](#hauptsätze-ausreizen)
+  - [Nebensatz-Position](#nebensatz-position)
+  - [Nebensatz-Limit](#nebensatz-limit)
+- [Section 4: Wortebene — Floskeln ersetzen](#section-4-wortebene-floskeln-ersetzen)
+- [Section 5: Die 11 Maximen — Stilregeln](#section-5-die-11-maximen-stilregeln)
+  - [Maxime 1: Natürlich schreiben](#maxime-1-natürlich-schreiben)
+  - [Maxime 2: Frische Ausdrücke statt Floskeln](#maxime-2-frische-ausdrücke-statt-floskeln)
+  - [Maxime 3: Weglassen belebt die Phantasie](#maxime-3-weglassen-belebt-die-phantasie)
+  - [Maxime 4: Wichtige Begriffe wiederholen, nicht variieren](#maxime-4-wichtige-begriffe-wiederholen-nicht-variieren)
+  - [Maxime 5: Nebensächliches variieren](#maxime-5-nebensächliches-variieren)
+  - [Maxime 6 & 7: Kernaussage in den Hauptsatz](#maxime-6-7-kernaussage-in-den-hauptsatz)
+  - [Maxime 8: Max 2 Nebensätze pro Hauptsatz (Geschäftsdokumente)](#maxime-8-max-2-nebensätze-pro-hauptsatz-geschäftsdokumente)
+  - [Maxime 9: Ein Gedanke pro Satz](#maxime-9-ein-gedanke-pro-satz)
+  - [Maxime 10: Max 12 Wörter, Verb in der Mitte](#maxime-10-max-12-wörter-verb-in-der-mitte)
+  - [Maxime 11: Rhythmus durch Abwechslung](#maxime-11-rhythmus-durch-abwechslung)
+- [Section 6: Die drei Bedrohungen der deutschen Sprache](#section-6-die-drei-bedrohungen-der-deutschen-sprache)
+- [Complete Example: Applying All Rules](#complete-example-applying-all-rules)
+- [Quality Checklist for German Text](#quality-checklist-for-german-text)
+- [Integration with Readability Metrics](#integration-with-readability-metrics)
+- [See Also](#see-also)
+
+
 ## Quick Reference
 
 **Use when:** Every German-language deliverable

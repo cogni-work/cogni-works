@@ -10,6 +10,29 @@ last_updated: 2026-02-25
 
 # Power Positions Enhancement
 
+## Contents
+
+- [Quick Reference](#quick-reference)
+- [Structure Markers (Preserve Exactly)](#structure-markers-preserve-exactly)
+- [The Three Layers](#the-three-layers)
+  - [IS Layer -- "What is this capability?"](#is-layer----what-is-this-capability)
+  - [DOES Layer -- "What can I do with it?"](#does-layer----what-can-i-do-with-it)
+  - [MEANS Layer -- "Why should I care?"](#means-layer----why-should-i-care)
+- [Supporting Fields Enhancement](#supporting-fields-enhancement)
+  - [Proof Field](#proof-field)
+  - [Addresses Field](#addresses-field)
+  - [Competitor Gap Field](#competitor-gap-field)
+- [Complete Before/After Example](#complete-beforeafter-example)
+  - [Before Enhancement](#before-enhancement)
+  - [After Enhancement](#after-enhancement)
+  - [Why each enhancement works](#why-each-enhancement-works)
+- [Layer Separation Rules](#layer-separation-rules)
+- [Integration with Other Techniques](#integration-with-other-techniques)
+- [Quality Validation](#quality-validation)
+- [Anti-Patterns](#anti-patterns)
+- [See Also](#see-also)
+
+
 ## Quick Reference
 
 **Use when:** MODE: sales is active and content contains IS-DOES-MEANS blocks

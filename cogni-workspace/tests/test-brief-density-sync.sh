@@ -34,7 +34,7 @@
 #
 # Generic harness: ~/GitHub/dev/managed-service/cogni-service/scripts/mutation-check.sh
 #   --file cogni-workspace/skills/text-to-narrative/references/density-ceilings.md \
-#   --expr 's{| `slide_points_max_lines` | 4 |}{| `slide_points_max_lines` | 9 |}' \
+#   --expr 's{\| `slide_points_max_lines` \| 4 \|}{| `slide_points_max_lines` | 9 |}' \
 #   --test 'bash cogni-workspace/tests/test-brief-density-sync.sh' --case bds-03-slides-matches-homes
 
 set -u

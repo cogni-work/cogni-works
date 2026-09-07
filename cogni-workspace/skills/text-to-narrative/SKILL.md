@@ -25,7 +25,7 @@ Transform input markdown into a structured executive narrative using one of the 
 
 ## Architectural model
 
-One responsibility per file. Read a file when its phase runs, not before. Every asset is bundled under this skill — flat, one file per responsibility — so the skill runs with no other skill installed.
+One responsibility per file. Read a file when its phase runs, not before. Every narrative asset is bundled under this skill — flat, one file per responsibility — so the skill runs with no other plugin installed. Its one cross-skill call is Pass 4's readability measurement, `${CLAUDE_PLUGIN_ROOT}/skills/copywriter/scripts/readability.sh` with the band in `cogni-workspace/tests/fixtures/copywriter/readability.yml`, exactly as the narrative skill calls it; the copywriter skill is not on the retirement list.
 
 - **SKILL.md orchestrates** — phases, parameters, output contract, JSON envelope.
 - **The registry chooses** — `references/arc-registry.md`: detection algorithm, one declarative block per arc, confirmation format.
@@ -68,7 +68,7 @@ The bundled set is derived from the `narrative` skill's tree by `cogni-workspace
 | `--language` | No | Output language: `en` (default) or `de`. Fallback chain: explicit parameter > project metadata > workspace preference (`.workspace-config.json`) > content detection > `en` |
 | `--output-path` | No | Narrative file path; defaults to `insight-summary.md` in the source directory |
 | `--brief-path` | No | Design brief path; defaults to `design-brief.md` in the source directory |
-| `--max-units` | No | Upper bound on brief units (slides, sections or blocks). Default: the target's `units_max_default` ceiling |
+| `--max-units` | No | Upper bound on brief units: slides, infographic blocks or web sections, lowering the target's own ceiling. Ignored on `document`, whose four sections are fixed — the checker's envelope says so. Default: the target's ceiling |
 | `--theme-path` | No | Absolute path to a `theme.md`, recorded in the brief verbatim. Never prompted for: Claude Design applies the organization design system, so a theme is attached only when none is configured |
 | `--project-path` | No | Research/knowledge project root; enables arc inheritance from the project's `.metadata/` (Phase 1 step 8) and loading entity data beyond the source path. When omitted, Phase 1 step 8 probes `<source-path>/..` and `<source-path>/../..` |
 | `--research-question` | No | Original research question, used for the subtitle and the opening |
@@ -292,7 +292,7 @@ Then read `references/validation.md` and check its judged gates plus the contrac
      --brief "${BRIEF_PATH}" --narrative "${OUTPUT_PATH}" --json
    ```
 
-   Pass `--max-units` through when the caller set it. Fix every `fail` finding by re-selecting, never by rewriting, and re-run — a fix can break a check that passed. **Attempt bound:** at most three fix-and-re-run cycles; if a check is still red after the third, keep the brief on disk, report `brief_qa: "fail"` and the error JSON with `phase: "7"` naming the check. Exit 2 means the brief could not be graded — the ceilings reference or the narrative is unreadable — and halts with the script's `error`, never as a finding.
+   Pass `--max-units` through when the caller set it; on `document` the checker ignores it and records that in its `notes`. Fix every `fail` finding by re-selecting, never by rewriting, and re-run — a fix can break a check that passed. **Attempt bound:** at most three fix-and-re-run cycles; if a check is still red after the third, keep the brief on disk, report `brief_qa: "fail"` and the error JSON with `phase: "7"` naming the check. Exit 2 means the brief could not be graded — the ceilings reference or the narrative is unreadable — and halts with the script's `error`, never as a finding.
 7. Print the handoff. Every path printed here is absolute — never `~`, `$HOME`, `$CLAUDE_PLUGIN_ROOT` or relative:
 
    ```

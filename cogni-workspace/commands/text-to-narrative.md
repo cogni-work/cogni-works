@@ -19,7 +19,7 @@ arguments:
     description: "Where to write the design brief (default: design-brief.md beside the narrative)"
     required: false
   - name: max_units
-    description: Upper bound on brief units (slides, sections or blocks).
+    description: Upper bound on brief units — slides, infographic blocks or web sections; ignored on document.
     required: false
   - name: theme
     description: Absolute path to a theme.md, recorded in the brief verbatim; never prompted for.

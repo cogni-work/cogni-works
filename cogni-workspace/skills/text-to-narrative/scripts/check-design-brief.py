@@ -13,7 +13,11 @@ Usage:
 
 Every ceiling is read at run time from the skill's references/density-ceilings.md
 (`## {target}` table) — the reference keeps sole authority and no number is a
-literal here. A ceilings file that cannot be read, a target section that carries
+literal here; a table missing a key the target needs is exit 2 naming the key.
+`--max-units` lowers the unit ceiling on slides (units_max_default), infographic
+(blocks_max / blocks_max_dense) and web (sections_max); the document target's
+count is fixed at four sections, so the flag is ignored there and the envelope
+says so. A ceilings file that cannot be read, a target section that carries
 no rows, an unreadable brief or narrative, and an empty brief are all exit 2:
 the brief cannot be graded, which is a different outcome from a brief that fails.
 
@@ -25,7 +29,8 @@ Checks (name — what fails it):
   unit-numbering         units not `## <Kind> N:` from 1 without gaps, kind wrong for target
   density-frontmatter    density.ceilings differs from the reference row for the target
   density-<target>       a unit or preamble field exceeds the target's ceilings
-  copy-frozen-numbers    a number on the brief does not occur in the narrative
+  copy-frozen-numbers    a number on the brief — units, preamble, title, subtitle,
+                         governing_thought, key_figures — does not occur in the narrative
   citations-resolve      a `[N]` marker has no `[N] ` Sources entry, or a `<sup>` survives
   key-figures-src        a key_figures / hero_numbers entry lacks a resolvable `(src: [N])`
   no-styling-keys        a styling key (Background:, Text-Color:, fill:, ...) appears
@@ -68,6 +73,16 @@ STYLING_KEY_RE = re.compile(
 SENTENCE_END_RE = re.compile(r"[.!?](?:\s|$)")
 
 DEFAULT_CEILINGS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "references", "density-ceilings.md")
+REQUIRED_KEYS = {
+    "slides": ("headline_chars_max", "slide_points_max_lines", "slide_point_words_max", "slide_point_words_max_table",
+               "talk_track_words_min", "talk_track_words_max", "units_min", "units_max_default"),
+    "document": ("target_length_default", "band_lower", "band_upper", "summary_words_min", "summary_words_max",
+                 "summary_sentences_min", "summary_sentences_max", "sections"),
+    "infographic": ("headline_words_max", "subline_words_max", "hero_numbers_min", "hero_numbers_max", "hero_label_words_max",
+                    "blocks_min", "blocks_max", "blocks_max_dense", "point_words_max", "words_max", "words_max_dense"),
+    "web": ("hero_headline_words_max", "hero_subline_words_max", "section_headline_words_max", "headline_chars_max",
+            "section_body_words_max", "bullet_words_max", "quote_words_max", "attribution_words_max", "sections_min", "sections_max"),
+}
 
 
 class CheckError(Exception):
@@ -187,6 +202,9 @@ def load_ceilings(path: str, target: str) -> dict:
             rows[m.group(1)] = float(raw) if "." in raw else int(raw)
     if not rows:
         raise CheckError(f"ceilings reference {path} carries no rows for target {target!r}")
+    missing = [k for k in REQUIRED_KEYS.get(target, ()) if k not in rows]
+    if missing:
+        raise CheckError(f"ceilings reference {path} lacks {', '.join(missing)} for target {target!r}")
     return rows
 
 
@@ -252,6 +270,7 @@ class Brief:
         self.max_units = max_units
         self.findings: list[dict] = []
         self.checks_run: list[str] = []
+        self.notes: list[str] = []
 
         # Sources block: everything from the `**Sources**` line on.
         src_at = body.find("\n**Sources**")
@@ -301,7 +320,7 @@ class Brief:
         if isinstance(hero, dict):
             out.extend((None, v) for v in hero.values())
         for item in self.pre.get("hero_numbers", []) if isinstance(self.pre.get("hero_numbers"), list) else []:
-            out.append((None, SRC_RE.sub("", item)))
+            out.append((None, SRC_RE.sub("", item).replace(" — ", " ")))
         for u in self.units:
             out.append((u["number"], u["headline"]))
             f = u["fields"]
@@ -313,6 +332,23 @@ class Brief:
                     out.append((u["number"], f[key]))
         if isinstance(self.trailer.get("cta"), str):
             out.append((None, self.trailer["cta"]))
+        return out
+
+    def frontmatter_copy(self) -> list[tuple[object, str]]:
+        """Copy the renderer surfaces from the frontmatter and the title block: the title,
+        the subtitle line, governing_thought and every key_figures entry."""
+        out: list[tuple[object, str]] = []
+        for key in ("title", "governing_thought"):
+            if isinstance(self.fm.get(key), str):
+                out.append((key, self.fm[key]))
+        kf = self.fm.get("key_figures")
+        for entry in kf if isinstance(kf, list) else []:
+            out.append(("key_figures", SRC_RE.sub("", str(entry))))
+        for ln in self.preamble.splitlines():
+            if ln.startswith("# ") and ln not in CONTRACT_HEADINGS.values():
+                out.append(("title", ln[2:]))
+            elif ln.startswith("*") and ln.endswith("*") and len(ln) > 2:
+                out.append(("subtitle", ln[1:-1]))
         return out
 
     def brief_word_count(self) -> int:
@@ -438,6 +474,8 @@ def check_density_slides(b: Brief) -> None:
 
 def check_density_document(b: Brief) -> None:
     c, chk = b.ceilings, "density-document"
+    if b.max_units is not None:
+        b.notes.append("--max-units ignored: the document target carries exactly four sections")
     summary = b.pre.get("executive_summary")
     if not isinstance(summary, str) or not summary:
         b.fail(chk, None, "executive_summary missing")
@@ -472,6 +510,8 @@ def check_density_infographic(b: Brief) -> None:
     c, chk = b.ceilings, "density-infographic"
     dense = isinstance(b.fm.get("density"), dict) and b.fm["density"].get("profile") == "dense"
     blocks_max = c["blocks_max_dense"] if dense else c["blocks_max"]
+    if b.max_units is not None:
+        blocks_max = min(blocks_max, b.max_units)
     words_max = c["words_max_dense"] if dense else c["words_max"]
     for key, cap in (("headline", c["headline_words_max"]), ("subline", c["subline_words_max"])):
         v = b.pre.get(key)
@@ -513,8 +553,9 @@ def check_density_web(b: Brief) -> None:
             b.fail(chk, None, f"hero.headline is {len(hero['headline'])} characters, ceiling {c['headline_chars_max']}")
         if hero.get("subline") and words(hero["subline"]) > c["hero_subline_words_max"]:
             b.fail(chk, None, f"hero.subline has {words(hero['subline'])} words, ceiling {c['hero_subline_words_max']}")
-    if not (c["sections_min"] <= len(b.units) <= c["sections_max"]):
-        b.fail(chk, None, f"{len(b.units)} sections; {c['sections_min']}-{c['sections_max']} required")
+    sections_max = c["sections_max"] if b.max_units is None else min(c["sections_max"], b.max_units)
+    if not (c["sections_min"] <= len(b.units) <= sections_max):
+        b.fail(chk, None, f"{len(b.units)} sections; {c['sections_min']}-{sections_max} required")
     for u in b.units:
         f, n = u["fields"], u["number"]
         _type_ok(b, u, chk)
@@ -554,7 +595,7 @@ def check_density_target(b: Brief) -> None:
 
 def check_copy_frozen_numbers(b: Brief) -> None:
     spoken = [(u["number"], u["fields"]["talk_track"]) for u in b.units if isinstance(u["fields"].get("talk_track"), str)]
-    for unit, text in b.on_brief_copy() + spoken:
+    for unit, text in b.frontmatter_copy() + b.on_brief_copy() + spoken:
         for token in NUMBER_RE.findall(MARKER_RE.sub("", text)):
             if token not in b.narrative_numbers:
                 b.fail("copy-frozen-numbers", unit, f"number {token!r} does not occur in the narrative: {text[:50]!r}")
@@ -628,7 +669,8 @@ def main() -> int:
     parser.add_argument("--brief", help="path to the design brief")
     parser.add_argument("--narrative", help="path to the narrative the brief was condensed from")
     parser.add_argument("--ceilings", default=DEFAULT_CEILINGS, help="density ceilings reference (default: the skill's)")
-    parser.add_argument("--max-units", type=int, default=None, help="caller's unit cap (slides)")
+    parser.add_argument("--max-units", type=int, default=None,
+                        help="caller's unit cap: slides, infographic blocks and web sections; ignored on document")
     parser.add_argument("--json", action="store_true", help="accepted for symmetry; output is always the JSON envelope")
     parser.add_argument("--list-checks", action="store_true", help="list every check and exit")
     args = parser.parse_args()
@@ -658,6 +700,7 @@ def main() -> int:
         "warns": 0,
         "unit_count": len(brief.units),
         "brief_word_count": brief.brief_word_count(),
+        "notes": brief.notes,
     }
     return emit(fails == 0, data, "", 0 if fails == 0 else 1)
 

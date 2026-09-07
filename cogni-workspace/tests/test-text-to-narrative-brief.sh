@@ -24,7 +24,7 @@
 #   --file cogni-workspace/skills/text-to-narrative/scripts/check-design-brief.py \
 #     --expr 's{if clauses < CONTRACT_MIN_CLAUSES:}{if False:}' \
 #     --test 'bash cogni-workspace/tests/test-text-to-narrative-brief.sh' --case ttn-05-contract-clauses
-#   --expr 's{if len(points) > c\["slide_points_max_lines"\]:}{if False:}' --case ttn-08-density-slides
+#   --expr 's{if len\(points\) > c\["slide_points_max_lines"\]:}{if False:}' --case ttn-08-density-slides
 #   --expr 's{if token not in b.narrative_numbers:}{if False:}' --case ttn-09-copy-frozen-numbers
 #   --expr 's{for m in STYLING_KEY_RE.finditer\(b.body\):}{for m in []:}' --case ttn-12-no-styling-keys
 #   --file cogni-workspace/skills/text-to-narrative/references/arc-corporate-visions.md \
@@ -159,12 +159,39 @@ red ttn-08-density-web density-web "$FIX/web-en.md" "$EN_NARR" \
   'old = "The evidence shows it is an information problem. The operators that spend most on scheduled maintenance lose 11 percent more production hours than those that spend least [1]."; new = old + " In the same sample, 62 percent of unplanned stops had a measurable precursor in sensor data at least 48 hours before failure, and in 71 percent of those cases the data existed but was not read [1]. Scheduled work replaces parts on a calendar rather than on evidence of wear, so budget flows to components that were not failing while the components that were failing go unmonitored [2]."; assert old in text; text = text.replace(old, new, 1)'
 red ttn-09-copy-frozen-numbers copy-frozen-numbers "$SL" "$EN_NARR" \
   'text = text.replace("- lose 11 percent more production hours [1]", "- lose 97 percent more production hours [1]", 1)'
+red ttn-09-copy-frozen-key-figures copy-frozen-numbers "$SL" "$EN_NARR" \
+  'text = text.replace("\"13.0 million euros (src: [1])\"", "\"99.9 million euros (src: [1])\"", 1)'
+red ttn-09-copy-frozen-governing-thought copy-frozen-numbers "$SL" "$EN_NARR" \
+  'text = text.replace("lose 11 percent more production hours than those that spend least [1].\"", "lose 88 percent more production hours than those that spend least [1].\"", 1)'
+red ttn-09-copy-frozen-title copy-frozen-numbers "$SL" "$EN_NARR" \
+  'text = text.replace("\n# The Maintenance Budget That Buys Downtime\n", "\n# The 999 Maintenance Budget That Buys Downtime\n", 1)'
 red ttn-10-citations-resolve citations-resolve "$SL" "$EN_NARR" \
   'text = text.replace("- The constraint is signal, not labour\n", "- The constraint is signal, not labour [9]\n", 1)'
 red ttn-11-key-figures-src key-figures-src "$SL" "$EN_NARR" \
   'text = text.replace("\"13.0 million euros (src: [1])\"", "\"13.0 million euros\"", 1)'
 red ttn-12-no-styling-keys no-styling-keys "$SL" "$EN_NARR" \
   'text = text.replace("type: cover\n", "type: cover\nBackground: dark\n", 1)'
+
+# --- ttn-08-max-units-*: the caller cap binds every unit-bearing target --------
+run "$FIX/infographic-en.md" "$EN_NARR" "$TMPROOT/mu-info.json" --max-units 2
+if [ "$RC" -eq 1 ] && has_fail "$TMPROOT/mu-info.json" density-infographic; then
+  pass "ttn-08-max-units-infographic"
+else
+  fail "ttn-08-max-units-infographic --max-units 2 did not cap a four-block infographic (exit $RC)"
+fi
+run "$FIX/web-en.md" "$EN_NARR" "$TMPROOT/mu-web.json" --max-units 2
+if [ "$RC" -eq 1 ] && has_fail "$TMPROOT/mu-web.json" density-web; then
+  pass "ttn-08-max-units-web"
+else
+  fail "ttn-08-max-units-web --max-units 2 did not cap a six-section web brief (exit $RC)"
+fi
+run "$FIX/document-en.md" "$EN_NARR" "$TMPROOT/mu-doc.json" --max-units 2
+if [ "$RC" -eq 0 ] && clean "$TMPROOT/mu-doc.json" && python3 -c "
+import json,sys; d=json.load(open('$TMPROOT/mu-doc.json')); sys.exit(0 if any('max-units' in n for n in d['data'].get('notes',[])) else 1)"; then
+  pass "ttn-08-max-units-document-ignored"
+else
+  fail "ttn-08-max-units-document-ignored the document target must stay green under --max-units 2 and say the flag was ignored (exit $RC)"
+fi
 
 # --- ttn-13..15: unreadable inputs are exit 2, never 0 ------------------------
 # exit2 <id> <outfile> — success false, non-empty error, exit 2

@@ -8,7 +8,7 @@ description: >
   file for a full pass or a scoped one (structure-only, tone-only, formatting-only or compress); a
   sales-mode rewrite that adds Power Positions; and a translate-then-polish pass when TARGET_LANG
   is set. Not for persona Q&A critique — use reader — and not for generating new narrative prose —
-  use narrative-writer. See "When to Use" in the agent body for the full scenario list.
+  use the text-to-narrative skill. See "When to Use" in the agent body for the full scenario list.
 tools: Skill, Glob
 ---
 
@@ -40,7 +40,7 @@ Invoke the copywriter skill to polish a markdown document and return ONLY JSON t
 - A sales-mode rewrite is wanted — `MODE=sales`, which enables Power Positions (IS-DOES-MEANS)
 - `TARGET_LANG` is set, so the document is translated and then polished in two passes
 
-**Not for:** Persona Q&A critique (use reader) or generating new narrative prose (use narrative-writer)
+**Not for:** Persona Q&A critique (use reader) or generating new narrative prose (use the text-to-narrative skill)
 
 ## Constraints
 

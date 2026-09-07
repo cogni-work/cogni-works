@@ -215,6 +215,12 @@ fi
 # defensive: cogni-issues/SKILL.md documents the scripts directory itself as
 # `${CLAUDE_PLUGIN_ROOT}/skills/cogni-issues/scripts/`, so a file-only check would
 # be red on arrival.
+#
+# A reference carrying a `{placeholder}` segment is a template over a family of
+# files and resolves as the directory enclosing the template. The extractor
+# admits `{` and `}` on purpose: a character class without them cuts the
+# copywriter's flat `.../references/arc-{arc_id}.md` down to `.../references/arc-`,
+# which no file matches, so the arm would be red on a correct cite.
 # ---------------------------------------------------------------------------
 p2_bad=""
 p2_scanned=0
@@ -231,6 +237,19 @@ for spec in $TREE_SPECS; do
     [ -n "$rel" ] || continue
     target="$WS_ROOT$rel"
     case "$ref" in
+      *\{*)
+        # A templated reference names a family of files, so it resolves as the
+        # directory that encloses the template: the prefix before the first `{`
+        # when it ends in `/`, else that prefix's dirname. Both shapes the
+        # copywriter has cited are covered — `.../story-arc/{arc_id}/...` and
+        # the flat `.../references/arc-{arc_id}.md`.
+        prefix="${target%%\{*}"
+        case "$prefix" in
+          */) enclosing="$prefix" ;;
+          *)  enclosing="$(dirname "$prefix")" ;;
+        esac
+        [ -d "$enclosing" ] || p2_bad="$p2_bad $ref"
+        ;;
       */)
         [ -d "$target" ] || p2_bad="$p2_bad $ref"
         ;;
@@ -239,7 +258,7 @@ for spec in $TREE_SPECS; do
         ;;
     esac
   done <<EOF
-$(grep -rhoE '\$\{CLAUDE_PLUGIN_ROOT\}[A-Za-z0-9_./-]*|\$CLAUDE_PLUGIN_ROOT[A-Za-z0-9_./-]*' "$tree" 2>/dev/null | sort -u)
+$(grep -rhoE '\$\{CLAUDE_PLUGIN_ROOT\}[A-Za-z0-9_./{}-]*|\$CLAUDE_PLUGIN_ROOT[A-Za-z0-9_./{}-]*' "$tree" 2>/dev/null | sort -u)
 EOF
 done
 

@@ -70,8 +70,8 @@ When `mode = arc`, the arc IS the document structure. Do NOT apply a messaging f
 
 ```
 LOAD: arc-preservation.md
-LOAD: ${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/story-arc/{arc_id}/arc-definition.md
-LOAD: ${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/narrative-techniques/techniques-overview.md
+LOAD: ${CLAUDE_PLUGIN_ROOT}/skills/text-to-narrative/references/arc-{arc_id}.md
+LOAD: ${CLAUDE_PLUGIN_ROOT}/skills/text-to-narrative/references/techniques-overview.md
 LOAD: clarity-principles.md
 LOAD: conciseness-principles.md
 LOAD: active-voice-principles.md
@@ -94,7 +94,7 @@ When `mode = sales`, load Power Positions plus supporting impact techniques. Sal
 
 ```
 LOAD: power-positions.md
-LOAD: ${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/narrative-techniques/techniques-overview.md
+LOAD: ${CLAUDE_PLUGIN_ROOT}/skills/text-to-narrative/references/techniques-overview.md
 ```
 
 In `techniques-overview.md`, sales mode uses `## 4. Number Plays (6 Techniques)` for the DOES layer and `## 5. Forcing Functions` through `## 8. Compound Impact Calculation` for the urgency and framing behind the MEANS layer. Power words are NOT in that file: the MEANS-layer vocabulary sales mode uses is the `MEANS layer Power Word categories` table inside `power-positions.md`, already loaded above.
@@ -194,7 +194,7 @@ These references load only when specific conditions are met. Check each independ
 
 ```
 IF impact_level = high OR audience is executive/C-suite OR deliverable is executive-summary:
-  LOAD: ${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/narrative-techniques/techniques-overview.md
+  LOAD: ${CLAUDE_PLUGIN_ROOT}/skills/text-to-narrative/references/techniques-overview.md
 ```
 
 What that file carries: `## 4. Number Plays (6 Techniques)` for quantification, `## 5. Forcing Functions` for urgency stacking, `## 6. Contrast Structure` for cognitive-dissonance framing, `## 7. You-Phrasing` for reader-centred phrasing, and `## 8. Compound Impact Calculation` for the compound-impact arithmetic.
@@ -329,7 +329,7 @@ valid file paths.
 - `step-by-step-guide.md` -- Complete sub-steps, gate checks, validation procedures
 
 ### Outside this tree
-- `${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/narrative-techniques/techniques-overview.md` -- the ecosystem's single copy of the impact techniques: Number Plays (6), Forcing Functions, Contrast Structure, You-Phrasing, Compound Impact Calculation, plus the per-arc-element application matrix. Loaded by the Arc and Sales blocks and by Step 5.
+- `${CLAUDE_PLUGIN_ROOT}/skills/text-to-narrative/references/techniques-overview.md` -- the ecosystem's single copy of the impact techniques: Number Plays (6), Forcing Functions, Contrast Structure, You-Phrasing, Compound Impact Calculation, plus the per-arc-element application matrix. Loaded by the Arc and Sales blocks and by Step 5.
 - The `copy-reader` skill's own `references/persona-*.md` profiles and `references/synthesis-protocol.md` -- the ecosystem's single copy of the stakeholder personas and the synthesis protocol. Not loaded from here: Step 5 delegates the whole review to that skill, which loads them itself.
 
 ---

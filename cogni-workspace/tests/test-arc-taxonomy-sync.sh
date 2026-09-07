@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# Guard: cogni-visual's arc taxonomy must stay in sync with the narrative skill's arcs.
+# Guard: cogni-visual's arc taxonomy must stay in sync with the text-to-narrative skill's bundled arcs.
 #
 # WHAT THIS PINS
 #   The `arc_id` set in the mapping table of cogni-workspace/libraries/arc-taxonomy.md
 #   must equal the set of arc directories under
-#   cogni-workspace/skills/narrative/references/story-arc/.
+#   cogni-workspace/skills/text-to-narrative/references/ (one flat arc-{arc-id}.md per arc).
 #
 # WHY A TEST AND NOT MORE PROSE
 #   Divergence degrades SILENTLY. An `arc_id` absent from the mapping table hits the
@@ -105,7 +105,7 @@ PLUGIN_DIR="$(cd "$HERE/.." && pwd)"
 # same file at a mutant under $TMPROOT. The override exists for the negative case, not as a
 # configuration surface — a normal run, and every CI run, resolves both defaults.
 TAXONOMY="${ARC_TAXONOMY_PATH:-$PLUGIN_DIR/libraries/arc-taxonomy.md}"
-ARC_DIR="${ARC_STORY_ARC_DIR:-$PLUGIN_DIR/skills/narrative/references/story-arc}"
+ARC_DIR="${ARC_STORY_ARC_DIR:-$PLUGIN_DIR/skills/text-to-narrative/references}"
 
 # The five valid visual arc types. arc-taxonomy.md does not declare this set itself — it is
 # stated by the consuming surfaces (cogni-workspace/skills/story-to-slides, story-to-web,
@@ -176,9 +176,9 @@ else
 fi
 
 if [ -d "$ARC_DIR" ]; then
-  pass "V2 story-arc directory is present at $ARC_DIR"
+  pass "V2 arc-contract set is present at $ARC_DIR"
 else
-  fail "V2 story-arc directory not found at $ARC_DIR"
+  fail "V2 arc-contract set not found at $ARC_DIR"
   vacuous=1
 fi
 
@@ -266,7 +266,7 @@ fi
 
 # `sort` here agrees with python's byte-wise sorted() above because LC_ALL=C is exported at the
 # top of this file. See that comment — the agreement is what makes every `comm` below sound.
-find "$ARC_DIR" -mindepth 1 -maxdepth 1 -type d -exec basename {} \; | sort > "$TMPROOT/dir_ids.txt"
+ls "$ARC_DIR"/arc-*.md | xargs -n1 basename | sed 's/^arc-//; s/\.md$//' | grep -vx registry | sort > "$TMPROOT/dir_ids.txt"
 
 map_count=$(wc -l < "$TMPROOT/map_ids.txt" | tr -d ' ')
 dir_count=$(wc -l < "$TMPROOT/dir_ids.txt" | tr -d ' ')
@@ -279,9 +279,9 @@ else
 fi
 
 if [ "$dir_count" -gt 0 ]; then
-  pass "V4 story-arc directory yielded $dir_count arc directory/ies"
+  pass "V4 arc-contract set yielded $dir_count arc directory/ies"
 else
-  fail "V4 story-arc directory contains no arc directories"
+  fail "V4 arc-contract set contains no arc directories"
   vacuous=1
 fi
 
@@ -293,18 +293,18 @@ fi
 
 orphan_rows=$(comm -23 "$TMPROOT/map_ids.txt" "$TMPROOT/dir_ids.txt" | tr '\n' ' ' | sed 's/ *$//')
 if [ -z "$orphan_rows" ]; then
-  pass "S1 every mapping-table arc_id has a story-arc directory"
+  pass "S1 every mapping-table arc_id has a arc-contract set"
 else
-  fail "S1 mapping-table arc_id(s) with no story-arc directory: $orphan_rows"
+  fail "S1 mapping-table arc_id(s) with no arc-contract set: $orphan_rows"
 fi
 
 # S2 is the direction a dropped mapping row turns red: the arc directory still exists, but
 # nothing maps it, so it silently falls through to auto-detection.
 unmapped_dirs=$(comm -13 "$TMPROOT/map_ids.txt" "$TMPROOT/dir_ids.txt" | tr '\n' ' ' | sed 's/ *$//')
 if [ -z "$unmapped_dirs" ]; then
-  pass "S2 every story-arc directory has a mapping-table row"
+  pass "S2 every arc-contract set has a mapping-table row"
 else
-  fail "S2 story-arc directory/ies with no mapping-table row: $unmapped_dirs"
+  fail "S2 arc-contract set/ies with no mapping-table row: $unmapped_dirs"
 fi
 
 # ------------------------------------------------------------------------ arc_type validity
@@ -409,8 +409,11 @@ def short(cell):
 
 
 checked, bad = 0, []
-for arc in sorted(os.listdir(arc_dir)):
-    path = os.path.join(arc_dir, arc, "arc-definition.md")
+for name in sorted(os.listdir(arc_dir)):
+    if not (name.startswith("arc-") and name.endswith(".md")) or name == "arc-registry.md":
+        continue
+    arc = name[len("arc-"):-len(".md")]
+    path = os.path.join(arc_dir, name)
     if not os.path.isfile(path):
         continue
     contract = contract_headings(path)
@@ -551,9 +554,9 @@ fi
 # H1's own negative case. Copies the taxonomy, rewrites one DE short name inside the element block
 # of a runtime-selected migrated arc to a value that cannot equal any pre-colon segment, re-invokes
 # this file against the mutant, and requires H1 red by name. Same recursion guard as M1.
-h1_victim=$(for d in "$ARC_DIR"/*/; do
-  a=$(basename "$d")
-  f="$d/arc-definition.md"
+h1_victim=$(for f in "$ARC_DIR"/arc-*.md; do
+  a=$(basename "$f" .md); a="${a#arc-}"
+  [ "$a" = "registry" ] && continue
   [ -f "$f" ] || continue
   awk 'NR==1 && $0!="---" {exit 1} NR>1 && $0=="---" {exit 0} /^contract: *2 *$/ {found=1} END {exit found?0:1}' "$f" && { echo "$a"; break; }
 done)

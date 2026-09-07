@@ -94,8 +94,8 @@ Before loading any framework, check whether the input document is an arc narrati
 
 ```text
 READ: references/arc-preservation.md
-READ: ${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/story-arc/{arc_id}/arc-definition.md
-READ: ${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/narrative-techniques/techniques-overview.md
+READ: ${CLAUDE_PLUGIN_ROOT}/skills/text-to-narrative/references/arc-{arc_id}.md
+READ: ${CLAUDE_PLUGIN_ROOT}/skills/text-to-narrative/references/techniques-overview.md
 ```
 
 Set `arc_mode: true` and `arc_id: {detected_arc_id}`. Do NOT load a messaging framework or deliverable type -- the arc IS the structure.
@@ -118,12 +118,12 @@ Resolve the deliverable type and the messaging framework from `references/00-ind
 
 - If `impact_level: high` OR audience is executive/C-suite:
   ```text
-  READ: ${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/narrative-techniques/techniques-overview.md
+  READ: ${CLAUDE_PLUGIN_ROOT}/skills/text-to-narrative/references/techniques-overview.md
   ```
 - If `MODE: sales`:
   ```text
   READ: references/power-positions.md
-  READ: ${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/narrative-techniques/techniques-overview.md
+  READ: ${CLAUDE_PLUGIN_ROOT}/skills/text-to-narrative/references/techniques-overview.md
   ```
 
 ### Step 1 Gate
@@ -340,7 +340,7 @@ Critical: NEVER merge IS into DOES or DOES into MEANS. Preserve all structure ma
 
 Load as needed:
 ```text
-READ: ${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/narrative-techniques/techniques-overview.md
+READ: ${CLAUDE_PLUGIN_ROOT}/skills/text-to-narrative/references/techniques-overview.md
 ```
 
 Application targets from that file:

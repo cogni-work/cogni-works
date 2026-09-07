@@ -34,7 +34,7 @@ Pitches are spoken aloud to an audience, usually in a room where someone can imm
 
 **Default**: `jtbd-portfolio` — portfolio pitches present capabilities to buyers who think in outcomes, not features. The JTBD arc's 1:1 job-to-solution mapping mirrors the portfolio's Feature x Market structure, and its verb-phrase jobs surface the buyer language that IS/DOES/MEANS already encodes. When SKILL.md Step 1b presents the arc picker to the user, `jtbd-portfolio` must be listed **first** so the documented default stays the default in practice. Never present an arc picker that omits `jtbd-portfolio`.
 
-**Override**: Accept `--arc-id` parameter for alternative arcs. When a non-default arc is selected, read the arc definition from `cogni-workspace/skills/narrative/references/story-arc/{arc-id}/arc-definition.md` to get element names, proportions, and quality gates. Adapt the evidence mapping accordingly.
+**Override**: Accept `--arc-id` parameter for alternative arcs. When a non-default arc is selected, read the arc definition from `cogni-workspace/skills/text-to-narrative/references/arc-{arc-id}.md` to get element names, proportions, and quality gates. Adapt the evidence mapping accordingly.
 
 **Supported arcs and their portfolio data mapping**:
 
@@ -210,7 +210,7 @@ For each Power Position, select a high-tier proposition (use relevance tiers fro
 
 ### Evidence Mapping: Portfolio Entities → JTBD Portfolio Elements
 
-The default evidence mapping follows a Jobs-to-be-Done structure. Read the arc definition from `cogni-workspace/skills/narrative/references/story-arc/jtbd-portfolio/arc-definition.md` for element names, proportions, and quality gates.
+The default evidence mapping follows a Jobs-to-be-Done structure. Read the arc definition from `cogni-workspace/skills/text-to-narrative/references/arc-jtbd-portfolio.md` for element names, proportions, and quality gates.
 
 #### Hook / Context Setter (10% of target length)
 

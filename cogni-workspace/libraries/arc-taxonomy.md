@@ -287,7 +287,7 @@ IF `arc_definition_path` parameter provided AND file exists:
 ## Arc Definition File Format
 
 Arc contracts live in the `narrative` skill at:
-`cogni-workspace/skills/narrative/references/story-arc/{arc-id}/arc-definition.md`
+`cogni-workspace/skills/text-to-narrative/references/arc-{arc-id}.md`
 
 Each contract's `## Headings` table carries the four full section headings per language (EN, DE, and further columns where the arc supports them). The short element names in this file are derived from those headings — the segment before the first colon, or the whole heading when it carries none — and `cogni-workspace/tests/test-arc-taxonomy-sync.sh` case H1 checks that derivation for every migrated arc.
 

@@ -9,7 +9,7 @@
 #   1. scripts/check-brief.py constants (slides)
 #   2. skills/story-to-slides/scripts/brief-to-outline.py MAX_SLIDE_POINTS
 #   3. skills/story-to-slides/SKILL.md Step 7.5 table
-#   4. skills/narrative/scripts/validate-narrative.py constants and the C1 band,
+#   4. skills/text-to-narrative/scripts/validate-narrative.py constants and the C1 band,
 #      plus one arc contract's four `### N.` element sections
 #   5. the story-to-web and story-to-infographic reference tables
 # This suite is the TRANSFER PROOF: while a home exists, a value in the reference
@@ -50,8 +50,8 @@ REFERENCE="${BRIEF_DENSITY_REFERENCE:-$WS/skills/text-to-narrative/references/de
 CHECKER="${BRIEF_DENSITY_CHECKER:-$WS/scripts/check-brief.py}"
 OUTLINE="${BRIEF_DENSITY_OUTLINE:-$WS/skills/story-to-slides/scripts/brief-to-outline.py}"
 SLIDES_SKILL="${BRIEF_DENSITY_SLIDES_SKILL:-$WS/skills/story-to-slides/SKILL.md}"
-VALIDATOR="${BRIEF_DENSITY_VALIDATOR:-$WS/skills/narrative/scripts/validate-narrative.py}"
-ARC_CONTRACT="${BRIEF_DENSITY_ARC_CONTRACT:-$WS/skills/narrative/references/story-arc/corporate-visions/arc-definition.md}"
+VALIDATOR="${BRIEF_DENSITY_VALIDATOR:-$WS/skills/text-to-narrative/scripts/validate-narrative.py}"
+ARC_CONTRACT="${BRIEF_DENSITY_ARC_CONTRACT:-$WS/skills/text-to-narrative/references/arc-corporate-visions.md}"
 WEB_COPY="${BRIEF_DENSITY_WEB_COPY:-$WS/libraries/web-section-copywriting.md}"
 WEB_ARCH="${BRIEF_DENSITY_WEB_ARCH:-$WS/libraries/web-section-architecture.md}"
 INFO_PRESETS="${BRIEF_DENSITY_INFO_PRESETS:-$WS/libraries/infographic-style-presets.md}"

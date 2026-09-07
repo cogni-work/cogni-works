@@ -2,9 +2,9 @@
 # Guard: the narrative skill's deterministic Phase 5 gates are real gates.
 #
 # WHAT THIS PINS
-#   skills/narrative/scripts/validate-narrative.py reads a finished narrative and the
+#   skills/text-to-narrative/scripts/validate-narrative.py reads a finished narrative and the
 #   arc contract it claims, and reports the mechanical gates from
-#   skills/narrative/references/validation.md. This suite proves two things about it:
+#   skills/text-to-narrative/references/validation.md. This suite proves two things about it:
 #   a conforming narrative passes every gate, and each gate can go red on a narrative
 #   that breaks precisely the rule it names. A validator that only ever sees a healthy
 #   fixture is indistinguishable from one that cannot fail.
@@ -24,9 +24,9 @@ set -u
 
 HERE="$(cd "$(dirname "$0")" && pwd)"
 PLUGIN_DIR="$(cd "$HERE/.." && pwd)"
-VALIDATOR="$PLUGIN_DIR/skills/narrative/scripts/validate-narrative.py"
+VALIDATOR="$PLUGIN_DIR/skills/text-to-narrative/scripts/validate-narrative.py"
 FIXTURE="$PLUGIN_DIR/tests/fixtures/narrative-output/corporate-visions-en.md"
-CONTRACT="$PLUGIN_DIR/skills/narrative/references/story-arc/corporate-visions/arc-definition.md"
+CONTRACT="$PLUGIN_DIR/skills/text-to-narrative/references/arc-corporate-visions.md"
 
 TMPROOT="$(mktemp -d)"
 trap 'rm -rf "$TMPROOT"' EXIT
@@ -238,7 +238,7 @@ expect_red NV18 C2 "$TMPROOT/fatelement.md"
 # ---------------------------------------------------------------- NV14 / NV15 the two end-to-end fixtures pass
 for pair in "strategic-choice-en.md:strategic-choice:NV14" "consulting-problem-solving-de.md:consulting-problem-solving:NV15"; do
   f="${pair%%:*}"; rest="${pair#*:}"; arc="${rest%%:*}"; cid="${rest#*:}"
-  OUT="$(python3 "$VALIDATOR" --narrative "$PLUGIN_DIR/tests/fixtures/narrative-output/$f" --contract "$PLUGIN_DIR/skills/narrative/references/story-arc/$arc/arc-definition.md" --json 2>&1)"
+  OUT="$(python3 "$VALIDATOR" --narrative "$PLUGIN_DIR/tests/fixtures/narrative-output/$f" --contract "$PLUGIN_DIR/skills/text-to-narrative/references/arc-$arc.md" --json 2>&1)"
   RC=$?
   if [ "$RC" -eq 0 ] && printf '%s' "$OUT" | grep -q '"success": true'; then
     pass "$cid end-to-end fixture $f passes every gate against the $arc contract"

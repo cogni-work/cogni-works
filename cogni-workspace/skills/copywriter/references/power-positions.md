@@ -321,5 +321,5 @@ After enhancing all Power Positions in a document, validate each one against the
 
 ## See Also
 
-- `${CLAUDE_PLUGIN_ROOT}/skills/narrative/references/narrative-techniques/techniques-overview.md` -- `## 4. Number Plays (6 Techniques)` for quantifying the DOES layer, and `## 5. Forcing Functions` through `## 8. Compound Impact Calculation` for the urgency and contrast framing the IS and MEANS layers build on.
+- `${CLAUDE_PLUGIN_ROOT}/skills/text-to-narrative/references/techniques-overview.md` -- `## 4. Number Plays (6 Techniques)` for quantifying the DOES layer, and `## 5. Forcing Functions` through `## 8. Compound Impact Calculation` for the urgency and contrast framing the IS and MEANS layers build on.
 - Power words for the MEANS layer are in **this file**: the `MEANS layer Power Word categories` table above. The Rule of Three named in the table above has no reference file anywhere -- apply it from your own knowledge, at the per-layer density this file states.

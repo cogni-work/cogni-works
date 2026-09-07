@@ -1,6 +1,6 @@
 # Infographic Artifact Detection and Priority
 
-What enrich-report Phase 2a checks before generating anything: which pre-existing story-to-infographic artifacts in `{source_dir}/cogni-visual/` short-circuit the phase, which path (1 reuse / 2 render-only / 3 from scratch) each combination selects, what each path produces, and how the Phase 4 post-processor ranks the artifacts it finds.
+What enrich-report Phase 2a checks before generating anything: which pre-existing infographic artifacts (a brief and its `/render-infographic` output) in `{source_dir}/cogni-visual/` short-circuit the phase, which path (1 reuse / 2 render-only / 3 from scratch) each combination selects, what each path produces, and how the Phase 4 post-processor ranks the artifacts it finds.
 
 ## Contents
 - Artifact detection ladder (Step 2a.0)
@@ -25,7 +25,7 @@ Check for rendered infographic artifacts in `{source_dir}/cogni-visual/` only (t
    - Proceed to Phase 2b.
 
 2. **Brief exists but no render:** `{source_dir}/cogni-visual/infographic-brief.md` exists but no rendered artifact (fragment HTML or PNG) was found
-   - The brief was generated (by story-to-infographic or a prior interrupted run) but never rendered.
+   - The brief exists (hand-authored, caller-supplied, or left by a prior interrupted run) but was never rendered.
    - Tell the user: "Found existing infographic-brief.md without rendered output. Dispatching renderer."
    - Dispatch the `render-infographic-pencil` agent with the brief:
      - Input: `{source_dir}/cogni-visual/infographic-brief.md`

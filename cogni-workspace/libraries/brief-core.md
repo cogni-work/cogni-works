@@ -7,7 +7,7 @@ updated: 2026-09-05
 
 # Brief Core — the grammar the four brief types share
 
-One document shape underlies every brief a `story-to-*` producer writes: YAML frontmatter, a `##` unit per slide, section, poster or block, exactly one fenced `yaml` block per unit, and two optional trailing sections. This file states the shared core once — the frontmatter keys, the per-type extensions, the version pins, the unit grammar and where each closed enum lives. `scripts/check-brief.py` enforces exactly this: the slides profile in full, the three siblings on the core checks.
+One document shape underlies every brief the render chain reads, whether hand-authored or caller-supplied: YAML frontmatter, a `##` unit per slide, section, poster or block, exactly one fenced `yaml` block per unit, and two optional trailing sections. This file states the shared core once — the frontmatter keys, the per-type extensions, the version pins, the unit grammar and where each closed enum lives. `scripts/check-brief.py` enforces exactly this: the slides profile in full, the three siblings on the core checks.
 
 ## Frontmatter core
 

@@ -26,7 +26,7 @@ Transform input markdown into a structured executive narrative using one of the 
 
 ## Architectural model
 
-One responsibility per file. Read a file when its phase runs, not before. Every narrative asset is bundled under this skill — flat, one file per responsibility — so the skill runs with no other plugin installed. Its one cross-skill call is Pass 4's readability measurement, `${CLAUDE_PLUGIN_ROOT}/skills/copywriter/scripts/readability.sh` with the band in `cogni-workspace/tests/fixtures/copywriter/readability.yml`, exactly as the narrative skill calls it; the copywriter skill is not on the retirement list.
+One responsibility per file. Read a file when its phase runs, not before. Every narrative asset is bundled under this skill — flat, one file per responsibility — so the skill runs with no other plugin installed. Its one cross-skill call is Pass 4's readability measurement, `${CLAUDE_PLUGIN_ROOT}/skills/copywriter/scripts/readability.sh` with the band in `cogni-workspace/tests/fixtures/copywriter/readability.yml`, exactly as the skill it succeeded called it; the copywriter skill did not retire.
 
 - **SKILL.md orchestrates** — phases, parameters, output contract, JSON envelope.
 - **The registry chooses** — `references/arc-registry.md`: detection algorithm, one declarative block per arc, confirmation format.

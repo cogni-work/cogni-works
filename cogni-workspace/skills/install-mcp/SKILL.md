@@ -12,7 +12,7 @@ description: >-
   (localhost:3000), or any mention of claude_desktop_config.json. Also trigger when
   manage-workspace needs to handle its MCP installation step (step 5), when
   workspace-status reports MCP servers as not loaded and the user wants to fix it, or
-  when a rendering skill (story-to-infographic, story-to-web) fails because its MCP
+  when a rendering agent (render-infographic-*, web, storyboard) fails because its MCP
   dependency is missing.
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep, AskUserQuestion, ToolSearch
 ---

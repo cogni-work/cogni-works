@@ -17,10 +17,9 @@ synchronized copy of the shared block below, and
 byte. Edit the block in one file and the guard goes red until the other matches.
 
 The layer is **optional and additive**: omit any piece and the brief still
-renders. `story-to-slides` is the in-plugin consumer:
-`libraries/presentation-brief-template.md` defines the emitted
-`design:`, `climax:` and `key_figures:` keys, and that skill's Step 8.2 and Step
-10 produce them.
+renders. In this plugin the layer lives in the presentation brief:
+`libraries/presentation-brief-template.md` defines the `design:`, `climax:` and
+`key_figures:` keys a brief author writes, and the slide renderers read them.
 
 ## The shared vocabulary
 

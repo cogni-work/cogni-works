@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Guard: the narrative skill's deterministic Phase 5 gates are real gates.
+# Guard: the text-to-narrative skill's deterministic Phase 5 gates are real gates.
 #
 # WHAT THIS PINS
 #   skills/text-to-narrative/scripts/validate-narrative.py reads a finished narrative and the

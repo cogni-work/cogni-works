@@ -1,9 +1,10 @@
 ---
 name: slides-enrichment-artist
 description: >
-  Use this agent when story-to-slides Step 8.2 must enrich a completed deck and write the final
-  presentation-brief.md. Typical triggers include the orchestrator handing over SLIDE_SPECS,
-  AUDIENCE_MODEL and ARC_ANALYSIS once Steps 8 and 8.1 are done; generating the Methodology prep
+  Use this agent when a caller assembling a presentation brief must enrich a completed deck and
+  write the final presentation-brief.md. Typical triggers include the caller handing over
+  SLIDE_SPECS, AUDIENCE_MODEL and ARC_ANALYSIS once the content slides are drafted, using the
+  launch payload in libraries/presentation-brief-template.md; generating the Methodology prep
   slide, plus the Buying Center slide in Rich mode; and adding two-section speaker notes across
   every slide before assembly. It is orchestrator-internal and is never dispatched directly by a
   user. Not for rendering the deck — use pptx or html-slides. See "When to Use" in the agent body
@@ -13,9 +14,9 @@ color: green
 tools: Read, Write, Bash
 ---
 
-# Slides Enrichment Artist Agent (Step 8.2 Worker)
+# Slides Enrichment Artist Agent (Enrichment Worker)
 
-Generate internal prep slides and per-slide speaker notes for a completed slide deck, then assemble and write the complete `presentation-brief.md`. You receive the slide specs from the orchestrator (Steps 8 + 8.1), the audience model (Step 3), the arc analysis (Step 4), and all brief metadata. You load your own reference files, produce the enrichment content, integrate everything, and write the final file.
+Generate internal prep slides and per-slide speaker notes for a completed slide deck, then assemble and write the complete `presentation-brief.md`. You receive the slide specs, the audience model, the arc analysis, and all brief metadata from the caller. You load your own reference files, produce the enrichment content, integrate everything, and write the final file.
 
 ## Mission
 
@@ -28,11 +29,11 @@ This is additive work — you enrich existing slides and assemble the final file
 
 ## When to Use
 
-- story-to-slides Step 8.2 hands over `SLIDE_SPECS`, `AUDIENCE_MODEL` and `ARC_ANALYSIS` once Steps 8 and 8.1 are done
+- The caller hands over `SLIDE_SPECS`, `AUDIENCE_MODEL` and `ARC_ANALYSIS` once the content slides are drafted
 - The Methodology prep slide is needed, plus the Buying Center slide in Rich mode
 - Two-section speaker notes must be added across every slide before assembly
 
-This agent is orchestrator-internal: story-to-slides is its only caller and it is never dispatched directly by a user.
+This agent is orchestrator-internal: it is dispatched by a caller supplying the launch payload in `libraries/presentation-brief-template.md` § Step 8.2 Enrichment Prompt Payload — the retired `story-to-slides` producer was that caller — and never directly by a user.
 
 **Not for:** Rendering the deck (use pptx or html-slides)
 

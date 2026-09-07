@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Guard: the narrative skill's citation bridge works on both input shapes SKILL.md allows.
+# Guard: the text-to-narrative skill's citation bridge works on both input shapes SKILL.md allows.
 #
 # WHAT THIS PINS
 #   skills/text-to-narrative/scripts/bridge-citations.py explodes `[Source: Publisher](URL)` markers

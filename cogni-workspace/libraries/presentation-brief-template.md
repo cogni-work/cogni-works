@@ -414,7 +414,7 @@ validation:
 
 ## Step 8.2 Enrichment Prompt Payload
 
-The `slides-enrichment-artist` launch payload story-to-slides Step 8.2 interpolates. The `FRONTMATTER:` block is an interpolation payload — it supplies values for the keys defined under [Frontmatter](#frontmatter) above, not a second definition of the key set; re-derive it from that section whenever the key set or any value annotation changes.
+The `slides-enrichment-artist` launch payload a caller interpolates when it hands the agent a completed deck to enrich (the retired `story-to-slides` producer did so at its Step 8.2). The `FRONTMATTER:` block is an interpolation payload — it supplies values for the keys defined under [Frontmatter](#frontmatter) above, not a second definition of the key set; re-derive it from that section whenever the key set or any value annotation changes.
 
 ```
 Agent tool:

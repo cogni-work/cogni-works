@@ -323,7 +323,7 @@ valid file paths.
 - `power-positions.md` -- IS-DOES-MEANS structure, enhancement by layer, Value Wedge
 
 ### Arc preservation
-- `arc-preservation.md` -- Arc detection, structure preservation, forbidden vs allowed modifications, translation-mode word band, validation checklist. Per-arc per-element technique rules are read at runtime from the `narrative` skill's arc contract (`story-arc/{arc_id}/arc-definition.md` `## Elements`) and `techniques-overview.md`
+- `arc-preservation.md` -- Arc detection, structure preservation, forbidden vs allowed modifications, translation-mode word band, validation checklist. Per-arc per-element technique rules are read at runtime from the `text-to-narrative` skill's arc contract (`references/arc-{arc_id}.md` `## Elements`) and `techniques-overview.md`
 
 ### Workflow
 - `step-by-step-guide.md` -- Complete sub-steps, gate checks, validation procedures

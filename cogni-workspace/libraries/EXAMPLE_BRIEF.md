@@ -729,4 +729,4 @@ conversion_goal: "consultation"
 
 ---
 
-**Source narrative boundary.** A narrative produced by the `narrative` skill ends with a bold `**Sources**` paragraph after its fourth `##` section. When a brief is built from such a narrative, element 4's content ends at that line: the Sources block feeds only the per-slide Source fields and the closing references slide, and never becomes slide, page or panel content of its own. The example above was read that way.
+**Source narrative boundary.** A narrative produced by `text-to-narrative` (as by the retired `narrative` skill before it) ends with a bold `**Sources**` paragraph after its fourth `##` section. When a brief is built from such a narrative, element 4's content ends at that line: the Sources block feeds only the per-slide Source fields and the closing references slide, and never becomes slide, page or panel content of its own. The example above was read that way.

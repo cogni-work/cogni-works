@@ -10,7 +10,7 @@ created: 2026-09-07
 
 Define how narratives decompose into web sections, map arc roles to section types, and enforce structural rules for visual rhythm and reader flow.
 
-**How this reference is used:** This file is loaded at Step 2 (arc analysis) and Step 4 (section decomposition) of the story-to-web skill. At Step 2, use the Arc-to-Section Mapping to understand the target section sequence for the detected arc type. At Step 4, follow the Decomposition Process step by step to produce the ordered section list.
+**How this reference is used:** Read it while authoring a web or storyboard brief, in two passes. First, use the Arc-to-Section Mapping to understand the target section sequence for the detected arc type. Then follow the Decomposition Process step by step to produce the ordered section list.
 
 ---
 

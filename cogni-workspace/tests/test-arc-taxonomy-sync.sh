@@ -108,8 +108,8 @@ TAXONOMY="${ARC_TAXONOMY_PATH:-$PLUGIN_DIR/libraries/arc-taxonomy.md}"
 ARC_DIR="${ARC_STORY_ARC_DIR:-$PLUGIN_DIR/skills/text-to-narrative/references}"
 
 # The five valid visual arc types. arc-taxonomy.md does not declare this set itself — it is
-# stated by the consuming surfaces (cogni-workspace/skills/story-to-slides, story-to-web,
-# story-to-infographic, render-html-slides), which document `arc_type` as
+# stated by the consuming surfaces (cogni-workspace/libraries/brief-core.md, render-html-slides
+# and the render agents that read brief frontmatter), which document `arc_type` as
 # one of these values. Mirrored here because there is no machine-readable source to read.
 VALID_ARC_TYPES="why-change problem-solution journey argument report"
 

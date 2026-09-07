@@ -12,8 +12,8 @@ description: >
   visualisieren", "als PDF exportieren", "Diagramme hinzufuegen"). The key signal: the
   user already has a finished report and wants it visual or exported — this skill
   post-processes existing content, it never creates new reports from
-  scratch (that is cogni-trends or upstream research), never creates slides (that
-  is story-to-slides), and never rewrites prose (that is the `copywriter` skill).
+  scratch (that is cogni-trends or upstream research), never creates slides (a brief
+  and its renderers do that), and never rewrites prose (that is the `copywriter` skill).
 allowed-tools: Read, Write, Bash, Glob, AskUserQuestion, Agent, Skill
 ---
 
@@ -30,7 +30,7 @@ A great enriched report does not just decorate prose with random charts. Each vi
 The enriched report uses a two-zone layout — an executive summary followed by a full-width infographic, then the detailed report body:
 
 1. **Executive summary** — The first H2 section of the report (e.g., "Executive Summary", "Management Summary"). Rendered at normal content width (860px) with sidebar navigation.
-2. **Infographic** — A full-width editorial visual executive summary placed immediately after the executive summary, breaking out of the content column to span from the sidebar edge to the right page edge. Contains KPI cards, 1-2 charts, optional pull-quote, optional comparison pair. Distilled from the complete report using story-to-infographic editorial-preset principles. Designed to be scanned in 60 seconds. This is where ALL the data visualization lives. Uses the `.infographic-breakout` CSS class for full-width placement.
+2. **Infographic** — A full-width editorial visual executive summary placed immediately after the executive summary, breaking out of the content column to span from the sidebar edge to the right page edge. Contains KPI cards, 1-2 charts, optional pull-quote, optional comparison pair. Distilled from the complete report using the editorial-preset principles in `references/08-infographic-distillation.md`. Designed to be scanned in 60 seconds. This is where ALL the data visualization lives. Uses the `.infographic-breakout` CSS class for full-width placement.
 3. **Report body** — The remaining prose sections with sidebar navigation. Every paragraph, citation, table, blockquote, list, and subsection heading from the source markdown appears verbatim. Very sparse illustrations only (3-5 max at `balanced` density): process-flows, concept diagrams, or key comparison charts — only where a visual genuinely aids comprehension of a specific passage.
 
 This matches the consulting deliverable pattern: executive summary as context, visual one-pager for the scan, detailed report for deep reading.
@@ -186,11 +186,11 @@ Output: section map (held in memory — not written to disk).
 
 ---
 
-### Phase 2a: Infographic Brief Generation (story-to-infographic pipeline)
+### Phase 2a: Infographic Brief Generation (infographic brief pipeline)
 
-> Detect existing infographic artifacts from a prior story-to-infographic run, or generate from scratch.
+> Detect existing infographic artifacts from a prior `/render-infographic` run, or generate from scratch.
 
-This phase produces a DIN A4 portrait infographic (Economist data-page style). Before generating anything, check for pre-existing artifacts — the user may have already run `story-to-infographic` + `/render-infographic` on this report for a higher-quality infographic (10-step distillation with 4-layer validation and reviewer agent, vs. the simplified inline distillation below).
+This phase produces a DIN A4 portrait infographic (Economist data-page style). Before generating anything, check for pre-existing artifacts — the user may already have an `infographic-brief.md` for this report (hand-authored against `${CLAUDE_PLUGIN_ROOT}/libraries/EXAMPLE_ECONOMIST_BRIEF.md` or caller-supplied) and run `/render-infographic` on it for a higher-quality infographic (4-layer validation and reviewer agent, vs. the simplified inline distillation below).
 
 **Step 2a.0 — Artifact detection.** Read `references/09-infographic-artifacts.md` and walk its ladder against `{source_dir}/cogni-visual/` (the canonical location for visual working artifacts; if no `infographic-preview.webp`/`.png` is present, rename a legacy `preview.png` to `infographic-preview.png` first). Three outcomes:
 
@@ -202,7 +202,7 @@ This phase produces a DIN A4 portrait infographic (Economist data-page style). B
 
 Read `references/08-infographic-distillation.md` for distillation principles.
 
-Scan the entire report and produce an `infographic-brief.md` following the story-to-infographic v1.2 schema (see `${CLAUDE_PLUGIN_ROOT}/libraries/EXAMPLE_ECONOMIST_BRIEF.md` for format reference):
+Scan the entire report and produce an `infographic-brief.md` following the infographic-brief v1.2 schema in `${CLAUDE_PLUGIN_ROOT}/libraries/infographic-layouts.md` (see `${CLAUDE_PLUGIN_ROOT}/libraries/EXAMPLE_ECONOMIST_BRIEF.md` for format reference):
 
 - **Frontmatter:** `type: infographic-brief`, `version: "1.2"`, `style_preset: "economist"`, `layout_type: "stat-heavy"`, `orientation: "portrait"`, `dimensions: "1584x2240"` (DIN A4 portrait at 2x), `language`, `theme_path`, `palette_override: "theme"`, `voice_tone: "analytical"`
 - **Content blocks (10-14):** title, kpi-card (hero number), stat-rows, chart (1-2), text-blocks, pull-quote, comparison-pair, CTA, footer — all following the block-type YAML format in `${CLAUDE_PLUGIN_ROOT}/libraries/infographic-block-copywriting.md`

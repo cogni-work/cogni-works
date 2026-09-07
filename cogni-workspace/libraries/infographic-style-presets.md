@@ -218,7 +218,7 @@ When presenting style options to the user, lead with the context match:
 The user's context awareness (who will see this, where, for what purpose) always overrides
 the algorithmic recommendation.
 
-## Two-Step Disclosure (story-to-infographic Step 4a/4b)
+## Two-Step Disclosure (choosing the preset interactively)
 
 People think about infographic style in two steps, not six. The first cognitive split is
 **hand-drawn feel vs editorial feel** — that single choice determines the rendering family

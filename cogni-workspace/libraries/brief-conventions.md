@@ -7,7 +7,7 @@ updated: 2026-09-05
 
 # Brief Conventions
 
-The conventions every `story-to-*` producer — `story-to-slides`, `story-to-web` (web and storyboard modes) and `story-to-infographic` — applies while writing a brief. Each skill's SKILL.md points here with one line per section and names only its own values; the rule text lives here once. Where the three former copies differed, the stronger variant was kept and is marked.
+The conventions a brief of any of the four types — presentation, web, storyboard, infographic — follows, whoever writes it. They were consolidated from the three `story-to-*` producers that once wrote briefs here; those producers have retired, so a brief now arrives hand-authored against the templates and `EXAMPLE_*_BRIEF.md` files in this directory, or supplied by a caller, and the render chain reads it against these rules. The rule text lives here once. Where the three former copies differed, the stronger variant was kept and is marked.
 
 ## Interactive checkpoints
 

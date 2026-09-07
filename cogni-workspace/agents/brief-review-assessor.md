@@ -2,9 +2,9 @@
 name: brief-review-assessor
 description: >
   Use this agent when a drafted visual brief needs a quality score from three stakeholder
-  perspectives before it is rendered. Typical triggers include story-to-slides, story-to-web or
-  story-to-infographic dispatching a stakeholder review right after drafting their brief; and
-  re-scoring a revised brief in a second round. The brief_type input —
+  perspectives before it is rendered. Typical triggers include whoever authors or supplies a
+  presentation, web, storyboard or infographic brief dispatching a stakeholder review before
+  rendering it; and re-scoring a revised brief in a second round. The brief_type input —
   slides, web, storyboard or infographic — selects which three perspectives apply. See "When to Use"
   in the agent body for the full scenario list.
 model: haiku
@@ -32,9 +32,9 @@ verdict with prioritized revision guidance.
 
 ## When to Use
 
-- story-to-slides has drafted a `presentation-brief.md` and `stakeholder_review` is true
-- story-to-web has drafted a `web-brief.md` or a `storyboard-brief.md`
-- story-to-infographic has drafted an `infographic-brief.md`
+- A hand-authored or caller-supplied `presentation-brief.md` awaits review and `stakeholder_review` is true
+- A `web-brief.md` or a `storyboard-brief.md` awaits review before the `web` or `storyboard` agent renders it
+- An `infographic-brief.md` awaits review before `/render-infographic` routes it
 - A revised brief needs re-scoring in a second review round
 
 ## Input

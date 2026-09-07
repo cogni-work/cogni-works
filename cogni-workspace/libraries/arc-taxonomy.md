@@ -1,28 +1,28 @@
 ---
 type: shared-library
 version: "1.0"
-purpose: "Single source of truth for arc_id → arc_type mapping and arc element names across all cogni-visual skills. The consumers list below is scoped to cogni-visual skills only; the one external, out-of-plugin reader, cogni-website:website-plan, is named here but deliberately not listed."
+purpose: "Single source of truth for arc_id → arc_type mapping and arc element names across cogni-workspace's brief-rendering surfaces. The consumers list below is scoped to this plugin; the one external, out-of-plugin reader, cogni-website:website-plan, is named here but deliberately not listed."
 consumers:
-  - story-to-slides (Step 1)
-  - story-to-web (Step 1)
-  - story-to-infographic (Step 1)
+  - brief-pipeline.md § Arc resolution (the contract every brief author or caller meets)
+  - render-html-slides (arc_type read from brief frontmatter)
+  - the pptx, html-slides, web and storyboard render agents (arc_type and per-unit roles read from brief frontmatter)
 ---
 
 # Arc Taxonomy
 
 ## Purpose
 
-Map narrative arc IDs from the `narrative` skill to visual arc types used by cogni-visual skills. Provide arc element names and translations for labeling (station labels, section labels, methodology phases).
+Map narrative arc IDs — the `arc_id` a `text-to-narrative` run writes into its narrative's frontmatter, in the registry the retired `narrative` skill established — to the visual arc types the brief-rendering surfaces of this plugin use. Provide arc element names and translations for labeling (station labels, section labels, methodology phases).
 
-**How this library is used:** Loaded at Step 1 of any visual skill when `arc_id` is present (from parameter or narrative frontmatter). Provides the mapping table and element names consumed by downstream steps.
+**How this library is used:** Loaded when a brief is authored or supplied and `arc_id` is present (from parameter or narrative frontmatter). Provides the mapping table and element names the brief's `arc_type` and labels are derived from.
 
 ---
 
 ## Arc ID to Visual Arc Type Mapping
 
-When the source narrative carries an `arc_id` from the `narrative` skill (in YAML frontmatter or passed as parameter), map it to the visual arc type used for decomposition. This bridges the rich narrative taxonomy (every registered arc, each a 4-element structure) to the visual taxonomy (5 visual arc types optimized for layout selection).
+When the source narrative carries an `arc_id` (in YAML frontmatter or passed as parameter), map it to the visual arc type used for decomposition. This bridges the rich narrative taxonomy (every registered arc, each a 4-element structure) to the visual taxonomy (5 visual arc types optimized for layout selection).
 
-| the `narrative` skill `arc_id` | Visual `arc_type` | Display Name | Reasoning |
+| Narrative `arc_id` | Visual `arc_type` | Display Name | Reasoning |
 |--------------------------|-------------------|--------------|-----------|
 | `corporate-visions` | `why-change` | Corporate Visions | Elements (Why Change/Why Now/Why You/Why Pay) map directly to tension-release-action |
 | `industry-transformation` | `why-change` | Industry Transformation | Elements (Forces/Friction/Evolution/Leadership) follow the same tension-release pattern |
@@ -286,7 +286,7 @@ IF `arc_definition_path` parameter provided AND file exists:
 
 ## Arc Definition File Format
 
-Arc contracts live in the `narrative` skill at:
+Arc contracts live in the `text-to-narrative` skill at:
 `cogni-workspace/skills/text-to-narrative/references/arc-{arc-id}.md`
 
 Each contract's `## Headings` table carries the four full section headings per language (EN, DE, and further columns where the arc supports them). The short element names in this file are derived from those headings — the segment before the first colon, or the whole heading when it carries none — and `cogni-workspace/tests/test-arc-taxonomy-sync.sh` case H1 checks that derivation for every migrated arc.
@@ -295,7 +295,7 @@ Each contract's `## Headings` table carries the four full section headings per l
 
 ## Arc Roles
 
-The closed set of section roles every `story-to-*` producer assigns to a narrative's parts after the arc is resolved, declared here once. A 4.1 presentation brief writes the role on each slide as `intent.role`; a web or storyboard brief writes it as `arc_role`; the infographic producer uses it to order blocks. The renderer reads the declared role rather than re-deriving it.
+The closed set of section roles a brief assigns to a narrative's parts after the arc is resolved, declared here once. A 4.1 presentation brief writes the role on each slide as `intent.role`; a web or storyboard brief writes it as `arc_role`; an infographic brief orders its blocks by it. The renderer reads the declared role rather than re-deriving it.
 
 | Role | Meaning |
 |------|---------|

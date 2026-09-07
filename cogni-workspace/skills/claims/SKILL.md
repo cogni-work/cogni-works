@@ -410,3 +410,7 @@ The ClaimEntity data model (record types, field definitions, status transitions)
 
 - **`cogni-workspace:claim-verifier`** — Fetches one source URL, verifies all claims against it, returns structured JSON. Launch in parallel for multiple URLs.
 - **`cogni-workspace:source-inspector`** — Opens a source URL in the browser and highlights the relevant passage for the user to inspect.
+
+## Evaluations
+
+`evals/evals.json` holds this skill's trigger and behaviour prompts — reference material for verifying the skill still fires on the phrasings it claims, not loaded at runtime.

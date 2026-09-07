@@ -325,3 +325,7 @@ On any unrecoverable failure, return `{"success": false, "error": "...", "phase"
 | 7 | The ceilings reference carries no table for `--target`, or the template is missing | Halt with the missing path |
 | 7 | The checker exits 2 | Halt with the checker's `error` — the brief could not be graded |
 | 7 | A check is still red after three cycles | Keep the brief, report `brief_qa: "fail"` and the error JSON naming the check |
+
+## Evaluations
+
+`evals/evals.json` holds this skill's trigger and behaviour prompts — reference material for verifying the skill still fires on the phrasings it claims, not loaded at runtime.

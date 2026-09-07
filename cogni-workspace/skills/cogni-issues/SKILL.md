@@ -427,3 +427,7 @@ require any extra dependencies.
 
 - **`references/issue-templates.md`** — Templates for the four issue types with auto-fill
   placeholders and label mapping.
+
+## Evaluations
+
+`evals/evals.json` holds this skill's trigger and behaviour prompts — reference material for verifying the skill still fires on the phrasings it claims, not loaded at runtime.

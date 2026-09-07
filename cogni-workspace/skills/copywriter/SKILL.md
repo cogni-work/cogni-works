@@ -442,3 +442,7 @@ When polishing a research report (detected by project directory containing `proj
 > 2. `/enrich-report` — Themed HTML with charts (reuses infographic from step 1)
 >
 > Rendering the infographic first gives enrich-report a validated, Pencil-rendered header instead of its simplified inline fallback.
+
+## Evaluations
+
+`evals/evals.json` holds this skill's trigger and behaviour prompts — reference material for verifying the skill still fires on the phrasings it claims, not loaded at runtime.

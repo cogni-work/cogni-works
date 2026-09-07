@@ -204,3 +204,7 @@ those are plugin-side curation and follow their own authoring loops.
 - `${CLAUDE_PLUGIN_ROOT}/tests/test-check-market-orphans.sh` — proves the orphan check discriminates
 - `cogni-research/references/market-sources.json` — research overlay (`authority_metadata` keyed by domain)
 - `cogni-trends/skills/trend-research/references/region-authority-sources.json` — trends overlay (`site_searches[]` keyed by dimension)
+
+## Evaluations
+
+`evals/evals.json` holds this skill's trigger and behaviour prompts — reference material for verifying the skill still fires on the phrasings it claims, not loaded at runtime.

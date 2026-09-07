@@ -451,3 +451,7 @@ After all requested formats are generated:
 | `schemas/enrichment-plan.schema.json` | Phase 2b | JSON schema for enrichment plan validation |
 | `schemas/infographic-data.schema.json` | Phase 2a | JSON schema for infographic data validation |
 | `scripts/generate-enriched-report.py` | Phase 4 (Step 4a + 4b) | Python post-processor: scroll post-processing (infographic injection, content validation) in Step 4a via agent, flipbook derivation (assembly + infographic injection) in Step 4b via skill |
+
+## Evaluations
+
+`evals/evals.json` holds this skill's trigger and behaviour prompts — reference material for verifying the skill still fires on the phrasings it claims, not loaded at runtime.

@@ -276,3 +276,7 @@ Available personas (any `references/persona-<name>.md` file is valid; the person
 - Conflict resolution patterns and tiebreaker hierarchy
 - Recommendation merging and deduplication
 - Auto-improvement validation checklist
+
+## Evaluations
+
+`evals/evals.json` holds this skill's trigger and behaviour prompts — reference material for verifying the skill still fires on the phrasings it claims, not loaded at runtime.

@@ -7,11 +7,6 @@
       "file": "cogni-consult/skills/consult-design-thinking/SKILL.md"
     },
     {
-      "skill": "copy-reader",
-      "arm": "reference-depth",
-      "file": "cogni-workspace/skills/copy-reader/references/personas"
-    },
-    {
       "skill": "features",
       "arm": "length",
       "file": "cogni-portfolio/skills/features/SKILL.md"
@@ -125,11 +120,6 @@
       "skill": "solutions",
       "arm": "length",
       "file": "cogni-portfolio/skills/solutions/SKILL.md"
-    },
-    {
-      "skill": "story-to-web",
-      "arm": "reference-depth",
-      "file": "cogni-workspace/skills/story-to-web/references/print"
     },
     {
       "skill": "trend-booklet",

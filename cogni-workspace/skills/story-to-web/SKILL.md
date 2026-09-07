@@ -197,11 +197,11 @@ For each section:
 
 ### Step 5b: Paginate Sections into Posters (`mode=storyboard` only)
 
-> A poster is one arc station holding 1-3 stacked sections. Skip this step entirely when `mode=web`. **Read reference:** `references/print/01-poster-architecture.md`
+> A poster is one arc station holding 1-3 stacked sections. Skip this step entirely when `mode=web`. **Read reference:** `references/07-poster-architecture.md`
 
 1. **Poster count from narrative length**, then cap at `max_posters` — take the word-count thresholds and the 3-5 bound from the reference's poster-count decision tree. Then resolve section capacity (`poster_count` x 3) before mapping stations in item 2 — it, not `max_sections`, is the binding cap; when `section_count` exceeds it, the reduction procedure, the prohibited poster patterns and the hero/cta bookends are owned by the reference § Section Capacity Is the Binding Cap.
 2. **Map arc stations to posters** using the poster templates in the reference.
-3. **Stack 1-3 sections per poster**, taking the height splits, the split-ratio selection rules and the portrait adaptations from `$CLAUDE_PLUGIN_ROOT/libraries/storyboard-layouts.md` — the same library item 4 reads for geometry, and the authoritative home for all three. `references/print/01-poster-architecture.md` restates them for readers arriving from the poster templates.
+3. **Stack 1-3 sections per poster**, taking the height splits, the split-ratio selection rules and the portrait adaptations from `$CLAUDE_PLUGIN_ROOT/libraries/storyboard-layouts.md` — the same library item 4 reads for geometry, and the authoritative home for all three. `references/07-poster-architecture.md` restates them for readers arriving from the poster templates.
 4. **Resolve poster geometry from `poster_size`.** Read the scale-factor table in `$CLAUDE_PLUGIN_ROOT/libraries/storyboard-layouts.md` (A0-A3, portrait only): that row gives `print_width`, `print_height` and `scale_factor`. `base_width` / `base_height` are the fixed design resolution 1440 x 2036, and `poster_gap` defaults to that library's base gap of 200px. With `poster_size` and the `poster_count` from item 1, these are exactly the eight frontmatter fields Step 10 writes.
 
 **Content checkpoint:** State poster count, the station-to-poster mapping, the height split per poster, and the resolved poster geometry, and confirm `section_count` is at most `poster_count` x 3.
@@ -215,7 +215,7 @@ For each section:
 **Read references:**
 - `references/03-section-copywriting.md`
 - `references/04-image-prompts.md`
-- **`mode=storyboard` only**, layered as overrides on the two above: `references/print/02-poster-copywriting.md` and `references/print/03-image-prompts.md`. Take the print image-prompt suffix verbatim from `03-image-prompts.md`, along with its per-poster image cap — a paraphrased suffix fails Step 9's image-consistency check.
+- **`mode=storyboard` only**, layered as overrides on the two above: `references/08-poster-copywriting.md` and `references/09-print-image-prompts.md`. Take the print image-prompt suffix verbatim from `09-print-image-prompts.md`, along with its per-poster image cap — a paraphrased suffix fails Step 9's image-consistency check.
 
 For each section, generate:
 
@@ -285,7 +285,7 @@ If not interactive: skip this checkpoint.
 
 > Header and footer provide the page's navigation frame and brand presence.
 
-**`mode=storyboard`:** skip this step. A storyboard brief has no page-level header or footer — `EXAMPLE_STORYBOARD_BRIEF.md` defines no such fields. Each poster instead carries its own header strip, built from the `sequence` and poster label resolved in Step 5b under the governing-headline rules in `references/print/02-poster-copywriting.md`.
+**`mode=storyboard`:** skip this step. A storyboard brief has no page-level header or footer — `EXAMPLE_STORYBOARD_BRIEF.md` defines no such fields. Each poster instead carries its own header strip, built from the `sequence` and poster label resolved in Step 5b under the governing-headline rules in `references/08-poster-copywriting.md`.
 
 Generate header and footer content based on metadata:
 
@@ -316,7 +316,7 @@ Four layers — stop on first failure, fix, re-check:
 3. **Visual coherence** — section theme alternation, feature position alternation, image consistency
 4. **Content integrity** — all narrative sections represented, language consistency
 
-**`mode=storyboard` only:** read `references/print/04-validation.md` **instead of** `05-validation.md`, not in addition to it. It restates all four layers against the storyboard-brief schema and then adds a fifth print group — poster count within 3-5, per-section minimum heights, poster font-size minimums, safe-area margins, and contiguous poster sequence numbering. The substitution is load-bearing, not tidiness — the web layers fail four CRITICAL checks on a sound storyboard brief and would rewrite it into web shape; `print/04-validation.md` opens with the full rationale.
+**`mode=storyboard` only:** read `references/10-print-validation.md` **instead of** `05-validation.md`, not in addition to it. It restates all four layers against the storyboard-brief schema and then adds a fifth print group — poster count within 3-5, per-section minimum heights, poster font-size minimums, safe-area margins, and contiguous poster sequence numbering. The substitution is load-bearing, not tidiness — the web layers fail four CRITICAL checks on a sound storyboard brief and would rewrite it into web shape; `10-print-validation.md` opens with the full rationale.
 
 ---
 
@@ -373,10 +373,10 @@ After the brief is written and validated, **append** the rendering prompt from `
 | **04-image-prompts.md** | 6 | Web image formats, hero bg+overlay pattern, stock vs AI guidance |
 | **05-validation.md** | 9 | *(`mode=web`)* Four-layer validation framework |
 | **06-rendering-prompt.md** | 11 | Rendering-prompt templates for the `web` and `storyboard` agents |
-| **print/01-poster-architecture.md** | 5b | *(`mode=storyboard`)* Arc-station-to-poster mapping, poster templates, poster-count decision tree |
-| **print/02-poster-copywriting.md** | 6, 8 | *(`mode=storyboard`)* Print-vs-web copy overrides, poster governing-headline rules |
-| **print/03-image-prompts.md** | 6 | *(`mode=storyboard`)* Print-resolution prompt suffix, max-2-images rule, poster image sizing |
-| **print/04-validation.md** | 9 | *(`mode=storyboard`)* Replaces 05-validation.md — all four layers against the storyboard schema, plus print-specific checks and poster font-size minimums |
+| **07-poster-architecture.md** | 5b | *(`mode=storyboard`)* Arc-station-to-poster mapping, poster templates, poster-count decision tree |
+| **08-poster-copywriting.md** | 6, 8 | *(`mode=storyboard`)* Print-vs-web copy overrides, poster governing-headline rules |
+| **09-print-image-prompts.md** | 6 | *(`mode=storyboard`)* Print-resolution prompt suffix, max-2-images rule, poster image sizing |
+| **10-print-validation.md** | 9 | *(`mode=storyboard`)* Replaces 05-validation.md — all four layers against the storyboard schema, plus print-specific checks and poster font-size minimums |
 
 ### Libraries (loaded as needed)
 

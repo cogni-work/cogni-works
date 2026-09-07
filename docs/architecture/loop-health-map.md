@@ -332,7 +332,7 @@ the report.
 
 | Move | Assessment | Evidence |
 |------|------------|----------|
-| Discovery | ✅ Healthy | Parameters parsed and document validated fresh per run; persona set resolved from `references/personas/` on disk (`:: Step 1`). |
+| Discovery | ✅ Healthy | Parameters parsed and document validated fresh per run; persona set resolved from the `references/persona-*.md` profiles on disk (`:: Step 1`). |
 | Handoff | ✅ Healthy | One Task agent per persona with a fixed JSON output schema; synthesis merges them under documented priority/tiebreaker rules from `references/synthesis-protocol.md` (`:: Steps 3–4`). |
 | Verification | ⚠ **Major — nodding** | The *initial* grade is healthy (fresh-context persona agents). The gap is the **improvement leg**: Step 5 applies "ONE improvement pass" in the orchestrator's own context, and the flow then proceeds straight to the Step 6 report — **no persona agent ever re-reads the edited document**. Post-edit validation is deterministic guardrails only (charset, citation count, protected content). Yet the Step 6 report template asserts re-measured quality effects — "raised Executive score to 88", "raised End-user score to 95" — scores nothing re-measured. The context that wrote the edits also grades their effect. See [F1](#f1). |
 | Persistence | ✅ Healthy | Backup created before analysis (`.{filename}.pre-reader-review`); validation failure reverts to backup with a reason (`:: Steps 2, 5`). |

@@ -46,7 +46,7 @@ Leave diagram placeholders, figure references, figure captions, Obsidian embeds 
 - `FILE_PATH`: Absolute path to markdown document (required)
 - `PERSONAS`: Array of perspectives to simulate (default: all five generic)
   - Built-in: `executive`, `technical`, `legal`, `marketing`, `end-user`
-  - Custom: any `.md` file in `references/personas/` is a valid persona name (e.g. `cdo-utility`, `cmo-provider`)
+  - Custom: any `references/persona-<name>.md` file is a valid persona; pass the `<name>` part (e.g. `cdo-utility` for `references/persona-cdo-utility.md`, `cmo-provider` for `references/persona-cmo-provider.md`)
 - `AUTO_IMPROVE`: Whether to apply improvements directly (default: true)
 
 **Validate:**
@@ -59,7 +59,7 @@ Leave diagram placeholders, figure references, figure captions, Obsidian embeds 
 
 ```text
 FOR EACH persona IN PERSONAS:
-  READ: references/personas/{persona}.md
+  READ: references/persona-{persona}.md
 ```
 
 ### Step 2: Create Document Backup
@@ -89,7 +89,7 @@ DOCUMENT PATH: {FILE_PATH}
 Read the document, then evaluate using the criteria from your persona profile.
 
 PERSONA PROFILE:
-{content from references/personas/{persona}.md}
+{content from references/persona-{persona}.md}
 
 INSTRUCTIONS:
 1. Read the entire document carefully
@@ -252,7 +252,7 @@ Present a comprehensive report to the user or calling agent.
 
 ## Bundled Resources
 
-### Persona Profiles (references/personas/)
+### Persona Profiles (references/persona-*.md)
 
 Each persona file defines:
 - Perspective philosophy and priorities
@@ -261,14 +261,14 @@ Each persona file defines:
 - Question generation patterns
 - Common improvement patterns
 
-Available personas (any `.md` file in this directory is valid):
-- **executive.md** - Decision-readiness, quantification, time respect, clarity, credibility
-- **technical.md** - Accuracy, logical flow, precision, completeness, terminology
-- **legal.md** - Risk language, regulatory alignment, liability, evidence standards, disclosure
-- **marketing.md** - Audience resonance, persuasiveness, brand tone, CTA, emotional connection
-- **end-user.md** - Plain language, immediate clarity, actionability, visual clarity, empathy
-- **cdo-utility.md** - CDO of energy utility (buyer): unconsidered need landing, actionability, regulatory urgency, ROI credibility, operational relevance
-- **cmo-provider.md** - CMO of IT provider (seller): pipeline opening, portfolio differentiation, narrative arc, go-to-market utility, competitive moat
+Available personas (any `references/persona-<name>.md` file is valid; the persona name is the `<name>` part):
+- **persona-executive.md** - Decision-readiness, quantification, time respect, clarity, credibility
+- **persona-technical.md** - Accuracy, logical flow, precision, completeness, terminology
+- **persona-legal.md** - Risk language, regulatory alignment, liability, evidence standards, disclosure
+- **persona-marketing.md** - Audience resonance, persuasiveness, brand tone, CTA, emotional connection
+- **persona-end-user.md** - Plain language, immediate clarity, actionability, visual clarity, empathy
+- **persona-cdo-utility.md** - CDO of energy utility (buyer): unconsidered need landing, actionability, regulatory urgency, ROI credibility, operational relevance
+- **persona-cmo-provider.md** - CMO of IT provider (seller): pipeline opening, portfolio differentiation, narrative arc, go-to-market utility, competitive moat
 
 ### Synthesis Protocol (references/synthesis-protocol.md)
 

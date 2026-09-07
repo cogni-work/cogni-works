@@ -1,3 +1,9 @@
+---
+library_id: infographic-brief-validation
+version: 1.0.0
+created: 2026-09-07
+---
+
 # Validation Checklist
 
 Four-layer validation for infographic briefs. Layer 1 is mechanized; Layers 2–4 are reasoned through with the shared rules in `$CLAUDE_PLUGIN_ROOT/libraries/brief-validation-core.md` (§ Core principle, § Severity, § Protocol) and only the infographic-specific rules kept here. Stop on the first failure, fix, then re-check.
@@ -32,12 +38,12 @@ Then verify the infographic-specific structure by eye:
 Infographics fail when they are overloaded. The first two limits derive from the active
 `style_preset`'s scan/read target — a 10-second scan for the standard presets, a 60-second
 read for `economist` — so both resolve from the Content Density table in
-`03-style-presets.md`. Every remaining row is a fixed per-block-type cap that does not vary
+`infographic-style-presets.md`. Every remaining row is a fixed per-block-type cap that does not vary
 by preset.
 
 | Check | Pass | Fail |
 |-------|------|------|
-| Content block count | At least 3 blocks and within the active `style_preset`'s max (Content Density table, `03-style-presets.md`), excluding title, CTA, footer | < 3 (too sparse) or over the preset's max (overloaded) |
+| Content block count | At least 3 blocks and within the active `style_preset`'s max (Content Density table, `infographic-style-presets.md`), excluding title, CTA, footer | < 3 (too sparse) or over the preset's max (overloaded) |
 | Total word count | Within the active `style_preset`'s max word count (Content Density table) | Over the preset's max |
 | KPI card word limit | Each kpi-card <= 15 words (excl. number and source) | Any kpi-card over 15 words |
 | Text block body limit | Each text-block body <= 40 words | Any body over 40 words |

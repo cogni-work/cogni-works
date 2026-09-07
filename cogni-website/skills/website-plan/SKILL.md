@@ -202,8 +202,8 @@ The element → block choice is this plugin's own. The hint table above is the s
 
 The decomposition rules are defined in cogni-workspace's story-to-web skill and referenced rather than duplicated here. Read once, apply per page:
 
-- Section taxonomy + decision tree: `$CLAUDE_PLUGIN_ROOT/../cogni-workspace/skills/story-to-web/references/02-section-architecture.md` (see the "Section Type Decision Tree" heading)
-- Copywriting rules (assertion headlines, number plays, bullet discipline): `$CLAUDE_PLUGIN_ROOT/../cogni-workspace/skills/story-to-web/references/03-section-copywriting.md`
+- Section taxonomy + decision tree: `$CLAUDE_PLUGIN_ROOT/../cogni-workspace/libraries/web-section-architecture.md` (see the "Section Type Decision Tree" heading)
+- Copywriting rules (assertion headlines, number plays, bullet discipline): `$CLAUDE_PLUGIN_ROOT/../cogni-workspace/libraries/web-section-copywriting.md`
 
 For each narrative page, walk the markdown in order:
 

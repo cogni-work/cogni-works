@@ -205,7 +205,7 @@ Read `references/08-infographic-distillation.md` for distillation principles.
 Scan the entire report and produce an `infographic-brief.md` following the story-to-infographic v1.2 schema (see `${CLAUDE_PLUGIN_ROOT}/libraries/EXAMPLE_ECONOMIST_BRIEF.md` for format reference):
 
 - **Frontmatter:** `type: infographic-brief`, `version: "1.2"`, `style_preset: "economist"`, `layout_type: "stat-heavy"`, `orientation: "portrait"`, `dimensions: "1584x2240"` (DIN A4 portrait at 2x), `language`, `theme_path`, `palette_override: "theme"`, `voice_tone: "analytical"`
-- **Content blocks (10-14):** title, kpi-card (hero number), stat-rows, chart (1-2), text-blocks, pull-quote, comparison-pair, CTA, footer — all following the block-type YAML format from story-to-infographic
+- **Content blocks (10-14):** title, kpi-card (hero number), stat-rows, chart (1-2), text-blocks, pull-quote, comparison-pair, CTA, footer — all following the block-type YAML format in `${CLAUDE_PLUGIN_ROOT}/libraries/infographic-block-copywriting.md`
 
 Distillation rules:
 1. **Governing assertion** — the report's thesis as a self-contained sentence (verb + quantified consequence)

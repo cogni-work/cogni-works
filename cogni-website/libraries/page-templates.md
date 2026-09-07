@@ -749,8 +749,8 @@ The page types above (`products`, `product-detail`, `blog-*`, `insights`, `resou
 
 The section-block taxonomy mirrors cogni-workspace's story-to-web skill so that narratives surface as scroll-driven reading experiences instead of entity-card dumps. The decomposition rules (decision tree, assertion-headline discipline, number plays, bullet scan-optimization) live in the story-to-web references and are **not** duplicated here:
 
-- Taxonomy + decision tree: `cogni-workspace/skills/story-to-web/references/02-section-architecture.md`
-- Copywriting rules: `cogni-workspace/skills/story-to-web/references/03-section-copywriting.md`
+- Taxonomy + decision tree: `cogni-workspace/libraries/web-section-architecture.md`
+- Copywriting rules: `cogni-workspace/libraries/web-section-copywriting.md`
 
 This appendix only defines the HTML patterns the page-generator emits for each block type, mapping onto the existing stylesheet (no new CSS classes — everything reuses `.section`, `.section--{theme}`, `.hero`, `.stat`, `.card-grid`, `.btn`, `.timeline` already defined in the style reference above).
 

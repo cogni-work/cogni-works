@@ -1,3 +1,9 @@
+---
+library_id: web-section-copywriting
+version: 1.0.0
+created: 2026-09-07
+---
+
 # Section Copywriting
 
 ## Purpose

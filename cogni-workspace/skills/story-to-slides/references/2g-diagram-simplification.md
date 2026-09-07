@@ -431,4 +431,4 @@ GENERATE speaker notes material from simplification:
 - **Step 5a** (Copywriting): Diagram slide titles follow the same headline rules (assertion, not label)
 - **Step 8c** (Speaker Notes): Consume preserved detail from simplification for `>> WAS SIE WISSEN MÜSSEN`
 - **Step 6** (Layout Selection): Use diagram type + topology to select layout (see 06-slide-mapping-rules.md)
-- **Step 7** (Validation): Validate Diagram field constraints (see 09-validation-checklist.md)
+- **Step 7** (Validation): Validate Diagram field constraints (see presentation-brief-validation.md)

@@ -31,7 +31,7 @@ Three more are shared but not required by the checker: `theme` and `theme_path` 
 
 | Type | Additional keys |
 |------|-----------------|
-| `presentation-brief` (4.1) | `max_slides`, `slides`, `design{register, dark_slides, speaker_notes, imagery, variations}`, `key_figures[]`, conditional `climax` (required whenever a slide carries `emphasis: climax`). Authority: `skills/story-to-slides/references/07-output-template.md` → Frontmatter |
+| `presentation-brief` (4.1) | `max_slides`, `slides`, `design{register, dark_slides, speaker_notes, imagery, variations}`, `key_figures[]`, conditional `climax` (required whenever a slide carries `emphasis: climax`). Authority: `libraries/presentation-brief-template.md` → Frontmatter |
 | `web-brief` | `conversion_goal`, `sections` |
 | `storyboard-brief` | `industry`, `poster_size`, `poster_count`, `poster_gap`, `conversion_goal`, `base_width`, `base_height`, `print_width`, `print_height`, `scale_factor` |
 | `infographic-brief` | `layout_type`, `style_preset`, `orientation`, `dimensions`, `voice_tone`, `palette_override` |
@@ -40,7 +40,7 @@ Three more are shared but not required by the checker: `theme` and `theme_path` 
 
 | Type | Current | Accepted as legacy | Owner of the pin |
 |------|---------|--------------------|------------------|
-| `presentation-brief` | `"4.1"` | `"4.0"` (unfenced slide bodies, no Rendering Contract) | `07-output-template.md` |
+| `presentation-brief` | `"4.1"` | `"4.0"` (unfenced slide bodies, no Rendering Contract) | `presentation-brief-template.md` |
 | `web-brief` | `"1.1"` | `"1.0"` | `libraries/web-layouts.md` |
 | `storyboard-brief` | `"2.1"` | `"2.0"` | `libraries/storyboard-layouts.md` |
 | `infographic-brief` | per rendering family — see `libraries/infographic-layouts.md` | `"1.0"`, `"1.1"`, `"1.2"` are all accepted by the `/render-infographic` dispatcher; the two hand-drawn agents accept `"1.0"` and `"1.1"` only | `libraries/infographic-layouts.md` |
@@ -65,7 +65,7 @@ Each type's unit vocabulary is closed and owned by one file; the producer maps c
 | Type | Enum | Owner |
 |------|------|-------|
 | `presentation-brief` | eleven slide layouts | `libraries/pptx-layouts.md` — pinned to its other homes by `tests/test-brief-layout-sync.sh` |
-| `presentation-brief` | `Slide-Kind`, `intent.role`, `intent.emphasis`, `visual.kind` | `07-output-template.md` → Slide grammar |
+| `presentation-brief` | `Slide-Kind`, `intent.role`, `intent.emphasis`, `visual.kind` | `presentation-brief-template.md` → Slide grammar |
 | `web-brief` | section types (`hero`, `problem-statement`, `stat-row`, `feature-alternating`, `feature-grid`, `testimonial`, `comparison`, `timeline`, `cta`, `text-block`) and `section_theme` | `libraries/web-layouts.md` |
 | `storyboard-brief` | the web section types, stacked per poster, plus poster geometry | `libraries/storyboard-layouts.md` |
 | `infographic-brief` | layout types and block types | `libraries/infographic-layouts.md` |

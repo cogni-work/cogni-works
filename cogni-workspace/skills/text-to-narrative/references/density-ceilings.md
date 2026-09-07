@@ -42,17 +42,17 @@ A Claude Design infographic. A 2,000-word narrative becomes 80-150 words: hero n
 
 | Key | Ceiling | Counts | Home |
 |-----|---------|--------|------|
-| `headline_words_max` | 12 | words of `headline` | `skills/story-to-infographic/references/04-block-copywriting.md` title block |
-| `subline_words_max` | 15 | words of `subline` | `skills/story-to-infographic/references/04-block-copywriting.md` title block |
+| `headline_words_max` | 12 | words of `headline` | `libraries/infographic-block-copywriting.md` title block |
+| `subline_words_max` | 15 | words of `subline` | `libraries/infographic-block-copywriting.md` title block |
 | `hero_numbers_min` | 3 | `hero_numbers` lines | `skills/story-to-infographic/references/01-content-distillation.md` Select Hero Numbers |
 | `hero_numbers_max` | 5 | `hero_numbers` lines | `skills/story-to-infographic/references/01-content-distillation.md` Select Hero Numbers |
-| `hero_label_words_max` | 4 | words of a hero number's label | `skills/story-to-infographic/references/04-block-copywriting.md` kpi-card Hero-Label |
-| `blocks_min` | 3 | `## Block N:` units | `skills/story-to-infographic/references/03-style-presets.md` universal floor |
-| `blocks_max` | 8 | `## Block N:` units, standard profile | `skills/story-to-infographic/references/03-style-presets.md` density table |
-| `blocks_max_dense` | 14 | `## Block N:` units, dense profile | `skills/story-to-infographic/references/03-style-presets.md` density table |
+| `hero_label_words_max` | 4 | words of a hero number's label | `libraries/infographic-block-copywriting.md` kpi-card Hero-Label |
+| `blocks_min` | 3 | `## Block N:` units | `libraries/infographic-style-presets.md` universal floor |
+| `blocks_max` | 8 | `## Block N:` units, standard profile | `libraries/infographic-style-presets.md` density table |
+| `blocks_max_dense` | 14 | `## Block N:` units, dense profile | `libraries/infographic-style-presets.md` density table |
 | `point_words_max` | 6 | words per `points` line | `skills/story-to-infographic/references/01-content-distillation.md` comparison bullets |
-| `words_max` | 150 | on-brief words in total, standard profile | `skills/story-to-infographic/references/03-style-presets.md` density table |
-| `words_max_dense` | 250 | on-brief words in total, dense profile | `skills/story-to-infographic/references/03-style-presets.md` density table |
+| `words_max` | 150 | on-brief words in total, standard profile | `libraries/infographic-style-presets.md` density table |
+| `words_max_dense` | 250 | on-brief words in total, dense profile | `libraries/infographic-style-presets.md` density table |
 
 ## web
 
@@ -60,13 +60,13 @@ A Claude Design web page or poster. Each section is read in about five seconds w
 
 | Key | Ceiling | Counts | Home |
 |-----|---------|--------|------|
-| `hero_headline_words_max` | 10 | words of `hero.headline` | `skills/story-to-web/references/03-section-copywriting.md` Headline Rules |
-| `hero_subline_words_max` | 25 | words of `hero.subline` | `skills/story-to-web/references/03-section-copywriting.md` Body Text Constraints |
-| `section_headline_words_max` | 12 | words of a `## Section N:` headline | `skills/story-to-web/references/03-section-copywriting.md` Headline Rules |
-| `headline_chars_max` | 70 | characters of any headline | `skills/story-to-web/references/03-section-copywriting.md` Headline Rules |
-| `section_body_words_max` | 50 | words of a section `body` | `skills/story-to-web/references/03-section-copywriting.md` Body Text Constraints |
-| `bullet_words_max` | 8 | words per `bullets` line | `skills/story-to-web/references/03-section-copywriting.md` Body Text Constraints |
-| `quote_words_max` | 30 | words of a `quote` | `skills/story-to-web/references/03-section-copywriting.md` Body Text Constraints |
-| `attribution_words_max` | 10 | words of an `attribution` | `skills/story-to-web/references/03-section-copywriting.md` Body Text Constraints |
-| `sections_min` | 6 | `## Section N:` units | `skills/story-to-web/references/02-section-architecture.md` section count |
-| `sections_max` | 10 | `## Section N:` units | `skills/story-to-web/references/02-section-architecture.md` section count |
+| `hero_headline_words_max` | 10 | words of `hero.headline` | `libraries/web-section-copywriting.md` Headline Rules |
+| `hero_subline_words_max` | 25 | words of `hero.subline` | `libraries/web-section-copywriting.md` Body Text Constraints |
+| `section_headline_words_max` | 12 | words of a `## Section N:` headline | `libraries/web-section-copywriting.md` Headline Rules |
+| `headline_chars_max` | 70 | characters of any headline | `libraries/web-section-copywriting.md` Headline Rules |
+| `section_body_words_max` | 50 | words of a section `body` | `libraries/web-section-copywriting.md` Body Text Constraints |
+| `bullet_words_max` | 8 | words per `bullets` line | `libraries/web-section-copywriting.md` Body Text Constraints |
+| `quote_words_max` | 30 | words of a `quote` | `libraries/web-section-copywriting.md` Body Text Constraints |
+| `attribution_words_max` | 10 | words of an `attribution` | `libraries/web-section-copywriting.md` Body Text Constraints |
+| `sections_min` | 6 | `## Section N:` units | `libraries/web-section-architecture.md` section count |
+| `sections_max` | 10 | `## Section N:` units | `libraries/web-section-architecture.md` section count |

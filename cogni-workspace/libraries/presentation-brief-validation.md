@@ -1,3 +1,9 @@
+---
+library_id: presentation-brief-validation
+version: 1.0.0
+created: 2026-09-07
+---
+
 # Validation Checklist
 
 ## Purpose
@@ -97,7 +103,7 @@ Read `brief-validation-core.md` § Number plays and § Bullets and body text —
      → Notes coach rather than script: a presenter internalizes 200-400 words; above
        ~450 they become a teleprompter (the count itself is check-brief.py's notes-words)
      → FAIL if: [Energy] tag missing, or Q&A prep absent on a slide whose audience will probe it
-     → FIX: Regenerate using 08c-presenter-prep.md sub-step 3 rules
+     → FIX: Regenerate using presenter-prep.md sub-step 3 rules
 
   2. CHECK phrase notation survives the budget
      → A box or bullet that fits its word count but reads as a full sentence still
@@ -126,7 +132,7 @@ Bookends, slide count, layout variety, the prep-slide positions and the referenc
      → Buying Center (Slide 3, Rich audience mode only): each quadrant has Label (role),
        Sublabel (title), Bullets (lead-with + key messages)
      → FAIL if: a prep slide is present but hollow
-     → FIX: Generate using 08c-presenter-prep.md rules
+     → FIX: Generate using presenter-prep.md rules
 
   3. CHECK the solution overview slide (why-change arc only)
      → Present BEFORE the first Power Position (is-does-means) slide, on two-columns-equal
@@ -160,7 +166,7 @@ Read `brief-validation-core.md` § Completeness against the source, § Language 
 
   4. CHECK Source fields
      → A slide whose body carries a URL-bearing citation has a Source field naming the
-       primary source (07-output-template.md § Citation Handling Rules)
+       primary source (presentation-brief-template.md § Citation Handling Rules)
      → FAIL if: a cited slide has no Source, or a Source names a URL the narrative does not carry
 ```
 

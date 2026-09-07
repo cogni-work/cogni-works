@@ -1,3 +1,9 @@
+---
+library_id: web-brief-validation
+version: 1.0.0
+created: 2026-09-07
+---
+
 # Web Brief Validation
 
 ## Purpose
@@ -46,7 +52,7 @@ For each section, verify:
 - `[C]` Has `type` (one of: `hero`, `problem-statement`, `stat-row`, `feature-alternating`, `feature-grid`, `testimonial`, `comparison`, `timeline`, `cta`, `text-block`)
   - If this fails, the renderer does not know which layout template to use. Fix: assign the correct type based on arc role and content
 - `[C]` Has `section_theme` (one of: `dark`, `light`, `light-alt`, `accent`)
-  - If this fails, the renderer cannot determine background/text colors. Fix: assign based on the theme alternation rules in `02-section-architecture.md`
+  - If this fails, the renderer cannot determine background/text colors. Fix: assign based on the theme alternation rules in `web-section-architecture.md`
 - `[W]` Has `arc_role` (valid role: `hook`, `problem`, `urgency`, `evidence`, `solution`, `proof`, `roadmap`, `call-to-action`)
   - If this fails, the generation metadata is incomplete. Fix: assign the role that matches this section's narrative function
 - `[C]` Has `headline` (string, non-empty)
@@ -102,7 +108,7 @@ For each section, verify:
 ### Number Play Quality (where present)
 
 - `[C]` Stat numbers are isolated (no units in the `number` field) — `number: "23 Tage"` becomes `number: "23"`, `label: "Tage Stillstand/Jahr"`; the stat card otherwise renders units inside the large number and breaks the visual hierarchy.
-- `[I]` Multiplier and ratio techniques from `03-section-copywriting.md` are the web-side toolkit for the framing question the core asks.
+- `[I]` Multiplier and ratio techniques from `web-section-copywriting.md` are the web-side toolkit for the framing question the core asks.
 
 ---
 
@@ -178,7 +184,7 @@ For each section, verify:
   - **How to detect:** Read the governing thought. Then read all section headlines in order. Do they build a logical argument that leads to the governing thought's conclusion?
   - If this fails, the page's narrative arc is broken. Fix: adjust section order or headlines so the argument builds toward the governing thought.
 - `[I]` Arc type is correctly identified
-  - If this fails, the section sequence template may be suboptimal but rendering is unaffected. Fix: re-assess the arc type against the patterns in `02-section-architecture.md`.
+  - If this fails, the section sequence template may be suboptimal but rendering is unaffected. Fix: re-assess the arc type against the patterns in `web-section-architecture.md`.
 
 ### Language Consistency
 

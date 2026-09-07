@@ -1,3 +1,9 @@
+---
+library_id: references-slide
+version: 1.0.0
+created: 2026-09-07
+---
+
 # References Slide Generation
 
 ## Purpose

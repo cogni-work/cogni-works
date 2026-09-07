@@ -1,3 +1,9 @@
+---
+library_id: infographic-style-presets
+version: 1.0.0
+created: 2026-09-07
+---
+
 # Style Presets
 
 Six style presets that control the visual character of infographics. Each preset defines
@@ -242,7 +248,7 @@ belong to the chosen family, with recommendations grounded in source cues:
   (HBR/McKinsey, generous whitespace), `data-viz` (Bloomberg Terminal dashboard feel,
   monospace numbers), `corporate` (annual report / governance, structured grid,
   serif-friendly). Each preset's density budget is in the Content Density table of
-  `03-style-presets.md`, loaded at this step.
+  `infographic-style-presets.md`, loaded at this step.
 
 Present via AskUserQuestion with 2–3 options. On empty response, auto-select top
 recommendation.

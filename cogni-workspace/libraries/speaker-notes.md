@@ -1,6 +1,12 @@
+---
+library_id: speaker-notes
+version: 1.0.0
+created: 2026-09-07
+---
+
 # Speaker Notes — Format Reference
 
-> **Generation home:** Speaker-Notes are generated in **Step 7c** (`08c-presenter-prep.md`), not Step 5. This file defines the **format specification**: two-section structure, available tags, templates, and localization. Step 7c references this file for format rules and extends it with arc-position coaching, layout-aware openings, comprehensive audience Q&A, and Speaker-Notes for internal prep slides.
+> **Generation home:** Speaker-Notes are generated in **Step 7c** (`presenter-prep.md`), not Step 5. This file defines the **format specification**: two-section structure, available tags, templates, and localization. Step 7c references this file for format rules and extends it with arc-position coaching, layout-aware openings, comprehensive audience Q&A, and Speaker-Notes for internal prep slides.
 
 ## Purpose
 
@@ -86,7 +92,7 @@ Speaker-Notes: |
 
 ## Length Guidelines
 
-> **Active targets** are defined in `08c-presenter-prep.md` (200-400 words per slide). The values below are the base format minimums.
+> **Active targets** are defined in `presenter-prep.md` (200-400 words per slide). The values below are the base format minimums.
 
 - Minimum: 150 words (below this, the presenter is unsupported)
 - Target: 200-400 words per slide (with arc coaching, layout-aware openings, comprehensive Q&A)

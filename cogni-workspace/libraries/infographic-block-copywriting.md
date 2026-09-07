@@ -1,3 +1,9 @@
+---
+library_id: infographic-block-copywriting
+version: 1.0.0
+created: 2026-09-07
+---
+
 # Block Copywriting Rules
 
 Per-block-type copy rules for infographic briefs. These rules enforce the "less is more"

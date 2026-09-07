@@ -18,7 +18,7 @@ byte. Edit the block in one file and the guard goes red until the other matches.
 
 The layer is **optional and additive**: omit any piece and the brief still
 renders. `story-to-slides` is the in-plugin consumer:
-`skills/story-to-slides/references/07-output-template.md` defines the emitted
+`libraries/presentation-brief-template.md` defines the emitted
 `design:`, `climax:` and `key_figures:` keys, and that skill's Step 8.2 and Step
 10 produce them.
 
@@ -75,7 +75,7 @@ prose buried inside bullets.
 
 The shared block above is vocabulary, not grammar. Where a clause spells a value
 inline it is illustrative prose; the emitted brief's shape is defined by
-`skills/story-to-slides/references/07-output-template.md`. One divergence worth
+`libraries/presentation-brief-template.md`. One divergence worth
 naming: clause 5 writes `climax: slide 11`, but the emitted key is a **bare slide
 integer** — `climax: 4` — as both the output template and `EXAMPLE_BRIEF.md`
 show.

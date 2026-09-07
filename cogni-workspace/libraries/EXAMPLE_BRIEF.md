@@ -40,7 +40,7 @@ transformation_notes: |
 
 This example demonstrates the v4.1 content-only slide specification schema. All color fields are absent — the renderer reads the theme directly for all visual decisions. Every slide declares `Slide-Kind`, an `intent` and a `visual`.
 
-Dieser Block ist die deutsche Fassung von `# Rendering Contract` aus `07-output-template.md`.
+Dieser Block ist die deutsche Fassung von `# Rendering Contract` aus `presentation-brief-template.md`.
 
 # Rendering-Vertrag
 

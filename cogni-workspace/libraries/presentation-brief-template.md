@@ -1,3 +1,9 @@
+---
+library_id: presentation-brief-template
+version: 1.0.0
+created: 2026-09-07
+---
+
 # Output Template Reference
 
 ## Per-slide YAML pattern
@@ -140,7 +146,7 @@ it of a brief. **Every other key above is required**, `design` and
 `key_figures` included.
 
 This paragraph is the single authority on 4.1 requiredness: `SKILL.md` defers
-to it; `09-validation-checklist.md` restates it for the checker and must not
+to it; `presentation-brief-validation.md` restates it for the checker and must not
 diverge from it.
 
 ### Rendering Contract
@@ -379,7 +385,7 @@ intent:
 visual:
   kind: table
 
-[... consolidated citation registry, two columns — see 08b-references-slide.md ...]
+[... consolidated citation registry, two columns — see references-slide.md ...]
 ```
 
 ## Generation Metadata
@@ -415,7 +421,7 @@ Agent tool:
   subagent_type: "cogni-workspace:slides-enrichment-artist"
   prompt: |
     OUTPUT_PATH: {resolved_output_path}
-    OUTPUT_TEMPLATE_PATH: $CLAUDE_PLUGIN_ROOT/skills/story-to-slides/references/07-output-template.md
+    OUTPUT_TEMPLATE_PATH: $CLAUDE_PLUGIN_ROOT/libraries/presentation-brief-template.md
 
     FRONTMATTER:
       type: presentation-brief

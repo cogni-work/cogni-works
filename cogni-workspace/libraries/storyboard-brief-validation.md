@@ -1,6 +1,12 @@
+---
+library_id: storyboard-brief-validation
+version: 1.0.0
+created: 2026-09-07
+---
+
 # Storyboard Brief Validation
 
-> **Why this file replaces `05-validation.md` rather than extending it.** The substitution is load-bearing, not tidiness: `05-validation.md` asserts at CRITICAL that `type` is `web-brief`, that `version` is `1.1`, and that header and footer blocks are present. A correct storyboard brief is `type: storyboard-brief`, `version: "2.1"`, and — per Step 8 — has no header or footer at all, so running the web layers over it fails four CRITICAL checks on a sound artifact, and that framework's repair phase would "fix" them by rewriting the brief into web shape, destroying the very contract Step 10 calls authoritative.
+> **Why this file replaces `web-brief-validation.md` rather than extending it.** The substitution is load-bearing, not tidiness: `web-brief-validation.md` asserts at CRITICAL that `type` is `web-brief`, that `version` is `1.1`, and that header and footer blocks are present. A correct storyboard brief is `type: storyboard-brief`, `version: "2.1"`, and — per Step 8 — has no header or footer at all, so running the web layers over it fails four CRITICAL checks on a sound artifact, and that framework's repair phase would "fix" them by rewriting the brief into web shape, destroying the very contract Step 10 calls authoritative.
 
 ## Purpose
 

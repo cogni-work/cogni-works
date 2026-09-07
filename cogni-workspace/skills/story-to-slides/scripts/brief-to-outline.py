@@ -85,7 +85,7 @@ NON_SLIDE_KEYS = frozenset({
 # This is the same property the sibling renderer keys on —
 # `skills/render-html-slides/scripts/generate-html-slides.py` treats any
 # `line.startswith(">>")` as a section header and holds no marker list at all.
-# `references/09-validation-checklist.md` check 5 requires BOTH sections, in that
+# `$CLAUDE_PLUGIN_ROOT/libraries/presentation-brief-validation.md` check 5 requires BOTH sections, in that
 # order, and FAILs a slide carrying only one, so the ordinal rule is
 # validator-backed. Matching on language-specific literals instead would have
 # worked for the two languages someone wrote down and silently produced an empty

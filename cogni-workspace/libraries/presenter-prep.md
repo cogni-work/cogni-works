@@ -1,3 +1,9 @@
+---
+library_id: presenter-prep
+version: 1.0.0
+created: 2026-09-07
+---
+
 # Presenter Prep Slides (Internal Prep Slide Copywriting)
 
 ## Purpose
@@ -509,7 +515,7 @@ Step 7c uses this format but extends it with three additional reasoning layers a
 
 ### Reasoning Approach: Extensive Speaker-Notes
 
-Before writing notes for each slide, reason through what the presenter needs. Steps 1-7 come from `05b-speaker-notes.md`. Steps 8-10 are the context-aware extensions that make notes extensive.
+Before writing notes for each slide, reason through what the presenter needs. Steps 1-7 come from `speaker-notes.md`. Steps 8-10 are the context-aware extensions that make notes extensive.
 
 ```text
 REASON through speaker notes for each slide:
@@ -535,11 +541,11 @@ REASON through speaker notes for each slide:
        CTA (closing) → Direct and specific. No preamble. State the ask.
 
   ══════════════════════════════════════════
-  PHASE B: BASE NOTES (from 05b-speaker-notes.md)
+  PHASE B: BASE NOTES (from speaker-notes.md)
   ══════════════════════════════════════════
 
   1. IDENTIFY what the slide SHOWS vs. what it DOESN'T show
-     → [as defined in 05b-speaker-notes.md reasoning step 1]
+     → [as defined in speaker-notes.md reasoning step 1]
 
   2. DECIDE the opening technique based on section role
      → [as defined in 05b reasoning step 2]
@@ -713,7 +719,7 @@ REASON through speaker notes for each slide:
 |-------------|-----------|-------------|
 | `[Energy]` | `[Energie]` | Arc-position delivery coaching — on EVERY content slide, as the FIRST element in "WHAT YOU SAY" before [Opening] |
 
-This tag is the ONLY structural addition to the 05b tag system. All other tags (`[Opening]`, `[Key point]`, `[Pause]`, `[Emphasis]`, `[Transition]`) remain as defined in `05b-speaker-notes.md`.
+This tag is the ONLY structural addition to the 05b tag system. All other tags (`[Opening]`, `[Key point]`, `[Pause]`, `[Emphasis]`, `[Transition]`) remain as defined in `speaker-notes.md`.
 
 ### Length Guidelines (Extensive Notes)
 
@@ -754,7 +760,7 @@ FOR each slide (content slides AND internal prep slides):
   0. LOOK UP arc position from Methodology slide (sub-step 1)
      → Record: section role (from Step 3c), PEAK/RELEASE status, position relative to peak
 
-  1-7. APPLY 05b-speaker-notes.md reasoning steps 1-7
+  1-7. APPLY speaker-notes.md reasoning steps 1-7
      → Generate "WHAT YOU SAY" with [Opening], [Key point], [Pause], [Emphasis], [Transition]
      → Generate "WHAT YOU NEED TO KNOW" with Sources, Context, Q&A Prep, Caveats
      → Use 200-400 word target (not 100-200)

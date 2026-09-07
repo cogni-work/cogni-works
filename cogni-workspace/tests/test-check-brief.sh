@@ -44,10 +44,10 @@ LIB="$ROOT/cogni-workspace/libraries"
 EXB="$LIB/EXAMPLE_BRIEF.md"
 F40="$ROOT/cogni-workspace/tests/fixtures/brief/unfenced-slides-4.0.md"
 CHECKLISTS=(
-  "$ROOT/cogni-workspace/skills/story-to-slides/references/09-validation-checklist.md"
-  "$ROOT/cogni-workspace/skills/story-to-web/references/05-validation.md"
-  "$ROOT/cogni-workspace/skills/story-to-web/references/10-print-validation.md"
-  "$ROOT/cogni-workspace/skills/story-to-infographic/references/05-validation-checklist.md"
+  "$ROOT/cogni-workspace/libraries/presentation-brief-validation.md"
+  "$ROOT/cogni-workspace/libraries/web-brief-validation.md"
+  "$ROOT/cogni-workspace/libraries/storyboard-brief-validation.md"
+  "$ROOT/cogni-workspace/libraries/infographic-brief-validation.md"
 )
 
 pass() { printf '%s\n' "PASS: $1"; }

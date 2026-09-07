@@ -59,7 +59,7 @@ When content matches multiple layouts:
 **Family rule:** `economist`, `editorial`, `data-viz`, and `corporate` all belong to the
 **editorial family** (rendered via Pencil MCP). `sketchnote` and `whiteboard` belong to the
 **hand-drawn family** (rendered via Excalidraw). Picking a preset also picks the renderer —
-see `03-style-presets.md` for the full family description.
+see `infographic-style-presets.md` for the full family description.
 
 ### Arc Type → Style Preset (secondary heuristic)
 

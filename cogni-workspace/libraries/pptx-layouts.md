@@ -9,7 +9,7 @@ updated: 2026-02-04
 
 The **field schema** of the eleven slide layouts a presentation brief may use: for each layout, what it is for, which fields are required, which are optional, and a content-only example. This is the vocabulary `story-to-slides` writes and every renderer reads — the pptx path, `render-html-slides`, and the Claude Design outline exporter through its layout-to-type mapping.
 
-It carries **no geometry and no rendering instructions**. Canvas positions, point sizes, palette and font mapping, notes and citation rendering, Mermaid-to-shape rules and the QA loop for a pptxgenjs renderer live in `pptx-render-recipe.md`; the per-slide 4.1 keys (`Slide-Kind`, `intent`, `visual`) are defined in `skills/story-to-slides/references/07-output-template.md`; the closed layout set is pinned across its homes by `tests/test-brief-layout-sync.sh`, and `scripts/check-brief.py` enforces the required fields below.
+It carries **no geometry and no rendering instructions**. Canvas positions, point sizes, palette and font mapping, notes and citation rendering, Mermaid-to-shape rules and the QA loop for a pptxgenjs renderer live in `pptx-render-recipe.md`; the per-slide 4.1 keys (`Slide-Kind`, `intent`, `visual`) are defined in `libraries/presentation-brief-template.md`; the closed layout set is pinned across its homes by `tests/test-brief-layout-sync.sh`, and `scripts/check-brief.py` enforces the required fields below.
 
 ---
 
@@ -623,7 +623,7 @@ Metadata: kontakt@t-systems.com | +49 123 456 789
 
 ## Common fields
 
-Fields every layout may carry in addition to its own. The per-slide keys new in 4.1 — `Slide-Kind`, `intent` (with `role`, `emphasis`) and `visual` (with `kind`, `chart`, `image_prompt`) — are defined once in `skills/story-to-slides/references/07-output-template.md` → Slide grammar and are not restated here.
+Fields every layout may carry in addition to its own. The per-slide keys new in 4.1 — `Slide-Kind`, `intent` (with `role`, `emphasis`) and `visual` (with `kind`, `chart`, `image_prompt`) — are defined once in `libraries/presentation-brief-template.md` → Slide grammar and are not restated here.
 
 1. **Layout**: the layout name, exactly as headed above — `Layout: stat-card-with-context`. `scripts/check-brief.py` (`layout-enum`) rejects any other spelling.
 2. **Slide-Title**: the on-slide headline for every layout except `title-slide` and `closing-slide`, which use `Title`/`Subtitle`. The `## Slide N:` heading carries the assertion headline; `Slide-Title` is what the slide shows and is usually the same sentence.

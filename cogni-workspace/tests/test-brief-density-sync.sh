@@ -52,11 +52,11 @@ OUTLINE="${BRIEF_DENSITY_OUTLINE:-$WS/skills/story-to-slides/scripts/brief-to-ou
 SLIDES_SKILL="${BRIEF_DENSITY_SLIDES_SKILL:-$WS/skills/story-to-slides/SKILL.md}"
 VALIDATOR="${BRIEF_DENSITY_VALIDATOR:-$WS/skills/narrative/scripts/validate-narrative.py}"
 ARC_CONTRACT="${BRIEF_DENSITY_ARC_CONTRACT:-$WS/skills/narrative/references/story-arc/corporate-visions/arc-definition.md}"
-WEB_COPY="${BRIEF_DENSITY_WEB_COPY:-$WS/skills/story-to-web/references/03-section-copywriting.md}"
-WEB_ARCH="${BRIEF_DENSITY_WEB_ARCH:-$WS/skills/story-to-web/references/02-section-architecture.md}"
-INFO_PRESETS="${BRIEF_DENSITY_INFO_PRESETS:-$WS/skills/story-to-infographic/references/03-style-presets.md}"
+WEB_COPY="${BRIEF_DENSITY_WEB_COPY:-$WS/libraries/web-section-copywriting.md}"
+WEB_ARCH="${BRIEF_DENSITY_WEB_ARCH:-$WS/libraries/web-section-architecture.md}"
+INFO_PRESETS="${BRIEF_DENSITY_INFO_PRESETS:-$WS/libraries/infographic-style-presets.md}"
 INFO_DISTILL="${BRIEF_DENSITY_INFO_DISTILL:-$WS/skills/story-to-infographic/references/01-content-distillation.md}"
-INFO_BLOCKS="${BRIEF_DENSITY_INFO_BLOCKS:-$WS/skills/story-to-infographic/references/04-block-copywriting.md}"
+INFO_BLOCKS="${BRIEF_DENSITY_INFO_BLOCKS:-$WS/libraries/infographic-block-copywriting.md}"
 
 pass() { printf '%s\n' "PASS: $1"; }
 fail() { printf '%s\n' "FAIL: $1"; failures=$((failures + 1)); }

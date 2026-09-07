@@ -8,7 +8,7 @@
 #   2. the LAYOUT_RENDERERS keys in skills/render-html-slides/scripts/
 #      generate-html-slides.py, minus `references` (a Slide-Kind, not a layout)
 #   3. the `### Closed layout set` bullets in
-#      skills/story-to-slides/references/09-validation-checklist.md
+#      libraries/presentation-brief-validation.md
 #   4. the LAYOUT_ENUM tuple in scripts/check-brief.py
 # A layout added to one is invisible to the others until this suite goes red.
 #
@@ -37,7 +37,7 @@ ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 WS="$ROOT/cogni-workspace"
 PPTX="${BRIEF_SYNC_PPTX_LAYOUTS:-$WS/libraries/pptx-layouts.md}"
 HTML="${BRIEF_SYNC_HTML_RENDERER:-$WS/skills/render-html-slides/scripts/generate-html-slides.py}"
-CHECKLIST="${BRIEF_SYNC_CHECKLIST:-$WS/skills/story-to-slides/references/09-validation-checklist.md}"
+CHECKLIST="${BRIEF_SYNC_CHECKLIST:-$WS/libraries/presentation-brief-validation.md}"
 CHECKER="${BRIEF_SYNC_CHECKER:-$WS/scripts/check-brief.py}"
 
 pass() { printf '%s\n' "PASS: $1"; }

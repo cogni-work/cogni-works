@@ -90,7 +90,7 @@ Content density varies by style preset. The "less is more" principle applies to 
 but the threshold differs.
 
 The per-preset block and word ceilings live in one place — the Content Density table in
-`$CLAUDE_PLUGIN_ROOT/skills/story-to-infographic/references/03-style-presets.md`, loaded at
+`$CLAUDE_PLUGIN_ROOT/libraries/infographic-style-presets.md`, loaded at
 Step 4. Every density gate below (Step 5 self-check, Step 8 validation, Step 9 final checks)
 resolves its ceiling from that table using the brief's active `style_preset`, so no step
 restates a figure. Resolve on the preset, not its rendering family: only `economist` carries
@@ -182,7 +182,7 @@ Apply the distillation rules to reduce the data inventory to infographic-ready c
 
 **Read references:**
 - `$CLAUDE_PLUGIN_ROOT/skills/story-to-infographic/references/02-infographic-mapping.md`
-- `$CLAUDE_PLUGIN_ROOT/skills/story-to-infographic/references/03-style-presets.md`
+- `$CLAUDE_PLUGIN_ROOT/libraries/infographic-style-presets.md`
 
 **Layout type selection** (if `layout_type` is `auto`):
 Map the distilled content to the best layout type. The mapping rules in the reference file
@@ -191,7 +191,7 @@ sequence → timeline-flow, before/after comparison → comparison.
 
 **Style preset selection — two-step disclosure** (if `style_preset` is `auto`):
 
-Present the choice in two steps rather than six presets at once — **Step 4a** picks the family (hand-drawn: `sketchnote` / `whiteboard`; editorial: `economist` / `editorial` / `data-viz` / `corporate`), **Step 4b** narrows to a preset inside it. Infer the likely family from source cues (workshop recap or learning content → hand-drawn; trend report, investor brief or board deck → editorial), present each step via AskUserQuestion with 2–3 options, and auto-select the top recommendation on an empty response. The family descriptions, per-preset characters and the option wording are in `references/03-style-presets.md` § Two-Step Disclosure; each preset's density budget is that file's Content Density table.
+Present the choice in two steps rather than six presets at once — **Step 4a** picks the family (hand-drawn: `sketchnote` / `whiteboard`; editorial: `economist` / `editorial` / `data-viz` / `corporate`), **Step 4b** narrows to a preset inside it. Infer the likely family from source cues (workshop recap or learning content → hand-drawn; trend report, investor brief or board deck → editorial), present each step via AskUserQuestion with 2–3 options, and auto-select the top recommendation on an empty response. The family descriptions, per-preset characters and the option wording are in `$CLAUDE_PLUGIN_ROOT/libraries/infographic-style-presets.md` § Two-Step Disclosure; each preset's density budget is that file's Content Density table.
 
 **Output:** Selected layout_type + style_preset.
 
@@ -200,7 +200,7 @@ Present the choice in two steps rather than six presets at once — **Step 4a** 
 ### Step 5: Compose Block Architecture
 
 **Read references:**
-- `$CLAUDE_PLUGIN_ROOT/skills/story-to-infographic/references/04-block-copywriting.md`
+- `$CLAUDE_PLUGIN_ROOT/libraries/infographic-block-copywriting.md`
 - `$CLAUDE_PLUGIN_ROOT/libraries/infographic-layouts.md` (block type schemas)
 
 Map distilled content to block types following the selected layout's composition rules:
@@ -217,7 +217,7 @@ Apply block copywriting rules:
 - **Word limits**: strict per block type (see infographic-layouts.md)
 - **No maps, use flags**: geographic references use flag icons per article guidance
 
-**Self-check:** Count content blocks (excluding title/CTA/footer) against the max for the active `style_preset` in the Content Density table of `03-style-presets.md`. If over that max, merge or cut the weakest blocks.
+**Self-check:** Count content blocks (excluding title/CTA/footer) against the max for the active `style_preset` in the Content Density table of `infographic-style-presets.md`. If over that max, merge or cut the weakest blocks.
 
 **Output:** Ordered list of block specifications with all content fields filled.
 
@@ -249,12 +249,12 @@ If interactive: present CTA proposal via AskUserQuestion (Approve/Adjust). On em
 
 ### Step 8: Validate
 
-**Read reference:** `$CLAUDE_PLUGIN_ROOT/skills/story-to-infographic/references/05-validation-checklist.md`
+**Read reference:** `$CLAUDE_PLUGIN_ROOT/libraries/infographic-brief-validation.md`
 
 Four layers — stop on first failure, fix, re-check:
 
 1. **Schema** — run `python3 "$CLAUDE_PLUGIN_ROOT/scripts/check-brief.py" --type infographic "{output_path}"` and fix every `fail`, then the block-type checks the checklist keeps by eye
-2. **Content density** — content-block count and total word count within the active `style_preset`'s ceilings (Content Density table, `03-style-presets.md`), word counts within limits per block type
+2. **Content density** — content-block count and total word count within the active `style_preset`'s ceilings (Content Density table, `infographic-style-presets.md`), word counts within limits per block type
 3. **Data integrity** — numbers match source narrative, chart data valid, no fabricated statistics
 4. **Distillation quality** — title is assertion (not topic label), hero numbers isolated, icon prompts specific, 10-second scan test passes
 
@@ -384,9 +384,9 @@ skill creates `output/` when generating the enriched HTML.
 |-----------|------|---------|
 | **01-content-distillation.md** | 3 | "Less is more" rules, 10-second test, number selection, icon-over-text |
 | **02-infographic-mapping.md** | 4 | Layout type selection heuristics, content pattern → layout mapping |
-| **03-style-presets.md** | 4, 5, 8, 9 | 6 style presets with character descriptions and selection heuristics, plus the canonical Content Density table (block and word ceilings by preset) |
-| **04-block-copywriting.md** | 5 | Per-block-type copy rules, assertion headlines, number plays, icon prompts |
-| **05-validation-checklist.md** | 8 | 4-layer validation framework (schema, density, integrity, distillation) |
+| **infographic-style-presets.md** | 4, 5, 8, 9 | 6 style presets with character descriptions and selection heuristics, plus the canonical Content Density table (block and word ceilings by preset) |
+| **infographic-block-copywriting.md** | 5 | Per-block-type copy rules, assertion headlines, number plays, icon prompts |
+| **infographic-brief-validation.md** | 8 | 4-layer validation framework (schema, density, integrity, distillation) |
 
 ### Libraries (loaded in Step 1)
 

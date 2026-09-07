@@ -35,17 +35,17 @@ None of these returns a usable `actions[]`. Render no rows rather than inventing
 - **A registry whose `servers` object is empty or absent** returns `success: true` with a
   flat top-level `action: "noop"` and `message: "No servers in registry"`, and no
   `actions[]`. That check runs before the per-target loop, so this flat shape is what a
-  `--target both` run returns too — the one `both` run with no `data.targets[]`. Nothing
-  was written and no config was even read: fix the registry rather than reporting a clean
-  no-op install.
+  `--target both` run returns too — the only *successful* `both` run with no
+  `data.targets[]`. Nothing was written and no config was even read: fix the registry
+  rather than reporting a clean no-op install.
 - **A `--target both` run stops at the first target whose existing config will not parse**
   and exits non-zero with `data.target` naming it. Read the direction from that field:
   desktop is attempted first, so a desktop failure leaves cli unattempted, while a cli
   failure means desktop was already **processed** — and processed is a write only where
   that target patched. A `--dry-run` run, or one where every server was skipped (`noop`),
-  returns before the write and takes no backup. Either way desktop's per-server actions,
-  and its backup path where one was taken, are dropped, because the exit precedes the
-  success envelope. Re-invoke with `--target <the failed one>` once its config parses, and
+  returns before the write and takes no backup. On a cli failure desktop's per-server
+  actions, and its backup path where one was taken, are dropped, because the exit precedes
+  the success envelope. Re-invoke with `--target <the failed one>` once its config parses, and
   treat a cli-failure run's desktop result as unreported rather than as unwritten.
 - **A backup, or the config write itself, that fails on permissions** exits with **no JSON
   envelope at all** — both raise outside the only handled error class, so the run ends in a

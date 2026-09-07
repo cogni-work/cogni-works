@@ -290,5 +290,5 @@ When invoked that way:
 - If the config being written has invalid JSON, warn the user rather than corrupting it
   further. This applies to `~/.claude.json` as much as to `claude_desktop_config.json`.
 - `patch-desktop-config.py` does not always return per-server rows. The shapes that produce
-  that, and the re-invoke-per-target recovery they share, are in
+  that, and the recovery each one calls for, are in
   `${CLAUDE_PLUGIN_ROOT}/skills/install-mcp/references/result-envelope.md`.

@@ -27,7 +27,7 @@ note: ...                      four meta-instructions
 **Sources**                    the narrative's block, verbatim
 ```
 
-Units are `## Slide N:` (slides), `## Section N:` (document, web) or `## Block N:` (infographic). The kind word is a machine marker and stays English in a German brief; the headline after it is in the brief's language. Inside a unit, fields are column-0 `key:` lines: an inline scalar (`type: bluf`), a `- ` list (`slide_points:`), or a prose block running to the next key (`talk_track:`, `body:`). No fenced blocks anywhere. Field order inside a unit is fixed: `type`, `element`, then the copy fields, then `talk_track`.
+Units are `## Slide N:` (slides), `## Section N:` (document, web) or `## Block N:` (infographic). The kind word is a machine marker and stays English in a German brief; the headline after it is in the brief's language. Inside a unit, fields are column-0 `key:` lines: an inline scalar (`type: bluf`), a `- ` list (`slide_points:`), or a prose block running to the next key (`talk_track:`, `body:`). No fenced blocks anywhere. Field order inside a unit is fixed: `type`, `element`, `visual_intent`, then the copy fields, then `talk_track`.
 
 ## Frontmatter
 
@@ -57,6 +57,8 @@ Five `- ` clauses under the localized heading, placed after the subtitle and bef
 
 **English.** Clause 1: `Copy is frozen: reproduce every headline, bullet, number and label verbatim — a renderer that rewrites a line has changed the deliverable, not styled it.` (document: "sentence" for "bullet"; infographic: "label, number and point"). Clause 4: `Styling comes only from the theme or the renderer's own design system; the brief carries no color, font, or coordinate, and none may be inferred from its wording.`
 
+The same fence governs the `visual_intent` block (`references/visual-intent.md`): visual intent is semantic, not art direction — it names the relationship the audience must perceive and the idea that must dominate, never how the renderer draws them. This is a principle of the brief, not a sixth clause: the contract stays at five.
+
 | Clause | slides | document | infographic | web |
 |--------|--------|----------|-------------|-----|
 | 2 | The talk track travels complete into the renderer's native notes channel; truncated or summarized notes are an incorrect rendering. | The executive summary never substitutes for the body; every section's prose travels complete into the document. | Nothing on this brief is renderer guidance to be paraphrased; every line is canvas copy, and a line that does not fit is dropped with the author, never shortened. | Every section's body travels complete onto the page; nothing collapses into a tooltip, an accordion or a read-more. |
@@ -78,6 +80,12 @@ Every unit on the slides, infographic and web targets carries `type:`, one of `c
 
 type: {enum}
 element: {1-4}            only on a unit cut from one of the four elements
+visual_intent:                            required on every copy-bearing unit; see references/visual-intent.md
+  message_pattern: {enum}
+  relationship: {the semantic relationship}
+  focal_point: {what must dominate}
+  preferred_expression: {enum}         optional hint, never a mandate
+  asset_signal: {enum}                optional hint, never a mandate
 slide_points:
 - {≤10 words; ≤20 when type is table}     at most 4 lines
 - ...
@@ -100,7 +108,7 @@ body:
 {the element's prose verbatim, paragraphs kept, `[N]` markers kept}
 ```
 
-Exactly four sections. The bodies total the narrative's body word count, which the checker holds inside `band_lower`–`band_upper` × `target_length`. No `type:`, no `design:`, no `climax`. This is the one target where nothing is cut: the document generator consumes the whole narrative, and the brief's value is the contract, the summary lead and the resolved sources.
+Exactly four sections. The bodies total the narrative's body word count, which the checker holds inside `band_lower`–`band_upper` × `target_length`. No `type:`, no `design:`, no `climax`, no `visual_intent:`. This is the one target where nothing is cut: the document generator consumes the whole narrative, and the brief's value is the contract, the summary lead and the resolved sources.
 
 ### infographic
 
@@ -112,6 +120,12 @@ hero_numbers:
 ## Block N: {block title}
 
 type: {enum}
+visual_intent:                            optional but recommended; see references/visual-intent.md
+  message_pattern: {enum}
+  relationship: {the semantic relationship}
+  focal_point: {what must dominate}
+  preferred_expression: {enum}         optional hint, never a mandate
+  asset_signal: {enum}                optional hint, never a mandate
 points:
 - {≤6 words}
 cta: {one line}
@@ -129,6 +143,12 @@ hero:
 ## Section N: {assertion headline, ≤12 words, ≤70 characters}
 
 type: {enum}
+visual_intent:                            optional but recommended; see references/visual-intent.md
+  message_pattern: {enum}
+  relationship: {the semantic relationship}
+  focal_point: {what must dominate}
+  preferred_expression: {enum}         optional hint, never a mandate
+  asset_signal: {enum}                optional hint, never a mandate
 body:
 {≤50 words, 2-3 sentences}
 bullets:                        optional, ≤8 words each
@@ -148,4 +168,4 @@ Then the narrative's `**Sources**` block, copied verbatim — every `[N] ` entry
 
 ## What the checker proves and what it does not
 
-`check-design-brief.py` proves: the frontmatter type and version; the target and language enums; the contract heading in the brief's language, before unit 1, with five clauses; unit kind and numbering; on slides, that unit 1 is `bluf` and the last unit is `sources`, each named with its unit number; `density.ceilings` equal to the reference row; every ceiling of the target against the units and preamble; every number on the brief present in the narrative; every `[N]` resolving in Sources and no `<sup>` surviving; every `key_figures` / `hero_numbers` entry carrying a resolvable `(src: [N])`; no styling key. It does not prove that a line is a substring of the narrative, that a headline is an assertion, that the `type` fits the content, or that the selection kept the arc's argument — those are the writer's four judgments, and the reviewer reads for them.
+`check-design-brief.py` proves: the frontmatter type and version; the target and language enums; the contract heading in the brief's language, before unit 1, with five clauses; unit kind and numbering; on slides, that unit 1 is `bluf` and the last unit is `sources`, each named with its unit number; `density.ceilings` equal to the reference row; every ceiling of the target against the units and preamble; every number on the brief present in the narrative; every `[N]` resolving in Sources and no `<sup>` surviving; every `key_figures` / `hero_numbers` entry carrying a resolvable `(src: [N])`; no styling key; that every copy-bearing slides unit carries a well-formed `visual_intent` block, that its keys and enum values are in range, and that no `visual_intent` appears on the document target. It does not prove that a line is a substring of the narrative, that a headline is an assertion, that the `type` fits the content, that the named visual intent is the relationship the evidence supports, or that the selection kept the arc's argument — those are the writer's five judgments, and the reviewer reads for them.

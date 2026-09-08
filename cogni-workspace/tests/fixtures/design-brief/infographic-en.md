@@ -57,6 +57,12 @@ points:
 ## Block 2: Three converging forces make action urgent
 
 type: timeline
+visual_intent:
+  message_pattern: convergence
+  relationship: three forces land inside the same window
+  focal_point: the closing window
+  preferred_expression: timeline
+  asset_signal: diagram
 points:
 - EU Machinery Regulation from January 2027 [2]
 - 23 percent fewer technicians [4]
@@ -73,6 +79,12 @@ points:
 ## Block 4: Action costs less than inaction by roughly 4x
 
 type: metric
+visual_intent:
+  message_pattern: comparison
+  relationship: acting costs a fraction of not acting
+  focal_point: the gap between the two totals
+  preferred_expression: metric
+  asset_signal: data-chart
 points:
 - 17.4 million euros
 - 4.2 million euros [2]

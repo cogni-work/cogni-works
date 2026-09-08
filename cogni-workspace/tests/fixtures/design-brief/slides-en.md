@@ -49,6 +49,12 @@ climax: 7
 ## Slide 1: The Maintenance Budget That Buys Downtime
 
 type: bluf
+visual_intent:
+  message_pattern: decision
+  relationship: the maintenance budget and the lost production hours move together
+  focal_point: the redirect of the budget before the deadline
+  preferred_expression: metric
+  asset_signal: none
 slide_points:
 - lose 11 percent more production hours [1]
 - 71 percent of the failures had a readable sensor precursor [1]
@@ -62,6 +68,12 @@ How should European industrial operators respond to the shift from scheduled to 
 
 type: two-column
 element: 1
+visual_intent:
+  message_pattern: shift
+  relationship: the constraint has moved from spending to information
+  focal_point: the move from spending to information
+  preferred_expression: comparison
+  asset_signal: data-chart
 slide_points:
 - Spend buys interventions that land on the wrong asset [1]
 - 62 percent of unplanned stops had a measurable precursor [1]
@@ -75,6 +87,12 @@ Most operators think reliability is a spending problem: more inspections, shorte
 
 type: timeline
 element: 2
+visual_intent:
+  message_pattern: convergence
+  relationship: three independent forces land inside the same window
+  focal_point: the closing window
+  preferred_expression: timeline
+  asset_signal: diagram
 slide_points:
 - EU Machinery Regulation applies in full from January 2027 [2]
 - 23 percent decline in qualified maintenance technicians by 2030 [4]
@@ -87,6 +105,13 @@ Three converging forces make action urgent. First, the EU Machinery Regulation a
 
 type: roles
 element: 3
+visual_intent:
+  message_pattern: composition
+  relationship: three positions that hold together as one capability
+  focal_point: the set of three rather than any one
+  preferred_expression: matrix
+  asset_signal: none
+  avoid: vendor-logo-wall
 slide_points:
 - Asset-Health Data Integration
 - Compliance-by-Design Monitoring
@@ -99,6 +124,12 @@ Organizations that thrive do not just react to these forces — they build capab
 
 type: table
 element: 4
+visual_intent:
+  message_pattern: distribution
+  relationship: four stacked costs on one horizon
+  focal_point: the total they add to
+  preferred_expression: table
+  asset_signal: data-chart
 slide_points:
 - Unplanned downtime: 13.0 million euros [1]
 - Technician wage premium: 2.1 million euros [4]
@@ -111,6 +142,12 @@ The cost of delay compounds. Over a three-year horizon a mid-sized operator with
 ## Slide 6: Action costs less than inaction by roughly 4x
 
 type: metric
+visual_intent:
+  message_pattern: comparison
+  relationship: acting costs a fraction of not acting
+  focal_point: the gap between the two totals
+  preferred_expression: metric
+  asset_signal: data-chart
 slide_points:
 - 17.4 million euros: the compound cost of inaction
 - 4.2 million euros: a condition-based programme [2]
@@ -122,6 +159,12 @@ A condition-based programme built on the three positions above costs 4.2 million
 ## Slide 7: Redirect the scheduled budget before January 2027
 
 type: bluf
+visual_intent:
+  message_pattern: decision
+  relationship: one decision taken before the deadline
+  focal_point: the decision itself
+  preferred_expression: none
+  asset_signal: none
 slide_points:
 - Redirect the scheduled budget into one asset-health view
 - Build a compliance-by-design monitoring process

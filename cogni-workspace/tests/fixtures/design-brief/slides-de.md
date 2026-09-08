@@ -48,6 +48,12 @@ climax: 7
 ## Slide 1: Das Instandhaltungsbudget kauft Stillstand — weil niemand die Signale liest
 
 type: bluf
+visual_intent:
+  message_pattern: decision
+  relationship: hohes Instandhaltungsbudget und hoher Ausfall gehören zusammen
+  focal_point: die Entscheidung des Vorstands vor der Frist
+  preferred_expression: metric
+  asset_signal: none
 slide_points:
 - elf Prozent mehr als das unterste Viertel [2]
 - 71 Prozent der Ausfälle hatten ein lesbares Sensorsignal [2]
@@ -60,6 +66,12 @@ Wie sollten europäische Industriebetreiber auf den Wandel von der geplanten zur
 
 type: two-column
 element: 1
+visual_intent:
+  message_pattern: composition
+  relationship: getrennte Datensysteme, die einander nicht lesen
+  focal_point: die Trennung der Systeme
+  preferred_expression: architecture
+  asset_signal: diagram
 slide_points:
 - 47 verschiedene Sensordatenformate [1]
 - 24 Produktionsstunden im Jahr an ungeplante Stillstände [2]
@@ -73,6 +85,12 @@ Europäische Industriebetreiber warten ihre Anlagen nach Kalender: Bauteile werd
 
 type: timeline
 element: 2
+visual_intent:
+  message_pattern: shift
+  relationship: der Engpass wandert vom Personal zum Signal
+  focal_point: der Wechsel vom Personal zum Signal
+  preferred_expression: comparison
+  asset_signal: data-chart
 slide_points:
 - 62 Prozent der ungeplanten Stillstände hatten einen messbaren Vorläufer [2]
 - Die Verordnung greift im Januar 2027 [3]
@@ -86,6 +104,12 @@ Die Ausgangslage hält nicht mehr, und zwar aus einem Grund, den die meisten Bet
 
 type: two-column
 element: 3
+visual_intent:
+  message_pattern: system
+  relationship: eine gemeinsame Sicht, die alle Formate liest
+  focal_point: die gemeinsame Sicht
+  preferred_expression: architecture
+  asset_signal: diagram
 slide_points:
 - 34 Prozent weniger ungeplante Stillstände [2]
 - 48 bis 72 Stunden vor dem Ausfall [2]
@@ -99,6 +123,12 @@ Die Antwort lautet: Das Budget der Kalenderwartung in eine gemeinsame Anlagenzus
 
 type: table
 element: 4
+visual_intent:
+  message_pattern: causality
+  relationship: aus der Antwort folgen drei Beschlüsse
+  focal_point: der Beschluss des Vorstands
+  preferred_expression: table
+  asset_signal: none
 slide_points:
 - 1,4 Millionen Euro gegenüber 0,6 Millionen bei geplantem Vorgehen [1]
 - weitere 0,9 Millionen Euro [5]
@@ -111,6 +141,12 @@ Wenn das die Antwort ist, folgen drei Dinge. Erstens entscheidet der Vorstand im
 ## Slide 6: 71 Prozent der Ausfälle sind vorher lesbar
 
 type: metric
+visual_intent:
+  message_pattern: comparison
+  relationship: die Mehrheit der Ausfälle ist vorher lesbar
+  focal_point: der Anteil der lesbaren Ausfälle
+  preferred_expression: metric
+  asset_signal: data-chart
 slide_points:
 - 71 Prozent der Ausfälle sind vorher lesbar [2]
 - alle 47 Formate [1]
@@ -122,6 +158,12 @@ Gegeben eine Kalenderwartung, die Stillstand kauft; aber 71 Prozent der Ausfäll
 ## Slide 7: Der Vorstand entscheidet jetzt und sichert die Datenhoheit
 
 type: bluf
+visual_intent:
+  message_pattern: decision
+  relationship: eine Entscheidung, getroffen vor der Frist
+  focal_point: die Entscheidung selbst
+  preferred_expression: none
+  asset_signal: none
 slide_points:
 - der Vorstand jetzt entscheidet und die Datenhoheit sichert
 - Der erste Schritt ist die Vorstandsvorlage im Oktober

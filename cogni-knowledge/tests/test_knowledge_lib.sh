@@ -1431,6 +1431,79 @@ def assert_extract_author_date_citation_urls():
     assert kl.extract_citation_urls(numbered, "apa") == []
 
 
+def assert_strip_author_date_destination_less():
+    # #1755: a source with no external URL (synthesis / distilled dcl-NNN /
+    # question-node acl-NNN) now renders the DESTINATION-LESS author-date marker
+    # under apa/mla/harvard instead of the numbered family's plain <sup>[N]</sup>.
+    # Strip must remove it with NO residue, in all three per-format shapes —
+    # full-string equality, so a stray bracket or a surviving year would fail.
+    apa = "AI is regulated ([Doe, 2024]). Next."
+    assert kl.strip_author_date_citation_markers(apa) == "AI is regulated . Next.", \
+        kl.strip_author_date_citation_markers(apa)
+    mla = "AI is regulated ([Doe])."
+    assert kl.strip_author_date_citation_markers(mla) == "AI is regulated ."
+    harvard = "AI is regulated ([Doe 2024])."
+    assert kl.strip_author_date_citation_markers(harvard) == "AI is regulated ."
+    # ... and through the family dispatcher for each of the three formats, so the
+    # fix is reachable the way verify-store.py's prefilter actually calls it.
+    for fmt, text in (("apa", apa), ("mla", mla), ("harvard", harvard)):
+        assert "[" not in kl.strip_citation_markers(text, fmt), \
+            (fmt, kl.strip_citation_markers(text, fmt))
+    # Two destination-less markers in one sentence.
+    two = "A ([Doe, 2024]) and B ([Roe, 2023])."
+    assert kl.strip_author_date_citation_markers(two) == "A  and B ."
+    # The DESTINATION-BEARING form is still consumed WHOLE by the URL arm — the
+    # new arm must not chip a linked marker into an orphan "(...)" residue.
+    linked = "AI is regulated ([Doe, 2024](https://x.eu/c)). Next."
+    assert kl.strip_author_date_citation_markers(linked) == "AI is regulated . Next.", \
+        kl.strip_author_date_citation_markers(linked)
+    # NEGATIVES, asserted byte-for-byte: the new arm is shape-anchored, never a
+    # heuristic over parenthesized prose.
+    for survivor in (
+        # unbracketed prose carries no bracketed label
+        "As noted (see Smith, 2020) the rule applies.",
+        # "(" is not immediately followed by "["
+        "As noted (see [the annex](#section-3)) the rule applies.",
+        # "]" is followed by "(", not ")", and the destination is not a scheme
+        "A ([Doe, 2024](#section-3)).",
+        # the label class excludes [ and ], so the [[N]] anti-pattern cannot match
+        "A ([[2]](https://a.org/x)).",
+    ):
+        assert kl.strip_author_date_citation_markers(survivor) == survivor, \
+            kl.strip_author_date_citation_markers(survivor)
+        assert kl.strip_citation_markers(survivor, "apa") == survivor, \
+            kl.strip_citation_markers(survivor, "apa")
+    # CROSS-FAMILY, both directions: the dispatcher still BRANCHES on the new form.
+    assert kl.strip_citation_markers(apa, "ieee") == apa
+    numbered = "AI is regulated<sup>[3](https://x.eu/c)</sup>."
+    assert kl.strip_citation_markers(numbered, "apa") == numbered
+    assert kl.strip_citation_markers(numbered, "ieee") == "AI is regulated."
+
+
+def assert_extract_author_date_destination_less():
+    # #1755: widening STRIP must not leak a phantom URL into EXTRACT. The
+    # destination-less form is precisely the shape extract is defined to yield
+    # nothing for, and the two patterns must stay disagreed on exactly that shape.
+    for text in ("G ([Doe, 2024]).", "G ([Doe]).", "G ([Doe 2024])."):
+        assert kl.extract_author_date_citation_urls(text) == [], \
+            kl.extract_author_date_citation_urls(text)
+        assert kl.extract_citation_urls(text, "apa") == [], \
+            kl.extract_citation_urls(text, "apa")
+    # A non-http(s)/file destination is not a citation URL either.
+    anchor = "H ([Doe, 2024](#section-3))."
+    assert kl.extract_author_date_citation_urls(anchor) == []
+    assert kl.extract_citation_urls(anchor, "apa") == []
+    # A real destination in the SAME string still extracts, in appearance order,
+    # with the destination-less marker contributing nothing.
+    mixed = "A ([Doe, 2024](https://a.org/x)) then B ([Roe]) then C ([Poe, 2022](file:///abs/p.pdf))."
+    assert kl.extract_author_date_citation_urls(mixed) == \
+        ["https://a.org/x", "file:///abs/p.pdf"], kl.extract_author_date_citation_urls(mixed)
+    assert kl.extract_citation_urls(mixed, "harvard") == \
+        ["https://a.org/x", "file:///abs/p.pdf"]
+    # The extract pattern itself is untouched and still scheme-anchored.
+    assert "https?|file" in kl._AUTHOR_DATE_CITATION_URL_RE.pattern
+
+
 def assert_build_author_date_reference_list():
     # Insertion order deliberately differs from alphabetical order, and `roe` is
     # cited twice under two different renderings of the SAME source — so a dedup
@@ -1603,6 +1676,8 @@ check("strip_author_date_citation_markers", assert_strip_author_date_citation_ma
 check("extract_author_date_citation_urls", assert_extract_author_date_citation_urls)
 check("build_author_date_reference_list", assert_build_author_date_reference_list)
 check("author_date_reference_entry", assert_author_date_reference_entry)
+check("strip_author_date_destination_less", assert_strip_author_date_destination_less)
+check("extract_author_date_destination_less", assert_extract_author_date_destination_less)
 PY
 )
 
@@ -1669,6 +1744,8 @@ grade build_author_date_reference_list "klib-47 build_author_date_reference_list
 grade page_type_line "klib-48 page_type_line (#931) — the reader-facing Type: <Display> · <stage> header: per-type display name and stage word for all seven types, U+00B7 middle dot as the separator and never an ASCII substitute, case-insensitive key, and the fail-safe arms (unknown -> title-cased + raw, None/empty -> Unknown + raw, non-str int coerced) that must never raise"
 grade author_date_reference_entry "klib-51 author_date_reference_entry — the three author-date bibliography strings, pinned per format by full-string equality AND asserted pairwise distinct so a collapse onto one shared shape cannot pass; mla's period inside the closing quote; un-numbered (no **[N]**/[[N]]); a numbered format (incl. the wikilink alias and unknown/''/None) renders '' rather than guessing an author-date shape; and the four degradations — no year -> n.d., no author -> title-first per format, no publisher dropped (mla folds to the bare year), no url dropped with harvard's 'Available at:' — plus md_link_dest angle-bracketing a paren-bearing URL, none of which may raise"
 grade parse_distilled_claims_with_backlinks "klib-49 parse_distilled_claims_with_backlinks (#885) — the dual-level retrieval join reader: claim_id + text + backlinks and nothing else, inline list parsed with or without a space after the comma, order preserved, missing/empty backlinks normalized to [] so every claim carries the key, the with_id sibling left byte-identical (additive), and inline []/no key/empty/no-frontmatter -> []"
+grade strip_author_date_destination_less "klib-52 strip_author_date_citation_markers, destination-less arm (#1755) — the DESTINATION-LESS ([Author, Year]) / ([Author]) / ([Author Year]) form a URL-less source now renders under apa/mla/harvard is stripped with no residue, direct and through strip_citation_markers; a destination-bearing marker is still consumed WHOLE by the URL arm (no orphan-paren residue); the negatives survive byte-for-byte ((see Smith, 2020) unbracketed prose, (see [the annex](#section-3)), a non-http(s)/file destination, and the [[N]] anti-pattern); and the dispatcher still BRANCHES both ways (destination-less marker survives under ieee, numbered marker survives under apa)"
+grade extract_author_date_destination_less "klib-53 extract_author_date_citation_urls vs the destination-less form (#1755) — widening STRIP leaks no phantom URL into EXTRACT: all three destination-less shapes and a non-http(s)/file destination yield [] both directly and via extract_citation_urls, a real http/file destination in the SAME string still extracts in appearance order, and _AUTHOR_DATE_CITATION_URL_RE stays scheme-anchored"
 
 # --- klib-50: check/grade census -------------------------------------------
 # The census computation lives in fixtures/test_helpers.sh as

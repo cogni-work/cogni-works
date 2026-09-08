@@ -42,7 +42,12 @@ That inline shape carries no `[N]`, so every surface that reads markers resolves
 
 ## Hard rule: inline citations must be clickable
 
-For every link-based format, plain-text inline citations like `(Publisher, 2026)` are a **format violation**, not a stylistic choice. The composer renders every inline citation as a clickable markdown link. The only exception is a source with no URL at all (a synthesis or distilled page whose `sources:` are `wiki://…` backlinks) — render `<sup>[N]</sup>` as a plain superscript without a link, with the reference-list entry carrying the `[[<slug>]]` wikilink.
+For every link-based format, **unbracketed** plain-text inline citations like `(Publisher, 2026)` are a **format violation**, not a stylistic choice. The composer renders every inline citation as a clickable markdown link. The only exception is a source with no URL at all (a synthesis, distilled `dcl-NNN` or question-node `acl-NNN` page whose `sources:` are `wiki://…` backlinks), and that exception is stated **per family**:
+
+- **Numbered** (`ieee`, `chicago`) — render `<sup>[N]</sup>` as a plain superscript without a link.
+- **Author-date** (`apa`, `mla`, `harvard`) — render the **destination-less** form of that format's own inline shape: `([Publisher, 2026])` (APA), `([Publisher])` (MLA), `([Publisher 2026])` (Harvard). This is sanctioned rather than a violation because the **single-bracketed label** is what distinguishes a marker from prose — an unbracketed `(Publisher, 2026)` remains a violation in every format. A numbered `<sup>[N]</sup>` must not appear in an author-date draft: the reference list is alphabetical and un-numbered, and `knowledge-finalize` bypasses the renumber pass for this family, so the numeral could never be resolved.
+
+On both legs the reference-list entry carries the `[[<slug>]]` wikilink.
 
 **Anti-pattern — double brackets `[[N]]`**: Never emit `[[N]]` (double square brackets) anywhere in inline citations. Obsidian parses `[[N]]` as a wikilink to a missing note named "N", so the citation appears clickable but jumps nowhere. Single-bracket superscripts only — `<sup>[N](url)</sup>`. The `wiki-reviewer` density gate independently flags any `[[N]]` as a high-severity citation-format violation.
 

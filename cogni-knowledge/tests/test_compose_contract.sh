@@ -442,6 +442,15 @@ assert_grep 'else `publisher:`' "$COMPOSER" "compose-contract-157-author-year-su
 # The staged fall-through instruction must be gone, not merely supplemented — an
 # additive edit that left it in place would keep ordering the numbered shape.
 assert_not_grep 'staged author-date' "$COMPOSER" "compose-contract-158-no-staged-fallthrough wiki-composer: no surviving instruction to render apa/mla/harvard as the numbered IEEE shape"
+# #1755: a URL-less source (synthesis / distilled dcl-NNN / question-node acl-NNN)
+# renders the DESTINATION-LESS author-date marker under this family, not the
+# numbered family's plain <sup>[N]</sup>. Asserted as a fixed string on the APA
+# shape — the bracketed label with no markdown destination is the whole point.
+assert_grep_f 'DESTINATION-LESS author-date marker' "$COMPOSER" "compose-contract-159-urlless-author-date-marker wiki-composer: a source with no external URL carries the destination-less author-date marker under apa/mla/harvard, in that format's own shape"
+# The numbering instruction is the half an additive edit leaves behind. There is
+# no first-appearance order in this family at all, so a surviving instruction to
+# number the URL-less markers would reintroduce the [N] numeral this closes.
+assert_not_grep 'Number those markers in first-appearance order among themselves' "$COMPOSER" "compose-contract-160-no-urlless-numbering wiki-composer: no surviving instruction to number the URL-less markers among themselves under the author-date family"
 
 if [ $errors -eq 0 ]; then
   green ""

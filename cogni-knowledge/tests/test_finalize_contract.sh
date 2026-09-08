@@ -659,11 +659,15 @@ s = next(i for i, l in enumerate(lines) if l.strip() == "python3 -c '")
 e = next(i for i, l in enumerate(lines) if i > s and l.strip() == "'")
 code = "\n".join(lines[s + 1:e])
 
-# The third marker is URL-less in BOTH families: a synthesis citation has no
-# external destination, so it keeps the plain <sup>[N]</sup> superscript.
+# The third citation is URL-less (a synthesis page has no external destination),
+# and since #1755 its marker is PER FAMILY: the numbered families keep the plain
+# <sup>[N]</sup> superscript, while author-date renders the destination-less
+# ([Author, Year]) form. The AD tuple carries that form so the body assertion
+# below can insist no <sup>[ survives an author-date deposit.
 NUM = ("<sup>[1](https://zeta.eu/r)</sup>", "<sup>[2](https://acme.de/s)</sup>", "<sup>[3]</sup>")
-AD = ("([Zimmermann, Ada, 2024](https://zeta.eu/r))", "([acme.de, 2019](https://acme.de/s))", "<sup>[3]</sup>")
+AD = ("([Zimmermann, Ada, 2024](https://zeta.eu/r))", "([acme.de, 2019](https://acme.de/s))", "([Vorherige Synthese, n.d.])")
 results = {}
+bodies = {}
 for fmt, inline in (("ieee", NUM), ("apa", AD), ("mla", AD), ("harvard", AD)):
     root = work / fmt
     w = root / "wiki"
@@ -706,6 +710,7 @@ for fmt, inline in (("ieee", NUM), ("apa", AD), ("mla", AD), ("harvard", AD)):
         sys.exit("subprocess failed for " + fmt + ": " + r.stderr[-600:])
     page = (root / "wiki" / "syntheses" / "syn.md").read_text(encoding="utf-8")
     results[fmt] = page.split("## References", 1)[1].strip().split("\n") if "## References" in page else []
+    bodies[fmt] = page.split("## References", 1)[0] if "## References" in page else page
 
 problems = []
 # ieee is the numbered control: numbering survives, in citation order.
@@ -741,6 +746,16 @@ for fmt in ("apa", "mla", "harvard"):
     # the bare wikilink backlink.
     if "](http" in rows[2]:
         problems.append(fmt + "-urlless-entry-got-a-link:" + repr(rows[2]))
+# #1755: no numbered marker may survive in an author-date BODY — the reference
+# list is un-numbered and the renumber pass is bypassed, so a [N] numeral could
+# never be resolved. The ieee body is the control: it must still carry one.
+if "<sup>[" not in bodies["ieee"]:
+    problems.append("ieee-body-lost-its-numbered-marker:" + repr(bodies["ieee"][-200:]))
+for fmt in ("apa", "mla", "harvard"):
+    if "<sup>[" in bodies[fmt]:
+        problems.append(fmt + "-body-kept-a-numbered-marker:" + repr(bodies[fmt][-200:]))
+    if "([Vorherige Synthese, n.d.])" not in bodies[fmt]:
+        problems.append(fmt + "-body-lost-the-destination-less-marker:" + repr(bodies[fmt][-200:]))
 # the three formats must not collapse onto one shared bibliography string
 firsts = {results[f][0] for f in ("apa", "mla", "harvard")}
 if len(firsts) != 3:
@@ -750,7 +765,7 @@ PY
 )
 rm -rf "$FINWORK"
 if [ "$FINOUT" = "CLEAN" ]; then
-  green "PASS: finalize-203-author-date-deposit-behavioral knowledge-finalize subprocess deposits apa/mla/harvard as an alphabetical, un-numbered, three-distinct-string reference list, resolves a legacy page through the publisher:/fetched_at: surrogates, renders a year-less URL-less synthesis entry title-first and last with n.d. and no doubled period, and leaves the ieee numbering intact"
+  green "PASS: finalize-203-author-date-deposit-behavioral knowledge-finalize subprocess deposits apa/mla/harvard as an alphabetical, un-numbered, three-distinct-string reference list, resolves a legacy page through the publisher:/fetched_at: surrogates, renders a year-less URL-less synthesis entry title-first and last with n.d. and no doubled period, leaves the ieee numbering intact, and (#1755) keeps the destination-less author-date marker in the author-date BODY while no <sup>[N]</sup> survives there and the ieee body still carries one"
 else
   red "FAIL: finalize-203-author-date-deposit-behavioral author-date deposit did not match the contract"
   red "  got: $FINOUT"

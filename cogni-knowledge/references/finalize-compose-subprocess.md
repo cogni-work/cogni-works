@@ -332,8 +332,11 @@ if body.startswith("# "):
 # families still run it (that is the whole gap-closing behaviour), while the
 # author-date family bypasses it. Under author-date the re-derived list above is
 # alphabetical and un-numbered, so there is nothing for a contiguous 1..K remap to
-# line up with — running it would rewrite the URL-less <sup>[N]</sup> markers
-# against a list that carries no numbers at all.
+# line up with. Since #1755 an author-date draft carries no <sup>[N]</sup> marker
+# at all — a URL-less source renders the destination-less ([Author, Year]) form —
+# so the pass would have nothing to rewrite even if it ran; the bypass is what
+# keeps a stray numbered marker from being remapped against a list that carries
+# no numbers.
 body = strip_reference_section(body, heading)
 if family == "numbered":
     body = renumber_inline_citations(body)

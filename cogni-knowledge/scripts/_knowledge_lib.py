@@ -701,21 +701,64 @@ _AUTHOR_DATE_CITATION_URL_RE = re.compile(
     r"\(\[[^\[\]]+\]\((?:<((?:https?|file)://[^>]+)>|((?:https?|file)://[^)]+?))\)\)"
 )
 
-# Stripping and extracting share ONE pattern, deliberately. What counts as an
-# author-date marker must be a single definition: a second pattern differing only
-# in its capture groups would have to be kept byte-identical by hand, and a
-# one-sided edge fix would leave strip and extract disagreeing about what a marker
-# is — with each unit case exercising only one of the two, nothing would catch it.
+# Stripping admits ONE form more than extracting does, per family — the same split
+# the numbered family above already carries between the permissive `_SUP_MARKER_RE`
+# (:632, strip) and the strict `_INLINE_CITATION_URL_RE` (:655, extract). #1748
+# recorded the opposite rule here ("a single definition, or a one-sided edge fix
+# leaves strip and extract disagreeing about what a marker is"), written before any
+# strip/extract divergence had been demonstrated for author-date; #1749 demonstrated
+# one and #1755 settles it. The rule it stated is not deleted, it is restated for
+# the case it was not written against.
+#
+# EXTRACT stays scheme-anchored because its payload IS the destination: a marker
+# with no `http(s)`/`file` destination contributes no URL, which is exactly what
+# `_AUTHOR_DATE_CITATION_URL_RE` above encodes.
+#
+# STRIP additionally admits the DESTINATION-LESS bracketed form the composer emits
+# for a source with no external URL — a synthesis page, a distilled `dcl-NNN` claim
+# or a question node's `acl-NNN` answer claim, whose `sources:` are `wiki://…`
+# backlinks. Under `apa`/`mla`/`harvard` that renders `([Author, Year])` /
+# `([Author])` / `([Author Year])` rather than the numbered family's plain
+# `<sup>[N]</sup>`, so a numbered marker no longer survives in an author-date draft
+# and `verify-store.py prefilter` can strip it verbatim.
+#
+# The two patterns cannot drift into disagreeing about a DESTINATION-BEARING
+# marker, which is the drift #1748 actually feared: the strip pattern is built FROM
+# the extract pattern's own source, and the URL arm is placed FIRST so a linked
+# marker is consumed whole by the shared definition rather than by the new arm.
+# The added arm is the one shape extract is defined to yield nothing for, and
+# klib-53 pins that it still does.
+#
+# What the destination-less arm CANNOT match, because the shape is what makes it
+# recognizable rather than a heuristic over prose:
+#
+#   * `(see [the annex](#section-3))` — `(` is not immediately followed by `[`.
+#   * `([Author, Year](#anchor))` — `]` is followed by `(`, not `)`, and the
+#     destination is not a scheme the URL arm accepts either, so it survives whole.
+#   * `([[N]](url))` — the label class excludes `[` and `]`, so the `[[N]]`
+#     wikilink anti-pattern (references/citation-formats.md:47) can never match.
+#   * `(see Smith, 2020)` — ordinary parenthesized prose carries no bracketed label.
+#
 # `.sub()` with a literal empty replacement never dereferences groups, so the
-# capturing form serves both. The alias is what the strip reads under.
-_AUTHOR_DATE_MARKER_RE = _AUTHOR_DATE_CITATION_URL_RE
+# capturing URL arm still serves the strip unchanged.
+_AUTHOR_DATE_DESTINATIONLESS_MARKER = r"\(\[[^\[\]]+\]\)"
+_AUTHOR_DATE_MARKER_RE = re.compile(
+    _AUTHOR_DATE_CITATION_URL_RE.pattern + "|" + _AUTHOR_DATE_DESTINATIONLESS_MARKER
+)
 
 
 def strip_author_date_citation_markers(text: str) -> str:
-    """Remove every inline `([Author, Year](url))` marker, leaving the surrounding
-    prose. The author-date counterpart of `strip_inline_citation_markers`; a
-    parenthesized markdown link whose destination is not http(s)/file is ordinary
-    prose and is left alone."""
+    """Remove every inline author-date marker, leaving the surrounding prose — both
+    the destination-bearing `([Author, Year](url))` form and the DESTINATION-LESS
+    `([Author, Year])` / `([Author])` / `([Author Year])` form the composer emits
+    for a source with no external URL (synthesis, distilled `dcl-NNN`, question-node
+    `acl-NNN`).
+
+    The author-date counterpart of `strip_inline_citation_markers`, and permissive
+    where its extract sibling is strict, exactly as `_SUP_MARKER_RE` is against
+    `_INLINE_CITATION_URL_RE`. A parenthesized markdown link whose destination is
+    not http(s)/file is ordinary prose and is left alone, and so is unbracketed
+    parenthesized prose — the bracketed label is what distinguishes a marker."""
     return _AUTHOR_DATE_MARKER_RE.sub("", text)
 
 

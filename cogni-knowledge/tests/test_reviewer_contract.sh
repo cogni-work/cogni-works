@@ -171,6 +171,14 @@ assert_grep_f 'The bracketed `(<url>)` alternative comes FIRST and is not option
 # taken: the reviewer receives no CITATION_FORMAT parameter, so its plan read is
 # the only channel.
 assert_grep 'Capture `citation_format`' "$REV" "reviewer-47-reads-citation-format-from-plan wiki-reviewer: resolves the citation family by reading citation_format from the PLAN_PATH it already receives — no dispatch parameter carries it"
+# #1755: an author-date draft carries no <sup>[N]</sup> at all — a URL-less source
+# renders the destination-less marker instead — so a gate counting only the linked
+# author-date shape scores a fully-cited URL-less section as a density deficit.
+assert_grep_f '\(\[[^\[\]]+\]\)' "$REV" "reviewer-49-density-gate-counts-destination-less wiki-reviewer: the density gate counts the destination-less author-date marker under apa/mla/harvard"
+# The family-blind phrasing is what an additive edit leaves standing: it asserts
+# the URL-less <sup>[N]</sup> count applies under author-date too, which is the
+# claim this change reverses.
+assert_not_grep 'stays counted in this family too' "$REV" "reviewer-50-no-family-blind-urlless-count wiki-reviewer: the URL-less <sup>[N]</sup> count is stated for the numbered family only, never reasserted family-blind"
 
 if [ $errors -eq 0 ]; then
   green ""

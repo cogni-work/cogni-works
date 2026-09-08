@@ -366,6 +366,17 @@ assert_grep_f '([Author, Year](url))' "$VERIFIER" "verify-contract-112-verifier-
 # unreachable and the assertion would prove nothing.
 assert_grep 'Read the citation format' "$VERIFIER" "verify-contract-113-verifier-reads-citation-format wiki-verifier: resolves the citation family by reading plan.json under the PROJECT_PATH it already receives — no dispatch parameter carries it"
 
+# --- revisor read-back citation-integrity check (#1755) ---------------------
+# The revisor counts inline markers of the draft's own family and compares that
+# count against its citation records; a family whose URL-less shape it does not
+# recognize returns write_failed on a CORRECT draft.
+REVISOR="$PLUGIN_ROOT/agents/revisor.md"
+assert_grep_f '`([Author, Year])` / `([Author])` / `([Author Year])`' "$REVISOR" "verify-contract-114-revisor-counts-destination-less revisor: the read-back citation-integrity check counts the destination-less author-date marker under apa/mla/harvard"
+# The family-blind phrasing is the half an additive edit leaves behind — it says
+# the plain <sup>[N]</sup> is the URL-less form in EVERY family, which is the
+# claim this change reverses.
+assert_not_grep 'keeps that shape in every family' "$REVISOR" "verify-contract-115-no-family-blind-urlless-shape revisor: the plain <sup>[N]</sup> is stated as the numbered family's URL-less form only, never family-blind"
+
 if [ $errors -eq 0 ]; then
   green ""
   green "ALL PASS"

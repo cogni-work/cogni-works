@@ -33,6 +33,17 @@
 #     (the exemption's teeth: it reds ttn-01-green-slides AND ttn-01-green-slides-de,
 #      since the sources unit of each fixture carries no slide_points)
 #
+#   --expr 's{if b.target == "slides" and not \(u is last and _visual_intent_exempt\(u\)\):}{if False:}' \
+#     --case ttn-22-visual-intent-required-missing
+#   --expr 's{if key not in allowed:}{if False:}' --case ttn-22-visual-intent-unknown-key
+#   --expr 's{if value and value not in enum:}{if False:}' --case ttn-23-visual-intent-message-pattern-enum
+#   The two disjuncts of the trailing-source-register exemption, each proven on its own —
+#   disabling either branch reds only the case that isolates it:
+#   --expr 's{f.get\("type"\) == "sources" or "slide_points" not in f}{False or "slide_points" not in f}' \
+#     --case ttn-25-visual-intent-exempt-sources-type
+#   --expr 's{f.get\("type"\) == "sources" or "slide_points" not in f}{f.get("type") == "sources" or False}' \
+#     --case ttn-25-visual-intent-exempt-no-slide-points
+#
 # CASE LABEL SHAPE: "PASS: <id>" / "FAIL: <id>", ids unique per emitted line.
 
 set -u
@@ -92,6 +103,18 @@ want = int(sys.argv[3])
 hits = [f for f in d["data"].get("findings", [])
         if f["check"] == sys.argv[2] and f["severity"] == "fail" and f.get("unit") == want]
 sys.exit(0 if hits else 1)
+PY
+}
+
+# no_fail <outfile> <check> — exit 0 when the check appears in NO finding. The
+# complement of has_fail, needed where a mutant legitimately reds OTHER checks and
+# the claim under test is only that this one stayed silent.
+no_fail() {
+  python3 - "$1" "$2" <<'PY'
+import json, sys
+d = json.load(open(sys.argv[1]))
+hits = [f for f in d["data"].get("findings", []) if f["check"] == sys.argv[2]]
+sys.exit(1 if hits else 0)
 PY
 }
 
@@ -312,6 +335,70 @@ red_unit ttn-20-slides-close-sources slides-close-sources 8 "$SL" "$EN_NARR" \
 # while a non-sources unit stripped of its list is still reported.
 red ttn-20-slides-points-still-required density-slides "$SL" "$EN_NARR" \
   'import re; i = text.index("## Slide 2:"); j = text.index("## Slide 3:"); blk = text[i:j]; nb = re.sub(r"slide_points:\n(?:- .*\n)+", "", blk, count=1); assert nb != blk; text = text[:i] + nb + text[j:]'
+
+# --- ttn-22 / ttn-23 / ttn-24: the visual-intent arm ---------------------------
+# One named check answers every malformation of the visual_intent block, so a brief
+# cannot pass by being wrong in a new way. Each case names `visual-intent`.
+red_unit ttn-22-visual-intent-required-missing visual-intent 2 "$SL" "$EN_NARR" \
+  'import re; i = text.index("## Slide 2:"); j = text.index("## Slide 3:"); blk = text[i:j]; nb = re.sub(r"visual_intent:\n(?:  .*\n)+", "", blk, count=1); assert nb != blk; text = text[:i] + nb + text[j:]'
+
+# An inline scalar parses as a str, never a mapping — which is what the arm detects.
+red ttn-22-visual-intent-non-mapping visual-intent "$SL" "$EN_NARR" \
+  'import re; text = re.sub(r"visual_intent:\n(?:  .*\n)+", "visual_intent: comparison\n", text, count=1)'
+
+red ttn-22-visual-intent-unknown-key visual-intent "$SL" "$EN_NARR" \
+  'text = text.replace("  message_pattern: decision\n", "  message_pattern: decision\n  narrative_beat: rising\n", 1)'
+
+red ttn-22-visual-intent-empty-subkey visual-intent "$SL" "$EN_NARR" \
+  'import re; text = re.sub(r"  focal_point: .*\n", "  focal_point:\n", text, count=1)'
+
+red ttn-23-visual-intent-message-pattern-enum visual-intent "$SL" "$EN_NARR" \
+  'text = text.replace("  message_pattern: decision\n", "  message_pattern: vibes\n", 1)'
+
+red ttn-23-visual-intent-expression-enum visual-intent "$SL" "$EN_NARR" \
+  'text = text.replace("  preferred_expression: metric\n", "  preferred_expression: infographic\n", 1)'
+
+red ttn-23-visual-intent-asset-signal-enum visual-intent "$SL" "$EN_NARR" \
+  'text = text.replace("  asset_signal: none\n", "  asset_signal: screenshot\n", 1)'
+
+# The document target carries no unit-level visual decision at all.
+red_unit ttn-24-visual-intent-on-document visual-intent 1 "$FIX/document-en.md" "$EN_NARR" \
+  'text = text.replace("\nbody:\n", "\nvisual_intent:\n  message_pattern: shift\n  relationship: a relationship\n  focal_point: a focal point\nbody:\n", 1)'
+
+# --- ttn-25: the trailing-source-register exemption is a DISJUNCTION -----------
+# `type: sources` OR no `slide_points`, each sufficient on its own. Both are true of
+# the green fixture's Slide 8, so neither disjunct is observable there — each needs a
+# mutant that makes ONLY the other one false.
+#
+# First disjunct alone: Slide 8 keeps `type: sources` and GAINS a slide_points list,
+# so "no slide_points" is false. The exemption must still hold.
+if mutate "$SL" "$TMPROOT/ttn-25a.md" \
+  'text = text.replace("\ntype: sources\n\ntalk_track:", "\ntype: sources\nslide_points:\n- The deck source register\n\ntalk_track:", 1)' 2>/dev/null; then
+  run "$TMPROOT/ttn-25a.md" "$EN_NARR" "$TMPROOT/ttn-25a.json"
+  if [ "$RC" -eq 0 ] && clean "$TMPROOT/ttn-25a.json"; then
+    pass "ttn-25-visual-intent-exempt-sources-type"
+  else
+    fail "ttn-25-visual-intent-exempt-sources-type expected a clean exit 0, got exit $RC"
+  fi
+else
+  fail "ttn-25-visual-intent-exempt-sources-type the mutant could not be built"
+fi
+
+# Second disjunct alone: Slide 8 loses `type: sources` but still carries no
+# slide_points. Assert ONLY that visual-intent stayed silent — never exit 0, because
+# slides-close-sources and density-slides fire independently on this mutant. A rule
+# keyed solely on `type: sources` fails here, which is the whole point of the case.
+if mutate "$SL" "$TMPROOT/ttn-25b.md" \
+  'text = text.replace("\ntype: sources\n", "\ntype: bluf\n", 1)' 2>/dev/null; then
+  run "$TMPROOT/ttn-25b.md" "$EN_NARR" "$TMPROOT/ttn-25b.json"
+  if no_fail "$TMPROOT/ttn-25b.json" visual-intent; then
+    pass "ttn-25-visual-intent-exempt-no-slide-points"
+  else
+    fail "ttn-25-visual-intent-exempt-no-slide-points the exemption is keyed on type: sources alone"
+  fi
+else
+  fail "ttn-25-visual-intent-exempt-no-slide-points the mutant could not be built"
+fi
 
 # --- ttn-21: the vendored validator is a gate against the flat contracts ------
 VAL="$SKILL/scripts/validate-narrative.py"

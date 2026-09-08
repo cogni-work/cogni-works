@@ -58,12 +58,24 @@ The evidence shows it is an information problem. The operators that spend most o
 ## Section 2: The constraint has moved from labour to signal
 
 type: two-column
+visual_intent:
+  message_pattern: shift
+  relationship: the constraint has moved from labour to signal
+  focal_point: the move itself
+  preferred_expression: comparison
+  asset_signal: data-chart
 body:
 Operators already generate an average of 47 sensor formats per plant across drives, bearings, pumps and control systems [2], and the plants that convert those signals into a single asset-health view report 34 percent fewer unplanned stops than those that do not [1].
 
 ## Section 3: Three converging forces make action urgent
 
 type: timeline
+visual_intent:
+  message_pattern: convergence
+  relationship: three forces land inside the same window
+  focal_point: the closing window
+  preferred_expression: timeline
+  asset_signal: diagram
 body:
 An operator that starts in 2026 meets the deadline. One that starts in 2027 does not, and pays the retrofit premium described below.
 bullets:
@@ -94,6 +106,12 @@ bullets:
 ## Section 6: Action costs less than inaction by roughly 4x
 
 type: metric
+visual_intent:
+  message_pattern: comparison
+  relationship: acting costs a fraction of not acting
+  focal_point: the gap between the two totals
+  preferred_expression: metric
+  asset_signal: data-chart
 body:
 A condition-based programme built on the three positions above costs 4.2 million euros over the same three years, including integration, documentation and the operating-model change [2].
 

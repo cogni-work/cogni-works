@@ -38,6 +38,11 @@ Checks (name — what fails it):
   citations-resolve      a `[N]` marker has no `[N] ` Sources entry, or a `<sup>` survives
   key-figures-src        a key_figures / hero_numbers entry lacks a resolvable `(src: [N])`
   no-styling-keys        a styling key (Background:, Text-Color:, fill:, ...) appears
+  visual-intent          a copy-bearing slides unit carries no visual_intent block; the block
+                         is not a mapping; it carries an unknown key; a required subkey
+                         (message_pattern, relationship, focal_point) is missing or empty;
+                         message_pattern, preferred_expression or asset_signal is out of
+                         enum; or any visual_intent appears on the document target
 
 Exit 0 when no check fails, 1 when any does, 2 when the brief cannot be graded.
 Envelope on stdout: {"success": bool, "data": {...}, "error": str}.
@@ -62,6 +67,21 @@ CONTRACT_HEADINGS = {"en": "# Rendering Contract", "de": "# Rendering-Vertrag"}
 CONTRACT_MIN_CLAUSES = 5
 TYPE_ENUM = ("cover", "bluf", "two-column", "table", "timeline", "quote", "metric", "roles", "sources")
 PROFILES = ("standard", "dense")
+
+# The visual_intent block — the relationship the audience must perceive, never how it is drawn.
+# references/visual-intent.md is the sole authority; these tuples must stay set-equal to its lists.
+VISUAL_INTENT_REQUIRED = ("message_pattern", "relationship", "focal_point")
+VISUAL_INTENT_OPTIONAL = ("preferred_expression", "asset_signal", "avoid")
+MESSAGE_PATTERNS = ("comparison", "shift", "convergence", "hierarchy", "sequence", "positioning",
+                   "composition", "causality", "distribution", "system", "trajectory", "decision")
+PREFERRED_EXPRESSIONS = ("none", "metric", "comparison", "timeline", "positioning-map", "ecosystem-map",
+                        "flow", "spectrum", "matrix", "architecture", "geography", "chart", "table", "quote")
+ASSET_SIGNALS = ("none", "data-chart", "diagram", "geography", "logos", "photography")
+VISUAL_INTENT_ENUMS = {
+    "message_pattern": MESSAGE_PATTERNS,
+    "preferred_expression": PREFERRED_EXPRESSIONS,
+    "asset_signal": ASSET_SIGNALS,
+}
 
 UNIT_RE = re.compile(r"^## (Slide|Section|Block) (\d+): (.*)$", re.M)
 KEY_RE = re.compile(r"^([a-z_]+):(.*)$")
@@ -670,6 +690,49 @@ def check_no_styling_keys(b: Brief) -> None:
         b.fail("no-styling-keys", None, f"styling key {m.group(1)!r} appears; styling comes only from the design system")
 
 
+def _visual_intent_exempt(u: dict) -> bool:
+    """True for the trailing source register, which asserts no relationship of its own.
+
+    The renderer builds that unit from the narrative's **Sources** block verbatim, so it names
+    no visual intent. It is recognisable two ways, and each is sufficient on its own: it carries
+    `type: sources`, or it carries no `slide_points`. The exemption is the disjunction, so it
+    holds whichever of the two shapes a brief happens to use.
+    """
+    f = u["fields"]
+    return f.get("type") == "sources" or "slide_points" not in f
+
+
+def check_visual_intent(b: Brief) -> None:
+    if b.target not in TARGETS:
+        return
+    last = b.units[-1] if b.units else None
+    allowed = VISUAL_INTENT_REQUIRED + VISUAL_INTENT_OPTIONAL
+    for u in b.units:
+        f, n = u["fields"], u["number"]
+        vi = f.get("visual_intent")
+        if b.target == "document":
+            if vi is not None:
+                b.fail("visual-intent", n, "visual_intent is not allowed on the document target")
+            continue
+        if vi is None:
+            if b.target == "slides" and not (u is last and _visual_intent_exempt(u)):
+                b.fail("visual-intent", n, "visual_intent block missing; every copy-bearing slides unit owes one")
+            continue
+        if not isinstance(vi, dict):
+            b.fail("visual-intent", n, "visual_intent is not a mapping; it needs indented message_pattern, relationship and focal_point")
+            continue
+        for key in vi:
+            if key not in allowed:
+                b.fail("visual-intent", n, f"visual_intent carries unknown key {key!r}")
+        for key in VISUAL_INTENT_REQUIRED:
+            if not vi.get(key):
+                b.fail("visual-intent", n, f"visual_intent is missing required {key}")
+        for key, enum in VISUAL_INTENT_ENUMS.items():
+            value = vi.get(key)
+            if value and value not in enum:
+                b.fail("visual-intent", n, f"visual_intent {key} is {value!r}, which is not one of {', '.join(enum)}")
+
+
 CHECKS = (
     ("frontmatter-type", check_frontmatter_type),
     ("target-enum", check_target_enum),
@@ -684,6 +747,7 @@ CHECKS = (
     ("citations-resolve", check_citations_resolve),
     ("key-figures-src", check_key_figures_src),
     ("no-styling-keys", check_no_styling_keys),
+    ("visual-intent", check_visual_intent),
 )
 
 

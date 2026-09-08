@@ -27,8 +27,9 @@ The selection contract for the `text-to-narrative` skill: which arc a run should
   - [Step 2: Structural detection (trend-panorama / smarter-service)](#step-2-structural-detection-trend-panorama-smarter-service)
   - [Step 3: Content-type mapping](#step-3-content-type-mapping)
   - [Step 4: Execution-fit ranking](#step-4-execution-fit-ranking)
-  - [Step 5: Content analysis](#step-5-content-analysis)
-  - [Step 6: Fallback](#step-6-fallback)
+  - [Step 5: Target-fit ranking](#step-5-target-fit-ranking)
+  - [Step 6: Content analysis](#step-6-content-analysis)
+  - [Step 7: Fallback](#step-7-fallback)
 - [Arc Directory Structure](#arc-directory-structure)
 - [Interactive Selection Format](#interactive-selection-format)
 - [Extension Guidelines](#extension-guidelines)
@@ -62,10 +63,11 @@ The selection contract for the `text-to-narrative` skill: which arc a run should
 2. **Structural detection** — arc-specific file signatures (the TIPS pair).
 3. **Content-type mapping** — `content_type` or `research_type` metadata.
 4. **Execution-fit ranking** — compare the strongest registered candidates against the Phase 0 brief: audience, decision purpose, perspective, geography and each arc's governing question. The decision purpose takes precedence over keyword density: a diagnostic purpose ranks a diagnostic arc above a persuasion arc even when the persuasion keywords are denser.
-5. **Content analysis** — keyword density against each block's `signals`, discounted by its `anti_signals`.
-6. **Fallback** — `corporate-visions` as a candidate for the shortlist, never an automatic winner.
+5. **Target-fit ranking** — when evidence and execution fit leave two or more defensible candidates, the requested `--target` breaks the tie: the arc whose chain reads best in that format ranks higher. Never overrides an explicit or inherited arc.
+6. **Content analysis** — keyword density against each block's `signals`, discounted by its `anti_signals`.
+7. **Fallback** — `corporate-visions` as a candidate for the shortlist, never an automatic winner.
 
-The output of steps 2-6 is a ranked candidate set. Phase 2 presents the top two or three as a shortlist (see Interactive Selection Format); under `--interactive false` the top-ranked candidate is taken.
+The output of steps 2-7 is a ranked candidate set. Phase 2 presents the top two or three as a shortlist (see Interactive Selection Format); under `--interactive false` the top-ranked candidate is taken and the run summary retains the top two alternatives alongside it.
 
 ## Arc Blocks
 
@@ -217,8 +219,8 @@ SKILL.md Phase 2 fixes only the override order (explicit `--arc-id` → inherite
 | Step 2 structural signal | `structural: <file> detected (<variant>)` — the three literal strings in Step 2 |
 | Step 3 `research_type` | `research_type="<value>"` (with the `(theme-less)` suffix where Step 3 shows it) |
 | Step 3 `content_type` | `content_type="<value>"` |
-| Step 5 keyword density | `keyword density analysis` |
-| Step 6 fallback | `default candidate (no specific signals detected)` |
+| Step 6 keyword density | `keyword density analysis` |
+| Step 7 fallback | `default candidate (no specific signals detected)` |
 
 ### Step 1: Explicit selection
 
@@ -274,11 +276,21 @@ if (content_type in arcMap) { detected_arc = arcMap[content_type]; detection_rea
 
 Take the arcs whose `signals` the source matches and rank them against the Phase 0 brief. For each candidate ask whether its governing question is the question the brief's decision purpose needs answered, whether its `best_for` fits the audience and perspective, and whether its `anti_signals` are present. The decision purpose outranks keyword density: when the purpose is "decide between make, buy and partner", an arc whose question is a choice ranks above one whose question is persuasion, whatever the keyword counts say. The `distinguish_from` field names the neighbours to weigh each candidate against, so a shortlist always carries the arcs that would make something materially different of the evidence.
 
-### Step 5: Content analysis
+### Step 5: Target-fit ranking
+
+Apply this step only once evidence and execution fit have left two or more defensible candidates; with a single candidate standing there is no tie to break. It reads the already-resolved `--target` — no new parameter is introduced.
+
+For `slides`, rank higher the candidate whose four-element chain reads as an answer-first management story and whose final element naturally carries the decision or the ask. For `document`, `web` and `infographic`, apply the same legibility principle to the format at hand, without the answer-first slide bias.
+
+Two hard limits. Target fit **never overrides an explicit `--arc-id` or an arc inherited from the source project** — Step 1 has already decided those and no detection runs. And it **never rescues an arc whose evidence contract is unmet**: an arc the evidence cannot support does not become defensible because it would present well.
+
+Record a short `target_fit` sentence for every shortlisted arc, so the trade-off survives into the run summary and not only into the prompt. This step emits no `detection_reason` of its own — it reorders candidates the earlier steps produced, and the deciding step's string stands.
+
+### Step 6: Content analysis
 
 When no content type matched, score keyword density per arc against its `signals`, discounted by `anti_signals`. Thresholds: `theme-thesis`, `technology-futures` and `category-creation` 15% (their terms are distinctive); `strategic-foresight` 10%; every other arc 12%. For the four decision arcs the execution-fit step is the decisive one — their keywords overlap with `corporate-visions`, and the decision purpose separates them.
 
-### Step 6: Fallback
+### Step 7: Fallback
 
 ```javascript
 if (!ranked_candidates.length) { ranked_candidates = ["corporate-visions"]; detection_reason = "default candidate (no specific signals detected)" }
@@ -298,7 +310,7 @@ A contract carries `contract: 2` in its frontmatter and the seven `##` sections 
 
 ## Interactive Selection Format
 
-The confirmation is a **shortlist, not a menu**. The user has no basis to ratify a single detected arc, and the full registry is a catalogue rather than a recommendation, so Phase 2 presents the 2-3 arcs that would produce materially different but defensible narratives from this evidence and this decision purpose. Every candidate carries the same four facts, and exactly one is marked Recommended:
+The confirmation is a **shortlist, not a menu**. The user has no basis to ratify a single detected arc, and the full registry is a catalogue rather than a recommendation, so Phase 2 presents the 2-3 arcs that would produce materially different but defensible narratives from this evidence and this decision purpose. Every candidate carries the same five facts, and exactly one is marked Recommended:
 
 ```
 Detected: {arc_display_name} ({detection_reason})
@@ -308,17 +320,19 @@ Which arc should this narrative follow?
 1. {Recommended arc} — Recommended: {one sentence keyed to the decision purpose}
    Elements: {element1} → {element2} → {element3} → {element4}
    Governing question: {from the arc's block above}
-   Fit: {one reason this evidence suits this arc}
+   Evidence fit: {one reason this evidence suits this arc}
+   Target fit: {how this arc reads in the requested --target}
 
 2. {Alternative arc}
    Elements: {element1} → {element2} → {element3} → {element4}
    Governing question: {…}
-   Fit: {one reason — and what it would make of this evidence that the Recommended arc would not}
+   Evidence fit: {one reason — and what it would make of this evidence that the Recommended arc would not}
+   Target fit: {how this arc reads in the requested --target, against the Recommended arc}
 
 [3. {second alternative, only when defensible}]
 ```
 
-Rules: 2-3 candidates, never padded to three when only two fit; when only one arc is defensible, say so and ask for confirmation of that one; the full arc list appears only when the user asks for it. Under `--interactive false` the top-ranked candidate is taken with its `detection_reason` recorded and no prompt is shown.
+Rules: 2-3 candidates, never padded to three when only two fit; when only one arc is defensible, say so and ask for confirmation of that one; the full arc list appears only when the user asks for it. Under `--interactive false` the top-ranked candidate is taken with its `detection_reason` recorded and no prompt is shown; the run summary retains the top two alternatives alongside it, each with its `target_fit` sentence.
 
 ## Extension Guidelines
 
@@ -326,7 +340,7 @@ Rules: 2-3 candidates, never padded to three when only two fit; when only one ar
 
 1. Choose a unique `arc_id` (lowercase, hyphens, descriptive).
 2. Create `arc-{arc-id}.md` on the v2 contract shape — copy a contract such as `arc-corporate-visions.md` and replace every section. This directory is the arc's only home, so the contract is authored here directly. Headings carry real characters per language, never ASCII substitutes.
-3. Add the arc's block under Arc Blocks above with all six fields, a `distinguish_from` naming at least one existing arc, and the reciprocal mention in each neighbour's block; add a Quick Reference row; add its `content_type` mapping to Step 3 and its threshold to Step 5, and a structural signal to Step 2 if the arc has a unique file signature.
+3. Add the arc's block under Arc Blocks above with all six fields, a `distinguish_from` naming at least one existing arc, and the reciprocal mention in each neighbour's block; add a Quick Reference row; add its `content_type` mapping to Step 3 and its threshold to Step 6, and a structural signal to Step 2 if the arc has a unique file signature.
 4. Add a column to the application matrix in `techniques-overview.md`.
 5. Add a mapping row and an element block to `cogni-workspace/libraries/arc-taxonomy.md` — short names are the pre-colon segments of the contract's headings.
 6. Update the arc list in `SKILL.md`'s frontmatter description, its Bundled arcs table and every prose surface that states an arc count.

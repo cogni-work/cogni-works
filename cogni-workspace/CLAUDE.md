@@ -147,6 +147,27 @@ What cogni-help contributed when it was retired. `cogni-issues` survives as a sk
 - `commands/troubleshoot.md` registers `/troubleshoot`; it is this plugin's first command file, and since the merge it is the only surface carrying that name
 - `tests/test-relocated-skill-hygiene.sh` pins the two properties of every adopted tree that no other guard covers: no source-plugin dispatch token survives, and every `${CLAUDE_PLUGIN_ROOT}` path documented in them resolves under this plugin. It pairs each tree with the token its own source plugin used, so both the cogni-help arm and the cogni-claims arm stay falsifiable
 
+## Mutation Harness
+
+`scripts/mutation-check.sh` is this plugin's harness for proving a guard load-bearing: it reverts the guard, expects the named case to go RED, restores, and expects GREEN. Mutation is the only technique that separates a guard from a comment — a guard whose grep matches nothing reports green forever, and only breaking what it guards shows that it fires.
+
+**Shape decision: the flag-accepting generic harness** — `--root` / `--file` / `--expr` / `--test` / `--case`, all five required. The rejected alternative was a plugin-local argument-less harness matching the `cogni-consult/scripts/mutation-check.sh` and `cogni-portfolio/scripts/mutation-check.sh` precedent. That shape is cheaper and more consistent with those siblings, but it **cannot grade a recipe recorded in a PR body**, which is the exact capability the review gate asks for on every guard-bearing PR; adopting it would mean shipping a harness that does not solve the problem it was built for, purely to match two precedents carrying the same limitation. The flag shape also retires a live trap: recorded recipes here have pointed at a harness shipping from a *different* marketplace, and those paths rot — version-pinned cache spellings resolve on no current machine, and every upstream patch bump strands another cohort. Record recipes against the in-repo path.
+
+**The two sibling harnesses do NOT migrate.** `cogni-consult/scripts/mutation-check.sh` and `cogni-portfolio/scripts/mutation-check.sh` keep their argument-less contract and are out of scope here. The divergence is real and worth closing, but it carries its own regression surface and belongs in a separate change. Stating the position explicitly is the point: an unstated divergence is how three harnesses with three contracts happen.
+
+Two properties are load-bearing rather than incidental, and both exist to kill a false green:
+
+- **Red dominates green, per case.** An aggregated case prints one line per item it walks, so a genuinely red run of `P1` in `tests/test-relocated-skill-hygiene.sh` emits a `FAIL:` line *and* a `PASS:` line together. A classifier that stops at the first green label grades that red run green and then reports every guard it touches as verified.
+- **An `--expr` that matches nothing is a hard error, never a pass.** A typo'd expression mutates nothing, the case stays green, and a naive harness reports the guard fine — inverting the whole signal.
+
+Classification reads the test command's **output lines, never its exit code**: a suite exits non-zero whenever *any* case is red, so the exit code conflates "my case went red" with "some other case is broken". Green is `ok:` or `PASS:` — this plugin's suites genuinely use both — and red is `FAIL:`, the one universal signal. Matching is whole-token, so `--case P1` never matches a `P10` line.
+
+`tests/test-mutation-check.sh` grades the harness itself, against fixture suites in its own `mktemp -d` tree — never a tracked file, which would race the full-sweep run and leave the working tree mutated if interrupted.
+
+It is an **independent implementation** of the same five-flag contract that `cogni-service/scripts/mutation-check.sh` implements in the managed-service marketplace, not a port of it: that script is `LicenseRef-cogni-work-proprietary` and this repo is Apache-2.0. Recipes are portable between the two because the flags are the contract; the code is not shared.
+
+**One deliberate exception to the stdlib-only convention above:** this harness requires `perl`, because `--expr` is a `perl -0pi` expression and every recipe already recorded in this repo is written in that syntax. Re-implementing perl substitution semantics in python would silently diverge on those recorded recipes, which is a worse failure than the dependency. Perl ships with macOS and every mainstream Linux, and it is not a pip dependency.
+
 ## Claim Verification
 
 Absorbed from cogni-claims when it was retired. These are now the only copies. Claim verification is the cross-plugin quality gate: cogni-trends, cogni-portfolio, cogni-consult and (on the opt-in `knowledge-refresh --resweep` path only) cogni-knowledge submit sourced assertions here and get back a verdict per claim.

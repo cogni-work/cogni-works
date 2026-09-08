@@ -39,12 +39,15 @@ Never ask for what is explicit or safely inferable. Never ask more than one brie
 
 | Pass | Field | Effect |
 |------|-------|--------|
+| Arc selection (Phase 2) | target | The requested output target breaks a tie in the registry's Step 5: when evidence and execution fit leave two or more defensible arcs, the one whose chain reads best in the requested target ranks higher. It never overrides an explicit or inherited arc. |
 | Pass 1 — evidence draft | geography | When sources span markets, evidence from the named markets leads; other markets' evidence is context, not the argument. |
 | Pass 2 — argument edit | purpose | The argumentative emphasis across the four elements and the close serve the named decision. |
 | Pass 2 — argument edit | perspective | Pronouns and ownership follow the voice: a neutral analyst says "operators"; the client's leadership says "we"; an advisor addressing the client says "you". |
 | Pass 3 — language edit | audience, knowledge level | Vocabulary, acronym expansion on first use, and how much a mechanism is explained. `expert` keeps domain terms bare; `general` explains each mechanism once. |
 | Pass 3 — language edit | tone | Register of the prose, within the executive-prose rules of `language-shared.md`. |
 | Phase 5 — TL;DR synthesis | purpose | The Executive TL;DR's decision implication serves the named decision. |
+
+`target` is the resolved `--target` invocation parameter carried alongside the brief, not a seventh brief field — the `## Fields` table above is unchanged.
 
 ## Frontmatter
 
